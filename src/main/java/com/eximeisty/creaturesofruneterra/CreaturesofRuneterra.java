@@ -4,10 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
-//import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
@@ -15,6 +17,10 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
+import com.eximeisty.creaturesofruneterra.item.ModItems;
 
 import java.util.stream.Collectors;
 
@@ -27,14 +33,19 @@ public class CreaturesofRuneterra
     private static final Logger LOGGER = LogManager.getLogger();
 
     public CreaturesofRuneterra() {
+        IEventBus eventBus=FMLJavaModLoadingContext.get().getModEventBus(); 
+
+        ModItems.register(eventBus);
+        ModEntityTypes.register(eventBus);
+
         // Register the setup method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        eventBus.addListener(this::setup);
         // Register the enqueueIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
+        eventBus.addListener(this::enqueueIMC);
         // Register the processIMC method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
+        eventBus.addListener(this::processIMC);
         // Register the doClientStuff method for modloading
-        //FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
+        eventBus.addListener(this::doClientStuff);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -47,10 +58,11 @@ public class CreaturesofRuneterra
         LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
     }
 
-    // private void doClientStuff(final FMLClientSetupEvent event) {
-    //     // do something that can only be done on the client
-    //     //LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
-    // }
+    private void doClientStuff(final FMLClientSetupEvent event) {
+        // do something that can only be done on the client
+        //LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
+    }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
     {
