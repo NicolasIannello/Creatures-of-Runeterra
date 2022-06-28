@@ -1,19 +1,16 @@
 package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import net.minecraft.block.BlockState;
-//import net.minecraft.entity.Entity;
+import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
-//import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.ai.goal.ZombieAttackGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.monster.ZombieEntity;
-import net.minecraft.entity.monster.ZombifiedPiglinEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 //import net.minecraft.potion.EffectInstance;
@@ -24,38 +21,35 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class XerSaiHatchlingEntity extends ZombieEntity{
+public class XerSaiHatchlingEntity extends CreatureEntity {
 
-    public XerSaiHatchlingEntity(EntityType<? extends ZombieEntity> type, World worldIn) {
+    public XerSaiHatchlingEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
     }
-    
+
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 10)
-        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5)
-        .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3)
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)
+        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.6)
+        .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
         .createMutableAttribute(Attributes.FOLLOW_RANGE, 50)
-        .createMutableAttribute(Attributes.ATTACK_SPEED, 1.5)
-        .createMutableAttribute(Attributes.ZOMBIE_SPAWN_REINFORCEMENTS);
+        .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)
+        .createMutableAttribute(Attributes.ATTACK_SPEED, 2);
     }
 
     @Override
     protected void registerGoals(){
         super.registerGoals();
         this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, true ));
-        this.goalSelector.addGoal(2, new ZombieAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(ZombifiedPiglinEntity.class));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(1, new RandomWalkingGoal(this, 0.6,80));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
     @Override
-    protected int getExperiencePoints(PlayerEntity player)
-    {
-        return 1 + this.world.rand.nextInt(2);
-    }
+    protected int getExperiencePoints(PlayerEntity player){ return 1+this.world.rand.nextInt(2); }
 
     @Override
     protected SoundEvent getAmbientSound(){ return SoundEvents.ENTITY_SILVERFISH_AMBIENT; }
