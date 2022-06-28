@@ -18,7 +18,7 @@ public class ModEntityTypes {
     //xer'sai
     public static final RegistryObject<EntityType<XerSaiHatchlingEntity>> XERSAI_HATCHLING=
         ENTITY_TYPES.register("xersai_hatchling", 
-            ()-> EntityType.Builder.create(XerSaiHatchlingEntity::new, EntityClassification.MONSTER).size(1f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_hatchling").toString())
+            ()-> EntityType.Builder.create(XerSaiHatchlingEntity::new, EntityClassification.MONSTER).size(1.5f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_hatchling").toString())
         );
 
     public static void register(IEventBus eventBus){
