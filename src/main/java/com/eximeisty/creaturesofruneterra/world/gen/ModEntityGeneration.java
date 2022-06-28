@@ -15,7 +15,7 @@ import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 
 public class ModEntityGeneration {
     public static void onEntitySpawn(final BiomeLoadingEvent event) {
-        addEntityToSpecificBiomes(event, ModEntityTypes.XERSAI_HATCHLING.get(), 40, 3, 5, Biomes.DESERT,Biomes.DESERT_HILLS,Biomes.DESERT_LAKES);
+        addEntityToSpecificBiomes(event, ModEntityTypes.XERSAI_HATCHLING.get(), 10, 3, 4, Biomes.DESERT,Biomes.DESERT_HILLS,Biomes.DESERT_LAKES,Biomes.BADLANDS,Biomes.BADLANDS_PLATEAU );
     }
     
     private static void addEntityToSpecificBiomes(BiomeLoadingEvent event, EntityType<?> type, int weight, int minCount, int maxCount, RegistryKey<Biome>... biomes) {
