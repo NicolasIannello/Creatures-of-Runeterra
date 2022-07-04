@@ -1,7 +1,10 @@
 package com.eximeisty.creaturesofruneterra.world.structure;
 
+import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.world.structure.structures.TestStructure;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -11,30 +14,38 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
-import com.eximeisty.creaturesofruneterra.world.structure.structures.TestStructure;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class ModStructures {
-    public static final DeferredRegister<Structure<?>> STRUCTURES= DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CreaturesofRuneterra.MOD_ID);
+    public static final DeferredRegister<Structure<?>> STRUCTURES =
+            DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CreaturesofRuneterra.MOD_ID);
 
-    public static final RegistryObject<Structure<NoFeatureConfig>> TEST= STRUCTURES.register("test", TestStructure::new);
+    public static final RegistryObject<Structure<NoFeatureConfig>> TEST =
+            STRUCTURES.register("test", TestStructure::new);
 
     /* average distance apart in chunks between spawn attempts */
     /* minimum distance apart in chunks between spawn attempts. MUST BE LESS THAN ABOVE VALUE*/
     /* this modifies the seed of the structure so no two structures always spawn over each-other.
     Make this large and unique. */
     public static void setupStructures() {
-        setupMapSpacingAndLand(TEST.get(),new StructureSeparationSettings(50,20, 1234567890),true);
+        setupMapSpacingAndLand(TEST.get(),
+                new StructureSeparationSettings(100,50, 1234567890),
+                true);
     }
-    
+
+    /**
+     * Adds the provided structure to the registry, and adds the separation settings.
+     * The rarity of the structure is determined based on the values passed into
+     * this method in the structureSeparationSettings argument.
+     * This method is called by setupStructures above.
+     **/
     public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings,
                                                                        boolean transformSurroundingLand) {
         //add our structures into the map in Structure class
         Structure.NAME_STRUCTURE_BIMAP.put(structure.getRegistryName().toString(), structure);
-        
+
         /*
          * Whether surrounding land will be modified automatically to conform to the bottom of the structure.
          * Basically, it adds land at the base of the structure like it does for Villages and Outposts.
@@ -47,7 +58,7 @@ public class ModStructures {
                     .add(structure)
                     .build();
         }
-        
+
         /*
          * This is the map that holds the default spacing of all structures.
          * Always add your structure to here so that other mods can utilize it if needed.
@@ -97,7 +108,7 @@ public class ModStructures {
         });
     }
 
-    public static void register(IEventBus eventBus){
+    public static void register(IEventBus eventBus) {
         STRUCTURES.register(eventBus);
     }
 }
