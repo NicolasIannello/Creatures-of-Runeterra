@@ -1,7 +1,6 @@
 package com.eximeisty.creaturesofruneterra;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -21,13 +20,11 @@ import org.apache.logging.log4j.Logger;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
-
-import java.util.stream.Collectors;
+import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(CreaturesofRuneterra.MOD_ID)
-public class CreaturesofRuneterra
-{
+public class CreaturesofRuneterra{
     public static final String MOD_ID="creaturesofruneterra";
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
@@ -36,6 +33,7 @@ public class CreaturesofRuneterra
         IEventBus eventBus=FMLJavaModLoadingContext.get().getModEventBus(); 
 
         ModItems.register(eventBus);
+        ModStructures.register(eventBus);
         ModEntityTypes.register(eventBus);
 
         // Register the setup method for modloading
@@ -51,31 +49,26 @@ public class CreaturesofRuneterra
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
-        // some preinit code
-        LOGGER.info("HELLO FROM PREINIT");
-        LOGGER.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
+    private void setup(final FMLCommonSetupEvent event){
+        event.enqueueWork( ()->{
+            ModStructures.setupStructures();
+        });
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
-        //LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().options);
+        event.enqueueWork(() -> {
+
+        });
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
     }
 
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
+    private void enqueueIMC(final InterModEnqueueEvent event){
         // some example code to dispatch IMC to another mod
         InterModComms.sendTo("creaturesofruneterra", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
     }
 
-    private void processIMC(final InterModProcessEvent event)
-    {
-        // some example code to receive and process InterModComms from other mods
-        LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.getMessageSupplier().get()).
-                collect(Collectors.toList()));
+    private void processIMC(final InterModProcessEvent event){
+
     }
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent

@@ -2,12 +2,17 @@ package com.eximeisty.creaturesofruneterra.world;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.world.gen.ModEntityGeneration;
+import com.eximeisty.creaturesofruneterra.world.gen.ModStructureGeneration;
+import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
 import com.mojang.serialization.Codec;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-//import net.minecraft.world.World;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.ChunkGenerator;
-//import net.minecraft.world.gen.FlatChunkGenerator;
+import net.minecraft.world.gen.FlatChunkGenerator;
+import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.gen.settings.DimensionStructuresSettings;
+import net.minecraft.world.gen.settings.StructureSeparationSettings;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -17,13 +22,17 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.apache.logging.log4j.LogManager;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = CreaturesofRuneterra.MOD_ID)
 public class ModWorlEvents {
     
     @SubscribeEvent
     public static void biomeLoadingEvent(final BiomeLoadingEvent event) {
-        ModEntityGeneration.onEntitySpawn(event);
+        ModStructureGeneration.generateStructures(event);//tiene que ir primero
+        //otros
+        ModEntityGeneration.onEntitySpawn(event);//tiene que ir ultimo
     }
 
     @SubscribeEvent
@@ -43,9 +52,15 @@ public class ModWorlEvents {
             }
 
             // Prevent spawning our structure in Vanilla's superflat world
-            /*if (chunk instanceof FlatChunkGenerator && serverWorld.getDimensionKey().equals(World.OVERWORLD)) {
+            if (serverWorld.getChunkProvider().generator instanceof FlatChunkGenerator && serverWorld.getDimensionKey().equals(World.OVERWORLD)) {
                 return;
-            }*/
+            }
+
+             // Adding our Structure to the Map
+            Map<Structure<?>, StructureSeparationSettings> tempMap = new HashMap<>(serverWorld.getChunkProvider().generator.func_235957_b_().func_236195_a_());
+            tempMap.putIfAbsent(ModStructures.TEST.get(),DimensionStructuresSettings.field_236191_b_.get(ModStructures.TEST.get()));
+            serverWorld.getChunkProvider().generator.func_235957_b_().field_236193_d_ = tempMap;
+
         }
     }
 }

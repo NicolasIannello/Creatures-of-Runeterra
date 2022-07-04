@@ -13,6 +13,11 @@ import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.ClimberPathNavigator;
+import net.minecraft.pathfinding.PathNavigator;
 //import net.minecraft.potion.EffectInstance;
 //import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
@@ -22,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class XerSaiHatchlingEntity extends CreatureEntity {
+    private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(XerSaiHatchlingEntity.class, DataSerializers.BYTE);
 
     public XerSaiHatchlingEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -76,4 +82,45 @@ public class XerSaiHatchlingEntity extends CreatureEntity {
             return true;
         }
     }*/
+
+    @Override
+    protected void updateLeashedState() {
+        super.updateLeashedState();
+        this.clearLeashed(true, true);
+        return;
+    }
+
+    protected PathNavigator createNavigator(World worldIn) {
+        return new ClimberPathNavigator(this, worldIn);
+    }
+    
+    protected void registerData() {
+        super.registerData();
+        this.dataManager.register(CLIMBING, (byte)0);
+    }
+    
+    public void tick() {
+        super.tick();
+        if (!this.world.isRemote) {
+           this.setBesideClimbableBlock(this.collidedHorizontally);
+        }
+    }
+    
+    public boolean isOnLadder() {
+        return this.isBesideClimbableBlock();
+    }
+    
+    public boolean isBesideClimbableBlock() {
+        return (this.dataManager.get(CLIMBING) & 1) != 0;
+    }
+    
+    public void setBesideClimbableBlock(boolean climbing) {
+        byte b0 = this.dataManager.get(CLIMBING);
+        if (climbing) {
+           b0 = (byte)(b0 | 1);
+        } else {
+           b0 = (byte)(b0 & -2);
+        }
+        this.dataManager.set(CLIMBING, b0);
+    }
 }
