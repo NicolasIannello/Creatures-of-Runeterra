@@ -14,6 +14,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,19 +25,21 @@ import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(CreaturesofRuneterra.MOD_ID)
-public class CreaturesofRuneterra{
-    public static final String MOD_ID="creaturesofruneterra";
+public class CreaturesofRuneterra {
+    public static final String MOD_ID = "creaturesofruneterra";
+
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
     public CreaturesofRuneterra() {
-        IEventBus eventBus=FMLJavaModLoadingContext.get().getModEventBus(); 
+        // Register the setup method for modloading
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.register(eventBus);
+
         ModStructures.register(eventBus);
         ModEntityTypes.register(eventBus);
 
-        // Register the setup method for modloading
         eventBus.addListener(this::setup);
         // Register the enqueueIMC method for modloading
         eventBus.addListener(this::enqueueIMC);
@@ -49,8 +52,8 @@ public class CreaturesofRuneterra{
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void setup(final FMLCommonSetupEvent event){
-        event.enqueueWork( ()->{
+    private void setup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
             ModStructures.setupStructures();
         });
     }
@@ -62,14 +65,18 @@ public class CreaturesofRuneterra{
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
     }
 
-    private void enqueueIMC(final InterModEnqueueEvent event){
+    private void enqueueIMC(final InterModEnqueueEvent event) {
         // some example code to dispatch IMC to another mod
-        InterModComms.sendTo("creaturesofruneterra", "helloworld", () -> { LOGGER.info("Hello world from the MDK"); return "Hello world";});
+        InterModComms.sendTo("examplemod", "helloworld", () -> {
+            LOGGER.info("Hello world from the MDK");
+            return "Hello world";
+        });
     }
 
-    private void processIMC(final InterModProcessEvent event){
+    private void processIMC(final InterModProcessEvent event) {
 
     }
+
     // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(FMLServerStartingEvent event) {
@@ -79,7 +86,7 @@ public class CreaturesofRuneterra{
 
     // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
     // Event bus for receiving Registry Events)
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
+    @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
         @SubscribeEvent
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
