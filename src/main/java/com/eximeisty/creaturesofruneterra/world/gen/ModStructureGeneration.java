@@ -23,6 +23,7 @@ public class ModStructureGeneration {
             List<Supplier<StructureFeature<?, ?>>> structures = event.getGeneration().getStructures();
 
             structures.add(() -> ModStructures.TEST.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+            structures.add(() -> ModStructures.VOIDSANDCAVE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         }
     }
 }
