@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
+import com.eximeisty.creaturesofruneterra.entity.render.XerxarethRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
 
@@ -63,6 +64,7 @@ public class CreaturesofRuneterra {
 
         });
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERXARETH.get(), XerxarethRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {

@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.XerxarethEntity;
 
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -20,6 +21,11 @@ public class ModEntityTypes {
         ENTITY_TYPES.register("xersai_hatchling", 
             ()-> EntityType.Builder.create(XerSaiHatchlingEntity::new, EntityClassification.MONSTER).size(1.5f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_hatchling").toString())
         );
+    
+    public static final RegistryObject<EntityType<XerxarethEntity>> XERXARETH=
+    ENTITY_TYPES.register("xerxareth", 
+        ()-> EntityType.Builder.create(XerxarethEntity::new, EntityClassification.MONSTER).size(8.5f,5.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xerxareth").toString())
+    );
 
     public static void register(IEventBus eventBus){
         ENTITY_TYPES.register(eventBus);

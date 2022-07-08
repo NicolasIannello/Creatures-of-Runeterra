@@ -16,6 +16,7 @@ public class ModEventBusEvents {
     @SubscribeEvent
     public static void addEntityAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.XERXARETH.get(), XerSaiHatchlingEntity.setCustomAttributes().create());
     }
 
     @SubscribeEvent
