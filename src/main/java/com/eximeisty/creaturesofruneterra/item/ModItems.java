@@ -14,7 +14,11 @@ public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CreaturesofRuneterra.MOD_ID);
 
     public static final RegistryObject<ModSpawnEggItem> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
-    () -> new ModSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x464F56, 0x1D6336,
+    () -> new ModSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F,
+            new Item.Properties().group(ItemGroup.MISC)));
+
+    public static final RegistryObject<ModSpawnEggItem> XERXARETH_SPAWN_EGG = ITEMS.register("xerxareth_spawn_egg",
+    () -> new ModSpawnEggItem(ModEntityTypes.XERXARETH, 0x9F2BAF, 0xF3D978,
             new Item.Properties().group(ItemGroup.MISC)));
 
     public static void register(IEventBus eventBus) {
