@@ -15,7 +15,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class ModEntityGeneration {
     public static void onEntitySpawn(final BiomeLoadingEvent event) {
-        addEntityToSpecificBiomes(event, ModEntityTypes.XERSAI_HATCHLING.get(), 5, 2, 4, Biomes.DESERT,Biomes.DESERT_HILLS,Biomes.DESERT_LAKES,Biomes.BADLANDS,Biomes.BADLANDS_PLATEAU );
+        addEntityToSpecificBiomes(event, ModEntityTypes.XERSAI_HATCHLING.get(), 3, 2, 4, Biomes.DESERT,Biomes.DESERT_HILLS,Biomes.DESERT_LAKES,Biomes.BADLANDS,Biomes.BADLANDS_PLATEAU );
     }
 
     private static void addEntityToSpecificBiomes(BiomeLoadingEvent event, EntityType<?> type, int weight, int minCount, int maxCount, RegistryKey<Biome>... biomes) {
