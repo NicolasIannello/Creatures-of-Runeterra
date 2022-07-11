@@ -23,7 +23,7 @@ public class XerxarethEntity extends XerSaiHatchlingEntity {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.6)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 200)
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 150)
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 2);
     }
@@ -31,11 +31,11 @@ public class XerxarethEntity extends XerSaiHatchlingEntity {
     @Override
     protected void registerGoals(){
         super.registerGoals();
-        this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, true ));
+        this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
     }
 }

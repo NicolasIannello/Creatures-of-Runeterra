@@ -37,7 +37,7 @@ public class XerSaiHatchlingEntity extends CreatureEntity {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.6)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 50)
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 20)
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 2);
     }

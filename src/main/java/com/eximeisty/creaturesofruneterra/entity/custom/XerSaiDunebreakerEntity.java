@@ -20,18 +20,18 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 @SuppressWarnings("unchecked")
-public class XerSaiDunebreakerEntity extends XerxarethEntity implements IAnimatable {
+public class XerSaiDunebreakerEntity extends XerSaiHatchlingEntity implements IAnimatable {
     private AnimationFactory factory = new AnimationFactory(this);
 
-    public XerSaiDunebreakerEntity(EntityType<? extends XerxarethEntity> type, World worldIn) {
+    public XerSaiDunebreakerEntity(EntityType<? extends XerSaiHatchlingEntity> type, World worldIn) {
         super(type, worldIn);
     }
     
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)
-        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.3)
+        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.15)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 200)
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 20)
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 0.3);
     }
@@ -53,7 +53,7 @@ public class XerSaiDunebreakerEntity extends XerxarethEntity implements IAnimata
             return PlayState.CONTINUE;
         }
 
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.walk", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.idle", true));
         return PlayState.CONTINUE;
     }
 
