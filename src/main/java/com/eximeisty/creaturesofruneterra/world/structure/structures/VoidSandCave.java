@@ -75,7 +75,7 @@ public class VoidSandCave extends Structure<NoFeatureConfig> {
                             5), AbstractVillagePiece::new, chunkGenerator, templateManagerIn,
                     blockpos, this.components, this.rand,false,true);
 
-            this.components.forEach(piece -> piece.offset(0, -14, 0));
+            this.components.forEach(piece -> piece.offset(0, -13, 0));
             this.components.forEach(piece -> piece.getBoundingBox().minY -= 1);
 
             this.recalculateStructureSize();
