@@ -47,10 +47,10 @@ public class XerSaiHatchlingEntity extends CreatureEntity {
         super.registerGoals();
         this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, true ));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
-        this.goalSelector.addGoal(1, new RandomWalkingGoal(this, 0.6,80));
+        this.goalSelector.addGoal(5, new RandomWalkingGoal(this, 0.6,80));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
-        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
+        this.targetSelector.addGoal(4, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
 
