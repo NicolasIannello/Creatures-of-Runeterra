@@ -30,7 +30,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<XerSaiDunebreakerEntity>> XERSAI_DUNEBREAKER=
     ENTITY_TYPES.register("xersai_dunebreaker", 
-        ()-> EntityType.Builder.create(XerSaiDunebreakerEntity::new, EntityClassification.MONSTER).size(2.5f,2f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString())
+        ()-> EntityType.Builder.create(XerSaiDunebreakerEntity::new, EntityClassification.MONSTER).size(3f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString())
     );
 
     public static void register(IEventBus eventBus){
