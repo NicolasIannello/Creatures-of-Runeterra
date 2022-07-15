@@ -5,6 +5,7 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
@@ -28,16 +29,17 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
+// import org.apache.logging.log4j.Level;
+// import org.apache.logging.log4j.LogManager;
+// LogManager.getLogger().log(Level.DEBUG, "hi");
 
-//@SuppressWarnings("unchecked")
 public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(XerSaiDunebreakerEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(XerSaiDunebreakerEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
-    private int swingCooldown=0;
-    private int normalAttack=0;
+    private int AttackCD=0;
+    private int HeavyCD=300;
+    private int ticks=0;
 
     public XerSaiDunebreakerEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -48,7 +50,7 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
         .createMutableAttribute(Attributes.FOLLOW_RANGE, 20)//30?
-        .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)
+        .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)//?
         .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 10)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 0.3);
     }
@@ -73,20 +75,24 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
 		// 	event.getController().setAnimation(new AnimationBuilder().addAnimation("death", false));
 		// 	return PlayState.CONTINUE;
 		// }
-
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.idle", true));
         return PlayState.CONTINUE;
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if ( dataManager.get(STATE) == 1 ) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.attack", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.attack", false));
 			return PlayState.CONTINUE;
 		}
+        if ( dataManager.get(STATE) == 2 ) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.heavy", false));
+			return PlayState.CONTINUE;
+		}
+        event.getController().clearAnimationCache();
         return PlayState.STOP;
     }
 
-    @Override
+    @Override @SuppressWarnings("unchecked")
     public void registerControllers(AnimationData data){
         data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
         data.addAnimationController(new AnimationController(this, "attacks", 0, this::predicate2));
@@ -148,7 +154,7 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
         private double targetY;
         private double targetZ;
         private int delayCounter;        
-        private long lastCheckTime;
+        //private long lastCheckTime;
         private int failedPathFindingPenalty = 0;
         private boolean canPenalize = false;
 
@@ -160,34 +166,36 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
         }
         
         public boolean shouldExecute() {
-            long i = this.attacker.world.getGameTime();
-            if (i - this.lastCheckTime < 20L) {
+            //long i = this.attacker.world.getGameTime();
+            // if (i - this.lastCheckTime < 20L) {
+            //     return false;                        //doesn't seems to matter
+            // } else {
+            //    this.lastCheckTime = i;
+            --AttackCD;
+            --HeavyCD;
+            LivingEntity livingentity = this.attacker.getAttackTarget();
+            if (livingentity == null) {
+                return false;
+            } else if (!livingentity.isAlive()) {
                 return false;
             } else {
-                this.lastCheckTime = i;
-                LivingEntity livingentity = this.attacker.getAttackTarget();
-                if (livingentity == null) {
-                    return false;
-                } else if (!livingentity.isAlive()) {
-                    return false;
-                } else {
-                    if (canPenalize) {
-                        if (--this.delayCounter <= 0) {
-                            this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
-                            this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
-                            return this.path != null;
-                        } else {
-                            return true;
-                        }
-                    }
-                    this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
-                    if (this.path != null) {
-                        return true;
+                if (canPenalize) {
+                    if (--this.delayCounter <= 0) {
+                        this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
+                        this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
+                        return this.path != null;
                     } else {
-                        return this.getAttackReachSqr(livingentity) >= this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
+                        return true;
                     }
                 }
+                this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
+                if (this.path != null) {
+                    return true;
+                } else {
+                    return this.getAttackReachSqr(livingentity) >= this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
+                }
             }
+            //}
         }
         
         public boolean shouldContinueExecuting() {
@@ -206,11 +214,9 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
         }
         
         public void startExecuting() {
-            //LogManager.getLogger().log(Level.DEBUG, "startExecuting");
             this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
             this.attacker.setAggroed(true);
             this.delayCounter = 0;
-            swingCooldown = swingCooldown-1;
         }
         
         public void resetTask() {
@@ -254,34 +260,57 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
                     this.delayCounter += 15;
                 }
             }
-            //LogManager.getLogger().log(Level.DEBUG, "CD "+swingCooldown);
-            swingCooldown = swingCooldown - 1;
+            --AttackCD;
+            --HeavyCD;
             this.checkAndPerformAttack(livingentity, d0);
         }
         
-        protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            double d0 = this.attacker.getDistanceSq(enemy.getPosX(), enemy.getPosY(), enemy.getPosZ());
-            if (d0 <= 17 && swingCooldown <= 0) {
-                ++normalAttack;
-                LogManager.getLogger().log(Level.DEBUG, "Attack");
-                this.resetSwingCooldown();             
-                dataManager.set(STATE, 1);
-            }
-            if(normalAttack>0){
-                ++normalAttack;
-                if(normalAttack==10 && d0 <= 17){
-                    //LogManager.getLogger().log(Level.DEBUG, "Hit");
-                    this.attacker.attackEntityAsMob(enemy);
+        public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+            this.attacker.getLookController().setLookPositionWithEntity(this.attacker.getAttackTarget(), 30.0F, 30.0F);
+            if (distToEnemySqr<=15 && AttackCD<=0 && ticks==0) {  
+                ++ticks;
+                if(HeavyCD<=0){
+                    dataManager.set(STATE, 2);
+                    HeavyCD=200;
+                }else{
+                    dataManager.set(STATE, 1);
                 }
-                if(normalAttack>=20){
-                    dataManager.set(STATE, 0);
-                    normalAttack=0;
+            }
+
+            //Anim Notifys
+            if(ticks>0){
+                if(dataManager.get(STATE)==1){
+                    if(ticks==17 && distToEnemySqr<=22){
+                        this.attacker.attackEntityAsMob(enemy);
+                    }
+                    if(ticks==31){
+                        dataManager.set(STATE, 0);
+                    }
+                }
+                if(dataManager.get(STATE)==2){
+                    if(ticks==1){
+                        this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-0.25,AttributeModifier.Operation.ADDITION)); 
+                        this.attacker.getAttribute(Attributes.ATTACK_DAMAGE).applyPersistentModifier(new AttributeModifier("damage",20,AttributeModifier.Operation.ADDITION)); 
+                    }
+                    if(distToEnemySqr<=22 && ticks==30 ){
+                        this.attacker.attackEntityAsMob(enemy);
+                    }
+                    if(ticks==45){
+                        dataManager.set(STATE, 0);
+                        this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",0.25,AttributeModifier.Operation.ADDITION)); 
+                        this.attacker.getAttribute(Attributes.ATTACK_DAMAGE).applyPersistentModifier(new AttributeModifier("damage",-20,AttributeModifier.Operation.ADDITION)); 
+                    }
+                }
+                ++ticks;
+                if(dataManager.get(STATE)==0){
+                    this.resetAttackCD();
+                    ticks=0;
                 }
             }
         }
-        
-        protected void resetSwingCooldown() {
-            swingCooldown = 90;
+
+        protected void resetAttackCD() {
+            AttackCD = 50;
         }
         
         protected double getAttackReachSqr(LivingEntity attackTarget) {
