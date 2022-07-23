@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerxarethEntity;
@@ -31,6 +32,11 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<XerSaiDunebreakerEntity>> XERSAI_DUNEBREAKER=
     ENTITY_TYPES.register("xersai_dunebreaker", 
         ()-> EntityType.Builder.create(XerSaiDunebreakerEntity::new, EntityClassification.MONSTER).size(3f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString())
+    );
+
+    public static final RegistryObject<EntityType<RekSaiEntity>> REKSAI=
+    ENTITY_TYPES.register("reksai", 
+        ()-> EntityType.Builder.create(RekSaiEntity::new, EntityClassification.MONSTER).size(3f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
     );
 
     public static void register(IEventBus eventBus){

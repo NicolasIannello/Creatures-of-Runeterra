@@ -19,7 +19,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
-import com.eximeisty.creaturesofruneterra.entity.client.XerSaiDunebreakerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.dunebreaker.XerSaiDunebreakerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.reksai.RekSaiRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerxarethRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
@@ -70,6 +71,7 @@ public class CreaturesofRuneterra {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERXARETH.get(), XerxarethRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REKSAI.get(), RekSaiRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
