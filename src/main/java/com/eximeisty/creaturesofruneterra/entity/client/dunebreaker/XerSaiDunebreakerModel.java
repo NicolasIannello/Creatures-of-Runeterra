@@ -1,4 +1,4 @@
-package com.eximeisty.creaturesofruneterra.entity.client;
+package com.eximeisty.creaturesofruneterra.entity.client.dunebreaker;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
