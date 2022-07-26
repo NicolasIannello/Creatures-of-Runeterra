@@ -6,6 +6,7 @@ import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
@@ -37,6 +38,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(XerSaiDunebreakerEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(XerSaiDunebreakerEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
+    private static float velocidad=0;
     
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -44,9 +46,9 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)//60?
-        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25)
+        .createMutableAttribute(Attributes.MOVEMENT_SPEED, velocidad)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 20)//30?
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 150)//30?
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)//?
         .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 10)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 0.3);
@@ -56,7 +58,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     protected void registerGoals(){
         super.registerGoals();
         this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, true ));
-        this.goalSelector.addGoal(2, new RekSaiEntity.MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(2, new RekSaiEntity.MeleeAttackGoal(this, 1D, false));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
@@ -68,6 +70,23 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.walk", true));
             return PlayState.CONTINUE;
         }
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.idle", true));
+        return PlayState.CONTINUE;
+    }
+
+    public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
+        if (dataManager.get(STATE)==3) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.burrow", false));
+            return PlayState.CONTINUE;
+        }
+        if (dataManager.get(STATE)==4) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.charge", true));
+            return PlayState.CONTINUE;
+        }
+        if (dataManager.get(STATE)==5) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.salir", false));
+            return PlayState.CONTINUE;
+        }
         event.getController().clearAnimationCache();
         return PlayState.STOP;
     }
@@ -75,6 +94,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     @Override @SuppressWarnings("unchecked")
     public void registerControllers(AnimationData data){
         data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController(this, "attacks", 0, this::predicate2));
     }
 
     @Override
@@ -132,9 +152,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         private double targetX;
         private double targetY;
         private double targetZ;
-        private int delayCounter;        
-        private int failedPathFindingPenalty = 0;
-        private boolean canPenalize = false;
+        private int charge=0;
+        private int ticks=0;
+        private double lastX;
+        private double lastY;
+        private double lastZ;
 
         public MeleeAttackGoal(CreatureEntity creature, double speedIn, boolean useLongMemory) {
             this.attacker = creature;
@@ -146,22 +168,13 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         public boolean shouldExecute() { 
             LivingEntity livingentity = this.attacker.getAttackTarget();
             if (livingentity == null) {
-                LogManager.getLogger().log(Level.DEBUG, "1 living entity should "+livingentity);
                 return false;
             } else if (!livingentity.isAlive()) {
-                LogManager.getLogger().log(Level.DEBUG, "2 living isn't alive should "+!livingentity.isAlive());
                 return false;
             } else {
-                if (canPenalize) {
-                    if (--this.delayCounter <= 0) {
-                        this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
-                        this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
-                        return this.path != null;
-                    } else {
-                        return true;
-                    }
+                if(dataManager.get(STATE)<3){
+                    this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
                 }
-                this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
                 if (this.path != null) {
                     return true;
                 } else {
@@ -188,7 +201,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         public void startExecuting() {
             this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
             this.attacker.setAggroed(true);
-            this.delayCounter = 0;
         }
         
         public void resetTask() {
@@ -201,43 +213,71 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         
         public void tick() {
+            --charge;
             LivingEntity livingentity = this.attacker.getAttackTarget();
-            this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
+            if(dataManager.get(STATE)<3){
+                this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
+            }
             double d0 = this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
-            this.delayCounter = Math.max(this.delayCounter - 1, 0);
-            if ((this.longMemory || this.attacker.getEntitySenses().canSee(livingentity)) && this.delayCounter <= 0 && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || livingentity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
+
+            if ((this.longMemory || this.attacker.getEntitySenses().canSee(livingentity)) && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || livingentity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
                 this.targetX = livingentity.getPosX();
                 this.targetY = livingentity.getPosY();
                 this.targetZ = livingentity.getPosZ();
-                this.delayCounter = 4 + this.attacker.getRNG().nextInt(7);
-                if (this.canPenalize) {
-                    this.delayCounter += failedPathFindingPenalty;
-                    if (this.attacker.getNavigator().getPath() != null) {
-                        net.minecraft.pathfinding.PathPoint finalPathPoint = this.attacker.getNavigator().getPath().getFinalPathPoint();
-                        if (finalPathPoint != null && livingentity.getDistanceSq(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1){
-                            failedPathFindingPenalty = 0;
-                        }else {
-                            failedPathFindingPenalty += 10;
-                        }
-                    }else {
-                        failedPathFindingPenalty += 10;
-                    }
-                }
-                if (d0 > 1024.0D) {
-                    this.delayCounter += 10;
-                } else if (d0 > 256.0D) {
-                    this.delayCounter += 5;
-                }
-                if (!this.attacker.getNavigator().tryMoveToEntityLiving(livingentity, this.speedTowardsTarget)) {
-                    this.delayCounter += 15;
-                }
             }
             this.checkAndPerformAttack(livingentity, d0);
         }
         
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            this.attacker.getLookController().setLookPositionWithEntity(this.attacker.getAttackTarget(), 30.0F, 30.0F);
 
+            if(distToEnemySqr>550 && dataManager.get(STATE)==0 && charge<=0){
+                charge=200;
+                dataManager.set(STATE, 3);
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
+            }
+            if(dataManager.get(STATE)==3){
+                ++ticks;
+                if(ticks==20){
+                    this.lastX = this.attacker.getAttackTarget().getPosX();
+                    this.lastY = this.attacker.getAttackTarget().getPosY();
+                    this.lastZ = this.attacker.getAttackTarget().getPosZ();
+                    LogManager.getLogger().log(Level.DEBUG, "Rek'Sai X: "+this.attacker.getPosX()+" Z: "+this.attacker.getPosZ());
+                    LogManager.getLogger().log(Level.DEBUG, "X: "+this.lastX+" Z: "+this.lastZ);
+                    if(this.lastX<this.attacker.getPosX()){
+                        this.lastX-=20;
+                    }else if(this.lastX>this.attacker.getPosX()){
+                        this.lastX+=20;
+                    }
+                    if(this.lastZ<this.attacker.getPosZ()){
+                        this.lastZ-=20;
+                    }else if(this.lastZ>this.attacker.getPosZ()){
+                        this.lastZ+=20;
+                    }
+                    LogManager.getLogger().log(Level.DEBUG, "X: "+this.lastX+" Z: "+this.lastZ);
+                }
+                if(ticks==30){
+                    dataManager.set(STATE, 4);
+                    ticks=0;
+                    this.attacker.getNavigator().pathfind(this.lastX, this.lastY, this.lastZ, 0);
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",1.5,AttributeModifier.Operation.ADDITION)); 
+                }
+            }
+            if(dataManager.get(STATE)==4){
+                if(distToEnemySqr<30){
+                    this.attacker.attackEntityAsMob(enemy);
+                }
+                if( this.attacker.getDistanceSq(this.lastX, this.lastY, this.lastZ)<=10){
+                    dataManager.set(STATE, 5);
+                }
+            }
+            if(dataManager.get(STATE)==5){
+                ++ticks;
+                if(ticks==20){
+                    ticks=0;
+                    dataManager.set(STATE, 0);
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-1.15,AttributeModifier.Operation.ADDITION)); 
+                }
+            }
         }
 
         protected void resetAttackCD() {
