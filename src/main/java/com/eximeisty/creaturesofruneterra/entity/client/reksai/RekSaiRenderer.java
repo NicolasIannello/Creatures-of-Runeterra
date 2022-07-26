@@ -25,7 +25,7 @@ public class RekSaiRenderer extends GeoEntityRenderer<RekSaiEntity> {
 
     @Override
 	public RenderType getRenderType(RekSaiEntity animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        stack.scale(1F, 1F, 1F);
+        stack.scale(2.5F, 2.5F, 2.5F);
         return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
 	}
 }
