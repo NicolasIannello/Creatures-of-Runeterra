@@ -30,9 +30,6 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-// LogManager.getLogger().log(Level.DEBUG, "hi");
 
 public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(XerSaiDunebreakerEntity.class, DataSerializers.VARINT);
@@ -91,10 +88,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         return PlayState.STOP;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
     public void registerControllers(AnimationData data){
-        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
-        data.addAnimationController(new AnimationController(this, "attacks", 0, this::predicate2));
+        //<IAnimatable> antes no estaba
+        data.addAnimationController(new AnimationController<IAnimatable>(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<IAnimatable>(this, "attacks", 0, this::predicate2));
     }
 
     @Override
@@ -217,6 +215,8 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             LivingEntity livingentity = this.attacker.getAttackTarget();
             if(dataManager.get(STATE)<3){
                 this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
+            }else{
+                this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30, 30);
             }
             double d0 = this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
 
@@ -241,19 +241,23 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     this.lastX = this.attacker.getAttackTarget().getPosX();
                     this.lastY = this.attacker.getAttackTarget().getPosY();
                     this.lastZ = this.attacker.getAttackTarget().getPosZ();
-                    LogManager.getLogger().log(Level.DEBUG, "Rek'Sai X: "+this.attacker.getPosX()+" Z: "+this.attacker.getPosZ());
-                    LogManager.getLogger().log(Level.DEBUG, "X: "+this.lastX+" Z: "+this.lastZ);
-                    if(this.lastX<this.attacker.getPosX()){
-                        this.lastX-=20;
-                    }else if(this.lastX>this.attacker.getPosX()){
-                        this.lastX+=20;
-                    }
-                    if(this.lastZ<this.attacker.getPosZ()){
-                        this.lastZ-=20;
-                    }else if(this.lastZ>this.attacker.getPosZ()){
-                        this.lastZ+=20;
-                    }
-                    LogManager.getLogger().log(Level.DEBUG, "X: "+this.lastX+" Z: "+this.lastZ);
+                    
+                    if((this.lastX-this.attacker.getPosX())<=10 && (this.lastX-this.attacker.getPosX())>=-10){
+                        if(this.lastZ<this.attacker.getPosZ()){
+                            this.lastZ-=20;
+                        }else{
+                            this.lastZ+=20;
+                        }
+                    }else{
+                        double m= (this.lastZ-this.attacker.getPosZ())/(this.lastX-this.attacker.getPosX());
+                        double b= this.attacker.getPosZ()-(m*this.attacker.getPosX());
+                        if(this.lastX<this.attacker.getPosX()){
+                            this.lastX-=20;
+                        }else{
+                            this.lastX+=20;
+                        }
+                        this.lastZ= m*this.lastX+b;
+                    }                  
                 }
                 if(ticks==30){
                     dataManager.set(STATE, 4);
