@@ -92,10 +92,10 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
         return PlayState.STOP;
     }
 
-    @Override @SuppressWarnings("unchecked")
+    @Override
     public void registerControllers(AnimationData data){
-        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
-        data.addAnimationController(new AnimationController(this, "attacks", 0, this::predicate2));
+        data.addAnimationController(new AnimationController<IAnimatable>(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<IAnimatable>(this, "attacks", 0, this::predicate2));
     }
 
     @Override
