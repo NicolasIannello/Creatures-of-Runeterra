@@ -4,6 +4,7 @@ import java.util.EnumSet;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
@@ -16,16 +17,21 @@ import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.ClimberPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.server.ServerBossInfo;
+
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -39,7 +45,8 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(XerSaiDunebreakerEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
     private static double velocidad=0;
-    
+    private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
+
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -48,9 +55,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)//60?
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, velocidad)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 150)//30?
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 600)//30?
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)//?
         .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 10)
+        .createMutableAttribute(Attributes.ARMOR, 0)
+        .createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 0)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 0.3);
     }
 
@@ -63,6 +72,16 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
         this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+    }
+
+    public void addTrackingPlayer(ServerPlayerEntity player) {
+        super.addTrackingPlayer(player);
+        this.bossInfo.addPlayer(player);
+    }
+
+    public void removeTrackingPlayer(ServerPlayerEntity player) {
+        super.removeTrackingPlayer(player);
+        this.bossInfo.removePlayer(player);
     }
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
@@ -122,6 +141,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     
     public void tick() {
         super.tick();
+        this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
         if (!this.world.isRemote) {
            this.setBesideClimbableBlock(this.collidedHorizontally);
         }
@@ -314,5 +334,25 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         protected double getAttackReachSqr(LivingEntity attackTarget) {
             return (double)(this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F + attackTarget.getWidth());
         }
+    }
+
+    @Override
+    public boolean onLivingFall(float distance, float damageMultiplier) {
+        return false;
+    }
+  
+    @Override
+    public boolean addPotionEffect(EffectInstance effectInstanceIn) {
+        return false;
+    }
+  
+    @Override
+    protected boolean canBeRidden(Entity entityIn) {
+        return false;
+    }
+  
+    @Override
+    public boolean canChangeDimension() {
+        return false;
     }
 }
