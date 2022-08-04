@@ -28,6 +28,7 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.server.ServerBossInfo;
@@ -169,6 +170,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         protected final CreatureEntity attacker;
         private final double speedTowardsTarget;
         private final boolean longMemory;
+        private boolean leap=false;
         private Path path;
         private double targetX;
         private double targetY;
@@ -184,7 +186,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             this.attacker = creature;
             this.speedTowardsTarget = speedIn;
             this.longMemory = useLongMemory;
-            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
+            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
         }
         
         public boolean shouldExecute() { 
@@ -265,7 +267,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            if(distToEnemySqr>550 && dataManager.get(STATE)==0 && charge<=0){
+            if(distToEnemySqr>550 && dataManager.get(STATE)==0 && charge<=0 && this.attacker.isOnGround()){
                 dataManager.set(STATE, 3);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
             }
@@ -275,29 +277,46 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     this.lastX = this.attacker.getAttackTarget().getPosX();
                     this.lastY = this.attacker.getAttackTarget().getPosY();
                     this.lastZ = this.attacker.getAttackTarget().getPosZ();
-                    
-                    if((this.lastX-this.attacker.getPosX())<=10 && (this.lastX-this.attacker.getPosX())>=-10){
-                        if(this.lastZ<this.attacker.getPosZ()){
-                            this.lastZ-=20;
-                        }else{
-                            this.lastZ+=20;
-                        }
+                    if (band==false){//(this.attacker.getPosY()+10.0D<this.lastY){
+                        leap=true;
                     }else{
-                        double m= (this.lastZ-this.attacker.getPosZ())/(this.lastX-this.attacker.getPosX());
-                        double b= this.attacker.getPosZ()-(m*this.attacker.getPosX());
-                        if(this.lastX<this.attacker.getPosX()){
-                            this.lastX-=20;
+                        if((this.lastX-this.attacker.getPosX())<=10 && (this.lastX-this.attacker.getPosX())>=-10){
+                            if(this.lastZ<this.attacker.getPosZ()){
+                                this.lastZ-=20;
+                            }else{
+                                this.lastZ+=20;
+                            }
                         }else{
-                            this.lastX+=20;
-                        }
-                        this.lastZ= m*this.lastX+b;
-                    }                  
+                            double m= (this.lastZ-this.attacker.getPosZ())/(this.lastX-this.attacker.getPosX());
+                            double b= this.attacker.getPosZ()-(m*this.attacker.getPosX());
+                            if(this.lastX<this.attacker.getPosX()){
+                                this.lastX-=20;
+                            }else{
+                                this.lastX+=20;
+                            }
+                            this.lastZ= m*this.lastX+b;
+                        } 
+                    }     
                 }
                 if(ticks==30){
-                    dataManager.set(STATE, 4);
                     ticks=0;
-                    this.attacker.getNavigator().pathfind(this.lastX, this.lastY, this.lastZ, 0);
-                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",1.5,AttributeModifier.Operation.ADDITION)); 
+                    if(leap==true){
+                        leap=false;
+                        charge=(int)(Math.random() * 150 + 30);
+                        Vector3d vector3d = this.attacker.getMotion();
+                        double vectorY=((this.attacker.getAttackTarget().getPosY() - this.attacker.getPosY())/10)+0.5;
+                        Vector3d vector3d1 = new Vector3d(this.attacker.getAttackTarget().getPosX() - this.attacker.getPosX(), 0D, this.attacker.getAttackTarget().getPosZ() - this.attacker.getPosZ());
+                        if (vector3d1.lengthSquared() > 1.0E-7D) {
+                            vector3d1 = vector3d1/* .normalize()*/.scale(0.2D).add(vector3d.scale(0.2D));
+                        }
+                        System.out.println(vectorY);
+                        this.attacker.setMotion(vector3d1.x, vectorY, vector3d1.z);
+                        dataManager.set(STATE, 0);
+                    }else{
+                        dataManager.set(STATE, 4);
+                        this.attacker.getNavigator().getPathToPos(new BlockPos(this.lastX, this.lastY, this.lastZ), 0);
+                        this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",1.5,AttributeModifier.Operation.ADDITION)); 
+                    }
                 }
             }
             if(dataManager.get(STATE)==4){
@@ -312,6 +331,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     this.attacker.attackEntityAsMob(enemy);
                 }
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks==100){
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-1.15,AttributeModifier.Operation.ADDITION)); 
                     dataManager.set(STATE, 5);
                     ticks=0;
                 }
@@ -322,7 +342,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     charge=(int)(Math.random() * 150 + 30);
                     ticks=0;
                     dataManager.set(STATE, 0);
-                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-1.15,AttributeModifier.Operation.ADDITION)); 
                 }
             }
         }
