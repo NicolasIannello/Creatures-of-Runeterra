@@ -95,6 +95,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
+        if (dataManager.get(STATE)==2) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.R", false));
+            return PlayState.CONTINUE;
+        }
         if (dataManager.get(STATE)==3) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.burrow", false));
             return PlayState.CONTINUE;
@@ -196,7 +200,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             } else if (!livingentity.isAlive()) {
                 return false;
             } else {
-                if(dataManager.get(STATE)<3){
+                if(dataManager.get(STATE)<2){
                     this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
                     this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
                 }
@@ -253,7 +257,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(charge>0) --charge;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
-            if(dataManager.get(STATE)<3){
+            if(dataManager.get(STATE)<2){
                 this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
             }else{
                 this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30, 30);
