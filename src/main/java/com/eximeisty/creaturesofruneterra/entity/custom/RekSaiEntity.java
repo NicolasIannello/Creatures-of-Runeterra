@@ -158,7 +158,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     
     public void setBesideClimbableBlock(boolean climbing) {
         byte b0 = this.dataManager.get(CLIMBING);
-        if (climbing && dataManager.get(STATE)<3) {
+        if (climbing && dataManager.get(STATE)<2) {
            b0 = (byte)(b0 | 1);
         } else {
            b0 = (byte)(b0 & -2);
@@ -277,7 +277,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     this.lastX = this.attacker.getAttackTarget().getPosX();
                     this.lastY = this.attacker.getAttackTarget().getPosY();
                     this.lastZ = this.attacker.getAttackTarget().getPosZ();
-                    if (band==false){//(this.attacker.getPosY()+10.0D<this.lastY){
+                    if (this.attacker.getPosY()+10.0D<this.lastY && leap==false){
                         leap=true;
                     }else{
                         if((this.lastX-this.attacker.getPosX())<=10 && (this.lastX-this.attacker.getPosX())>=-10){
@@ -296,22 +296,20 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                             }
                             this.lastZ= m*this.lastX+b;
                         } 
-                    }     
+                    }
                 }
                 if(ticks==30){
                     ticks=0;
                     if(leap==true){
-                        leap=false;
                         charge=(int)(Math.random() * 150 + 30);
                         Vector3d vector3d = this.attacker.getMotion();
-                        double vectorY=((this.attacker.getAttackTarget().getPosY() - this.attacker.getPosY())/10)+0.5;
+                        double vectorY=((this.attacker.getAttackTarget().getPosY() - this.attacker.getPosY())/10)+0.6;
                         Vector3d vector3d1 = new Vector3d(this.attacker.getAttackTarget().getPosX() - this.attacker.getPosX(), 0D, this.attacker.getAttackTarget().getPosZ() - this.attacker.getPosZ());
                         if (vector3d1.lengthSquared() > 1.0E-7D) {
-                            vector3d1 = vector3d1/* .normalize()*/.scale(0.2D).add(vector3d.scale(0.2D));
+                            vector3d1 = vector3d1.scale(0.2D).add(vector3d.scale(0.2D));
                         }
-                        System.out.println(vectorY);
                         this.attacker.setMotion(vector3d1.x, vectorY, vector3d1.z);
-                        dataManager.set(STATE, 0);
+                        dataManager.set(STATE, 2);
                     }else{
                         dataManager.set(STATE, 4);
                         this.attacker.getNavigator().getPathToPos(new BlockPos(this.lastX, this.lastY, this.lastZ), 0);
@@ -341,6 +339,22 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(ticks==20){
                     charge=(int)(Math.random() * 150 + 30);
                     ticks=0;
+                    dataManager.set(STATE, 0);
+                }
+            }
+            if(dataManager.get(STATE)==2){
+                ++ticks;
+                BlockPos.getAllInBox(new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D))
+                .forEach(pos->{
+                    if( this.attacker.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
+                        this.attacker.world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                    }
+                });
+                if(distToEnemySqr<30){
+                    this.attacker.attackEntityAsMob(enemy);
+                }
+                if(this.attacker.isOnGround()&& ticks>5){
+                    leap=false;
                     dataManager.set(STATE, 0);
                 }
             }
