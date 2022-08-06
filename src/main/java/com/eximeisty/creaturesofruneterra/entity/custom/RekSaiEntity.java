@@ -48,7 +48,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private AnimationFactory factory = new AnimationFactory(this);
     private static double velocidad=0;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
-    private boolean band2=true;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
