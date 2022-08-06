@@ -25,6 +25,7 @@ import net.minecraft.pathfinding.ClimberPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -47,6 +48,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private AnimationFactory factory = new AnimationFactory(this);
     private static double velocidad=0;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
+    private boolean band2=true;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -96,7 +98,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if (dataManager.get(STATE)==2) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.R", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.R2", true));
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==3) {
@@ -175,6 +177,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         private final double speedTowardsTarget;
         private final boolean longMemory;
         private boolean leap=false;
+        private boolean grab=false;
         private Path path;
         private double targetX;
         private double targetY;
@@ -260,7 +263,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(dataManager.get(STATE)<2){
                 this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
             }else{
-                this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30, 30);
+                this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
             }
             double d0 = this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
 
@@ -307,7 +310,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     if(leap==true){
                         charge=(int)(Math.random() * 150 + 30);
                         Vector3d vector3d = this.attacker.getMotion();
-                        double vectorY=((this.attacker.getAttackTarget().getPosY() - this.attacker.getPosY())/10)+0.6;
+                        double vectorY=((this.attacker.getAttackTarget().getPosY() - this.attacker.getPosY())/10)+0.5;
                         Vector3d vector3d1 = new Vector3d(this.attacker.getAttackTarget().getPosX() - this.attacker.getPosX(), 0D, this.attacker.getAttackTarget().getPosZ() - this.attacker.getPosZ());
                         if (vector3d1.lengthSquared() > 1.0E-7D) {
                             vector3d1 = vector3d1.scale(0.2D).add(vector3d.scale(0.2D));
@@ -354,10 +357,20 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                         this.attacker.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 });
-                if(distToEnemySqr<30){
-                    this.attacker.attackEntityAsMob(enemy);
+                if(distToEnemySqr<30 && grab==false){
+                    grab=true;
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 2.0F);
+                    enemy.stopRiding();
+                    enemy.startRiding(this.attacker, true);
                 }
-                if(this.attacker.isOnGround()&& ticks>5){
+                if(enemy.isRidingSameEntity(this.attacker)==false && grab==true){
+                    enemy.startRiding(this.attacker, true);
+                }
+                if(this.attacker.isOnGround() && ticks>5){
+                    enemy.stopRiding();
+                    grab=false;
+                    ticks=0;
+                    charge=(int)(Math.random() * 150 + 30);
                     leap=false;
                     dataManager.set(STATE, 0);
                 }
@@ -373,23 +386,56 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
     }
 
+    public void updatePassenger(Entity passenger) {
+        super.updatePassenger(passenger);
+        if (this.isPassenger(passenger)) {
+            //passenger.setMotion(0, passenger.getMotion().y, 0); ??
+            passenger.setPosition(this.getLookVec().x*-8+this.getPosX(), this.getPosY()+13.0D, this.getLookVec().z*-8+this.getPosZ());
+        }
+    }
+
     @Override
     public boolean onLivingFall(float distance, float damageMultiplier) {
         return false;
     }
-  
     @Override
     public boolean addPotionEffect(EffectInstance effectInstanceIn) {
         return false;
     }
-  
     @Override
     protected boolean canBeRidden(Entity entityIn) {
         return false;
     }
-  
+    @Override
+    public boolean canPassengerSteer() {
+        return false;
+    }
+    @Override
+    public boolean shouldRiderSit() {
+        return false;
+    }
+    @Override
+    public boolean canBePushed() {
+        return false;
+    }
+    @Override
+    public boolean canBeRiddenInWater(Entity rider) {
+        return true;
+    }
     @Override
     public boolean canChangeDimension() {
         return false;
+    }
+    @Override
+    public boolean canDespawn(double distanceToClosestPlayer) {
+        return false;
+    }
+    @Override
+    public boolean preventDespawn() {
+        return true;
+    }
+    @Override
+    public boolean isNoDespawnRequired() {
+        return true;
     }
 }
