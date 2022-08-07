@@ -47,6 +47,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(XerSaiDunebreakerEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
     private static double velocidad=0;
+    private double grabTicks=1;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
@@ -96,6 +97,14 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
+        if (dataManager.get(STATE)==1) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.RDown", true));
+            return PlayState.CONTINUE;
+        }
+        if (dataManager.get(STATE)==6){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.RTrans", false));
+            return PlayState.CONTINUE;
+        }
         if (dataManager.get(STATE)==2) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.R2", true));
             return PlayState.CONTINUE;
@@ -163,7 +172,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     
     public void setBesideClimbableBlock(boolean climbing) {
         byte b0 = this.dataManager.get(CLIMBING);
-        if (climbing && dataManager.get(STATE)<2) {
+        if (climbing && dataManager.get(STATE)<1) {
            b0 = (byte)(b0 | 1);
         } else {
            b0 = (byte)(b0 & -2);
@@ -202,7 +211,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             } else if (!livingentity.isAlive()) {
                 return false;
             } else {
-                if(dataManager.get(STATE)<2){
+                if(dataManager.get(STATE)<1){
                     this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
                     this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
                 }
@@ -259,7 +268,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(charge>0) --charge;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
-            if(dataManager.get(STATE)<2){
+            if(dataManager.get(STATE)<1){
                 this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
             }else{
                 this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
@@ -348,14 +357,21 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     dataManager.set(STATE, 0);
                 }
             }
-            if(dataManager.get(STATE)==2){
-                ++ticks;
+            if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){
                 BlockPos.getAllInBox(new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D))
                 .forEach(pos->{
                     if( this.attacker.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
                         this.attacker.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 });
+                if(this.attacker.fallDistance>0){
+                    if(ticks==0){
+                        dataManager.set(STATE, 6);
+                    }else if(ticks==20){
+                        dataManager.set(STATE, 1);
+                    }
+                    ++ticks;
+                }
                 if(distToEnemySqr<30 && grab==false){
                     grab=true;
                     enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 2.0F);
@@ -365,11 +381,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(enemy.isRidingSameEntity(this.attacker)==false && grab==true){
                     enemy.startRiding(this.attacker, true);
                 }
-                if(this.attacker.isOnGround() && ticks>5){
+                if(this.attacker.isOnGround() && ticks>1){
                     enemy.stopRiding();
                     grab=false;
                     ticks=0;
-                    charge=(int)(Math.random() * 150 + 30);
+                    charge=(int)(Math.random() * 5 + 30);
                     leap=false;
                     dataManager.set(STATE, 0);
                 }
@@ -389,7 +405,22 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
             //passenger.setMotion(0, passenger.getMotion().y, 0); ??
-            passenger.setPosition(this.getLookVec().x*-8+this.getPosX(), this.getPosY()+13.0D, this.getLookVec().z*-8+this.getPosZ());
+            double y;
+            if(dataManager.get(STATE)==6 || grabTicks>1.0D && grabTicks<=14.0D){
+                y = this.getPosY()+13.0D-grabTicks;
+                grabTicks+=0.5D;
+            }else if(dataManager.get(STATE)==1){
+                y = this.getPosY();
+                if(grabTicks>1.0D){
+                    grabTicks=1.0D;
+                }
+            }else{
+                y = this.getPosY()+13.0D;
+                if(grabTicks>1.0D){
+                    grabTicks=1.0D;
+                }
+            }
+            passenger.setPosition(this.getLookVec().x*-8+this.getPosX(), y, this.getLookVec().z*-8+this.getPosZ());
         }
     }
 
