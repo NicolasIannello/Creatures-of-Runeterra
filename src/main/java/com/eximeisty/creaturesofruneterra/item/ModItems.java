@@ -15,19 +15,25 @@ public class ModItems {
 
         public static final RegistryObject<ModSpawnEggItem> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F,
-                new Item.Properties().group(ItemGroup.MISC)));
+                new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<ModSpawnEggItem> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.XERSAI_DUNEBREAKER, 0x9F2BAF, 0x370E45,
-                new Item.Properties().group(ItemGroup.MISC)));
+                new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<ModSpawnEggItem> XERXARETH_SPAWN_EGG = ITEMS.register("xerxareth_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.XERXARETH, 0x9F2BAF, 0xF3D978,
-                new Item.Properties().group(ItemGroup.MISC)));
+                new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<ModSpawnEggItem> REKSAI_SPAWN_EGG = ITEMS.register("reksai_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.REKSAI, 0x9F2BAF, 0x005f8f,
-                new Item.Properties().group(ItemGroup.MISC)));
+                new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> DUNEBREAKER_HORN = ITEMS.register("dunebreaker_horn",
+        () -> new Item(new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> DUNEBREAKER_FANG = ITEMS.register("dunebreaker_fang",
+        () -> new Item(new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
