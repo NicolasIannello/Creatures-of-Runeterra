@@ -28,4 +28,4 @@ forge*changelog.txt
 # BlockBench stuff
 src/main/resources/assets/creaturesofruneterra/animations
 src/main/resources/assets/creaturesofruneterra/geo
-src/main/resources/assets/creaturesofruneterra/textures/entity
+src/main/resources/assets/creaturesofruneterra/textures
