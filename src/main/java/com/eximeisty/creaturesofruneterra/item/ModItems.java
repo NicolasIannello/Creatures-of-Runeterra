@@ -35,6 +35,15 @@ public class ModItems {
         public static final RegistryObject<Item> DUNEBREAKER_FANG = ITEMS.register("dunebreaker_fang",
         () -> new Item(new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
+        public static final RegistryObject<Item> REKSAI_PLAQUE = ITEMS.register("reksai_plaque",
+        () -> new Item(new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> REKSAI_CLAW = ITEMS.register("reksai_claw",
+        () -> new Item(new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
+        () -> new SwordItem(ModItemTier.SAI, 5, 2, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
         }
