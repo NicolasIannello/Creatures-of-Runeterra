@@ -383,6 +383,8 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 }
                 if(this.attacker.isOnGround() && ticks>1){
                     enemy.stopRiding();
+                    enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
+                    enemy.attackEntityFrom(DamageSource.FALL, this.attacker.fallDistance/2F);
                     grab=false;
                     ticks=0;
                     charge=(int)(Math.random() * 5 + 30);
