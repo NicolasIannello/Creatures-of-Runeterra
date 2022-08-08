@@ -38,7 +38,7 @@ public class ModWorldEvents {
         ModEntityGeneration.onEntitySpawn(event);
     }
 
-    @SubscribeEvent
+    @SubscribeEvent @SuppressWarnings("resource")
     public static void addDimensionalSpacing(final WorldEvent.Load event) {
         if(event.getWorld() instanceof ServerWorld) {
             ServerWorld serverWorld = (ServerWorld) event.getWorld();
