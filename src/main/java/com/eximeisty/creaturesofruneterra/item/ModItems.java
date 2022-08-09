@@ -3,7 +3,9 @@ package com.eximeisty.creaturesofruneterra.item;
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.item.custom.ModSpawnEggItem;
+import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
 
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
@@ -43,6 +45,18 @@ public class ModItems {
 
         public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
         () -> new SwordItem(ModItemTier.SAI, 5, 2, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> SAI_CHESTPLATE = ITEMS.register("sai_chestplate",
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> SAI_LEGGINGS = ITEMS.register("sai_leggings",
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.LEGS, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> SAI_BOOTS = ITEMS.register("sai_boots",
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.FEET, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
