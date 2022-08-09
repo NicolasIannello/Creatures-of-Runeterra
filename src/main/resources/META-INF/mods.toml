@@ -13,6 +13,7 @@ license="All rights reserved"
 # A URL to refer people to when problems occur with this mod
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
+logoFile="cor.png" #optional
 [[mods]] #mandatory
 # The modid of the mod
 modId="creaturesofruneterra" #mandatory
@@ -27,14 +28,13 @@ displayName="Creatures of Runeterra" #mandatory
 # A URL for the "homepage" for this mod, displayed in the mod UI
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
-logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI
-credits="none" #optional
+credits="Eximeisty" #optional
 # A text field displayed in the mod UI
 authors="Eximeisty" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-description
+Creatures of Runeterra is a mod that plans to bring to life the universe of Runeterra into minecraft.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.examplemod]] #optional
