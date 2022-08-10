@@ -1,0 +1,25 @@
+{
+    "type": "creaturesofruneterra:reksai",
+    "pools": [
+        {
+            "rolls": 20,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "weight": 70,
+                    "name": "creaturesofruneterra:reksai_plaque"
+                },
+                {
+                    "type": "minecraft:item",
+                    "weight": 20,
+                    "name": "creaturesofruneterra:reksai_claw"
+                },
+                {
+                    "type": "minecraft:item",
+                    "weight": 10,
+                    "name": "minecraft:air"
+                }
+            ]
+        }
+    ]
+}

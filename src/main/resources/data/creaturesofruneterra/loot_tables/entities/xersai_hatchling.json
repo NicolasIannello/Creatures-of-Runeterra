@@ -1,0 +1,25 @@
+{
+    "type": "creaturesofruneterra:xersai_hatchling",
+    "pools": [
+        {
+            "rolls": 1,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "weight": 40,
+                    "name": "minecraft:bone"
+                },
+                {
+                    "type": "minecraft:item",
+                    "weight": 40,
+                    "name": "minecraft:string"
+                },
+                {
+                    "type": "minecraft:item",
+                    "weight": 20,
+                    "name": "minecraft:air"
+                }
+            ]
+        }
+    ]
+}
