@@ -1,4 +1,4 @@
-package com.eximeisty.creaturesofruneterra.entity.client.reksai;
+package com.eximeisty.creaturesofruneterra.entity.client.entities.reksai;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
@@ -9,12 +9,12 @@ public class RekSaiModel extends AnimatedGeoModel<RekSaiEntity> {
 
     @Override
     public ResourceLocation getAnimationFileLocation(RekSaiEntity animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/reksai.animation.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/reksai.animation.json");
     }
 
     @Override
     public ResourceLocation getModelLocation(RekSaiEntity object) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/reksai.geo.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/reksai.geo.json");
     }
 
     @Override

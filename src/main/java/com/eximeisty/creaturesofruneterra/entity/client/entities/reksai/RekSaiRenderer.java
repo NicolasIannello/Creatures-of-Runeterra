@@ -1,4 +1,4 @@
-package com.eximeisty.creaturesofruneterra.entity.client.reksai;
+package com.eximeisty.creaturesofruneterra.entity.client.entities.reksai;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;

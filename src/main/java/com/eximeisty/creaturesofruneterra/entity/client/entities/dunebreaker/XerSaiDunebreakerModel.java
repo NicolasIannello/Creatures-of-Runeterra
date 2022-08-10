@@ -1,4 +1,4 @@
-package com.eximeisty.creaturesofruneterra.entity.client.dunebreaker;
+package com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
@@ -9,12 +9,12 @@ public class XerSaiDunebreakerModel extends AnimatedGeoModel<XerSaiDunebreakerEn
 
     @Override
     public ResourceLocation getAnimationFileLocation(XerSaiDunebreakerEntity animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/xersai_dunebreaker.animation.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/xersai_dunebreaker.animation.json");
     }
 
     @Override
     public ResourceLocation getModelLocation(XerSaiDunebreakerEntity object) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/xersai_dunebreaker.geo.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/xersai_dunebreaker.geo.json");
     }
 
     @Override
