@@ -8,7 +8,7 @@ public class ModItemGroup {
 
         @Override
         public ItemStack createIcon() {
-            return new ItemStack(ModItems.SAI_SWORD.get());
+            return new ItemStack(ModItems.SAI_HELMET.get());
         }
     };
 }
