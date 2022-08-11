@@ -60,7 +60,7 @@ public class ModItems {
         () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.FEET, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
-        () -> new DunebreakerShield(new Item.Properties().group(ModItemGroup.COR_GROUP).maxStackSize(1)));
+        () -> new DunebreakerShield(new Item.Properties().maxDamage(600).group(ModItemGroup.COR_GROUP)));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
