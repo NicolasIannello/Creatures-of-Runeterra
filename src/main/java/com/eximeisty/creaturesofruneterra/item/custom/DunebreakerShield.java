@@ -53,21 +53,20 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
         return this.factory;
     }
 
-    public void tick(World worldIn, PlayerEntity playerIn, Hand handIn, ItemStack itemstack){
-        if (!worldIn.isRemote) {
-            final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) worldIn);
-            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerIn);
-            GeckoLibNetwork.syncAnimation(target, this, id, 1);
-        }
-    }
-
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
+        //System.out.println("held item "+playerIn.getHeldItem(handIn).getDisplayName().getString());
+        // System.out.println("held main "+playerIn.getHeldItemMainhand().getDisplayName().getString());
+        // System.out.println("held off "+playerIn.getHeldItemOffhand().getDisplayName().getString());
         playerIn.setActiveHand(handIn);
         if (!worldIn.isRemote) {
             final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) worldIn);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerIn);
-            GeckoLibNetwork.syncAnimation(target, this, id, 1);
+            if(playerIn.getHeldItemMainhand().getDisplayName().getString().contains("Dunebreaker")){
+                GeckoLibNetwork.syncAnimation(target, this, id, 1);
+            }else{
+                GeckoLibNetwork.syncAnimation(target, this, id, 2);
+            }
         }
         return ActionResult.resultConsume(itemstack);
     }
@@ -77,7 +76,7 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
         if (state == 1) {
 			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
 			controller.markNeedsReload();
-			controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.guard", false));
+			controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.guard", true));
 		}
     }
 
