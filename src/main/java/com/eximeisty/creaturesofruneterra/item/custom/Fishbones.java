@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShootableItem;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -75,73 +76,100 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
             PlayerEntity playerentity = (PlayerEntity)entityLiving;
             boolean flag = playerentity.abilities.isCreativeMode;
             ItemStack itemstack = playerentity.findAmmo(stack);
+            if(isCharged(itemstack)){
+                playerentity.getCooldownTracker().setCooldown(this, 10);
+            }else{
+                playerentity.getCooldownTracker().setCooldown(this, 30);
+            }
             if (!itemstack.isEmpty() || flag) {
                 if (itemstack.isEmpty()) {
                     itemstack = new ItemStack(Items.ARROW);
                 }
                 boolean flag1 = playerentity.abilities.isCreativeMode || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem)itemstack.getItem()).isInfinite(itemstack, stack, playerentity));
                 if (!worldIn.isRemote) {
-                    ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
-                    AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
-                    abstractarrowentity = customArrow(abstractarrowentity);
-                    abstractarrowentity.setDirectionAndMovement(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
+                    if(isCharged(itemstack)==true){
+                        ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
+                        AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
+                        abstractarrowentity = customArrow(abstractarrowentity);
+                        abstractarrowentity.setDirectionAndMovement(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
 
-                    abstractarrowentity.setDamage(2.5);
-                    abstractarrowentity.setIsCritical(true);
-                    abstractarrowentity.setKnockbackStrength(5);
-                    abstractarrowentity.ticksExisted = 35;
-                    abstractarrowentity.setNoGravity(true);
+                        abstractarrowentity.setDamage(2.5);
+                        abstractarrowentity.setIsCritical(true);
+                        abstractarrowentity.setKnockbackStrength(5);
+                        abstractarrowentity.ticksExisted = 35;
+                        abstractarrowentity.setNoGravity(true);
 
-                    stack.damageItem(1, playerentity, (player) -> {
-                        player.sendBreakAnimation(playerentity.getActiveHand());
-                    });
-                    if (flag1 || playerentity.abilities.isCreativeMode && (itemstack.getItem() == Items.SPECTRAL_ARROW || itemstack.getItem() == Items.TIPPED_ARROW)) {
-                        abstractarrowentity.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
-                    }
-                    worldIn.addEntity(abstractarrowentity);
-                }
-                //worldIn.playSound((PlayerEntity)null, playerentity.getPosX(), playerentity.getPosY(), playerentity.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
-                if (!flag1 && !playerentity.abilities.isCreativeMode) {
-                    itemstack.shrink(1);
-                    if (itemstack.isEmpty()) {
-                        playerentity.inventory.deleteStack(itemstack);
+                        stack.damageItem(1, playerentity, (player) -> {
+                            player.sendBreakAnimation(playerentity.getActiveHand());
+                        });
+                        if (flag1 || playerentity.abilities.isCreativeMode && (itemstack.getItem() == Items.SPECTRAL_ARROW || itemstack.getItem() == Items.TIPPED_ARROW)) {
+                            abstractarrowentity.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
+                        }
+                        worldIn.addEntity(abstractarrowentity);
                     }
                 }
-                playerentity.addStat(Stats.ITEM_USED.get(this));
-           }
+                if(isCharged(itemstack)==false){
+                    //worldIn.playSound((PlayerEntity)null, playerentity.getPosX(), playerentity.getPosY(), playerentity.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+                    if (!flag1 && !playerentity.abilities.isCreativeMode) {
+                        itemstack.shrink(1);
+                        if (itemstack.isEmpty()) {
+                            playerentity.inventory.deleteStack(itemstack);
+                        }
+                    }
+                    playerentity.addStat(Stats.ITEM_USED.get(this));
+                }
+            }
+            if (!worldIn.isRemote) {
+                final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
+                final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityLiving);
+                if(isCharged(itemstack)==true){
+                    GeckoLibNetwork.syncAnimation(target, this, id, 3);
+                }else{
+                    GeckoLibNetwork.syncAnimation(target, this, id, 2);
+                }
+            }
+            setCharged(itemstack, !isCharged(itemstack));
         }
+    }
+
+    public static boolean isCharged(ItemStack stack) {
+        CompoundNBT compoundnbt = stack.getTag();
+        return compoundnbt != null && compoundnbt.getBoolean("Charged");
+    }
+  
+     public static void setCharged(ItemStack stack, boolean chargedIn) {
+        CompoundNBT compoundnbt = stack.getOrCreateTag();
+        compoundnbt.putBoolean("Charged", chargedIn);
     }
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
         boolean flag = !playerIn.findAmmo(itemstack).isEmpty();
-  
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, worldIn, playerIn, handIn, flag);
         if (ret != null) return ret;
   
         if (!playerIn.abilities.isCreativeMode && !flag) {
            return ActionResult.resultFail(itemstack);
         } else {
-            if (!worldIn.isRemote) {
-                final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) worldIn);
-                final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerIn);
-                GeckoLibNetwork.syncAnimation(target, this, id, 1);
-            }
-           playerIn.setActiveHand(handIn);
-           return ActionResult.resultConsume(itemstack);
+            playerIn.setActiveHand(handIn);
+            return ActionResult.resultConsume(itemstack);
         }
     }
 
     @Override
     public void onAnimationSync(int id, int state) {
-        if (state == 1) {
-			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-			controller.markNeedsReload();
-			controller.setAnimation(new AnimationBuilder().addAnimation("animation.fishbones.full", false));
+        final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+        controller.markNeedsReload();
+        if (state == 2) {
+			controller.setAnimation(new AnimationBuilder().addAnimation("animation.fishbones.reload", false).addAnimation("animation.fishbones.charged", true));
+            System.out.println("reload");
+		}
+        if (state == 3) {
+			controller.setAnimation(new AnimationBuilder().addAnimation("animation.fishbones.fire", false).addAnimation("animation.fishbones.idle", true));
 		}
     }
 
-    @Override
+    @Override //@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(new TranslationTextComponent(quotes[quote]));
 	}
