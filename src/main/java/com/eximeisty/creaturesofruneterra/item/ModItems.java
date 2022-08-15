@@ -4,6 +4,7 @@ import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
 import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
+import com.eximeisty.creaturesofruneterra.item.custom.MisilItem;
 import com.eximeisty.creaturesofruneterra.item.custom.ModSpawnEggItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
 
@@ -65,6 +66,10 @@ public class ModItems {
 
         public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
         () -> new Fishbones(new Item.Properties().maxDamage(150).group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> MISIL = ITEMS.register("misil", 
+        () -> new MisilItem(new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);

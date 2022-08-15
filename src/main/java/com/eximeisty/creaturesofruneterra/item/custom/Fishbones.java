@@ -3,6 +3,8 @@ package com.eximeisty.creaturesofruneterra.item.custom;
 import java.util.List;
 import java.util.function.Predicate;
 
+import com.eximeisty.creaturesofruneterra.entity.custom.MisilEntity;
+import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.item.client.fishbones.FishbonesRenderer;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -36,6 +38,7 @@ import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
+    protected static final Predicate<ItemStack> MISIL = (stack) -> stack.isItemEqual( new ItemStack(ModItems.MISIL.get()));
     private AnimationFactory factory = new AnimationFactory(this);
     public String controllerName = "controller";
     final int quote=(int)(Math.random() * 8);
@@ -88,24 +91,24 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
                 boolean flag1 = playerentity.abilities.isCreativeMode || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem)itemstack.getItem()).isInfinite(itemstack, stack, playerentity));
                 if (!worldIn.isRemote) {
                     if(isCharged(itemstack)==true){
-                        ArrowItem arrowitem = (ArrowItem)(itemstack.getItem() instanceof ArrowItem ? itemstack.getItem() : Items.ARROW);
-                        AbstractArrowEntity abstractarrowentity = arrowitem.createArrow(worldIn, itemstack, playerentity);
-                        abstractarrowentity = customArrow(abstractarrowentity);
-                        abstractarrowentity.setDirectionAndMovement(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
+                        MisilItem misilitem = (MisilItem)(itemstack.getItem() instanceof MisilItem ? itemstack.getItem() : ModItems.MISIL);
+                        MisilEntity misilentity = misilitem.createMisil(worldIn, itemstack, playerentity);
 
-                        abstractarrowentity.setDamage(2.5);
-                        abstractarrowentity.setIsCritical(true);
-                        abstractarrowentity.setKnockbackStrength(5);
-                        abstractarrowentity.ticksExisted = 35;
-                        abstractarrowentity.setNoGravity(true);
+                        misilentity= customMisil(misilentity);
+                        misilentity.setDirectionAndMovement(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
+                        misilentity.setDamage(2.5);
+                        misilentity.setIsCritical(true);
+                        misilentity.setKnockbackStrength(5);
+                        misilentity.ticksExisted = 35;
+                        misilentity.setNoGravity(true);
 
                         stack.damageItem(1, playerentity, (player) -> {
                             player.sendBreakAnimation(playerentity.getActiveHand());
                         });
-                        if (flag1 || playerentity.abilities.isCreativeMode && (itemstack.getItem() == Items.SPECTRAL_ARROW || itemstack.getItem() == Items.TIPPED_ARROW)) {
+                        /*if (flag1 || playerentity.abilities.isCreativeMode && (itemstack.getItem() == Items.SPECTRAL_ARROW || itemstack.getItem() == Items.TIPPED_ARROW)) {
                             abstractarrowentity.pickupStatus = AbstractArrowEntity.PickupStatus.CREATIVE_ONLY;
-                        }
-                        worldIn.addEntity(abstractarrowentity);
+                        }*/
+                        worldIn.addEntity(misilentity);
                     }
                 }
                 if(isCharged(itemstack)==false){
@@ -162,7 +165,6 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
         controller.markNeedsReload();
         if (state == 2) {
 			controller.setAnimation(new AnimationBuilder().addAnimation("animation.fishbones.reload", false).addAnimation("animation.fishbones.charged", true));
-            System.out.println("reload");
 		}
         if (state == 3) {
 			controller.setAnimation(new AnimationBuilder().addAnimation("animation.fishbones.fire", false).addAnimation("animation.fishbones.idle", true));
@@ -182,12 +184,15 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
     }
     public AbstractArrowEntity customArrow(AbstractArrowEntity arrow) {
         return arrow;
+    }  
+    public MisilEntity customMisil(MisilEntity misil) {
+        return misil;
     }   
     public int func_230305_d_() {
         return 15;
     }
     @Override
     public Predicate<ItemStack> getInventoryAmmoPredicate() {
-        return ARROWS;
+        return MISIL;
     }
 }
