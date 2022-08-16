@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.entity.custom.HexcoreEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.MisilEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
@@ -45,6 +46,10 @@ public class ModEntityTypes {
         ()-> EntityType.Builder.<MisilEntity>create(MisilEntity::new, EntityClassification.MISC).size(4.0F, 2.0F).trackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
     );
 
+    public static final RegistryObject<EntityType<HexcoreEntity>> HEXCORE = 
+    ENTITY_TYPES.register("hexcore", 
+        ()-> EntityType.Builder.<HexcoreEntity>create(HexcoreEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).trackingRange(4).updateInterval(10).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "hexcore").toString())
+    );
 
     public static void register(IEventBus eventBus){
         ENTITY_TYPES.register(eventBus);
