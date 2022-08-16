@@ -1,0 +1,22 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "ICC",
+        "ITC",
+        "ICC"
+    ],
+    "key":{
+        "I":{
+            "item":"minecraft:iron_nugget"
+        },
+        "C":{
+            "item":"minecraft:clay_ball"
+        },
+        "T":{
+            "item":"minecraft:tnt"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:misil"
+    }
+}
