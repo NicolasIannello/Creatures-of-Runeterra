@@ -97,7 +97,6 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
                         misilentity= customMisil(misilentity);
                         misilentity.setDirectionAndMovement(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
                         misilentity.setDamage(2.5);
-                        misilentity.setIsCritical(true);
                         misilentity.setKnockbackStrength(5);
                         misilentity.ticksExisted = 35;
                         misilentity.setNoGravity(true);
