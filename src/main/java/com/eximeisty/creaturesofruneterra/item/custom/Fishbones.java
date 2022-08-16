@@ -11,7 +11,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.item.ArrowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -79,18 +78,18 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
             PlayerEntity playerentity = (PlayerEntity)entityLiving;
             boolean flag = playerentity.abilities.isCreativeMode;
             ItemStack itemstack = playerentity.findAmmo(stack);
-            if(isCharged(itemstack)){
+            if(isCharged(stack)){
                 playerentity.getCooldownTracker().setCooldown(this, 10);
             }else{
                 playerentity.getCooldownTracker().setCooldown(this, 30);
             }
-            if (!itemstack.isEmpty() || flag) {
+            if (!itemstack.isEmpty() || flag || isCharged(stack)) {
                 if (itemstack.isEmpty()) {
-                    itemstack = new ItemStack(Items.ARROW);
+                    itemstack = new ItemStack(ModItems.MISIL.get());
                 }
-                boolean flag1 = playerentity.abilities.isCreativeMode || (itemstack.getItem() instanceof ArrowItem && ((ArrowItem)itemstack.getItem()).isInfinite(itemstack, stack, playerentity));
+                boolean flag1 = playerentity.abilities.isCreativeMode || (itemstack.getItem() instanceof MisilItem && ((MisilItem)itemstack.getItem()).isInfinite(itemstack, stack, playerentity));
                 if (!worldIn.isRemote) {
-                    if(isCharged(itemstack)==true){
+                    if(isCharged(stack)==true){
                         MisilItem misilitem = (MisilItem)(itemstack.getItem() instanceof MisilItem ? itemstack.getItem() : ModItems.MISIL);
                         MisilEntity misilentity = misilitem.createMisil(worldIn, itemstack, playerentity);
 
@@ -110,7 +109,7 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
                         worldIn.addEntity(misilentity);
                     }
                 }
-                if(isCharged(itemstack)==false){
+                if(isCharged(stack)==false){
                     //worldIn.playSound((PlayerEntity)null, playerentity.getPosX(), playerentity.getPosY(), playerentity.getPosZ(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS, 1.0F, 1.0F / (random.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
                     if (!flag1 && !playerentity.abilities.isCreativeMode) {
                         itemstack.shrink(1);
@@ -124,13 +123,13 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
             if (!worldIn.isRemote) {
                 final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
                 final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityLiving);
-                if(isCharged(itemstack)==true){
+                if(isCharged(stack)==true){
                     GeckoLibNetwork.syncAnimation(target, this, id, 3);
                 }else{
                     GeckoLibNetwork.syncAnimation(target, this, id, 2);
                 }
             }
-            setCharged(itemstack, !isCharged(itemstack));
+            setCharged(stack, !isCharged(stack));
         }
     }
 
@@ -149,10 +148,13 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
         boolean flag = !playerIn.findAmmo(itemstack).isEmpty();
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, worldIn, playerIn, handIn, flag);
         if (ret != null) return ret;
-  
-        if (!playerIn.abilities.isCreativeMode && !flag) {
+        
+        if(isCharged(itemstack)){
+            playerIn.setActiveHand(handIn);
+            return ActionResult.resultConsume(itemstack);
+        }else if (!playerIn.abilities.isCreativeMode && !flag) {
            return ActionResult.resultFail(itemstack);
-        } else {
+        }else {
             playerIn.setActiveHand(handIn);
             return ActionResult.resultConsume(itemstack);
         }
