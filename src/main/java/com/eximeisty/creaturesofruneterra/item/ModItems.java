@@ -74,6 +74,9 @@ public class ModItems {
         public static final RegistryObject<Item> HEXCORE = ITEMS.register("hexcore", 
         () -> new HexcoreItem(new Item.Properties().maxStackSize(10).group(ModItemGroup.COR_GROUP)));
 
+        public static final RegistryObject<Item> GEMSTONE = ITEMS.register("gemstone", 
+        () -> new Item(new Item.Properties().maxStackSize(10).group(ModItemGroup.COR_GROUP)));
+
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
         }
