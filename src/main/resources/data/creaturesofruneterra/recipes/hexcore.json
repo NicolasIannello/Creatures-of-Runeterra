@@ -1,0 +1,22 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "CRC",
+        "CEC",
+        "CRC"
+    ],
+    "key":{
+        "C":{
+            "item":"minecraft:prismarine_crystals"
+        },
+        "R":{
+            "item":"minecraft:redstone"
+        },
+        "E":{
+            "item":"minecraft:ender_eye"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:hexcore"
+    }
+}
