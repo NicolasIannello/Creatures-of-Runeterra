@@ -9,6 +9,9 @@ import net.minecraft.util.LazyValue;
 public enum ModItemTier implements IItemTier{
     SAI(5, 2700, 12.0F, 6.0F, 20, () -> {
         return Ingredient.fromItems(ModItems.REKSAI_CLAW.get());
+    }),
+    ATLAS(5, 2700, 35.0F, 5.0F, 20, () -> {
+        return Ingredient.fromItems(ModItems.GEMSTONE.get());
     });
 
     private final int harvestLevel;
