@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
 import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
 import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
 import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
@@ -48,7 +49,7 @@ public class ModItems {
         () -> new Item(new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
-        () -> new SwordItem(ModItemTier.SAI, 5, 2, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new SwordItem(ModItemTier.SAI, 5, 1, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
         () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP)));
@@ -76,6 +77,9 @@ public class ModItems {
 
         public static final RegistryObject<Item> GEMSTONE = ITEMS.register("gemstone", 
         () -> new Item(new Item.Properties().maxStackSize(10).group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
+        () -> new AtlasG(ModItemTier.ATLAS, 3, 2, new Item.Properties().maxDamage(400).group(ModItemGroup.COR_GROUP)));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
