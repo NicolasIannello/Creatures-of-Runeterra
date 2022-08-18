@@ -13,7 +13,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.ShootableItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
@@ -178,7 +177,7 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
 	}
 
     public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return Items.LAPIS_LAZULI==repair.getItem() || super.getIsRepairable(toRepair, repair);
+        return ModItems.GEMSTONE.get()==repair.getItem() || super.getIsRepairable(toRepair, repair);
     }
     public int getUseDuration(ItemStack stack) {
         return 72000;
