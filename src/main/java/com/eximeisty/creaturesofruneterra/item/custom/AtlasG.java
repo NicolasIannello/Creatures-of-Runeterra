@@ -65,6 +65,12 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         Iterator<ItemStack> item = entityIn.getHeldEquipment().iterator();
         if(item.next()==stack && hand) hand=false;
         if(item.next()==stack && !hand) hand=true;
+        if (!worldIn.isRemote && !isCharged(stack)) {
+            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
+            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityIn);
+            GeckoLibNetwork.syncAnimation(target, this, id, 2);
+        
+        }
     }
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerentity, Hand handIn) {
@@ -88,14 +94,10 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
                 playerentity.addStat(Stats.ITEM_USED.get(this));
             }
         }
-        if (!worldIn.isRemote) {
+        if (!worldIn.isRemote && !isCharged(stack)) {
             final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerentity);
-            if(isCharged(stack)){
-                GeckoLibNetwork.syncAnimation(target, this, id, 1);
-            }else{
-                GeckoLibNetwork.syncAnimation(target, this, id, 2);
-            }
+            GeckoLibNetwork.syncAnimation(target, this, id, 1);
         }
         setCharged(stack, !isCharged(stack));
         return ActionResult.resultConsume(stack);
@@ -105,12 +107,10 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public void onAnimationSync(int id, int state) {
         final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
         controller.markNeedsReload();
-        if (state == 2) {
-			controller.setAnimation(new AnimationBuilder().addAnimation("animation.atlasg.reload", false).addAnimation("animation.atlasg.charged", true));
-		}
-        if (state == 3) {
-			controller.setAnimation(new AnimationBuilder().addAnimation("animation.atlasg.fire", false).addAnimation("animation.atlasg.idle", true));
-		}
+        String dois="";
+        if(hand) dois="2";
+        if (state == 1) controller.setAnimation(new AnimationBuilder().addAnimation("animation.atlasg.charge"+dois, false).addAnimation("animation.atlasg.full"+dois, true));
+        if (state == 2) controller.setAnimation(new AnimationBuilder().addAnimation("animation.atlasg.idle"+dois, true));
     }
 
     public static boolean isCharged(ItemStack stack) {
