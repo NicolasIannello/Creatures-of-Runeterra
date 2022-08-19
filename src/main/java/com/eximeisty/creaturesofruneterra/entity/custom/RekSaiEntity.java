@@ -46,9 +46,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
-    private static double velocidad=0;
+    private static double velocidad=0.4;//0.4
     private double grabTicks=1;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
+    private float dañoSalto=0;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -69,10 +70,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     @Override
     protected void registerGoals(){
         super.registerGoals();
-        this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, true ));
+        this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
         this.goalSelector.addGoal(2, new RekSaiEntity.MeleeAttackGoal(this, 1D, false));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, true));
+        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
         this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
     }
@@ -286,7 +287,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 dataManager.set(STATE, 3);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
             }
-            if(dataManager.get(STATE)==3){
+            if(dataManager.get(STATE)==3){//burrow
                 ++ticks;
                 if(ticks==20){
                     this.lastX = this.attacker.getAttackTarget().getPosX();
@@ -332,7 +333,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     }
                 }
             }
-            if(dataManager.get(STATE)==4){
+            if(dataManager.get(STATE)==4){//charge
                 ticks++;
                 BlockPos.getAllInBox(new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D))
                 .forEach(pos->{
@@ -340,16 +341,17 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                         this.attacker.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
                 });
-                if(distToEnemySqr<30){
-                    this.attacker.attackEntityAsMob(enemy);
-                }
+                this.attacker.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D)).stream().forEach(livingEntity -> {
+                    if(!livingEntity.isEntityEqual(this.attacker)) livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 10);
+                    if(!livingEntity.world.isRemote) livingEntity.applyKnockback(5F, livingEntity.getPosX()+this.attacker.getPosX(), livingEntity.getPosZ()+this.attacker.getPosZ());
+                });
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks==100){
-                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-1.15,AttributeModifier.Operation.ADDITION)); 
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-1.5+velocidad,AttributeModifier.Operation.ADDITION)); 
                     dataManager.set(STATE, 5);
                     ticks=0;
                 }
             }
-            if(dataManager.get(STATE)==5){
+            if(dataManager.get(STATE)==5){//salir
                 ++ticks;
                 if(ticks==20){
                     charge=(int)(Math.random() * 150 + 30);
@@ -357,12 +359,16 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     dataManager.set(STATE, 0);
                 }
             }
-            if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){
+            if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){//aire
                 BlockPos.getAllInBox(new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D))
                 .forEach(pos->{
                     if( this.attacker.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
                         this.attacker.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                     }
+                });
+                this.attacker.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D)).stream().forEach(livingEntity -> {
+                    if(!livingEntity.isEntityEqual(this.attacker) && !livingEntity.isEntityEqual(enemy)) livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 10);
+                    if(!livingEntity.world.isRemote && !livingEntity.isEntityEqual(enemy)) livingEntity.applyKnockback(5F, livingEntity.getPosX()+this.attacker.getPosX(), livingEntity.getPosZ()+this.attacker.getPosZ());
                 });
                 if(this.attacker.fallDistance>0){
                     if(ticks==0){
@@ -384,12 +390,16 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(this.attacker.isOnGround() && ticks>1){
                     enemy.stopRiding();
                     enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
-                    enemy.attackEntityFrom(DamageSource.FALL, this.attacker.fallDistance/2F);
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), dañoSalto);
                     grab=false;
                     ticks=0;
+                    dañoSalto=0;
                     charge=(int)(Math.random() * 5 + 30);
                     leap=false;
                     dataManager.set(STATE, 0);
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",velocidad,AttributeModifier.Operation.ADDITION)); 
+                }else{
+                    dañoSalto=this.attacker.fallDistance;
                 }
             }
         }
