@@ -13,12 +13,15 @@ import net.minecraft.item.PickaxeItem;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -34,7 +37,8 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     private AnimationFactory factory = new AnimationFactory(this);
     public String controllerName = "controller";
-    public boolean hand=false;
+    private boolean hand=false;
+    private int dashTicks=0;
 
     public AtlasG(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
         super(tier, attackDamageIn, attackSpeedIn, builder.setISTER(()-> AtlasGRenderer::new));
@@ -69,7 +73,15 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
             final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityIn);
             GeckoLibNetwork.syncAnimation(target, this, id, 2);
-        
+        }
+        if(getState(stack)==3){
+            dashTicks++;
+            System.out.println(dashTicks);
+            entityIn.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(entityIn.getBoundingBox().minX-1.0D,entityIn.getBoundingBox().minY,entityIn.getBoundingBox().minZ-1.0D,entityIn.getBoundingBox().maxX+1.0D,entityIn.getBoundingBox().maxY,entityIn.getBoundingBox().maxZ+1.0D)).stream().forEach(livingEntity -> {
+                if(!livingEntity.isEntityEqual(entityIn)) livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)entityIn), 10);
+                if(!livingEntity.world.isRemote) livingEntity.applyKnockback(1.5F, livingEntity.getPosX()-entityIn.getPosX(), livingEntity.getPosZ()-entityIn.getPosZ());
+            });
+            if(dashTicks>=20 && entityIn.isOnGround()) setState(stack, 1);
         }
     }
 
@@ -77,22 +89,19 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         ItemStack stack = playerentity.getHeldItem(handIn);
         playerentity.setActiveHand(handIn);
         if(isCharged(stack)){
-            playerentity.getCooldownTracker().setCooldown(this, 10);
+            setState(stack, 3);
+            playerentity.getCooldownTracker().setCooldown(this, 20);
+            playerentity.setMotion(playerentity.getLookVec().x*2, 0.1, playerentity.getLookVec().z*2);
+            if (!worldIn.isRemote){
+                stack.damageItem(10, playerentity, (player) -> {
+                    player.sendBreakAnimation(playerentity.getActiveHand());
+                });
+            }
         }else{
-            playerentity.getCooldownTracker().setCooldown(this, 30);
-        }
-        if (isCharged(stack)) {
-            playerentity.setMotion(playerentity.getLookVec().x*4, 0.3, playerentity.getLookVec().z*4);
-            if (!worldIn.isRemote) {
-                if(isCharged(stack)){
-                    stack.damageItem(10, playerentity, (player) -> {
-                        player.sendBreakAnimation(playerentity.getActiveHand());
-                    });
-                }
-            }
-            if(!isCharged(stack)){
-                playerentity.addStat(Stats.ITEM_USED.get(this));
-            }
+            dashTicks=0;
+            setState(stack, 2);
+            playerentity.getCooldownTracker().setCooldown(this, 25);
+            playerentity.addStat(Stats.ITEM_USED.get(this));
         }
         if (!worldIn.isRemote && !isCharged(stack)) {
             final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
@@ -121,5 +130,15 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public static void setCharged(ItemStack stack, boolean chargedIn) {
         CompoundNBT compoundnbt = stack.getOrCreateTag();
         compoundnbt.putBoolean("Charged", chargedIn);
+    }
+
+    public static int getState(ItemStack stack) {
+        CompoundNBT compoundnbt = stack.getTag();
+        return compoundnbt.getInt("State");
+    }
+  
+    public static void setState(ItemStack stack, int chargedIn) {
+        CompoundNBT compoundnbt = stack.getOrCreateTag();
+        compoundnbt.putInt("State", chargedIn);
     }
 }
