@@ -213,7 +213,9 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 return false;
             } else {
                 if(dataManager.get(STATE)<1){
-                    this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
+                    if(this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ())>100){
+                        this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
+                    }
                     this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
                 }
                 if (this.path != null) {
@@ -253,15 +255,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             this.attacker.getNavigator().clearPath();
         }
         
-        /*
-        world.getEntitiesWithinAABB()
-        .stream().forEach(livingEntity -> {
-            if (!destroyer.isOnSameTeam(livingEntity) && !destroyer.isEntityEqual(livingEntity) && destroyer.canEntityBeSeen(livingEntity)) {
-                livingEntity.attackEntityFrom(source, stageDmg);
-                livingEntity.setFire(statusDuration);
-            }
-        }
-        */
         public void tick() {
             if(band==true){
                 band=false;
