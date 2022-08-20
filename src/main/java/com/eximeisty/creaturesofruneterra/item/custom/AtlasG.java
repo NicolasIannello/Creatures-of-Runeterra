@@ -16,6 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -76,11 +77,18 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         }
         if(getState(stack)==3){
             dashTicks++;
-            System.out.println(dashTicks);
             entityIn.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(entityIn.getBoundingBox().minX-1.0D,entityIn.getBoundingBox().minY,entityIn.getBoundingBox().minZ-1.0D,entityIn.getBoundingBox().maxX+1.0D,entityIn.getBoundingBox().maxY,entityIn.getBoundingBox().maxZ+1.0D)).stream().forEach(livingEntity -> {
                 if(!livingEntity.isEntityEqual(entityIn)) livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)entityIn), 10);
                 if(!livingEntity.world.isRemote) livingEntity.applyKnockback(1.5F, livingEntity.getPosX()-entityIn.getPosX(), livingEntity.getPosZ()-entityIn.getPosZ());
             });
+            if(dashTicks<=10){
+                BlockPos.getAllInBox(new AxisAlignedBB(entityIn.getBoundingBox().minX-0.5D,entityIn.getBoundingBox().minY,entityIn.getBoundingBox().minZ-0.5D,entityIn.getBoundingBox().maxX+0.5D,entityIn.getBoundingBox().maxY,entityIn.getBoundingBox().maxZ+0.5D))
+                .forEach(pos->{
+                    if(entityIn.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && entityIn.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && entityIn.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
+                        entityIn.world.destroyBlock(pos, true, entityIn);
+                    }
+                });
+            }
             if(dashTicks>=20 && entityIn.isOnGround()) setState(stack, 1);
         }
     }
@@ -93,7 +101,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
             playerentity.getCooldownTracker().setCooldown(this, 20);
             playerentity.setMotion(playerentity.getLookVec().x*2, 0.1, playerentity.getLookVec().z*2);
             if (!worldIn.isRemote){
-                stack.damageItem(10, playerentity, (player) -> {
+                stack.damageItem(50, playerentity, (player) -> {
                     player.sendBreakAnimation(playerentity.getActiveHand());
                 });
             }
