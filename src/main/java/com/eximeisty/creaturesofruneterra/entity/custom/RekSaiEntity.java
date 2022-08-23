@@ -45,6 +45,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BYTE);
+    private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this);
     private static double velocidad=0.4;//0.4
     private double grabTicks=1;
@@ -90,7 +91,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.walk", true));
+            if(dataManager.get(RUN)==0){
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.walk", true));
+            }else{
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.run", true));
+            }
             return PlayState.CONTINUE;
         }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.idle", true));
@@ -98,6 +103,26 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
+        if (dataManager.get(STATE)==7) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.attack1", false));
+            return PlayState.CONTINUE;
+        }
+        if (dataManager.get(STATE)==8) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.spin", false));
+            return PlayState.CONTINUE;
+        }
+        if (dataManager.get(STATE)==9) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.attack1", false).addAnimation("animation.Reksai.attack2", false));
+            return PlayState.CONTINUE;
+        }
+        if (dataManager.get(STATE)==10) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.spin", false).addAnimation("animation.Reksai.spin", false));
+            return PlayState.CONTINUE;
+        }
+        if (dataManager.get(STATE)==11) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.slam", false));
+            return PlayState.CONTINUE;
+        }
         if (dataManager.get(STATE)==1) {
             event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.RDown", true));
             return PlayState.CONTINUE;
@@ -153,6 +178,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.registerData();
         this.dataManager.register(CLIMBING, (byte)0);
         dataManager.register(STATE, 0);
+        dataManager.register(RUN, 0);
     }
     
     public void tick() {
@@ -192,6 +218,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         private double targetY;
         private double targetZ;
         private int charge=(int)(Math.random() * 60 + 40);
+        private int cd=10;
         private int ticks=0;
         private double lastX;
         private double lastY;
@@ -260,9 +287,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 band=false;
             }
             if(charge>0) --charge;
+            if(cd>0) --cd;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
-            if(dataManager.get(STATE)<1){
+            if(dataManager.get(STATE)<1 || (dataManager.get(STATE)>=7 && dataManager.get(STATE)<=10)){
                 this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
             }else{
                 this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
@@ -276,6 +304,47 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+            if(distToEnemySqr<100 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0){
+                // int chance=(int)(Math.random() * 10);
+                int running=0;
+                // if(dataManager.get(RUN)==1){
+                //     running=1;
+                // }
+                //System.out.println("entre "+chance);
+                // if(chance==3 || chance==4){
+                //     dataManager.set(STATE, 11);
+                // }else if(chance<3){
+                    dataManager.set(STATE, 7+running);
+                // }else{
+                    //dataManager.set(STATE, 9+running);
+                // }
+                //this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
+            }
+            if(dataManager.get(STATE)==7 || dataManager.get(STATE)==9){
+                ticks++;
+                if(ticks>15 && ticks<20){
+                    double posx=this.attacker.getLookVec().x*8+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*8+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
+                    AxisAlignedBB bb= new AxisAlignedBB(posx+4, posy, posz+4, posx-4, posy+5, posz-4);
+                    this.attacker.world.getEntitiesWithinAABB(LivingEntity.class, bb).stream().forEach(livingEntity -> {
+                        if(!livingEntity.isEntityEqual(this.attacker)) livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 10);
+                    });
+                    //System.out.println("X: "+(this.attacker.getLookVec().x*-8+this.attacker.getPosX()));
+                    //System.out.println("Z: "+(this.attacker.getLookVec().z*-8+this.attacker.getPosZ()));
+                    System.out.println(bb.maxX+" z:"+bb.maxZ+" x:"+bb.minX+" z:"+bb.minZ);
+                }
+                if((ticks==25 && dataManager.get(STATE)==7) || ticks==55){
+                    dataManager.set(STATE, 0);
+                    ticks=0;
+                    cd=10;
+                }
+            }
+            if(dataManager.get(STATE)==8 || dataManager.get(STATE)==10){
+                
+            }
+            if(dataManager.get(STATE)==11){
+
+            }
+
             if(distToEnemySqr>550 && dataManager.get(STATE)==0 && charge<=0 && this.attacker.isOnGround()){
                 dataManager.set(STATE, 3);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
