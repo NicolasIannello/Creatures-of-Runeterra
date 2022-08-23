@@ -47,11 +47,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BYTE);
     private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this);
-    private static double velocidad=0.4;//0.4
+    private static double velocidad=0.4;
     private double grabTicks=1;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
     private float dañoSalto=0;
-    private boolean band=true;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -188,12 +187,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         if (!this.world.isRemote) {
            this.setBesideClimbableBlock(this.collidedHorizontally);
         }
-        /*if(band){
-            double posx=this.getLookVec().x*8+this.getPosX(); double posz=this.getLookVec().z*8+this.getPosZ(); double posy=this.getPosY();
-            AxisAlignedBB bb= new AxisAlignedBB(posx+4, posy, posz+4, posx-4, posy+5, posz-4);
-            System.out.println(bb.maxX+" z:"+bb.maxZ+" x:"+bb.minX+" z:"+bb.minZ);
-            band=false;
-        }*/
     }
     
     public boolean isOnLadder() {
@@ -226,6 +219,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         private double targetZ;
         private int charge=(int)(Math.random() * 60 + 40);
         private int cd=40;
+        private int slam=(int)(Math.random() * 60 + 80);
         private int ticks=0;
         private double lastX;
         private double lastY;
@@ -289,11 +283,9 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         
         public void tick() {
-            if(band==true){
-                band=false;
-            }
             if(charge>0) --charge;
             if(cd>0) --cd;
+            if(slam>0) --slam;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
             if(dataManager.get(STATE)<1 || (dataManager.get(STATE)>=7 && dataManager.get(STATE)<=10)){
@@ -310,21 +302,38 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+            if(distToEnemySqr<300 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && slam<=0){
+                this.lastX = this.attacker.getAttackTarget().getPosX();
+                this.lastY = this.attacker.getAttackTarget().getPosY();
+                this.lastZ = this.attacker.getAttackTarget().getPosZ();
+                dataManager.set(STATE, 11);
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
+            }
+            if(dataManager.get(STATE)==11){
+                ticks++;
+                if(ticks>=25 && ticks<=30){
+                    double posx=this.attacker.getLookVec().x*23+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*23+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
+                    AxisAlignedBB bb= new AxisAlignedBB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).union(this.attacker.getBoundingBox());
+                    this.attackBB(bb, 10, true, 3F);
+                }
+                if(ticks==40){
+                    dataManager.set(STATE, 0);
+                    ticks=0;
+                    slam=(int)(Math.random() * 60 + 80);
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",velocidad,AttributeModifier.Operation.ADDITION)); 
+                }
+            }
             if(distToEnemySqr<100 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0){
-                // int chance=(int)(Math.random() * 10);
+                int chance=(int)(Math.random() * 5);
                 int running=0;
-                // if(dataManager.get(RUN)==1){
-                    running=1;
-                // }
-                //System.out.println("entre "+chance);
-                // if(chance==3 || chance==4){
-                //     dataManager.set(STATE, 11);
-                // }else if(chance<3){
-                    //dataManager.set(STATE, 7+running);
-                // }else{
-                    dataManager.set(STATE, 9+running);
-                // }
-                //this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
+                if(dataManager.get(RUN)==1){
+                    running=2;
+                }
+                if(chance<=2){
+                    dataManager.set(STATE, 8+running);
+                }else{
+                    dataManager.set(STATE, 7+running);
+                }
             }
             if(dataManager.get(STATE)==7 || dataManager.get(STATE)==8){
                 ticks++;
@@ -341,7 +350,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             }
             if(dataManager.get(STATE)==9 || dataManager.get(STATE)==10){
                 ticks++;
-                System.out.println(ticks);
                 if((ticks>=3 && ticks<=8) || (ticks>=13 && ticks<=18)){
                     AxisAlignedBB bb= new AxisAlignedBB(this.attacker.getBoundingBox().minX-6.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-6.0D,this.attacker.getBoundingBox().maxX+6.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+6.0D);
                     this.attackBB(bb, 10, true, 0.4F);
@@ -352,10 +360,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     cd=10;
                 }
             }
-            if(dataManager.get(STATE)==11){
-
-            }
-
             if(distToEnemySqr>550 && dataManager.get(STATE)==0 && charge<=0 && this.attacker.isOnGround()){
                 dataManager.set(STATE, 3);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
