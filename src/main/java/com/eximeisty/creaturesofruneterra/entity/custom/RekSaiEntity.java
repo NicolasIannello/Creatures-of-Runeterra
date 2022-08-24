@@ -45,7 +45,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BYTE);
-    //private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this);
     private static double velocidad=0.5;
     private double grabTicks=1;
@@ -57,7 +56,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 800)//60?
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 800)//800?
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, velocidad)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
         .createMutableAttribute(Attributes.FOLLOW_RANGE, 400)//30?
@@ -91,14 +90,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
-            //if(dataManager.get(RUN)==0){
-                //event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.walk", true));
-            //}else{
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.run", true));
-            //}
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.run", true));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.idle", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.idle2", true));
         return PlayState.CONTINUE;
     }
 
@@ -178,7 +173,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.registerData();
         this.dataManager.register(CLIMBING, (byte)0);
         dataManager.register(STATE, 0);
-        //dataManager.register(RUN, 0);
     }
     
     public void tick() {
@@ -308,6 +302,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 this.lastZ = this.attacker.getAttackTarget().getPosZ();
                 dataManager.set(STATE, 11);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
+                return;
             }
             if(dataManager.get(STATE)==11){
                 ticks++;
@@ -322,6 +317,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     slam=(int)(Math.random() * 60 + 80);
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",velocidad,AttributeModifier.Operation.ADDITION)); 
                 }
+                return;
             }
             if(distToEnemySqr<100 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0){
                 int chance=(int)(Math.random() * 5); int running=0;
@@ -331,6 +327,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 }else{
                     dataManager.set(STATE, 7+running);
                 }
+                return;
             }
             if(dataManager.get(STATE)==7 || dataManager.get(STATE)==8){
                 ticks++;
@@ -342,8 +339,9 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if((ticks==25 && dataManager.get(STATE)==7) || ticks==55){
                     dataManager.set(STATE, 0);
                     ticks=0;
-                    cd=20;
+                    cd=(int)(Math.random() * 20 + 20);
                 }
+                return;
             }
             if(dataManager.get(STATE)==9 || dataManager.get(STATE)==10){
                 ticks++;
@@ -354,14 +352,16 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if((ticks==10 && dataManager.get(STATE)==9) || ticks==20){
                     dataManager.set(STATE, 0);
                     ticks=0;
-                    cd=10;
+                    cd=(int)(Math.random() * 20 + 20);
                 }
+                return;
             }
             if(distToEnemySqr>550 && dataManager.get(STATE)==0 && charge<=0 && this.attacker.isOnGround()){
                 dataManager.set(STATE, 3);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
+                return;
             }
-            if(dataManager.get(STATE)==3){//burrow
+            if(dataManager.get(STATE)==3){
                 ++ticks;
                 if(ticks==20){
                     this.lastX = this.attacker.getAttackTarget().getPosX();
@@ -406,8 +406,9 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                         this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",1.5,AttributeModifier.Operation.ADDITION)); 
                     }
                 }
+                return;
             }
-            if(dataManager.get(STATE)==4){//charge
+            if(dataManager.get(STATE)==4){
                 ticks++;
                 AxisAlignedBB bb= new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D);
                 this.breakBB(bb);
@@ -417,16 +418,18 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     dataManager.set(STATE, 5);
                     ticks=0;
                 }
+                return;
             }
-            if(dataManager.get(STATE)==5){//salir
+            if(dataManager.get(STATE)==5){
                 ++ticks;
                 if(ticks==20){
                     charge=(int)(Math.random() * 150 + 30);
                     ticks=0;
                     dataManager.set(STATE, 0);
                 }
+                return;
             }
-            if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){//aire
+            if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){
                 AxisAlignedBB bb= new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D);
                 this.breakBB(bb);
                 this.attackBB(bb, 10, true, 5);
@@ -462,6 +465,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     dañoSalto=this.attacker.fallDistance;
                 }
             }
+            return;
         }
 
         protected void attackBB(AxisAlignedBB bb, float damage, boolean canKnockback, float knockbackStrenght){
@@ -487,7 +491,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
-            //passenger.setMotion(0, passenger.getMotion().y, 0); ??
             double y;
             if(dataManager.get(STATE)==6 || grabTicks>1.0D && grabTicks<=14.0D){
                 y = this.getPosY()+13.0D-grabTicks;
