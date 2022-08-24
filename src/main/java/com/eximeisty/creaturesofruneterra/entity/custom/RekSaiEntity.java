@@ -45,9 +45,9 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BYTE);
-    private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
+    //private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this);
-    private static double velocidad=0.4;
+    private static double velocidad=0.6;
     private double grabTicks=1;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
     private float dañoSalto=0;
@@ -91,11 +91,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
-            if(dataManager.get(RUN)==0){
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.walk", true));
-            }else{
+            //if(dataManager.get(RUN)==0){
+                //event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.walk", true));
+            //}else{
                 event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.run", true));
-            }
+            //}
             return PlayState.CONTINUE;
         }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.idle", true));
@@ -178,7 +178,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.registerData();
         this.dataManager.register(CLIMBING, (byte)0);
         dataManager.register(STATE, 0);
-        dataManager.register(RUN, 0);
+        //dataManager.register(RUN, 0);
     }
     
     public void tick() {
@@ -324,11 +324,8 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 }
             }
             if(distToEnemySqr<100 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0){
-                int chance=(int)(Math.random() * 5);
-                int running=0;
-                if(dataManager.get(RUN)==1){
-                    running=2;
-                }
+                int chance=(int)(Math.random() * 5); int running=0;
+                if(chance==0 || chance==2 || chance==4) running=2;
                 if(chance<=2){
                     dataManager.set(STATE, 8+running);
                 }else{
