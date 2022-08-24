@@ -47,7 +47,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BYTE);
     //private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this);
-    private static double velocidad=0.6;
+    private static double velocidad=0.5;
     private double grabTicks=1;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
     private float dañoSalto=0;
@@ -57,14 +57,14 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)//60?
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 800)//60?
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, velocidad)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 600)//30?
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 400)//30?
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)//?
         .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 10)
-        .createMutableAttribute(Attributes.ARMOR, 0)
-        .createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 0)
+        .createMutableAttribute(Attributes.ARMOR, 5)
+        .createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 5)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 0.3);
     }
 
@@ -314,7 +314,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(ticks>=25 && ticks<=30){
                     double posx=this.attacker.getLookVec().x*23+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*23+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
                     AxisAlignedBB bb= new AxisAlignedBB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).union(this.attacker.getBoundingBox());
-                    this.attackBB(bb, 10, true, 3F);
+                    this.attackBB(bb, 50, true, 3F);
                 }
                 if(ticks==40){
                     dataManager.set(STATE, 0);
@@ -337,7 +337,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if((ticks>15 && ticks<20) || (ticks>40 && ticks<45)){
                     double posx=this.attacker.getLookVec().x*8+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*8+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
                     AxisAlignedBB bb= new AxisAlignedBB(posx+7, posy, posz+7, posx-7, posy+5, posz-7);
-                    this.attackBB(bb, 10, false, 0);
+                    this.attackBB(bb, 15, false, 0);
                 }
                 if((ticks==25 && dataManager.get(STATE)==7) || ticks==55){
                     dataManager.set(STATE, 0);
@@ -349,7 +349,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 ticks++;
                 if((ticks>=3 && ticks<=8) || (ticks>=13 && ticks<=18)){
                     AxisAlignedBB bb= new AxisAlignedBB(this.attacker.getBoundingBox().minX-6.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-6.0D,this.attacker.getBoundingBox().maxX+6.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+6.0D);
-                    this.attackBB(bb, 10, true, 0.4F);
+                    this.attackBB(bb, 25, true, 0.4F);
                 }
                 if((ticks==10 && dataManager.get(STATE)==9) || ticks==20){
                     dataManager.set(STATE, 0);
@@ -411,7 +411,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 ticks++;
                 AxisAlignedBB bb= new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D);
                 this.breakBB(bb);
-                this.attackBB(bb, 10, true, 5);
+                this.attackBB(bb, 40, true, 5);
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks==100){
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-1.5+velocidad,AttributeModifier.Operation.ADDITION)); 
                     dataManager.set(STATE, 5);
@@ -440,7 +440,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 }
                 if(distToEnemySqr<30 && grab==false){
                     grab=true;
-                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 2.0F);
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 20);
                     enemy.stopRiding();
                     enemy.startRiding(this.attacker, true);
                 }
@@ -450,7 +450,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(this.attacker.isOnGround() && ticks>1){
                     enemy.stopRiding();
                     enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
-                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), dañoSalto);
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), dañoSalto+30);
                     grab=false;
                     ticks=0;
                     dañoSalto=0;
