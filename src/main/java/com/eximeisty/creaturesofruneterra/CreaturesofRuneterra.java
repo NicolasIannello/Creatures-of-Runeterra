@@ -14,6 +14,8 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
+import com.eximeisty.creaturesofruneterra.block.ModBlocks;
+import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
@@ -33,7 +35,8 @@ public class CreaturesofRuneterra {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.register(eventBus);
-
+        ModBlocks.register(eventBus);
+        ModTiles.register(eventBus);
         ModStructures.register(eventBus);
         ModEntityTypes.register(eventBus);
 
