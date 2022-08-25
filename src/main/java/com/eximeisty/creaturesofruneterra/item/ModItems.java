@@ -1,8 +1,10 @@
 package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
+import com.eximeisty.creaturesofruneterra.item.custom.DrillItem;
 import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
 import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
 import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
@@ -80,6 +82,9 @@ public class ModItems {
 
         public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
         () -> new AtlasG(ModItemTier.ATLAS, 3, 2, new Item.Properties().maxDamage(400).group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
+	() -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
