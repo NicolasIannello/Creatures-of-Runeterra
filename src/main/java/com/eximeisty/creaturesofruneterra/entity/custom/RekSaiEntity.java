@@ -50,13 +50,14 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private double grabTicks=1;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
     private float dañoSalto=0;
+    private boolean spawnAnim=false;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 800)//800?
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 8)//800?
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, velocidad)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
         .createMutableAttribute(Attributes.FOLLOW_RANGE, 400)//30?
@@ -172,7 +173,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     protected void registerData() {
         super.registerData();
         this.dataManager.register(CLIMBING, (byte)0);
-        dataManager.register(STATE, 0);
+        dataManager.register(STATE, 5);
     }
     
     public void tick() {
@@ -180,6 +181,14 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
         if (!this.world.isRemote) {
            this.setBesideClimbableBlock(this.collidedHorizontally);
+        }
+        if(!spawnAnim){
+            grabTicks++;
+            if(grabTicks==20){
+                grabTicks=1.0D;
+                dataManager.set(STATE, 0);
+                spawnAnim=true;
+            }
         }
     }
     
@@ -231,6 +240,8 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if (livingentity == null) {
                 return false;
             } else if (!livingentity.isAlive()) {
+                return false;
+            } else if(!spawnAnim) {
                 return false;
             } else {
                 if(dataManager.get(STATE)<1){
