@@ -65,7 +65,7 @@ public class DrillBlock extends DirectionalBlock{
 	public ActionResultType onBlockActivated(BlockState state, World worldIn, BlockPos pos, PlayerEntity player, Hand handIn, BlockRayTraceResult hit) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		if (!worldIn.isRemote && tileentity instanceof DrillTileEntity) {
-			((DrillTileEntity)tileentity).setEstado();
+			((DrillTileEntity)tileentity).setEstado(false);
 		}
 		return ActionResultType.SUCCESS;
 	}
