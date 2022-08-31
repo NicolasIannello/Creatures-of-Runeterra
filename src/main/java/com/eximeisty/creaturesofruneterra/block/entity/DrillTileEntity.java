@@ -83,7 +83,6 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
     public void tick() {
         if(this.estado==1){
             ticks++;
-            System.out.println(ticks);
             if(ticks==550) setEstado(false);
             if(inDesert && ticks==500){
                 RekSaiEntity reksai=new RekSaiEntity(ModEntityTypes.REKSAI.get(), this.world);
