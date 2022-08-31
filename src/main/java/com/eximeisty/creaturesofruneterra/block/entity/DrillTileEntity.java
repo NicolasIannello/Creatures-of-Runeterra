@@ -4,8 +4,6 @@ import javax.annotation.Nullable;
 
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
@@ -21,6 +19,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class DrillTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity{
     private final AnimationFactory factory = new AnimationFactory(this);
     public int estado=0;
+    public int ticks=0;
 
     public DrillTileEntity() {
         super(ModTiles.DRILL.get());
@@ -45,26 +44,26 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
         return this.factory;
     }
 
-    @Override
-	public CompoundNBT write(CompoundNBT compound) {
-		compound.putInt("state", this.estado);
-        return super.write(compound);
-	}
+    // @Override
+	// public CompoundNBT write(CompoundNBT compound) {
+	// 	compound.putInt("state", this.estado);
+    //     return super.write(compound);
+	// }
 
-	@Override
-	public void read(BlockState state, CompoundNBT compound) {
-		super.read(state, compound);
-	}
+	// @Override
+	// public void read(BlockState state, CompoundNBT compound) {
+	// 	super.read(state, compound);
+	// }
 
     @Override @Nullable
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, 3/*3 4 -1 9*/, this.getUpdateTag());
+        return new SUpdateTileEntityPacket(this.pos, -1, this.getUpdateTag());
     }
  
-    @Override
-    public CompoundNBT getUpdateTag() {
-        return this.write(this.getTileData());
-    }
+    // @Override
+    // public CompoundNBT getUpdateTag() {
+    //     return this.write(this.getTileData());
+    // }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
@@ -72,18 +71,30 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
         handleUpdateTag(this.world.getBlockState(this.getPos()), pkt.getNbtCompound());
     }
 
-    @Override
-	public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-		this.read(state, tag);
-	}
+    // @Override
+	// public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+	// 	this.read(state, tag);
+	// }
     
     @Override
     public void tick() {
-
+        if(this.estado==2){
+            ticks++;
+            if(ticks==30){
+                setEstado(true);
+                ticks=0;
+            }
+        }
     }
 
-    public void setEstado() {
-        if(this.estado==0 || this.estado==2){ this.estado=1; }else{ this.estado=2; }
+    public void setEstado(boolean setZero) {
+        if(this.estado==0 || this.estado==2){ 
+            this.estado=1; 
+        }else{ 
+            this.estado=2; 
+        }
+        if(setZero) this.estado=0;
+        this.getTileData().putInt("state", estado);
         //this.markDirty();
         this.world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 2);
 	}
