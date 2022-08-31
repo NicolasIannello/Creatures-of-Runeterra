@@ -28,4 +28,9 @@ public class RekSaiRenderer extends GeoEntityRenderer<RekSaiEntity> {
         stack.scale(4.5F, 4.5F, 4.5F);
         return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
 	}
+
+    @Override
+    protected float getDeathMaxRotation(RekSaiEntity entityLivingBaseIn) {
+		return 0.0F;
+	}
 }
