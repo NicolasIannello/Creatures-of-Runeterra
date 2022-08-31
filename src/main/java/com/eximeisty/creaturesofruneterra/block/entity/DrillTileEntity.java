@@ -3,6 +3,8 @@ package com.eximeisty.creaturesofruneterra.block.entity;
 import javax.annotation.Nullable;
 
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
+import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -20,6 +22,7 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
     private final AnimationFactory factory = new AnimationFactory(this);
     public int estado=0;
     public int ticks=0;
+    public boolean inDesert=false;
 
     public DrillTileEntity() {
         super(ModTiles.DRILL.get());
@@ -78,16 +81,25 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
     
     @Override
     public void tick() {
-        if(this.estado==2){
+        if(this.estado==1){
             ticks++;
-            if(ticks==30){
-                setEstado(true);
-                ticks=0;
+            System.out.println(ticks);
+            if(ticks==550) setEstado(false);
+            if(inDesert && ticks==500){
+                RekSaiEntity reksai=new RekSaiEntity(ModEntityTypes.REKSAI.get(), this.world);
+                reksai.setPosition(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+                this.world.addEntity(reksai);
+                this.world.destroyBlock(pos, false);
             }
+            if(ticks==1) if(this.world.getBiome(this.pos).getRegistryName().toString().contains("desert")) inDesert=true;
+        }else if(this.estado==2){
+            ticks++;
+            if(ticks==30) setEstado(true);
         }
     }
 
     public void setEstado(boolean setZero) {
+        ticks=0; inDesert=false;
         if(this.estado==0 || this.estado==2){ 
             this.estado=1; 
         }else{ 
