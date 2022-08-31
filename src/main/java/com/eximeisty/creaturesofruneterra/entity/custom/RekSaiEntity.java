@@ -190,6 +190,15 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 spawnAnim=true;
             }
         }
+        if(this.getHealth()<=1){
+            grabTicks++;
+            dataManager.set(STATE, 3);
+            if(grabTicks==30){
+                this.remove();
+            }else{
+                this.setHealth(1);
+            }
+        }
     }
     
     public boolean isOnLadder() {
