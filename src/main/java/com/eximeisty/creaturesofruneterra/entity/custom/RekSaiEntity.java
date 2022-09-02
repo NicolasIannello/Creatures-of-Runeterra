@@ -2,6 +2,8 @@ package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import java.util.EnumSet;
 
+import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiPartEntity;
+
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
@@ -25,6 +27,7 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -53,9 +56,21 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private boolean spawnAnim=false;
     private int lastAttack=0;
     private int run=150;
+    private final RekSaiPartEntity[] reksaiParts;
+    private final RekSaiPartEntity reksaiPartHead;
+    private final RekSaiPartEntity reksaiPartBody;
+    private final RekSaiPartEntity reksaiPartLegs;
+    private final RekSaiPartEntity reksaiPartTail;
+    private final RekSaiPartEntity reksaiPartTail2;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
+        reksaiPartHead=new RekSaiPartEntity(this, "head", 4.0F, 4.0F);
+        reksaiPartBody=new RekSaiPartEntity(this, "body", 5.0F, 5.0F);
+        reksaiPartLegs=new RekSaiPartEntity(this, "legs", 7.0F, 7.0F);
+        reksaiPartTail=new RekSaiPartEntity(this, "tail", 3.0F, 3.0F);
+        reksaiPartTail2=new RekSaiPartEntity(this, "tail", 5.0F, 4.0F);
+        reksaiParts = new RekSaiPartEntity[]{reksaiPartHead, reksaiPartBody, reksaiPartLegs, reksaiPartTail, reksaiPartTail2};
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
@@ -189,6 +204,28 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     
     public void tick() {
         super.tick();
+        Vector3d[] avector3d = new Vector3d[this.reksaiParts.length];
+        for(int j = 0; j < this.reksaiParts.length; ++j) {
+            avector3d[j] = new Vector3d(this.reksaiParts[j].getPosX(), this.reksaiParts[j].getPosY(), this.reksaiParts[j].getPosZ());
+        }
+        if(dataManager.get(RUN)==0){
+            this.setPartPosition(reksaiPartHead, this.getLookVec().x*8+this.getPosX(), this.getPosY()+6, this.getLookVec().z*8+this.getPosZ());
+            this.setPartPosition(reksaiPartBody, this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+5, this.getLookVec().z*3.5+this.getPosZ());
+        }else{
+            this.setPartPosition(reksaiPartHead, this.getLookVec().x*8+this.getPosX(), this.getPosY()+4, this.getLookVec().z*8+this.getPosZ());
+            this.setPartPosition(reksaiPartBody, this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+3, this.getLookVec().z*3.5+this.getPosZ());
+        }
+        this.setPartPosition(reksaiPartLegs, this.getLookVec().x*-3+this.getPosX(), this.getPosY(), this.getLookVec().z*-3+this.getPosZ());
+        this.setPartPosition(reksaiPartTail, this.getLookVec().x*-8.5+this.getPosX(), this.getPosY()+3, this.getLookVec().z*-8.5+this.getPosZ());
+        this.setPartPosition(reksaiPartTail2, this.getLookVec().x*-13+this.getPosX(), this.getPosY()+4, this.getLookVec().z*-13+this.getPosZ());
+        for(int l = 0; l < this.reksaiParts.length; ++l) {
+            this.reksaiParts[l].prevPosX = avector3d[l].x;
+            this.reksaiParts[l].prevPosY = avector3d[l].y;
+            this.reksaiParts[l].prevPosZ = avector3d[l].z;
+            this.reksaiParts[l].lastTickPosX = avector3d[l].x;
+            this.reksaiParts[l].lastTickPosY = avector3d[l].y;
+            this.reksaiParts[l].lastTickPosZ = avector3d[l].z;
+        }
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
         if (!this.world.isRemote) {
             this.setBesideClimbableBlock(this.collidedHorizontally);
@@ -612,4 +649,36 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     public boolean isNoDespawnRequired() {
         return true;
     }
+
+    /* MULTI PART ENTITY THINGS */
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    public RekSaiPartEntity[] getRekSaiParts() {
+        return this.reksaiParts;
+    }
+
+    @Override
+    public net.minecraftforge.entity.PartEntity<?>[] getParts() {
+        return this.reksaiParts;
+    }
+
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (source instanceof EntityDamageSource && ((EntityDamageSource)source).getIsThornsDamage()) this.attackEntityPartFrom(this.reksaiPartBody, source, amount);
+        return false;
+    }
+    protected boolean attackRekSaiFrom(DamageSource source, float amount) {
+        return super.attackEntityFrom(source, amount);
+    }
+    public boolean attackEntityPartFrom(RekSaiPartEntity part, DamageSource source, float damage) {
+        this.attackRekSaiFrom(source, damage);
+        return true;
+    }
+
+    private void setPartPosition(RekSaiPartEntity part, double offsetX, double offsetY, double offsetZ) {
+        part.setPosition(offsetX, offsetY, offsetZ);
+    }
+    /* END MULTI PART ENTITY THINGS */
 }
