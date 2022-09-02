@@ -8,7 +8,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
@@ -44,21 +43,24 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
+    private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
-    private static double velocidad=0.5;
+    private double velocidad=0.6;
     private double grabTicks=1;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
     private float dañoSalto=0;
     private boolean spawnAnim=false;
+    private int lastAttack=0;
+    private int run=250;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 8)//800?
-        .createMutableAttribute(Attributes.MOVEMENT_SPEED, velocidad)
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 100)//800?
+        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
         .createMutableAttribute(Attributes.FOLLOW_RANGE, 400)//30?
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)//?
@@ -91,7 +93,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.run", true));
+            if(dataManager.get(RUN)==0){
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.walk", true));
+            }else{
+                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.run", true));
+            }
             return PlayState.CONTINUE;
         }
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.idle2", true));
@@ -132,7 +138,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==3) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.burrow", false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.burrow", false).addAnimation("animation.Reksai.charge", true));
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==4) {
@@ -174,13 +180,33 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.registerData();
         this.dataManager.register(CLIMBING, (byte)0);
         dataManager.register(STATE, 5);
+        dataManager.register(RUN, 0);
     }
     
     public void tick() {
         super.tick();
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
         if (!this.world.isRemote) {
-           this.setBesideClimbableBlock(this.collidedHorizontally);
+            this.setBesideClimbableBlock(this.collidedHorizontally);
+            if(dataManager.get(STATE)==0 && this.getHealth()>this.getMaxHealth()/2){
+                if(dataManager.get(RUN)==0){
+                    lastAttack++;
+                    if(lastAttack>250){
+                        velocidad=0.6;
+                        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
+                        dataManager.set(RUN, 1);
+                        lastAttack=0;
+                    }
+                }else{
+                    run--;
+                    if(run<=0){
+                        velocidad=1;
+                        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
+                        dataManager.set(RUN, 0);
+                    }
+                }
+                return;
+            }
         }
         if(!spawnAnim){
             grabTicks++;
@@ -189,6 +215,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 dataManager.set(STATE, 0);
                 spawnAnim=true;
             }
+        }
+        if(this.getHealth()<this.getMaxHealth()/2 && dataManager.get(RUN)==0){
+            velocidad=1;
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
+            dataManager.set(RUN, 1);
         }
         if(this.getHealth()<=1){
             grabTicks++;
@@ -317,11 +348,12 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
             if(distToEnemySqr<300 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && slam<=0){
+                lastAttack=0;
                 this.lastX = this.attacker.getAttackTarget().getPosX();
                 this.lastY = this.attacker.getAttackTarget().getPosY();
                 this.lastZ = this.attacker.getAttackTarget().getPosZ();
                 dataManager.set(STATE, 11);
-                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
                 return;
             }
             if(dataManager.get(STATE)==11){
@@ -335,11 +367,12 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     dataManager.set(STATE, 0);
                     ticks=0;
                     slam=(int)(Math.random() * 60 + 80);
-                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",velocidad,AttributeModifier.Operation.ADDITION)); 
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 }
                 return;
             }
             if(distToEnemySqr<100 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0){
+                lastAttack=0;
                 int chance=(int)(Math.random() * 5); int running=0;
                 if(chance==0 || chance==2 || chance==4) running=2;
                 if(chance<=2){
@@ -378,7 +411,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             }
             if(distToEnemySqr>550 && dataManager.get(STATE)==0 && charge<=0 && this.attacker.isOnGround()){
                 dataManager.set(STATE, 3);
-                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-velocidad,AttributeModifier.Operation.ADDITION)); 
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
                 return;
             }
             if(dataManager.get(STATE)==3){
@@ -423,7 +456,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     }else{
                         dataManager.set(STATE, 4);
                         this.attacker.getNavigator().getPathToPos(new BlockPos(this.lastX, this.lastY, this.lastZ), 0);
-                        this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",1.5,AttributeModifier.Operation.ADDITION)); 
+                        this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(1.5);
                     }
                 }
                 return;
@@ -434,7 +467,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 this.breakBB(bb);
                 this.attackBB(bb, 40, true, 5);
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks==100){
-                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-1.5+velocidad,AttributeModifier.Operation.ADDITION)); 
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                     dataManager.set(STATE, 5);
                     ticks=0;
                 }
@@ -480,7 +513,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     charge=(int)(Math.random() * 5 + 30);
                     leap=false;
                     dataManager.set(STATE, 0);
-                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",velocidad,AttributeModifier.Operation.ADDITION)); 
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 }else{
                     dañoSalto=this.attacker.fallDistance;
                 }
