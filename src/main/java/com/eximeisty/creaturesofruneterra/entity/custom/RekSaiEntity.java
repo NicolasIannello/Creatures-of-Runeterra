@@ -52,7 +52,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private float dañoSalto=0;
     private boolean spawnAnim=false;
     private int lastAttack=0;
-    private int run=250;
+    private int run=150;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -203,6 +203,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                         velocidad=1;
                         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                         dataManager.set(RUN, 0);
+                        run=150;
                     }
                 }
                 return;
