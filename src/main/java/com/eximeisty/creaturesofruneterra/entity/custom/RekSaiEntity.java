@@ -534,7 +534,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(this.attacker.isOnGround() && ticks>1){
                     enemy.stopRiding();
                     enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
-                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), dañoSalto+0);
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), dañoSalto+30);
                     grab=false;
                     ticks=0;
                     dañoSalto=0;
@@ -543,7 +543,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     dataManager.set(STATE, 0);
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 }else{
-                    dañoSalto=0;//this.attacker.fallDistance;
+                    dañoSalto=this.attacker.fallDistance;
                 }
             }
             return;
