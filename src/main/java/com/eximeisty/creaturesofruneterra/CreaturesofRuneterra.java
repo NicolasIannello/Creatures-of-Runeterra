@@ -20,6 +20,7 @@ import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
+import com.eximeisty.creaturesofruneterra.entity.render.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerxarethRenderer;
@@ -64,8 +65,14 @@ public class CreaturesofRuneterra {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERXARETH.get(), XerxarethRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.REKSAI.get(), RekSaiRenderer::new);
+        //ITEMS
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MISIL.get(), MisilRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.HEXCORE.get(), new HexcoreRenderer());
+        //PART ENTITIES
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WIVHIV.get(), EmptyRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WVIHV.get(), EmptyRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WVIIHVI.get(), EmptyRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WIIIHIII.get(), EmptyRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event) {
