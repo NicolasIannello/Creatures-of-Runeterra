@@ -1,8 +1,10 @@
 package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import java.util.EnumSet;
+// import java.util.List;
+// import javax.annotation.Nullable;
 
-import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiPartEntity;
+import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
@@ -22,12 +24,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.pathfinding.ClimberPathNavigator;
+//import net.minecraft.pathfinding.ClimberPathNavigator;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathNavigator;
+//import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -35,7 +36,6 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.server.ServerBossInfo;
-
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -47,7 +47,6 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
-    private static final DataParameter<Byte> CLIMBING = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BYTE);
     private AnimationFactory factory = new AnimationFactory(this);
     private double velocidad=0.6;
     private double grabTicks=1;
@@ -56,25 +55,24 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private boolean spawnAnim=false;
     private int lastAttack=0;
     private int run=150;
-    private final RekSaiPartEntity[] reksaiParts;
-    private final RekSaiPartEntity reksaiPartHead;
-    private final RekSaiPartEntity reksaiPartBody;
-    private final RekSaiPartEntity reksaiPartLegs;
-    private final RekSaiPartEntity reksaiPartTail;
-    private final RekSaiPartEntity reksaiPartTail2;
+    private static final DataParameter<Integer> SPAWN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
+    private final CoRPartEntity head;
+    private final CoRPartEntity body;
+    private final CoRPartEntity leg;
+    private final CoRPartEntity tail;
+    private final CoRPartEntity tail2;
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
-        reksaiPartHead=new RekSaiPartEntity(this, "head", 4.0F, 4.0F);
-        reksaiPartBody=new RekSaiPartEntity(this, "body", 5.0F, 5.0F);
-        reksaiPartLegs=new RekSaiPartEntity(this, "legs", 7.0F, 7.0F);
-        reksaiPartTail=new RekSaiPartEntity(this, "tail", 3.0F, 3.0F);
-        reksaiPartTail2=new RekSaiPartEntity(this, "tail", 5.0F, 4.0F);
-        reksaiParts = new RekSaiPartEntity[]{reksaiPartHead, reksaiPartBody, reksaiPartLegs, reksaiPartTail, reksaiPartTail2};
+        head=new CoRPartEntity(ModEntityTypes.WIVHIV.get(),this.world);
+        body=new CoRPartEntity(ModEntityTypes.WVIHV.get(),this.world);
+        leg=new CoRPartEntity(ModEntityTypes.WVIIHVI.get(),this.world);
+        tail=new CoRPartEntity(ModEntityTypes.WIIIHIII.get(),this.world);
+        tail2=new CoRPartEntity(ModEntityTypes.WIVHIV.get(),this.world);
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)//800?
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 700)//800?
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
         .createMutableAttribute(Attributes.FOLLOW_RANGE, 400)//30?
@@ -93,7 +91,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, true));
+        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
     }
 
     public void addTrackingPlayer(ServerPlayerEntity player) {
@@ -191,49 +189,45 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         return;
     }
 
-    protected PathNavigator createNavigator(World worldIn) {
-        return new ClimberPathNavigator(this, worldIn);
-    }
-    
     protected void registerData() {
         super.registerData();
-        this.dataManager.register(CLIMBING, (byte)0);
         dataManager.register(STATE, 5);
         dataManager.register(RUN, 0);
+        dataManager.register(SPAWN, 0);
     }
     
     public void tick() {
         super.tick();
-        Vector3d[] avector3d = new Vector3d[this.reksaiParts.length];
-        for(int j = 0; j < this.reksaiParts.length; ++j) {
-            avector3d[j] = new Vector3d(this.reksaiParts[j].getPosX(), this.reksaiParts[j].getPosY(), this.reksaiParts[j].getPosZ());
+        if(dataManager.get(SPAWN)==0){
+            head.setParent(this);
+            this.world.addEntity(head);
+            body.setParent(this);
+            this.world.addEntity(body);
+            leg.setParent(this);
+            this.world.addEntity(leg);
+            tail.setParent(this);
+            this.world.addEntity(tail);
+            tail2.setParent(this);
+            this.world.addEntity(tail2);
+            dataManager.set(SPAWN, 1);
         }
         if(dataManager.get(RUN)==0){
-            this.setPartPosition(reksaiPartHead, this.getLookVec().x*8+this.getPosX(), this.getPosY()+6, this.getLookVec().z*8+this.getPosZ());
-            this.setPartPosition(reksaiPartBody, this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+5, this.getLookVec().z*3.5+this.getPosZ());
+            this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY()+10, this.getLookVec().z*8+this.getPosZ());
+            this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+9, this.getLookVec().z*3.5+this.getPosZ());
         }else{
-            this.setPartPosition(reksaiPartHead, this.getLookVec().x*8+this.getPosX(), this.getPosY()+4, this.getLookVec().z*8+this.getPosZ());
-            this.setPartPosition(reksaiPartBody, this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+3, this.getLookVec().z*3.5+this.getPosZ());
+            this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY()+8, this.getLookVec().z*8+this.getPosZ());
+            this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*3.5+this.getPosZ());
         }
-        this.setPartPosition(reksaiPartLegs, this.getLookVec().x*-3+this.getPosX(), this.getPosY(), this.getLookVec().z*-3+this.getPosZ());
-        this.setPartPosition(reksaiPartTail, this.getLookVec().x*-8.5+this.getPosX(), this.getPosY()+3, this.getLookVec().z*-8.5+this.getPosZ());
-        this.setPartPosition(reksaiPartTail2, this.getLookVec().x*-13+this.getPosX(), this.getPosY()+4, this.getLookVec().z*-13+this.getPosZ());
-        for(int l = 0; l < this.reksaiParts.length; ++l) {
-            this.reksaiParts[l].prevPosX = avector3d[l].x;
-            this.reksaiParts[l].prevPosY = avector3d[l].y;
-            this.reksaiParts[l].prevPosZ = avector3d[l].z;
-            this.reksaiParts[l].lastTickPosX = avector3d[l].x;
-            this.reksaiParts[l].lastTickPosY = avector3d[l].y;
-            this.reksaiParts[l].lastTickPosZ = avector3d[l].z;
-        }
+        this.leg.setPosition(this.getLookVec().x*-3+this.getPosX(), this.getPosY(), this.getLookVec().z*-3+this.getPosZ());
+        this.tail.setPosition(this.getLookVec().x*-8.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*-8.5+this.getPosZ());
+        this.tail2.setPosition(this.getLookVec().x*-13+this.getPosX(), this.getPosY()+8, this.getLookVec().z*-13+this.getPosZ());
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
         if (!this.world.isRemote) {
-            this.setBesideClimbableBlock(this.collidedHorizontally);
             if(dataManager.get(STATE)==0 && this.getHealth()>this.getMaxHealth()/2){
                 if(dataManager.get(RUN)==0){
                     lastAttack++;
                     if(lastAttack>250){
-                        velocidad=0.6;
+                        velocidad=0.4;
                         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                         dataManager.set(RUN, 1);
                         lastAttack=0;
@@ -241,7 +235,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 }else{
                     run--;
                     if(run<=0){
-                        velocidad=1;
+                        velocidad=0.6;
                         this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                         dataManager.set(RUN, 0);
                         run=150;
@@ -259,7 +253,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             }
         }
         if(this.getHealth()<this.getMaxHealth()/2 && dataManager.get(RUN)==0){
-            velocidad=1;
+            velocidad=0.6;
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
             dataManager.set(RUN, 1);
         }
@@ -267,29 +261,16 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             grabTicks++;
             dataManager.set(STATE, 3);
             if(grabTicks==30){
+                this.head.remove();
+                this.body.remove();
+                this.leg.remove();
+                this.tail.remove();
+                this.tail2.remove();
                 this.remove();
             }else{
                 this.setHealth(1);
             }
         }
-    }
-    
-    public boolean isOnLadder() {
-        return this.isBesideClimbableBlock();
-    }
-    
-    public boolean isBesideClimbableBlock() {
-        return (this.dataManager.get(CLIMBING) & 1) != 0;
-    }
-    
-    public void setBesideClimbableBlock(boolean climbing) {
-        byte b0 = this.dataManager.get(CLIMBING);
-        if (climbing && dataManager.get(STATE)<1) {
-           b0 = (byte)(b0 | 1);
-        } else {
-           b0 = (byte)(b0 & -2);
-        }
-        this.dataManager.set(CLIMBING, b0);
     }
 
     public class MeleeAttackGoal extends Goal {
@@ -331,6 +312,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                         this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
                     }
                     this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
+                }
+                if(dataManager.get(STATE)==4){
+                    this.path = this.attacker.getNavigator().getPathToPos(new BlockPos(this.lastX, this.lastY, this.lastZ), 0);
+                    this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
                 }
                 if (this.path != null) {
                     return true;
@@ -417,7 +402,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(dataManager.get(STATE)==9 || dataManager.get(STATE)==10){
                 ticks++;
                 if((ticks>=3 && ticks<=8) || (ticks>=13 && ticks<=18)){
-                    AxisAlignedBB bb= new AxisAlignedBB(this.attacker.getBoundingBox().minX-6.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-6.0D,this.attacker.getBoundingBox().maxX+6.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+6.0D);
+                    AxisAlignedBB bb= this.attacker.getBoundingBox().expand(8, 0, 8).expand(-8, 7, -8);
                     this.attackBB(bb, 25, true, 0.4F);
                 }
                 if((ticks==10 && dataManager.get(STATE)==9) || ticks==20){
@@ -440,7 +425,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 ticks++;
                 if(ticks>=25 && ticks<=30){
                     double posx=this.attacker.getLookVec().x*23+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*23+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
-                    AxisAlignedBB bb= new AxisAlignedBB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).union(this.attacker.getBoundingBox());
+                    AxisAlignedBB bb= new AxisAlignedBB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).union(this.attacker.getBoundingBox().expand(4, 0, 4).expand(-4, 5, -4));
                     this.attackBB(bb, 50, true, 3F);
                 }
                 if(ticks==40){
@@ -497,7 +482,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                         dataManager.set(STATE, 2);
                     }else{
                         dataManager.set(STATE, 4);
-                        this.attacker.getNavigator().getPathToPos(new BlockPos(this.lastX, this.lastY, this.lastZ), 0);
+                        this.path=this.attacker.getNavigator().getPathToPos(new BlockPos(this.lastX, this.lastY, this.lastZ), 0);
                         this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(1.5);
                     }
                 }
@@ -505,9 +490,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             }
             if(dataManager.get(STATE)==4){
                 ticks++;
-                AxisAlignedBB bb= new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D);
+                AxisAlignedBB bb= this.attacker.getBoundingBox().expand(5, 0, 5).expand(-5, 7, -5);
                 this.breakBB(bb);
                 this.attackBB(bb, 40, true, 5);
+                this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks==100){
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                     dataManager.set(STATE, 5);
@@ -525,7 +511,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 return;
             }
             if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){
-                AxisAlignedBB bb= new AxisAlignedBB(this.attacker.getBoundingBox().minX-1.0D,this.attacker.getBoundingBox().minY,this.attacker.getBoundingBox().minZ-1.0D,this.attacker.getBoundingBox().maxX+1.0D,this.attacker.getBoundingBox().maxY,this.attacker.getBoundingBox().maxZ+1.0D);
+                AxisAlignedBB bb= this.attacker.getBoundingBox().expand(5, 0, 5).expand(-5, 7, -5);
                 this.breakBB(bb);
                 this.attackBB(bb, 10, true, 5);
                 if(this.attacker.fallDistance>0){
@@ -565,8 +551,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
         protected void attackBB(AxisAlignedBB bb, float damage, boolean canKnockback, float knockbackStrenght){
             this.attacker.world.getEntitiesWithinAABB(LivingEntity.class, bb).stream().forEach(livingEntity -> {
-                if(!livingEntity.isEntityEqual(this.attacker)) livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), damage);
-                if(!livingEntity.world.isRemote && canKnockback) livingEntity.applyKnockback(knockbackStrenght, livingEntity.getPosX()+this.attacker.getPosX(), livingEntity.getPosZ()+this.attacker.getPosZ());
+                if(!livingEntity.isEntityEqual(this.attacker) && !(livingEntity instanceof CoRPartEntity)) {
+                    livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), damage);
+                    if(!livingEntity.world.isRemote && canKnockback) livingEntity.applyKnockback(knockbackStrenght, livingEntity.getPosX()+this.attacker.getPosX(), livingEntity.getPosZ()+this.attacker.getPosZ());
+                }
             });
         }
 
@@ -605,80 +593,41 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
     }
 
-    @Override
-    public boolean onLivingFall(float distance, float damageMultiplier) {
-        return false;
-    }
-    @Override
-    public boolean addPotionEffect(EffectInstance effectInstanceIn) {
-        return false;
-    }
-    @Override
-    protected boolean canBeRidden(Entity entityIn) {
-        return false;
-    }
-    @Override
-    public boolean canPassengerSteer() {
-        return false;
-    }
-    @Override
-    public boolean shouldRiderSit() {
-        return false;
-    }
-    @Override
-    public boolean canBePushed() {
-        return false;
-    }
-    @Override
-    public boolean canBeRiddenInWater(Entity rider) {
-        return true;
-    }
-    @Override
-    public boolean canChangeDimension() {
-        return false;
-    }
-    @Override
-    public boolean canDespawn(double distanceToClosestPlayer) {
-        return false;
-    }
-    @Override
-    public boolean preventDespawn() {
-        return true;
-    }
-    @Override
-    public boolean isNoDespawnRequired() {
-        return true;
-    }
-
-    /* MULTI PART ENTITY THINGS */
-    @Override
-    public boolean isMultipartEntity() {
-        return true;
-    }
-
-    public RekSaiPartEntity[] getRekSaiParts() {
-        return this.reksaiParts;
-    }
-
-    @Override
-    public net.minecraftforge.entity.PartEntity<?>[] getParts() {
-        return this.reksaiParts;
-    }
-
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (source instanceof EntityDamageSource && ((EntityDamageSource)source).getIsThornsDamage()) this.attackEntityPartFrom(this.reksaiPartBody, source, amount);
+        super.attackEntityFrom(source, amount);
         return false;
     }
-    protected boolean attackRekSaiFrom(DamageSource source, float amount) {
-        return super.attackEntityFrom(source, amount);
-    }
-    public boolean attackEntityPartFrom(RekSaiPartEntity part, DamageSource source, float damage) {
-        this.attackRekSaiFrom(source, damage);
-        return true;
-    }
 
-    private void setPartPosition(RekSaiPartEntity part, double offsetX, double offsetY, double offsetZ) {
-        part.setPosition(offsetX, offsetY, offsetZ);
-    }
-    /* END MULTI PART ENTITY THINGS */
+    @Override
+    public boolean onLivingFall(float distance, float damageMultiplier) { return false; }
+    @Override
+    public boolean addPotionEffect(EffectInstance effectInstanceIn) { return false; }
+    @Override
+    protected boolean canBeRidden(Entity entityIn) { return false; }
+    @Override
+    public boolean canPassengerSteer() { return false; }
+    @Override
+    public boolean shouldRiderSit() { return false; }
+    @Override
+    public boolean canBePushed() { return false; }
+    @Override
+    public boolean canBeRiddenInWater(Entity rider) { return true; }
+    @Override
+    public boolean canChangeDimension() { return false; }
+    @Override
+    public boolean canDespawn(double distanceToClosestPlayer) { return false; }
+    @Override
+    public boolean preventDespawn() { return true; }
+    @Override
+    public boolean isNoDespawnRequired() { return true; }
+    @Override
+    public boolean canBeCollidedWith() { return false; }
+    @Override
+    public void onCollideWithPlayer(PlayerEntity entityIn) { }
+    @Override
+    public boolean hitByEntity(Entity entityIn) { return true; }
+    @Override
+    protected void collideWithEntity(Entity p_82167_1_) { }
+    @Override
+    protected void collideWithNearbyEntities() { }
 }
