@@ -72,7 +72,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 700)//800?
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 700)//700?
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
         .createMutableAttribute(Attributes.FOLLOW_RANGE, 400)//30?
@@ -220,7 +220,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         this.leg.setPosition(this.getLookVec().x*-3+this.getPosX(), this.getPosY(), this.getLookVec().z*-3+this.getPosZ());
         this.tail.setPosition(this.getLookVec().x*-8.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*-8.5+this.getPosZ());
-        this.tail2.setPosition(this.getLookVec().x*-13+this.getPosX(), this.getPosY()+8, this.getLookVec().z*-13+this.getPosZ());
+        if(dataManager.get(STATE)!=2) this.tail2.setPosition(this.getLookVec().x*-13+this.getPosX(), this.getPosY()+8, this.getLookVec().z*-13+this.getPosZ());
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
         if (!this.world.isRemote) {
             if(dataManager.get(STATE)==0 && this.getHealth()>this.getMaxHealth()/2){
@@ -511,7 +511,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 return;
             }
             if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){
-                AxisAlignedBB bb= this.attacker.getBoundingBox().expand(5, 0, 5).expand(-5, 7, -5);
+                AxisAlignedBB bb= this.attacker.getBoundingBox().expand(4, 0, 4).expand(-4, 7, -4);
                 this.breakBB(bb);
                 this.attackBB(bb, 10, true, 5);
                 if(this.attacker.fallDistance>0){
@@ -534,7 +534,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(this.attacker.isOnGround() && ticks>1){
                     enemy.stopRiding();
                     enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
-                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), dañoSalto+30);
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), dañoSalto+0);
                     grab=false;
                     ticks=0;
                     dañoSalto=0;
@@ -543,7 +543,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     dataManager.set(STATE, 0);
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 }else{
-                    dañoSalto=this.attacker.fallDistance;
+                    dañoSalto=0;//this.attacker.fallDistance;
                 }
             }
             return;
@@ -574,22 +574,26 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     public void updatePassenger(Entity passenger) {
         super.updatePassenger(passenger);
         if (this.isPassenger(passenger)) {
-            double y;
+            double y, y2;
             if(dataManager.get(STATE)==6 || grabTicks>1.0D && grabTicks<=14.0D){
                 y = this.getPosY()+13.0D-grabTicks;
+                y2=y;
                 grabTicks+=0.5D;
             }else if(dataManager.get(STATE)==1){
                 y = this.getPosY();
+                y2=y+4D;
                 if(grabTicks>1.0D){
                     grabTicks=1.0D;
                 }
             }else{
                 y = this.getPosY()+13.0D;
+                y2=y;
                 if(grabTicks>1.0D){
                     grabTicks=1.0D;
                 }
             }
             passenger.setPosition(this.getLookVec().x*-8+this.getPosX(), y, this.getLookVec().z*-8+this.getPosZ());
+            this.tail2.setPosition(this.getLookVec().x*-8+this.getPosX(), y2, this.getLookVec().z*-8+this.getPosZ());
         }
     }
 
