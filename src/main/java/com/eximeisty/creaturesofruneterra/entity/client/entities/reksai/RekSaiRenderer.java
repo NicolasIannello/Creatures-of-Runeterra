@@ -7,6 +7,8 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.culling.ClippingHelper;
+
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -33,4 +35,15 @@ public class RekSaiRenderer extends GeoEntityRenderer<RekSaiEntity> {
     protected float getDeathMaxRotation(RekSaiEntity entityLivingBaseIn) {
 		return 0.0F;
 	}
+
+    @Override
+    public boolean shouldRender(RekSaiEntity livingEntityIn, ClippingHelper camera, double camX, double camY, double camZ) {
+        if (!livingEntityIn.isInRangeToRender3d(camX, camY, camZ)) {
+            return false;
+        } else if (livingEntityIn.ignoreFrustumCheck) {
+            return true;
+        } else {
+            return true;
+        }
+    }
 }
