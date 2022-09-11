@@ -213,10 +213,18 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         if(dataManager.get(RUN)==0){
             this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY()+10, this.getLookVec().z*8+this.getPosZ());
-            this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+9, this.getLookVec().z*3.5+this.getPosZ());
+            if(dataManager.get(STATE)!=4){
+                this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+9, this.getLookVec().z*3.5+this.getPosZ());
+            }else{
+                this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY(), this.getLookVec().z*3.5+this.getPosZ());
+            }
         }else{
             this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY()+8, this.getLookVec().z*8+this.getPosZ());
-            this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*3.5+this.getPosZ());
+            if(dataManager.get(STATE)!=4){
+                this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*3.5+this.getPosZ());
+            }else{
+                this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY(), this.getLookVec().z*3.5+this.getPosZ());
+            }
         }
         this.leg.setPosition(this.getLookVec().x*-3+this.getPosX(), this.getPosY(), this.getLookVec().z*-3+this.getPosZ());
         this.tail.setPosition(this.getLookVec().x*-8.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*-8.5+this.getPosZ());
