@@ -321,10 +321,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     }
                     this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
                 }
-                if(dataManager.get(STATE)==4){
-                    this.path = this.attacker.getNavigator().getPathToPos(new BlockPos(this.lastX, this.lastY, this.lastZ), 0);
-                    this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
-                }
                 if (this.path != null) {
                     return true;
                 } else {
@@ -501,7 +497,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 AxisAlignedBB bb= this.attacker.getBoundingBox().expand(5, 0, 5).expand(-5, 7, -5);
                 this.breakBB(bb);
                 this.attackBB(bb, 40, true, 10);
-                this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks==100){
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                     dataManager.set(STATE, 5);
