@@ -1,7 +1,7 @@
 package com.eximeisty.creaturesofruneterra.world.structure;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
-import com.eximeisty.creaturesofruneterra.world.structure.structures.TestStructure;
+//import com.eximeisty.creaturesofruneterra.world.structure.structures.TestStructure;
 import com.eximeisty.creaturesofruneterra.world.structure.structures.VoidSandCave;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class ModStructures {
     public static final DeferredRegister<Structure<?>> STRUCTURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, CreaturesofRuneterra.MOD_ID);
 
-    public static final RegistryObject<Structure<NoFeatureConfig>> TEST = STRUCTURES.register("test", TestStructure::new);
+    //public static final RegistryObject<Structure<NoFeatureConfig>> TEST = STRUCTURES.register("test", TestStructure::new);
     
     public static final RegistryObject<Structure<NoFeatureConfig>> VOIDSANDCAVE = STRUCTURES.register("sandentrance", VoidSandCave::new);
 
@@ -31,7 +31,7 @@ public class ModStructures {
     /* this modifies the seed of the structure so no two structures always spawn over each-other.
     Make this large and unique. */
     public static void setupStructures() {
-        setupMapSpacingAndLand(TEST.get(), new StructureSeparationSettings(100,50, 1234567890),true);
+        //setupMapSpacingAndLand(TEST.get(), new StructureSeparationSettings(100,50, 1234567890),true);
         setupMapSpacingAndLand(VOIDSANDCAVE.get(), new StructureSeparationSettings(100,50, 854795235),false);
     }
 
@@ -41,8 +41,7 @@ public class ModStructures {
      * this method in the structureSeparationSettings argument.
      * This method is called by setupStructures above.
      **/
-    public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings,
-                                                                       boolean transformSurroundingLand) {
+    public static <F extends Structure<?>> void setupMapSpacingAndLand(F structure, StructureSeparationSettings structureSeparationSettings, boolean transformSurroundingLand) {
         //add our structures into the map in Structure class
         Structure.NAME_STRUCTURE_BIMAP.put(structure.getRegistryName().toString(), structure);
 
@@ -53,7 +52,6 @@ public class ModStructures {
          *
          */
         if (transformSurroundingLand) {
-            
             Structure.field_236384_t_ = ImmutableList.<Structure<?>>builder()
                     .addAll(Structure.field_236384_t_)
                     .add(structure)

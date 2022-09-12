@@ -22,7 +22,7 @@ public class ModStructureGeneration {
         if(types.contains(BiomeDictionary.Type.SANDY)) {
             List<Supplier<StructureFeature<?, ?>>> structures = event.getGeneration().getStructures();
 
-            structures.add(() -> ModStructures.TEST.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+            //structures.add(() -> ModStructures.TEST.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
             structures.add(() -> ModStructures.VOIDSANDCAVE.get().withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
         }
     }
