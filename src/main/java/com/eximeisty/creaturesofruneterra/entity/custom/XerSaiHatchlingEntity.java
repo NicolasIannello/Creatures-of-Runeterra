@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
@@ -18,8 +19,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.ClimberPathNavigator;
 import net.minecraft.pathfinding.PathNavigator;
-//import net.minecraft.potion.EffectInstance;
-//import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
@@ -36,8 +35,8 @@ public class XerSaiHatchlingEntity extends CreatureEntity {
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.6)
-        .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 20)
+        .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3)
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 40)
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 2);
     }
@@ -123,4 +122,11 @@ public class XerSaiHatchlingEntity extends CreatureEntity {
         }
         this.dataManager.set(CLIMBING, b0);
     }
+
+    @Override
+    public boolean onLivingFall(float distance, float damageMultiplier) { return false; }
+    @Override
+    protected boolean canBeRidden(Entity entityIn) { return false; }
+    @Override
+    public boolean canChangeDimension() { return false; }
 }
