@@ -11,6 +11,7 @@ import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
 import com.eximeisty.creaturesofruneterra.item.custom.MisilItem;
 import com.eximeisty.creaturesofruneterra.item.custom.ModSpawnEggItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
+import com.eximeisty.creaturesofruneterra.item.custom.SaiElytraItem;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -85,6 +86,9 @@ public class ModItems {
 
         public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
 	() -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> SAI_ELYTRA = ITEMS.register("sai_elytra",
+        () -> new SaiElytraItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
