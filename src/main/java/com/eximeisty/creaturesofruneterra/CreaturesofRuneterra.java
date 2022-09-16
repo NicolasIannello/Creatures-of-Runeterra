@@ -27,6 +27,7 @@ import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerxarethRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
 import software.bernie.geckolib3.GeckoLib;
 
@@ -61,6 +62,7 @@ public class CreaturesofRuneterra {
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
+            ModItemModelProperties.makeBow(ModItems.SAI_BOW.get());
             RenderTypeLookup.setRenderLayer(ModBlocks.TENDRIL.get(), RenderType.getCutout());
         });
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
