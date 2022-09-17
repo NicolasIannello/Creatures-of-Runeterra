@@ -53,7 +53,7 @@ public class ModItems {
         () -> new Item(new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
-        () -> new SwordItem(ModItemTier.SAI, 5, 1, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new SwordItem(ModItemTier.SAI, 15, -2.4F, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
         () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP)));
@@ -83,7 +83,7 @@ public class ModItems {
         () -> new Item(new Item.Properties().maxStackSize(10).group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
-        () -> new AtlasG(ModItemTier.ATLAS, 3, 2, new Item.Properties().maxDamage(400).group(ModItemGroup.COR_GROUP)));
+        () -> new AtlasG(ModItemTier.ATLAS, 4, -2F, new Item.Properties().maxDamage(400).group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
 	() -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));
@@ -92,7 +92,7 @@ public class ModItems {
         () -> new SaiElytraItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow", 
-        () -> new SaiBowItem(new Item.Properties().maxStackSize(1).group(ModItemGroup.COR_GROUP)));
+        () -> new SaiBowItem(new Item.Properties().maxStackSize(1).maxDamage(384).group(ModItemGroup.COR_GROUP)));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
