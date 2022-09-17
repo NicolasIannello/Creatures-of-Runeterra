@@ -24,10 +24,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModItems {
         public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, CreaturesofRuneterra.MOD_ID);
 
-        //BLOCKS
-        public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
-	() -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));
-
         //ITEMS
         public static final RegistryObject<Item> HEXCORE = ITEMS.register("hexcore", 
         () -> new HexcoreItem(new Item.Properties().maxStackSize(10).group(ModItemGroup.COR_GROUP)));
@@ -108,6 +104,10 @@ public class ModItems {
         public static final RegistryObject<ModSpawnEggItem> REKSAI_SPAWN_EGG = ITEMS.register("reksai_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.REKSAI, 0x9F2BAF, 0x005f8f, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
+        //BLOCKS
+        public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
+        () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
         }
