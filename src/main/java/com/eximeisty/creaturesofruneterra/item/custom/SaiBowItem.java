@@ -7,6 +7,9 @@ import net.minecraft.item.Items;
 import net.minecraft.item.UseAction;
 
 import java.util.function.Predicate;
+
+import com.eximeisty.creaturesofruneterra.item.ModItems;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -54,9 +57,9 @@ public class SaiBowItem extends BowItem{
 
                     int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
                     if (j > 0) {
-                        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + (double)j * 2D + 6.5D);
+                        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + (double)j * 2D + 6D);
                     }else{
-                        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + 6.5D);
+                        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + 6D);
                     }
 
                     int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
@@ -125,9 +128,6 @@ public class SaiBowItem extends BowItem{
         }
     }
 
-    /**
-     * Get the predicate to match ammunition when searching the player's inventory, not their main/offhand
-    */
     public Predicate<ItemStack> getInventoryAmmoPredicate() {
         return ARROWS;
     }
@@ -138,5 +138,9 @@ public class SaiBowItem extends BowItem{
 
     public int func_230305_d_() {
         return 15;
+    }
+
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+        return ModItems.REKSAI_PLAQUE.get()==repair.getItem() || super.getIsRepairable(toRepair, repair);
     }
 }
