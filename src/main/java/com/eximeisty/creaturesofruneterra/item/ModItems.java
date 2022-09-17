@@ -53,19 +53,31 @@ public class ModItems {
         () -> new Item(new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
-        () -> new SwordItem(ModItemTier.SAI, 15, -2.4F, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new SwordItem(ModItemTier.SAI, 15, -2.4F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+
+        public static final RegistryObject<Item> SAI_PICKAXE = ITEMS.register("sai_pickaxe",
+        () -> new PickaxeItem(ModItemTier.SAI, 3, -2.8F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+
+        public static final RegistryObject<Item> SAI_AXE = ITEMS.register("sai_axe",
+        () -> new AxeItem(ModItemTier.SAI, 25.0F, -3.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+
+        public static final RegistryObject<Item> SAI_HOE = ITEMS.register("sai_hoe",
+        () -> new HoeItem(ModItemTier.SAI, -7, 0.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+
+        public static final RegistryObject<Item> SAI_SHOVEL = ITEMS.register("sai_shovel",
+        () -> new ShovelItem(ModItemTier.SAI, 3F, -3.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
-        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_CHESTPLATE = ITEMS.register("sai_chestplate",
-        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_LEGGINGS = ITEMS.register("sai_leggings",
-        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.LEGS, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.LEGS, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_BOOTS = ITEMS.register("sai_boots",
-        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.FEET, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.FEET, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
         () -> new DunebreakerShield(new Item.Properties().maxDamage(600).group(ModItemGroup.COR_GROUP)));
@@ -92,7 +104,7 @@ public class ModItems {
         () -> new SaiElytraItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow", 
-        () -> new SaiBowItem(new Item.Properties().maxStackSize(1).maxDamage(384).group(ModItemGroup.COR_GROUP)));
+        () -> new SaiBowItem(new Item.Properties().maxStackSize(1).maxDamage(384).group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);

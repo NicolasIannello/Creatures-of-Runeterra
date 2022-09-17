@@ -24,5 +24,9 @@
     "block.creaturesofruneterra.drill":"Drill",
     "item.creaturesofruneterra.sai_elytra":"Sai's Elytras",
     "block.creaturesofruneterra.tendril":"Tendrils",
-    "item.creaturesofruneterra.sai_bow":"Sai's Bow"
+    "item.creaturesofruneterra.sai_bow":"Sai's Bow",
+    "item.creaturesofruneterra.sai_pickaxe":"Sai's pickaxe",
+    "item.creaturesofruneterra.sai_axe":"Sai's axe",
+    "item.creaturesofruneterra.sai_shovel":"Sai's shovel",
+    "item.creaturesofruneterra.sai_hoe":"Sai's hoe"
 }
