@@ -7,10 +7,10 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 
 public enum ModItemTier implements IItemTier{
-    SAI(5, 2700, 12.0F, 6.0F, 20, () -> {
+    SAI(7, 2700, 20.0F, 10.0F, 30, () -> {
         return Ingredient.fromItems(ModItems.REKSAI_CLAW.get());
     }),
-    ATLAS(5, 2700, 35.0F, 5.0F, 20, () -> {
+    ATLAS(4, 1600, 10.0F, 5.0F, 20, () -> {
         return Ingredient.fromItems(ModItems.GEMSTONE.get());
     });
 
