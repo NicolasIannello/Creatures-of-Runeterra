@@ -7,9 +7,13 @@ import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 
 import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SChatPacket;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Util;
+import net.minecraft.util.text.ChatType;
+import net.minecraft.util.text.TranslationTextComponent;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -47,48 +51,32 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
         return this.factory;
     }
 
-    // @Override
-	// public CompoundNBT write(CompoundNBT compound) {
-	// 	compound.putInt("state", this.estado);
-    //     return super.write(compound);
-	// }
-
-	// @Override
-	// public void read(BlockState state, CompoundNBT compound) {
-	// 	super.read(state, compound);
-	// }
-
     @Override @Nullable
     public SUpdateTileEntityPacket getUpdatePacket() {
         return new SUpdateTileEntityPacket(this.pos, -1, this.getUpdateTag());
     }
- 
-    // @Override
-    // public CompoundNBT getUpdateTag() {
-    //     return this.write(this.getTileData());
-    // }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
         super.onDataPacket(net, pkt);
         handleUpdateTag(this.world.getBlockState(this.getPos()), pkt.getNbtCompound());
     }
-
-    // @Override
-	// public void handleUpdateTag(BlockState state, CompoundNBT tag) {
-	// 	this.read(state, tag);
-	// }
     
     @Override
     public void tick() {
         if(this.estado==1){
             ticks++;
             if(ticks==550) setEstado(false);
-            if(inDesert && ticks==500){
-                RekSaiEntity reksai=new RekSaiEntity(ModEntityTypes.REKSAI.get(), this.world);
-                reksai.setPosition(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-                this.world.addEntity(reksai);
-                this.world.destroyBlock(pos, false);
+            if(inDesert){
+                if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("The floor trembles"), ChatType.CHAT, Util.DUMMY_UUID));
+                if(ticks==500){
+                    RekSaiEntity reksai=new RekSaiEntity(ModEntityTypes.REKSAI.get(), this.world);
+                    reksai.setPosition(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
+                    this.world.addEntity(reksai);
+                    this.world.destroyBlock(pos, false);
+                }
+            }else{
+                if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("Nothing happends"), ChatType.CHAT, Util.DUMMY_UUID));
             }
             if(ticks==1) if(this.world.getBiome(this.pos).getRegistryName().toString().contains("desert")) inDesert=true;
         }else if(this.estado==2){
