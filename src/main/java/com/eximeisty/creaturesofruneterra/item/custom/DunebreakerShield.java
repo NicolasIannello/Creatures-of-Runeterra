@@ -1,7 +1,7 @@
 package com.eximeisty.creaturesofruneterra.item.custom;
 
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
-import com.eximeisty.creaturesofruneterra.item.client.DunebreakerShieldRenderer;
+import com.eximeisty.creaturesofruneterra.item.client.dunebreakershield.DunebreakerShieldRenderer;
 
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
