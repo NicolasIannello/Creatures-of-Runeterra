@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.item.custom;
 import com.eximeisty.creaturesofruneterra.item.client.DunebreakerShieldRenderer;
 
 import net.minecraft.block.DispenserBlock;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
@@ -14,7 +15,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
-import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -29,6 +29,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     private AnimationFactory factory = new AnimationFactory(this);
     public String controllerName = "controller";
+    public int cd=0;
 
     public DunebreakerShield(Properties properties) {
         super(properties.setISTER(()-> DunebreakerShieldRenderer::new));
@@ -37,9 +38,6 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     }
 
     public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
-        if(event.getController().getAnimationState()==AnimationState.Stopped){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.idle", true));
-        }
         return PlayState.CONTINUE;
     }
 
@@ -55,9 +53,6 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         ItemStack itemstack = playerIn.getHeldItem(handIn);
-        //System.out.println("held item "+playerIn.getHeldItem(handIn).getDisplayName().getString());
-        // System.out.println("held main "+playerIn.getHeldItemMainhand().getDisplayName().getString());
-        // System.out.println("held off "+playerIn.getHeldItemOffhand().getDisplayName().getString());
         playerIn.setActiveHand(handIn);
         if (!worldIn.isRemote) {
             final int id = GeckoLibUtil.guaranteeIDForStack(itemstack, (ServerWorld) worldIn);
@@ -71,13 +66,43 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
         return ActionResult.resultConsume(itemstack);
     }
 
+    @SuppressWarnings("resource")
+    public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
+        if(cd>0) cd--;
+        if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown() && cd==0){
+            // PlayerEntity playerentity = (PlayerEntity)livingEntityIn;
+            // playerentity.getCooldownTracker().setCooldown(this, 400);
+            cd=400;
+            System.out.println("Attack");
+            if (!worldIn.isRemote) {
+                final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
+                final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntityIn);
+                if(livingEntityIn.getHeldItemMainhand().getDisplayName().getString().contains("Dunebreaker")){
+                    GeckoLibNetwork.syncAnimation(target, this, id, 3);
+                }else{
+                    GeckoLibNetwork.syncAnimation(target, this, id, 4);
+                }
+            }
+        }
+    }
+
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
+        if (!worldIn.isRemote) {
+            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
+            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityLiving);
+            GeckoLibNetwork.syncAnimation(target, this, id, 0);
+        }
+    }
+
     @Override
     public void onAnimationSync(int id, int state) {
-        if (state == 1) {
-			final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-			controller.markNeedsReload();
-			controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.guard", true));
-		}
+        final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+		controller.markNeedsReload();
+        if (state == 0) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.idle", false));
+        if (state == 1) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.derecha", true));
+        if (state == 2) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.izquierda", true));
+        if (state == 3) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackD", false).addAnimation("animation.dunebreaker_shield.derecha", true));
+        if (state == 4) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackI", false).addAnimation("animation.dunebreaker_shield.izquierda", true));
     }
 
     @Override
