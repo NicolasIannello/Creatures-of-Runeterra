@@ -1,5 +1,6 @@
 package com.eximeisty.creaturesofruneterra.item.custom;
 
+import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.item.client.DunebreakerShieldRenderer;
 
 import net.minecraft.block.DispenserBlock;
@@ -72,9 +73,16 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
         if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown() && cd==0){
             // PlayerEntity playerentity = (PlayerEntity)livingEntityIn;
             // playerentity.getCooldownTracker().setCooldown(this, 400);
-            cd=400;
-            System.out.println("Attack");
+            cd=10;
             if (!worldIn.isRemote) {
+                DBShieldEntity shieldEntity = new DBShieldEntity(worldIn, livingEntityIn);
+                shieldEntity.setDirectionAndMovement(livingEntityIn, livingEntityIn.rotationPitch, livingEntityIn.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
+                shieldEntity.setDamage(2);
+                shieldEntity.setKnockbackStrength(2);
+                shieldEntity.ticksExisted = 35;
+                shieldEntity.setNoGravity(true);
+                shieldEntity.setPierceLevel((byte)4);
+                
                 final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
                 final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntityIn);
                 if(livingEntityIn.getHeldItemMainhand().getDisplayName().getString().contains("Dunebreaker")){
@@ -82,6 +90,7 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
                 }else{
                     GeckoLibNetwork.syncAnimation(target, this, id, 4);
                 }
+                worldIn.addEntity(shieldEntity);
             }
         }
     }
