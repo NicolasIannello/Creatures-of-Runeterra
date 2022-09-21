@@ -5,6 +5,7 @@ import com.eximeisty.creaturesofruneterra.entity.custom.HexcoreEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.MisilEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerxarethEntity;
@@ -63,7 +64,12 @@ public class ModEntityTypes {
     //ITEMS
     public static final RegistryObject<EntityType<MisilEntity>> MISIL = 
     ENTITY_TYPES.register("misil", 
-        ()-> EntityType.Builder.<MisilEntity>create(MisilEntity::new, EntityClassification.MISC).size(2.0F, 2.0F).trackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
+        ()-> EntityType.Builder.<MisilEntity>create(MisilEntity::new, EntityClassification.MISC).size(2.0F, 1.5F).trackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
+    );
+
+    public static final RegistryObject<EntityType<DBShieldEntity>> DBSHIELD = 
+    ENTITY_TYPES.register("dbshield", 
+        ()-> EntityType.Builder.<DBShieldEntity>create(DBShieldEntity::new, EntityClassification.MISC).size(2.5F, 2.0F).trackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "dbshield").toString())
     );
 
     public static final RegistryObject<EntityType<HexcoreEntity>> HEXCORE = 
