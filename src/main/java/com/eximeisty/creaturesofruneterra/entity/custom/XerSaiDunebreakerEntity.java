@@ -274,6 +274,9 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
     }
 
     @Override
+    protected int getExperiencePoints(PlayerEntity player){ return 10+this.world.rand.nextInt(30); }
+
+    @Override
     public boolean onLivingFall(float distance, float damageMultiplier) { return false; }
     @Override
     protected boolean canBeRidden(Entity entityIn) { return false; }
