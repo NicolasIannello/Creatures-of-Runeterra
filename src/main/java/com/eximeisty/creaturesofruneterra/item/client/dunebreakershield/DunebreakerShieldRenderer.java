@@ -1,4 +1,4 @@
-package com.eximeisty.creaturesofruneterra.item.client;
+package com.eximeisty.creaturesofruneterra.item.client.dunebreakershield;
 
 import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
 
