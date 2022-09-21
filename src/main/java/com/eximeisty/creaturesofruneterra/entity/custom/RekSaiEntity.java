@@ -17,6 +17,7 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.ai.goal.RandomWalkingGoal;
 import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -89,6 +90,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.registerGoals();
         this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
         this.goalSelector.addGoal(2, new RekSaiEntity.MeleeAttackGoal(this, 1D, false));
+        this.goalSelector.addGoal(9, new RandomWalkingGoal(this, velocidad,70));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
@@ -605,6 +607,9 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.attackEntityFrom(source, amount);
         return false;
     }
+
+    @Override
+    protected int getExperiencePoints(PlayerEntity player){ return 75+this.world.rand.nextInt(25); }
 
     @Override
     public boolean onLivingFall(float distance, float damageMultiplier) { return false; }
