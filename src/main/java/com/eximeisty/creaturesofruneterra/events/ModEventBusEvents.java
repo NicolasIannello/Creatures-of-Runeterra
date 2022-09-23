@@ -4,6 +4,7 @@ import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
@@ -25,6 +26,7 @@ public class ModEventBusEvents {
         event.put(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.REKSAI.get(), RekSaiEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.PORO.get(), PoroEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.FABLEDPORO.get(), FabledPoroEntity.setCustomAttributes().create());
         //PART ENTITIES
         event.put(ModEntityTypes.WIVHIV.get(), CoRPartEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.WVIHV.get(), CoRPartEntity.setCustomAttributes().create());

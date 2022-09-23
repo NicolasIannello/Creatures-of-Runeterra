@@ -7,6 +7,7 @@ import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerxarethEntity;
@@ -48,6 +49,11 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<PoroEntity>> PORO=
     ENTITY_TYPES.register("poro", 
         ()-> EntityType.Builder.<PoroEntity>create(PoroEntity::new, EntityClassification.CREATURE).size(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "poro").toString())
+    );
+
+    public static final RegistryObject<EntityType<FabledPoroEntity>> FABLEDPORO=
+    ENTITY_TYPES.register("fabledporo", 
+        ()-> EntityType.Builder.create(FabledPoroEntity::new, EntityClassification.CREATURE).size(0.8f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fabledporo").toString())
     );
     
     //PART ENTITIES
