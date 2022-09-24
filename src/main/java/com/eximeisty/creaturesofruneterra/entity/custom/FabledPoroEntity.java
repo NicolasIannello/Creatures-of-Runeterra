@@ -129,8 +129,8 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             ticks++;
             if(ticks==100){
                 dataManager.set(FORGE, false);
-                this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
-                forgeItem.setDamage(forgeItem.getDamage()-forgeItem.getDamage()/2);
+                if(!dataManager.get(STATE)) this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
+                forgeItem.setDamage(forgeItem.getDamage()-forgeItem.getDamage()/3);
                 this.entityDropItem(forgeItem);
                 forgeItem=ItemStack.EMPTY;
                 ticks=0;
