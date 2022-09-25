@@ -59,7 +59,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             @Override
             protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
                 double d0 = this.getAttackReachSqr(enemy);
-                if (distToEnemySqr <= d0 && !this.attacker.getDataManager().get(ATTACK)) {
+                if (distToEnemySqr <= d0 && !this.attacker.getDataManager().get(ATTACK) && !this.attacker.getDataManager().get(FORGE)) {
                    this.resetSwingCooldown();
                    this.attacker.swingArm(Hand.MAIN_HAND);
                    this.attacker.attackEntityAsMob(enemy);
@@ -130,9 +130,9 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             if(ticks==100){
                 dataManager.set(FORGE, false);
                 if(!dataManager.get(STATE)) this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
-                forgeItem.setDamage(forgeItem.getDamage()-forgeItem.getDamage()/3);
+                forgeItem.setDamage((forgeItem.getDamage()-forgeItem.getDamage()/2)+50);
                 this.entityDropItem(forgeItem);
-                forgeItem=ItemStack.EMPTY;
+                this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                 ticks=0;
             }
         }
@@ -153,11 +153,12 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             return flag ? ActionResultType.CONSUME : ActionResultType.PASS;
         }else{
             if(this.isOwner(playerIn)){
-                if(itemstack.isRepairable() && ticks==0){
-                    if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
+                if(itemstack.isRepairable() && !dataManager.get(FORGE)){
                     dataManager.set(FORGE, true);
                     this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
-                    forgeItem=itemstack;
+                    forgeItem=itemstack.copy();
+                    this.setHeldItem(Hand.MAIN_HAND, forgeItem);
+                    itemstack.shrink(1);
                     return ActionResultType.SUCCESS;
                 }
                 this.setSitting(!dataManager.get(STATE));
