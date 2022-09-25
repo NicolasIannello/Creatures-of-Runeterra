@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -85,8 +86,8 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
         super.setTamed(tamed);
         if (tamed) {
             velocidad=0.3;
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(15.0D);
-            this.setHealth(15.0F);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(10.0D);
+            this.setHealth(10.0F);
         } else {
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(5.0D);
         }
@@ -118,17 +119,27 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
                 if(item == Items.ANVIL){
                     if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
                     FabledPoroEntity fableporo=new FabledPoroEntity(ModEntityTypes.FABLEDPORO.get(), this.world);
-                    fableporo.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
-                    fableporo.setTamedBy(playerIn);
-                    fableporo.setTamed(true);
-                    fableporo.setOwnerId(playerIn.getUniqueID());
-                    this.world.addEntity(fableporo);
-                    this.remove();
+                    switchEntity(fableporo, playerIn);
+                }
+                if(item == Items.IRON_BLOCK){
+                    this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
+                    this.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
+                    itemstack.shrink(1);
+                    return ActionResultType.SUCCESS;
                 }
                 this.setSitting(!dataManager.get(STATE));
             }
             return super.getEntityInteractionResult(playerIn, hand);
         } 
+    }
+
+    public void switchEntity(TameableEntity poro, PlayerEntity owner){
+        poro.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
+        poro.setTamedBy(owner);
+        poro.setTamed(true);
+        poro.setOwnerId(owner.getUniqueID());
+        this.world.addEntity(poro);
+        this.remove();
     }
 
     protected void registerData() {
