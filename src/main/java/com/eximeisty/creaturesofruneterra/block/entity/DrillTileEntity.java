@@ -76,7 +76,7 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
                     this.world.destroyBlock(pos, false);
                 }
             }else{
-                if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("Nothing happends"), ChatType.CHAT, Util.DUMMY_UUID));
+                if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("Nothing happens"), ChatType.CHAT, Util.DUMMY_UUID));
             }
             if(ticks==1) if(this.world.getBiome(this.pos).getRegistryName().toString().contains("desert")) inDesert=true;
         }else if(this.estado==2){
