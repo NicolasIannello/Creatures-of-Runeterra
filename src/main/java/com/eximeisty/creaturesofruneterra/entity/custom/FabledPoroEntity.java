@@ -46,11 +46,13 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 60)
-        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.25)
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 40)
+        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.23)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 7)
         .createMutableAttribute(Attributes.ATTACK_SPEED, 1.2)
-        .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1);
+        .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 1)
+        .createMutableAttribute(Attributes.ARMOR, 4)
+        .createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 1);
     }
 
     protected void registerGoals() {
@@ -130,7 +132,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             if(ticks==100){
                 dataManager.set(FORGE, false);
                 if(!dataManager.get(STATE)) this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
-                forgeItem.setDamage((forgeItem.getDamage()-forgeItem.getDamage()/2)+50);
+                forgeItem.setDamage((forgeItem.getDamage()-forgeItem.getDamage()/2));
                 this.entityDropItem(forgeItem);
                 this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
                 ticks=0;
