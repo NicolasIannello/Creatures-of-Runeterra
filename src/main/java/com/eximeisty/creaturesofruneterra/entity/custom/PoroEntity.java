@@ -4,10 +4,15 @@ import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
+import net.minecraft.entity.ai.goal.HurtByTargetGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
+import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
 import net.minecraft.entity.ai.goal.PanicGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
@@ -35,7 +40,9 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class PoroEntity extends TameableEntity implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
     private static final DataParameter<Boolean> STATE = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
     private double velocidad=0.2;
+    private int ticks=0;
 
     public PoroEntity(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -44,14 +51,45 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 5)
-        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2);
+        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.2)
+        .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
+        .createMutableAttribute(Attributes.ARMOR, 2)
+        .createMutableAttribute(Attributes.ARMOR_TOUGHNESS, 0)
+        .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 0);
     }
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
-        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D));
+        this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true){
+            @Override
+            public boolean shouldExecute() {
+                if(this.attacker.getHeldItemMainhand()==ItemStack.EMPTY) return false;
+                return super.shouldExecute();
+            }
+
+            @Override
+            protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+                double d0 = this.getAttackReachSqr(enemy);
+                if (distToEnemySqr <= d0 && !this.attacker.getDataManager().get(ATTACK)) {
+                   this.resetSwingCooldown();
+                   this.attacker.swingArm(Hand.MAIN_HAND);
+                   this.attacker.attackEntityAsMob(enemy);
+                   this.attacker.getDataManager().set(ATTACK, true);
+                }
+            }
+        });
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D){
+            @Override
+            public boolean shouldExecute() {
+                if (this.creature.getHeldItemMainhand()!=ItemStack.EMPTY) return false; 
+                return super.shouldExecute();
+            }
+        });
         this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
+        this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
+        this.targetSelector.addGoal(3, (new HurtByTargetGoal(this)));
     }
 
     @Override
@@ -72,9 +110,19 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
         return PlayState.CONTINUE;
     }
 
+    public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
+        if(dataManager.get(ATTACK)){
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.attack", false));
+            return PlayState.CONTINUE;
+        }
+        event.getController().clearAnimationCache();
+        return PlayState.STOP;
+    }
+
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController<IAnimatable>(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController<IAnimatable>(this, "attacks", 0, this::predicate2));
     }
 
     @Override
@@ -82,10 +130,21 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
         return this.factory;
     }
 
+    public void tick() {
+        super.tick();
+        if(dataManager.get(ATTACK)){
+            ticks++;
+            if(ticks==15){
+                ticks=0;
+                dataManager.set(ATTACK, false);
+            }
+        }
+    }
+
     public void setTamed(boolean tamed) {
         super.setTamed(tamed);
         if (tamed) {
-            velocidad=0.3;
+            velocidad=0.25;
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(10.0D);
             this.setHealth(10.0F);
         } else {
@@ -121,11 +180,18 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
                     FabledPoroEntity fableporo=new FabledPoroEntity(ModEntityTypes.FABLEDPORO.get(), this.world);
                     switchEntity(fableporo, playerIn);
                 }
-                if(item == Items.IRON_BLOCK){
-                    this.setItemStackToSlot(EquipmentSlotType.HEAD, new ItemStack(Items.IRON_HELMET));
-                    this.setHeldItem(Hand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
-                    itemstack.shrink(1);
-                    return ActionResultType.SUCCESS;
+                if(itemstack!=ItemStack.EMPTY){
+                    if(item.canEquip(itemstack, EquipmentSlotType.HEAD, this)){
+                        this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
+                        this.setItemStackToSlot(EquipmentSlotType.HEAD, itemstack);
+                        itemstack.shrink(1);
+                        return ActionResultType.SUCCESS;
+                    }else if(itemstack.isRepairable()){
+                        this.entityDropItem(this.getHeldItemMainhand());
+                        this.setHeldItem(Hand.MAIN_HAND, itemstack);
+                        itemstack.shrink(1);
+                        return ActionResultType.SUCCESS;
+                    }
                 }
                 this.setSitting(!dataManager.get(STATE));
             }
@@ -145,6 +211,7 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
     protected void registerData() {
         super.registerData();
         dataManager.register(STATE, false);
+        dataManager.register(ATTACK, false);
     }
 
     @Override
