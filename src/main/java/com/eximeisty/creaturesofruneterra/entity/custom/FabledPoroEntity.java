@@ -36,6 +36,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
     private static final DataParameter<Boolean> STATE = EntityDataManager.createKey(FabledPoroEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> FORGE = EntityDataManager.createKey(FabledPoroEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(FabledPoroEntity.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Integer> DAY = EntityDataManager.createKey(FabledPoroEntity.class, DataSerializers.VARINT);
     private double velocidad=0.25;
     private int ticks=0;
     public ItemStack forgeItem=ItemStack.EMPTY;
@@ -118,6 +119,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
         dataManager.register(STATE, false);
         dataManager.register(FORGE, false);
         dataManager.register(ATTACK, false);
+        dataManager.register(DAY, 0);
     }
 
     @Override
@@ -155,7 +157,9 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             return flag ? ActionResultType.CONSUME : ActionResultType.PASS;
         }else{
             if(this.isOwner(playerIn)){
-                if(itemstack.isRepairable() && !dataManager.get(FORGE)){
+                int day=(int)(this.world.getDayTime()/24000);
+                if(itemstack.isRepairable() && dataManager.get(DAY)!=day){
+                    dataManager.set(DAY, day);
                     dataManager.set(FORGE, true);
                     this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
                     forgeItem=itemstack.copy();
