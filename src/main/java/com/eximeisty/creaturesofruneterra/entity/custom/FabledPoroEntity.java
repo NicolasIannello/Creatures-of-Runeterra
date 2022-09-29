@@ -119,7 +119,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
         dataManager.register(STATE, false);
         dataManager.register(FORGE, false);
         dataManager.register(ATTACK, false);
-        dataManager.register(DAY, 0);
+        dataManager.register(DAY, -1);
     }
 
     @Override
