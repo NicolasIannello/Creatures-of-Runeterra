@@ -29,5 +29,8 @@
     "item.creaturesofruneterra.sai_pickaxe":"Sai's pickaxe",
     "item.creaturesofruneterra.sai_axe":"Sai's axe",
     "item.creaturesofruneterra.sai_shovel":"Sai's shovel",
-    "item.creaturesofruneterra.sai_hoe":"Sai's hoe"
+    "item.creaturesofruneterra.sai_hoe":"Sai's hoe",
+    "entity.creaturesofruneterra.poro":"Poro",
+    "entity.creaturesofruneterra.fabledporo":"Fabled poro",
+    "entity.creaturesofruneterra.plunderporo":"Plunder poro"
 }
