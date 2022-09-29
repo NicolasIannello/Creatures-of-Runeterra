@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.entity;
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.HexcoreEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.MisilEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.PlunderPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
@@ -54,6 +55,11 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<FabledPoroEntity>> FABLEDPORO=
     ENTITY_TYPES.register("fabledporo", 
         ()-> EntityType.Builder.create(FabledPoroEntity::new, EntityClassification.CREATURE).size(0.8f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fabledporo").toString())
+    );
+
+    public static final RegistryObject<EntityType<PlunderPoroEntity>> PLUNDERPORO=
+    ENTITY_TYPES.register("plunderporo", 
+        ()-> EntityType.Builder.create(PlunderPoroEntity::new, EntityClassification.CREATURE).size(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "plunderporo").toString())
     );
     
     //PART ENTITIES
