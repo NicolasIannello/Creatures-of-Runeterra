@@ -145,12 +145,12 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
         super.setTamed(tamed);
         if (tamed) {
             velocidad=0.25;
-            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(10.0D);
-            this.setHealth(10.0F);
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(15.0D);
+            this.setHealth(15.0F);
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
         } else {
             this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(5.0D);
         }
-        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
      }
     
     public ActionResultType getEntityInteractionResult(PlayerEntity playerIn, Hand hand) {
@@ -180,6 +180,11 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
                     FabledPoroEntity fableporo=new FabledPoroEntity(ModEntityTypes.FABLEDPORO.get(), this.world);
                     switchEntity(fableporo, playerIn);
                 }
+                if(item == Items.HEART_OF_THE_SEA){
+                    if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
+                    PlunderPoroEntity plunderporo=new PlunderPoroEntity(ModEntityTypes.PLUNDERPORO.get(), this.world);
+                    switchEntity(plunderporo, playerIn);
+                }
                 if(itemstack!=ItemStack.EMPTY){
                     if(item.canEquip(itemstack, EquipmentSlotType.HEAD, this)){
                         this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
@@ -200,6 +205,8 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
     }
 
     public void switchEntity(TameableEntity poro, PlayerEntity owner){
+        this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
+        this.entityDropItem(this.getHeldItemMainhand());
         poro.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
         poro.setTamedBy(owner);
         poro.setTamed(true);
