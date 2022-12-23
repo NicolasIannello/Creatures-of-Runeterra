@@ -32,6 +32,7 @@ import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerxarethRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
+import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
 import software.bernie.geckolib3.GeckoLib;
 
@@ -46,6 +47,7 @@ public class CreaturesofRuneterra {
         ModBlocks.register(eventBus);
         ModTiles.register(eventBus);
         ModStructures.register(eventBus);
+        ModSoundEvents.register(eventBus);
         ModEntityTypes.register(eventBus);
 
         eventBus.addListener(this::setup);
