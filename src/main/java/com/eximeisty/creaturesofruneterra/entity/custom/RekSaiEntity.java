@@ -358,7 +358,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         
         public void startExecuting() {
-            this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
+            if(dataManager.get(STATE)==0 || dataManager.get(STATE)==4) this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
             this.attacker.setAggroed(true);
         }
         
@@ -377,7 +377,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(slam>0) --slam;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
-            if(dataManager.get(STATE)==0 || (dataManager.get(STATE)>=7 && dataManager.get(STATE)<=10)) this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
+            /*??????*/if(dataManager.get(STATE)==0 || (dataManager.get(STATE)>=7 && dataManager.get(STATE)<=10)) this.attacker.setMoveForward(1);//this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
             if(dataManager.get(STATE)==4) this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
 
             double d0 = this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
@@ -528,7 +528,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){
                 AxisAlignedBB bb= this.attacker.leg.getBoundingBox().union(this.attacker.tail2.getBoundingBox());
                 this.breakBB(bb);
-                this.attackBB(bb, this.attacker.damage*5, true, 5);
+                //???this.attackBB(bb, this.attacker.damage*5, true, 5);
                 if(this.attacker.fallDistance>0){
                     if(ticks==0){
                         dataManager.set(STATE, 6);
