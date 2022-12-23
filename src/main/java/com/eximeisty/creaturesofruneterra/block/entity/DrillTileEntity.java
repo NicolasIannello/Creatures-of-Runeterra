@@ -5,12 +5,14 @@ import javax.annotation.Nullable;
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
+import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SChatPacket;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ChatType;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -68,6 +70,7 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
             ticks++;
             if(ticks==550) setEstado(false);
             if(inDesert){
+                if(ticks==180) this.world.playSound(null, pos, ModSoundEvents.REKSAI_AWAKEN.get(), SoundCategory.AMBIENT, 3, 1);
                 if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("The floor trembles"), ChatType.CHAT, Util.DUMMY_UUID));
                 if(ticks==500){
                     RekSaiEntity reksai=new RekSaiEntity(ModEntityTypes.REKSAI.get(), this.world);
