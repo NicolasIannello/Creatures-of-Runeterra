@@ -81,15 +81,13 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
                 if(!livingEntity.isEntityEqual(entityIn)) livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)entityIn), 10);
                 if(!livingEntity.world.isRemote) livingEntity.applyKnockback(1.5F, livingEntity.getPosX()-entityIn.getPosX(), livingEntity.getPosZ()-entityIn.getPosZ());
             });
-            if(dashTicks<=10){
-                BlockPos.getAllInBox(new AxisAlignedBB(entityIn.getBoundingBox().minX-0.5D,entityIn.getBoundingBox().minY,entityIn.getBoundingBox().minZ-0.5D,entityIn.getBoundingBox().maxX+0.5D,entityIn.getBoundingBox().maxY,entityIn.getBoundingBox().maxZ+0.5D))
-                .forEach(pos->{
-                    if(entityIn.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && entityIn.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && entityIn.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
-                        entityIn.world.destroyBlock(pos, true, entityIn);
-                    }
-                });
-            }
-            if(dashTicks>=20 && entityIn.isOnGround()) setState(stack, 1);
+            BlockPos.getAllInBox(new AxisAlignedBB(entityIn.getBoundingBox().minX-0.5D,entityIn.getBoundingBox().minY,entityIn.getBoundingBox().minZ-0.5D,entityIn.getBoundingBox().maxX+0.5D,entityIn.getBoundingBox().maxY,entityIn.getBoundingBox().maxZ+0.5D))
+            .forEach(pos->{
+                if(entityIn.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && entityIn.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && entityIn.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
+                    if(entityIn.world.getBlockState(pos).getBlockHardness(worldIn, pos)>=0 && entityIn.world.getBlockState(pos).getBlockHardness(worldIn, pos)<=80) entityIn.world.destroyBlock(pos, true, entityIn);
+                }
+            });
+            if(dashTicks>=20 &&/*&& entityIn.isOnGround()*/!(entityIn.getMotion().x<=-0.1 || entityIn.getMotion().x>=0.1 || entityIn.getMotion().y<=-0.1 || entityIn.getMotion().y>=0.1)) setState(stack, 1);
         }
     }
 
