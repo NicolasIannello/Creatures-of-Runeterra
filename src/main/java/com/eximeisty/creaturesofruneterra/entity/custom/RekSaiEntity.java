@@ -5,6 +5,7 @@ import java.util.EnumSet;
 // import javax.annotation.Nullable;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
@@ -31,6 +32,8 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
@@ -50,6 +53,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this);
     private double velocidad=0.4;
+    private float damage=(float)1;
     private double grabTicks=1;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
     private float dañoSalto=0;
@@ -258,6 +262,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         // }
         if(!spawnAnim){
             grabTicks++;
+            if(grabTicks==3) this.world.playSound(null, this.getPosition(), ModSoundEvents.REKSAI_APP.get(), SoundCategory.HOSTILE, 3, 1);
             if(grabTicks==20){
                 grabTicks=1.0D;
                 dataManager.set(STATE, 0);
@@ -266,11 +271,13 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         if(this.getHealth()<this.getMaxHealth()/2 && dataManager.get(RUN)==0){
             velocidad=0.6;
+            this.world.playSound(null, this.getPosition(), ModSoundEvents.REKSAI_ANGRY.get(), SoundCategory.HOSTILE, 3, 1);
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
             dataManager.set(RUN, 1);
         }
         if(this.getHealth()<=1){
             grabTicks++;
+            if(grabTicks==3) this.world.playSound(null, this.getPosition(), ModSoundEvents.REKSAI_ESCAPE.get(), SoundCategory.HOSTILE, 3, 1);
             dataManager.set(STATE, 3);
             if(grabTicks==30){
                 this.head.remove();
@@ -398,7 +405,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if((ticks>15 && ticks<20) || (ticks>40 && ticks<45)){
                     double posx=this.attacker.getLookVec().x*8+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*8+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
                     AxisAlignedBB bb= new AxisAlignedBB(posx+7, posy, posz+7, posx-7, posy+5, posz-7);
-                    this.attackBB(bb, 10, false, 0);
+                    this.attackBB(bb, this.attacker.damage*10, false, 0);
                 }
                 if((ticks==25 && dataManager.get(STATE)==7) || ticks==55){
                     dataManager.set(STATE, 0);
@@ -411,7 +418,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 ticks++;
                 if((ticks>=3 && ticks<=8) || (ticks>=13 && ticks<=18)){
                     AxisAlignedBB bb= this.attacker.getBoundingBox().expand(8, 0, 8).expand(-8, 7, -8);
-                    this.attackBB(bb, 15, true, 0.4F);
+                    this.attackBB(bb, this.attacker.damage*15, true, 0.4F);
                 }
                 if((ticks==10 && dataManager.get(STATE)==9) || ticks==20){
                     dataManager.set(STATE, 0);
@@ -434,7 +441,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(ticks>=25 && ticks<=30){
                     double posx=this.attacker.getLookVec().x*23+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*23+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
                     AxisAlignedBB bb= new AxisAlignedBB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).union(this.attacker.leg.getBoundingBox());
-                    this.attackBB(bb, 25, true, 3F);
+                    this.attackBB(bb, this.attacker.damage*25, true, 3F);
                 }
                 if(ticks==40){
                     dataManager.set(STATE, 0);
@@ -487,6 +494,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                             vector3d1 = vector3d1.scale(0.2D).add(vector3d.scale(0.2D));
                         }
                         this.attacker.setMotion(vector3d1.x, vectorY, vector3d1.z);
+                        this.attacker.world.playSound(null, this.attacker.getPosition(), ModSoundEvents.REKSAI_JUMP.get(), SoundCategory.HOSTILE, 3, 1);
                         dataManager.set(STATE, 2);
                     }else{
                         dataManager.set(STATE, 4);
@@ -500,10 +508,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 //this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
                 AxisAlignedBB bb= this.attacker.leg.getBoundingBox();
                 this.breakBB(bb);
-                this.attackBB(bb, 25, true, 10);
+                this.attackBB(bb, this.attacker.damage*25, true, 10);
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks==120){
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                     dataManager.set(STATE, 5);
+                    ticks=0;
                 }
                 return;
             }
@@ -519,7 +528,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==6){
                 AxisAlignedBB bb= this.attacker.leg.getBoundingBox().union(this.attacker.tail2.getBoundingBox());
                 this.breakBB(bb);
-                this.attackBB(bb, 5, true, 5);
+                this.attackBB(bb, this.attacker.damage*5, true, 5);
                 if(this.attacker.fallDistance>0){
                     if(ticks==0){
                         dataManager.set(STATE, 6);
@@ -530,7 +539,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 }
                 if(distToEnemySqr<30 && grab==false){
                     grab=true;
-                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), 20);
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), this.attacker.damage*20);
                     enemy.stopRiding();
                     enemy.startRiding(this.attacker, true);
                 }
@@ -540,7 +549,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(this.attacker.isOnGround() && ticks>1){
                     enemy.stopRiding();
                     enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
-                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), dañoSalto+15);
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), this.attacker.damage*(dañoSalto+15));
                     grab=false;
                     ticks=0;
                     dañoSalto=0;
@@ -610,7 +619,8 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
     @Override
     protected int getExperiencePoints(PlayerEntity player){ return 75+this.world.rand.nextInt(25); }
-
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn){ return ModSoundEvents.REKSAI_HIT.get(); }
+    //protected SoundEvent getDeathSound(){ return ModSoundEvents.REKSAI_ESCAPE.get(); }
     @Override
     public boolean onLivingFall(float distance, float damageMultiplier) { return false; }
     @Override
