@@ -22,7 +22,10 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.ClimberPathNavigator;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigator;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityPredicates;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -288,4 +291,10 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
     public boolean preventDespawn() { return true; }
     @Override
     public boolean isNoDespawnRequired() { return true; }
+
+    protected SoundEvent getAmbientSound() { return SoundEvents.ENTITY_ZOGLIN_AMBIENT; }
+
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return SoundEvents.ENTITY_STRIDER_HURT; }
+
+    protected SoundEvent getDeathSound() { return SoundEvents.ENTITY_STRIDER_DEATH; }
 }
