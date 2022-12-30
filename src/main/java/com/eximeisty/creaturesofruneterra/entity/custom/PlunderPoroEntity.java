@@ -29,7 +29,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -274,4 +276,10 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
             }
         }
     }
+
+    protected SoundEvent getDeathSound() { return SoundEvents.ENTITY_BAT_DEATH; }
+
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return SoundEvents.ENTITY_FOX_HURT; }
+
+    public SoundEvent getAmbientSound() { return SoundEvents.ENTITY_FOX_AMBIENT; }
 }
