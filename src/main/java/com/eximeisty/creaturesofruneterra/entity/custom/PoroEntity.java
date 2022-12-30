@@ -26,7 +26,10 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ActionResultType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -231,4 +234,8 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
         }
         super.setSitting(sit);
     }
+
+    protected SoundEvent getDeathSound() { return SoundEvents.ENTITY_BAT_DEATH; }
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return SoundEvents.ENTITY_FOX_HURT; }
+    public SoundEvent getAmbientSound() { return SoundEvents.ENTITY_FOX_AMBIENT; }
 }
