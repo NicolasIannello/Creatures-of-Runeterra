@@ -1,5 +1,7 @@
 package com.eximeisty.creaturesofruneterra.util;
 
+import com.eximeisty.creaturesofruneterra.item.custom.TendrilCompassPropertyGetter;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemModelsProperties;
 import net.minecraft.util.ResourceLocation;
@@ -19,4 +21,9 @@ public class ModItemModelProperties {
             return p_239428_2_ != null && p_239428_2_.isHandActive() && p_239428_2_.getActiveItemStack() == p_239428_0_ ? 1.0F : 0.0F;
         });
     }
+
+	public static void makeCompass( Item item ) {
+		ItemModelsProperties.registerProperty(item, new ResourceLocation( "angle" ), new TendrilCompassPropertyGetter());
+	}
+	
 }

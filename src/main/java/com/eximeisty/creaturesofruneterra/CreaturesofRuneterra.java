@@ -69,6 +69,7 @@ public class CreaturesofRuneterra {
     private void doClientStuff(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             ModItemModelProperties.makeBow(ModItems.SAI_BOW.get());
+            ModItemModelProperties.makeCompass(ModItems.TENDRIL_COMPASS.get());
             RenderTypeLookup.setRenderLayer(ModBlocks.TENDRIL.get(), RenderType.getCutout());
         });
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
