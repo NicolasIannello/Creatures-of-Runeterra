@@ -13,6 +13,7 @@ import com.eximeisty.creaturesofruneterra.item.custom.ModSpawnEggItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiBowItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiElytraItem;
+import com.eximeisty.creaturesofruneterra.item.custom.TendrilCompassItem;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -64,6 +65,9 @@ public class ModItems {
 
         public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow", 
         () -> new SaiBowItem(new Item.Properties().maxStackSize(1).maxDamage(384).group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+
+        public static final RegistryObject<Item> TENDRIL_COMPASS = ITEMS.register("tendril_compass",
+        () -> new TendrilCompassItem(new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         //ARMORS
         public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
