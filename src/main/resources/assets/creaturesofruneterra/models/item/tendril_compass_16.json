@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "creaturesofruneterra:item/tendril_compass_16"
+    }
+}
