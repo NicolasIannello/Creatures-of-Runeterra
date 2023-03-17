@@ -1,11 +1,10 @@
 package com.eximeisty.creaturesofruneterra.item.custom;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.NBTUtil;
-// import net.minecraft.util.ResourceLocation;
-//import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -16,7 +15,6 @@ public class TendrilCompassItemStackHelper {
 	private static final String destinationName = "destination";
 	private static final String dimensionName = "destination_dimension";
 	private static final String posName = "destination_pos";
-	//private static final String lockedName = "locked";
 	private static final String directionDataName = "directionData";
 	private static final String rotationName = "rotation";
 	private static final String rotaName = "rota";
@@ -29,29 +27,20 @@ public class TendrilCompassItemStackHelper {
 		stack.getOrCreateTag().put( destinationName, compound );
 	}
 	
-	//package-private
 	static boolean isDimensionEqual( ItemStack stack, World world, LivingEntity entity ) {
-		
-		return Objects.equals(world.getDimensionKey().toString(),stack.getOrCreateTag().getCompound( destinationName ).getString( dimensionName ) );
-		//return Objects.equals(world.dimension().location(),ResourceLocation.tryParse( stack.getOrCreateTag().getCompound( destinationName ).getString( dimensionName ) ));
+		return world.getDimensionKey().toString().contains("nether");
 	}
 
-	
-	//package-private
-	static BlockPos getDestinationPos( ItemStack stack ) {
-		return NBTUtil.readBlockPos( stack.getOrCreateTag().getCompound( destinationName ).getCompound( posName ) );
+	static BlockPos findObj(World world, LivingEntity entity){
+		BlockPos obj=null;
+		for (int i = (int)entity.getPosX(); i < (int)entity.getPosX()+10; i++) {
+			if( world.getBlockState(new BlockPos(i, entity.getPosY(), entity.getPosZ()))==Blocks.ANCIENT_DEBRIS.getDefaultState()){
+				obj=new BlockPos(i, entity.getPosY(), entity.getPosZ());
+			}
+		}
+		return obj;
 	}
 	
-	// //package-private
-	// static boolean isLocked( ItemStack stack ) {
-	// 	return stack.getOrCreateTag().getBoolean( lockedName );
-	// }
-	
-	// public static void setLocked( ItemStack stack, boolean locked ) {
-	// 	stack.getOrCreateTag().putBoolean( lockedName, locked );
-	// }
-	
-	//package-private
 	static void setRotationRotaAndLastUpdateTick( ItemStack stack, double rotation, double rota, long lastUpdateTick ) {
 		CompoundNBT compound = new CompoundNBT();
 		compound.putDouble( rotationName, rotation );
@@ -60,17 +49,14 @@ public class TendrilCompassItemStackHelper {
 		stack.getOrCreateTag().put( directionDataName, compound );
 	}
 	
-	//package-private
 	static double getRotation( ItemStack stack ) {
 		return stack.getOrCreateTag().getCompound( directionDataName ).getDouble( rotationName );
 	}
 	
-	//package-private
 	static double getRota( ItemStack stack ) {
 		return stack.getOrCreateTag().getCompound( directionDataName ).getDouble( rotaName );
 	}
 	
-	//package-private
 	static long getLastUpdateTick( ItemStack stack ) {
 		return stack.getOrCreateTag().getCompound( directionDataName ).getLong( lastUpdateTickName );
 	}

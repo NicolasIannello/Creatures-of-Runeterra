@@ -14,7 +14,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.security.SecureRandom;
 import java.util.Objects;
 
 
@@ -22,10 +21,7 @@ public class TendrilCompassPropertyGetter implements IItemPropertyGetter {
 	
 	@OnlyIn( Dist.CLIENT )
 	@Override
-	public float call(
-		@Nonnull ItemStack stack,
-		@Nullable ClientWorld clientWorld,
-		@Nullable LivingEntity livingEntity ) {
+	public float call(@Nonnull ItemStack stack, @Nullable ClientWorld clientWorld, @Nullable LivingEntity livingEntity){
 		
 		if( livingEntity == null && !stack.isOnItemFrame() ) {
 			return 0.0F;
@@ -37,13 +33,14 @@ public class TendrilCompassPropertyGetter implements IItemPropertyGetter {
 				world = entity.getEntityWorld();
 			}
 			double angel;
-			if( TendrilCompassItemStackHelper.isDimensionEqual( stack, world, livingEntity ) ) {
-				double rotation = isLivingEntityNotNull ? entity.rotationYaw /*yRot*/ : getFrameRotation( (ItemFrameEntity)entity );
+			BlockPos objetivo=TendrilCompassItemStackHelper.findObj(world, livingEntity);
+			if( TendrilCompassItemStackHelper.isDimensionEqual( stack, world, livingEntity ) && objetivo!=null) {
+				double rotation = isLivingEntityNotNull ? entity.rotationYaw : getFrameRotation( (ItemFrameEntity)entity );
 				rotation = MathHelper.positiveModulo( rotation / 360.0D, 1.0D );
-				double d2 = getSpawnToAngle( stack, entity ) / ( (float)Math.PI * 2.0F );
+				double d2 = StrictMath.atan2( objetivo.getZ() - entity.getPosZ(), objetivo.getX() - entity.getPosX() ) / ( (float)Math.PI * 2.0F );
 				angel = 0.5D - ( rotation - 0.25D - d2 );
 			} else {
-				angel = new SecureRandom().nextDouble();
+				return 2;
 			}
 			if( isLivingEntityNotNull ) {
 				angel = wobble( stack, world, angel );
@@ -70,13 +67,11 @@ public class TendrilCompassPropertyGetter implements IItemPropertyGetter {
 	
 	@OnlyIn( Dist.CLIENT )
 	private double getFrameRotation( ItemFrameEntity itemFrameEntity ) {
-		//return MathHelper.wrapDegrees( 180 + itemFrameEntity.getDirection().get2DDataValue() * 90 );
         return MathHelper.wrapDegrees( 180 + itemFrameEntity.rotationYaw * 90 );
 	}
 	
 	@OnlyIn( Dist.CLIENT )
-	private double getSpawnToAngle( ItemStack stack, Entity entity ) {
-		BlockPos blockpos = TendrilCompassItemStackHelper.getDestinationPos( stack );
+	private double getSpawnToAngle( ItemStack stack, Entity entity, BlockPos blockpos ) {
 		return StrictMath.atan2( blockpos.getZ() - entity.getPosZ(), blockpos.getX() - entity.getPosX() );
 	}
 }
