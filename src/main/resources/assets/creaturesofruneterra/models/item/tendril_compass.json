@@ -33,6 +33,7 @@
         { "predicate": { "angle": 0.890625 }, "model": "creaturesofruneterra:item/tendril_compass_13" },
         { "predicate": { "angle": 0.921875 }, "model": "creaturesofruneterra:item/tendril_compass_14" },
         { "predicate": { "angle": 0.953125 }, "model": "creaturesofruneterra:item/tendril_compass_15" },
-        { "predicate": { "angle": 0.984375 }, "model": "creaturesofruneterra:item/tendril_compass_16" }
+        { "predicate": { "angle": 0.984375 }, "model": "creaturesofruneterra:item/tendril_compass_16" },
+        { "predicate": { "angle": 2 }, "model": "creaturesofruneterra:item/tendril_compass_off" }
     ]
 }
