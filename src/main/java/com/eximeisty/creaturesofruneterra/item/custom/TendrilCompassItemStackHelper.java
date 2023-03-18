@@ -33,9 +33,15 @@ public class TendrilCompassItemStackHelper {
 
 	static BlockPos findObj(World world, LivingEntity entity){
 		BlockPos obj=null;
-		for (int i = (int)entity.getPosX(); i < (int)entity.getPosX()+10; i++) {
-			if( world.getBlockState(new BlockPos(i, entity.getPosY(), entity.getPosZ()))==Blocks.ANCIENT_DEBRIS.getDefaultState()){
-				obj=new BlockPos(i, entity.getPosY(), entity.getPosZ());
+		double lastDistance=1000, X=entity.getPosX(), Y=entity.getPosY(), Z=entity.getPosZ();
+		for(double i = Y+6; i>=Y-6; i--){
+			for(double j = X+6; j>=X-6; j--){
+				for(double n = Z+6; n>=Z-6; n--){
+					if( world.getBlockState(new BlockPos(j, i, n))==Blocks.ANCIENT_DEBRIS.getDefaultState() && entity.getDistanceSq(j, i, n)<lastDistance){
+						obj=new BlockPos(j, i, n);
+						lastDistance=entity.getDistanceSq(j, i, n);
+					}
+				}
 			}
 		}
 		return obj;
