@@ -19,6 +19,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
@@ -33,6 +35,8 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class FabledPoroEntity extends TameableEntity implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
@@ -169,11 +173,33 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
                     this.setHeldItem(Hand.MAIN_HAND, forgeItem);
                     itemstack.shrink(1);
                     return ActionResultType.SUCCESS;
+                }else if(itemstack.isRepairable()){
+                    if(!this.world.isRemote) this.world.setEntityState(this, (byte)13);
+                    return ActionResultType.SUCCESS;
                 }
                 this.setSitting(!dataManager.get(STATE));
             }
             return super.getEntityInteractionResult(playerIn, hand);
-        } 
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void handleStatusUpdate(byte id) {
+        if (id == 13) {
+            this.spawnParticles(ParticleTypes.ANGRY_VILLAGER);
+        } else {
+            super.handleStatusUpdate(id);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    protected void spawnParticles(IParticleData particleData) {
+        for(int i = 0; i < 5; ++i) {
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            this.world.addParticle(particleData, this.getPosXRandom(1.0D), this.getPosYRandom(), this.getPosZRandom(1.0D), d0, d1, d2);
+        }
     }
 
     @Override
