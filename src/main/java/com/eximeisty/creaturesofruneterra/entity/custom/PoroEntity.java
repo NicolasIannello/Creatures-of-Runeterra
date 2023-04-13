@@ -188,6 +188,17 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
                     PlunderPoroEntity plunderporo=new PlunderPoroEntity(ModEntityTypes.PLUNDERPORO.get(), this.world);
                     switchEntity(plunderporo, playerIn);
                 }
+                if(item == Items.CHEST){
+                    if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
+                    PatchedPorobotEntity patchedporobot=new PatchedPorobotEntity(ModEntityTypes.PATCHEDPOROBOT.get(), this.world);
+                    //switchEntity(patchedporobot, playerIn);
+                    this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
+                    this.entityDropItem(this.getHeldItemMainhand());
+                    patchedporobot.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
+                    patchedporobot.setTamedBy(playerIn);
+                    this.world.addEntity(patchedporobot);
+                    this.remove();
+                }
                 if(itemstack!=ItemStack.EMPTY){
                     if(item.canEquip(itemstack, EquipmentSlotType.HEAD, this)){
                         this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
