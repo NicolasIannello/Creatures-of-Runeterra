@@ -23,6 +23,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShie
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fabledporo.FabledPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.patchedporobot.PatchedPorobotRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
@@ -79,6 +80,7 @@ public class CreaturesofRuneterra {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.PORO.get(), PoroRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FABLEDPORO.get(), FabledPoroRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.PATCHEDPOROBOT.get(), PatchedPorobotRenderer::new);
         //ITEMS
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MISIL.get(), MisilRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DBSHIELD.get(), DBShieldRenderer::new);
