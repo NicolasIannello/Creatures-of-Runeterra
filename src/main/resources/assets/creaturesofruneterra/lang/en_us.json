@@ -33,5 +33,6 @@
     "entity.creaturesofruneterra.poro":"Poro",
     "entity.creaturesofruneterra.fabledporo":"Fabled poro",
     "entity.creaturesofruneterra.plunderporo":"Plunder poro",
-    "item.creaturesofruneterra.tendril_compass":"Tendril compass"
+    "item.creaturesofruneterra.tendril_compass":"Tendril compass",
+    "entity.creaturesofruneterra.patchedporobot":"Patched Porobot"
 }
