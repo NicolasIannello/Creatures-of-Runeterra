@@ -191,13 +191,7 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
                 if(item == Items.CHEST){
                     if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
                     PatchedPorobotEntity patchedporobot=new PatchedPorobotEntity(ModEntityTypes.PATCHEDPOROBOT.get(), this.world);
-                    //switchEntity(patchedporobot, playerIn);
-                    this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
-                    this.entityDropItem(this.getHeldItemMainhand());
-                    patchedporobot.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
-                    patchedporobot.setTamedBy(playerIn);
-                    this.world.addEntity(patchedporobot);
-                    this.remove();
+                    switchEntity(patchedporobot, playerIn);
                 }
                 if(itemstack!=ItemStack.EMPTY){
                     if(item.canEquip(itemstack, EquipmentSlotType.HEAD, this)){
@@ -244,6 +238,12 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
         }
         super.setSitting(sit);
+    }
+
+    protected void dropInventory() {
+        super.dropInventory();
+        this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
+        this.entityDropItem(this.getHeldItemMainhand());
     }
 
     protected SoundEvent getDeathSound() { return SoundEvents.ENTITY_BAT_DEATH; }
