@@ -30,7 +30,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
@@ -110,7 +109,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
 
          @Override
          public ITextComponent getDisplayName() {
-            return new TranslationTextComponent(world.getEntityByID(id).getDisplayName()+"'s insides");
+            return world.getEntityByID(id).getDisplayName();
          }
          
       };
@@ -152,7 +151,8 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
             this.entityDropItem(itemstack);
          }
       }
-      this.entityDropItem(new ItemStack(Items.OAK_WOOD, 9));
+      this.entityDropItem(new ItemStack(Items.OAK_PLANKS, 5));
+      this.entityDropItem(new ItemStack(Items.DARK_OAK_PLANKS, 4));
    }
 /*-------------------------------------------------------------------------------------- */
    protected SoundEvent getDeathSound() { return SoundEvents.ENTITY_BAT_DEATH; }
