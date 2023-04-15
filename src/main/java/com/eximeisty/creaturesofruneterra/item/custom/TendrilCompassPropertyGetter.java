@@ -33,19 +33,23 @@ public class TendrilCompassPropertyGetter implements IItemPropertyGetter {
 				world = entity.getEntityWorld();
 			}
 			double angel;
-			BlockPos objetivo=TendrilCompassItemStackHelper.findObj(world, livingEntity);
-			if( TendrilCompassItemStackHelper.isDimensionEqual( stack, world, livingEntity ) && objetivo!=null) {
-				double rotation = isLivingEntityNotNull ? entity.rotationYaw : getFrameRotation( (ItemFrameEntity)entity );
-				rotation = MathHelper.positiveModulo( rotation / 360.0D, 1.0D );
-				double d2 = StrictMath.atan2( objetivo.getZ() - entity.getPosZ(), objetivo.getX() - entity.getPosX() ) / ( (float)Math.PI * 2.0F );
-				angel = 0.5D - ( rotation - 0.25D - d2 );
+			if(TendrilCompassItemStackHelper.isDimensionEqual( stack, world, livingEntity )){
+				BlockPos objetivo=TendrilCompassItemStackHelper.findObj(world, livingEntity);
+				if(objetivo!=null) {
+					double rotation = isLivingEntityNotNull ? entity.rotationYaw : getFrameRotation( (ItemFrameEntity)entity );
+					rotation = MathHelper.positiveModulo( rotation / 360.0D, 1.0D );
+					double d2 = StrictMath.atan2( objetivo.getZ() - entity.getPosZ(), objetivo.getX() - entity.getPosX() ) / ( (float)Math.PI * 2.0F );
+					angel = 0.5D - ( rotation - 0.25D - d2 );
+					if( isLivingEntityNotNull ) {
+						angel = wobble( stack, world, angel );
+					}
+					return MathHelper.positiveModulo( (float)angel, 1.0F );
+				} else {
+					return 2;
+				}
 			} else {
 				return 2;
 			}
-			if( isLivingEntityNotNull ) {
-				angel = wobble( stack, world, angel );
-			}
-			return MathHelper.positiveModulo( (float)angel, 1.0F );
 		}
 	}
 	
