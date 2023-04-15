@@ -43,7 +43,17 @@ public class PorobotContainer extends Container {
 
     @Override
     public boolean canInteractWith(PlayerEntity playerIn) {
-        return playerEntity.getDistance(poro)<5;
+        return playerEntity.getDistance(poro)<=3;
+    }
+
+    @Override
+    public void onContainerClosed(PlayerEntity playerIn) {
+        PlayerInventory playerinventory = playerIn.inventory;
+        if (!playerinventory.getItemStack().isEmpty()) {
+           playerIn.dropItem(playerinventory.getItemStack(), false);
+           playerinventory.setItemStack(ItemStack.EMPTY);
+        }
+        poro.playersUsing--;
     }
 
     private int addSlotRange(IItemHandler handler, int index, int x, int y, int amount, int dx) {
