@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.common.MinecraftForge;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
+import com.eximeisty.creaturesofruneterra.container.ModContainers;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
@@ -32,6 +34,7 @@ import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerxarethRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.screen.PorobotScreen;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
@@ -47,6 +50,7 @@ public class CreaturesofRuneterra {
         ModItems.register(eventBus);
         ModBlocks.register(eventBus);
         ModTiles.register(eventBus);
+        ModContainers.register(eventBus);
         ModStructures.register(eventBus);
         ModSoundEvents.register(eventBus);
         ModEntityTypes.register(eventBus);
@@ -72,6 +76,7 @@ public class CreaturesofRuneterra {
             ModItemModelProperties.makeBow(ModItems.SAI_BOW.get());
             ModItemModelProperties.makeCompass(ModItems.TENDRIL_COMPASS.get());
             RenderTypeLookup.setRenderLayer(ModBlocks.TENDRIL.get(), RenderType.getCutout());
+            ScreenManager.registerFactory(ModContainers.POROBOT_CONTAINER.get(), PorobotScreen::new);
         });
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.XERXARETH.get(), XerxarethRenderer::new);
