@@ -29,8 +29,14 @@ public class PorobotContainer extends Container {
 
         if(poro!=null){
             poro.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->{
-                addSlot(new SlotItemHandler(h, 0, 80, 31));
-                addSlot(new SlotItemHandler(h, 1, 80, 53));
+                int x=0, y=0, index=0;
+                for (int j = 0; j < 3; j++) {
+                    for (int i = 0; i < 5; i++) {
+                        addSlot(new SlotItemHandler(h, i+index, 43+x, 17+y));
+                        x+=18;
+                    }
+                    x=0; y+=18; index+=5;
+                }
             });
         }
     }
@@ -70,9 +76,7 @@ public class PorobotContainer extends Container {
     private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-
-    // THIS YOU HAVE TO DEFINE!
-    private static final int TE_INVENTORY_SLOT_COUNT = 2;  // must match TileEntityInventoryBasic.NUMBER_OF_SLOTS
+    private static final int TE_INVENTORY_SLOT_COUNT = 15;
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {

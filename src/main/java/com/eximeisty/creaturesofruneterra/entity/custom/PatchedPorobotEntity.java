@@ -90,7 +90,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    protected void registerData() {
       super.registerData();
    }
-/*-------------------------------------------------------------------------------------- */
+/*-------------------------------INVENTORY------------------------------------------------------- */
    public ActionResultType getEntityInteractionResult(PlayerEntity playerIn, Hand hand) {
       if (!world.isRemote) {
          INamedContainerProvider containerProvider = createContainerProvider(world, this.getEntityId());
@@ -128,7 +128,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    }
 
    private ItemStackHandler createHandler(){
-      return new ItemStackHandler(2){//might need to change later
+      return new ItemStackHandler(15){
          @Override
          protected void onContentsChanged(int slot){
             markLoadedDirty();
