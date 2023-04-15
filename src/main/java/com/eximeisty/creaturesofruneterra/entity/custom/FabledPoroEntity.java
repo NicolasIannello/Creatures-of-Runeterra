@@ -11,11 +11,13 @@ import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
+import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -65,6 +67,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true){
             @Override
             protected void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
@@ -205,12 +208,18 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
     @Override
     public void setSitting(boolean sit) {
         this.dataManager.set(STATE, sit);
-        if(sit){
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
-        }else{
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
-        }
         super.setSitting(sit);
+    }
+
+    public void writeAdditional(CompoundNBT compound) {
+        super.writeAdditional(compound);
+        compound.putInt("day", this.dataManager.get(DAY));
+     }
+
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.dataManager.set(STATE, compound.getBoolean("Sitting"));
+        this.dataManager.set(DAY, compound.getInt("day"));
     }
 
     protected SoundEvent getAmbientSound() { return SoundEvents.ENTITY_EVOKER_AMBIENT; }
