@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,10 +24,14 @@ import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
@@ -50,6 +55,11 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    private AnimationFactory factory = new AnimationFactory(this);
    private final ItemStackHandler itemHandler = createHandler();
    private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
+   private static final DataParameter<Boolean> STATE = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
+   private static final DataParameter<Boolean> OPEN = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
+   private static final DataParameter<Boolean> CLOSE = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
+   public int playersUsing=0;
+   public boolean playSound=false;
 
    public PatchedPorobotEntity(EntityType<? extends TameableEntity> type, World worldIn) {
       super(type, worldIn);
@@ -62,12 +72,25 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    }
 
    protected void registerGoals() {
-      this.goalSelector.addGoal(1, new PanicGoal(this, 1.2D));
+      this.goalSelector.addGoal(1, new PanicGoal(this, 1.2D){
+         @Override
+         public void startExecuting() {
+            TameableEntity poro =(TameableEntity)this.creature;
+            this.creature.getDataManager().set(STATE, false);
+            poro.setSitting(false);
+            super.startExecuting();
+         }
+      });
+      this.goalSelector.addGoal(2, new SitGoal(this));
       this.goalSelector.addGoal(0, new SwimGoal(this));
       this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
    }
 
    public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+      if(dataManager.get(STATE)){
+         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.sit", true));
+         return PlayState.CONTINUE;
+      }
       event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.idle", true));
       return PlayState.CONTINUE;
    }
@@ -89,12 +112,36 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
 
    protected void registerData() {
       super.registerData();
+      dataManager.register(STATE, false);
+      dataManager.register(OPEN, false);
+      dataManager.register(CLOSE, false);
+   }
+
+   @Override
+   public void setSitting(boolean sit) {
+      this.dataManager.set(STATE, sit);
+      super.setSitting(sit);
+   }
+
+   public void tick() {
+      super.tick();
+      if(playersUsing==0 && playSound){ 
+         this.world.playSound(null, this.getPosition(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.NEUTRAL, (float)0.5, (float)4);
+         playSound=false;
+      }
    }
 /*-------------------------------INVENTORY------------------------------------------------------- */
    public ActionResultType getEntityInteractionResult(PlayerEntity playerIn, Hand hand) {
       if (!world.isRemote) {
-         INamedContainerProvider containerProvider = createContainerProvider(world, this.getEntityId());
-         NetworkHooks.openGui((ServerPlayerEntity)playerIn, containerProvider, buf -> buf.writeInt(this.getEntityId()));
+         if(playerIn.isSecondaryUseActive()){
+            this.setSitting(!dataManager.get(STATE));
+         }else if(playerIn.getDistance(this)<=3){
+            INamedContainerProvider containerProvider = createContainerProvider(world, this.getEntityId());
+            NetworkHooks.openGui((ServerPlayerEntity)playerIn, containerProvider, buf -> buf.writeInt(this.getEntityId()));
+            this.world.playSound(null, this.getPosition(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.NEUTRAL, (float)0.5, (float)6);
+            playersUsing++;
+            playSound=true;
+         }
 		}
       return ActionResultType.SUCCESS;
    }
@@ -118,6 +165,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    @Override
    public void readAdditional(CompoundNBT compound) {
       itemHandler.deserializeNBT(compound.getCompound("inv"));
+      this.dataManager.set(STATE, compound.getBoolean("Sitting"));
       super.readAdditional(compound);
    }
 
