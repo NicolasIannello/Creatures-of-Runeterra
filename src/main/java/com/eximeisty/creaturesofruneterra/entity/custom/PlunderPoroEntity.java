@@ -15,6 +15,7 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
+import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.monster.MonsterEntity;
@@ -25,6 +26,7 @@ import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -48,7 +50,6 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
     private AnimationFactory factory = new AnimationFactory(this);
     private static final DataParameter<Boolean> STATE = EntityDataManager.createKey(PlunderPoroEntity.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(PlunderPoroEntity.class, DataSerializers.BOOLEAN);
-    private double velocidad=0.27;
     private int ticks=0;
     public ItemStack forgeItem=ItemStack.EMPTY;
 
@@ -68,6 +69,7 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(5, new PlunderPoroEntity.RangedAttackGoal(this, 1, 70, 13));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, MonsterEntity.class, 3.0F, 1D, 1.4D));
         this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 20.0F, 2.0F, false));
@@ -147,12 +149,12 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
     @Override
     public void setSitting(boolean sit) {
         this.dataManager.set(STATE, sit);
-        if(sit){
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
-        }else{
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
-        }
         super.setSitting(sit);
+    }
+
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.dataManager.set(STATE, compound.getBoolean("Sitting"));
     }
 
     @Override

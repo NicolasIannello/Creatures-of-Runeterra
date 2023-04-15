@@ -14,6 +14,7 @@ import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtByTargetGoal;
 import net.minecraft.entity.ai.goal.OwnerHurtTargetGoal;
 import net.minecraft.entity.ai.goal.PanicGoal;
+import net.minecraft.entity.ai.goal.SitGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.TameableEntity;
@@ -22,6 +23,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -63,6 +65,7 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
 
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new SwimGoal(this));
+        this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(5, new MeleeAttackGoal(this, 1.0D, true){
             @Override
             public boolean shouldExecute() {
@@ -232,12 +235,12 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
     @Override
     public void setSitting(boolean sit) {
         this.dataManager.set(STATE, sit);
-        if(sit){
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
-        }else{
-            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
-        }
         super.setSitting(sit);
+    }
+
+    public void readAdditional(CompoundNBT compound) {
+        super.readAdditional(compound);
+        this.dataManager.set(STATE, compound.getBoolean("Sitting"));
     }
 
     protected void dropInventory() {
