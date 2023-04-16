@@ -84,7 +84,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
       });
       this.goalSelector.addGoal(2, new SitGoal(this));
       this.goalSelector.addGoal(0, new SwimGoal(this));
-      this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 2.0D, 10.0F, 2.0F, false));
+      this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.5D, 3.5F, 1.5F, false));
    }
 
    public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
