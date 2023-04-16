@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class PatchedPorobotRenderer extends GeoEntityRenderer<PatchedPorobotEntity> {
-    private ResourceLocation rl=new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/poro.png");
+    private ResourceLocation rl=new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/porobot.png");
 
     public PatchedPorobotRenderer(EntityRendererManager renderManager) {
         super(renderManager, new PatchedPorobotModel());

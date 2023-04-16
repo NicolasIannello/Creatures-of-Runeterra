@@ -60,6 +60,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    private static final DataParameter<Boolean> CLOSE = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
    public int playersUsing=0;
    public boolean playSound=false;
+   public int animTicks=0;
 
    public PatchedPorobotEntity(EntityType<? extends TameableEntity> type, World worldIn) {
       super(type, worldIn);
@@ -83,21 +84,39 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
       });
       this.goalSelector.addGoal(2, new SitGoal(this));
       this.goalSelector.addGoal(0, new SwimGoal(this));
-      this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
+      this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 2.0D, 10.0F, 2.0F, false));
    }
 
    public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-      if(dataManager.get(STATE)){
-         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.sit", true));
+      if (event.isMoving()) {
+         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.walk", true));
          return PlayState.CONTINUE;
       }
-      event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.idle", true));
+      if(dataManager.get(STATE)){
+         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.sit", true));
+         return PlayState.CONTINUE;
+      }
+      event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.idle", true));
       return PlayState.CONTINUE;
    }
+
+   public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
+      if(dataManager.get(OPEN)){
+         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.open", false).addAnimation("animation.porobot.hold", true));
+         return PlayState.CONTINUE;
+      }
+      if(dataManager.get(CLOSE)){
+         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.close", false));
+         return PlayState.CONTINUE;
+      }
+      event.getController().clearAnimationCache();
+      return PlayState.STOP;
+  }
 
    @Override
    public void registerControllers(AnimationData data) {
       data.addAnimationController(new AnimationController<IAnimatable>(this, "controller", 0, this::predicate));
+      data.addAnimationController(new AnimationController<IAnimatable>(this, "openClose", 0, this::predicate2));
    }
 
    @Override
@@ -125,9 +144,18 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
 
    public void tick() {
       super.tick();
+      if(this.dataManager.get(CLOSE)){
+         animTicks++;
+         if(animTicks>10){
+            animTicks=0;
+            this.dataManager.set(CLOSE, false);
+         }
+      }
       if(playersUsing==0 && playSound){ 
          this.world.playSound(null, this.getPosition(), SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.NEUTRAL, (float)0.5, (float)4);
          playSound=false;
+         this.dataManager.set(OPEN, false);
+         this.dataManager.set(CLOSE, true);
       }
    }
 /*-------------------------------INVENTORY------------------------------------------------------- */
@@ -139,6 +167,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
             INamedContainerProvider containerProvider = createContainerProvider(world, this.getEntityId());
             NetworkHooks.openGui((ServerPlayerEntity)playerIn, containerProvider, buf -> buf.writeInt(this.getEntityId()));
             this.world.playSound(null, this.getPosition(), SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.NEUTRAL, (float)0.5, (float)6);
+            this.dataManager.set(OPEN, true);
             playersUsing++;
             playSound=true;
          }
