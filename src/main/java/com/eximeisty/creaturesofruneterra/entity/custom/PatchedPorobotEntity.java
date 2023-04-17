@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.eximeisty.creaturesofruneterra.container.PorobotContainer;
+import com.eximeisty.creaturesofruneterra.item.ModItems;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.AgeableEntity;
@@ -205,10 +206,28 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    }
 
    private ItemStackHandler createHandler(){
-      return new ItemStackHandler(15){
+      return new ItemStackHandler(17){
          @Override
          protected void onContentsChanged(int slot){
             markLoadedDirty();
+         }
+
+         @Override
+         public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+            switch (slot) {
+               case 15: return stack.getItem()==Items.DISPENSER;
+               case 16: return (stack.getItem()==Items.ARROW || stack.getItem()==Items.TNT || stack.getItem()==Items.SPLASH_POTION || stack.getItem()==ModItems.HEXCORE.get());
+               default: return super.isItemValid(slot, stack);     
+            }
+         }
+
+         @Override
+         public int getSlotLimit(int slot) {
+            switch (slot) {
+               case 15: return 1;
+               case 16: return 10;
+               default: return super.getSlotLimit(slot);     
+            }
          }
       };
    }
