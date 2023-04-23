@@ -32,13 +32,21 @@ public class PorobotContainer extends Container {
                 int x=0, y=0, index=0;
                 for (int j = 0; j < 3; j++) {
                     for (int i = 0; i < 5; i++) {
-                        addSlot(new SlotItemHandler(h, i+index, 62+x, 17+y));
+                        addSlot(new SlotItemHandler(h, i+index, 53+x, 17+y));
                         x+=18;
                     }
                     x=0; y+=18; index+=5;
                 }
-                addSlot(new SlotItemHandler(h, index, 23, 21));
-                addSlot(new SlotItemHandler(h, index+1, 23, 48));
+                y=0;
+                addSlot(new SlotItemHandler(h, index, 17, 17));
+                for (int j = 0; j < 2; j++) {
+                    for (int i = 0; i < 2; i++) {
+                        addSlot(new SlotItemHandler(h, i+index+1, 8+x, 35+y));
+                        x+=18;
+                    }
+                    x=0; y+=18; index+=2;
+                }
+                addSlot(new SlotItemHandler(h, index+1, 152, 35));
             });
         }
     }
@@ -88,7 +96,7 @@ public class PorobotContainer extends Container {
     private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-    private static final int TE_INVENTORY_SLOT_COUNT = 17;
+    private static final int TE_INVENTORY_SLOT_COUNT = 21;
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
