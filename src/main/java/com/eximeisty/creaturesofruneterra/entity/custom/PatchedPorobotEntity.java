@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.eximeisty.creaturesofruneterra.container.PorobotContainer;
-import com.eximeisty.creaturesofruneterra.item.ModItems;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.AgeableEntity;
@@ -20,6 +19,7 @@ import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.entity.projectile.PotionEntity;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
@@ -28,6 +28,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Direction;
@@ -35,6 +37,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
@@ -62,6 +66,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    public int playersUsing=0;
    public boolean playSound=false;
    public int animTicks=0;
+   public int cd=500;
 
    public PatchedPorobotEntity(EntityType<? extends TameableEntity> type, World worldIn) {
       super(type, worldIn);
@@ -158,6 +163,34 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
          this.dataManager.set(OPEN, false);
          this.dataManager.set(CLOSE, true);
       }
+      if(cd<=0){
+         boolean flag=(itemHandler.getStackInSlot(16).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(17).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(18).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(19).getItem()==Items.SPLASH_POTION);
+         if(this.getOwner().getHealth()<=10 && this.getDistanceSq(this.getOwner())<=14 && itemHandler.getStackInSlot(15).getItem()==Items.DISPENSER && flag){
+            Vector3d vector3d = this.getOwner().getMotion();
+            double d0 = this.getOwner().getPosX() + vector3d.x - this.getPosX();
+            double d1 = this.getOwner().getPosYEye() - (double)1.1F - this.getPosY();
+            double d2 = this.getOwner().getPosZ() + vector3d.z - this.getPosZ();
+            float f = MathHelper.sqrt(d0 * d0 + d2 * d2);
+            
+            Potion potion = null;
+            int i=15;
+            do {
+               i++;
+               if(!itemHandler.getStackInSlot(i).isEmpty()) potion = PotionUtils.getPotionFromItem(itemHandler.getStackInSlot(i));
+            } while (potion==null && i<=19);
+            if(potion!=null){
+               PotionEntity potionentity = new PotionEntity(this.world, this);
+               potionentity.setItem(PotionUtils.addPotionToItemStack(new ItemStack(Items.SPLASH_POTION), potion));
+               potionentity.rotationPitch -= -20.0F;
+               potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);
+               this.world.addEntity(potionentity);
+               itemHandler.extractItem(i, 1, false);
+               cd=500;
+            }
+         }
+      }else{
+         cd--;
+      }
    }
 /*-------------------------------INVENTORY------------------------------------------------------- */
    public ActionResultType getEntityInteractionResult(PlayerEntity playerIn, Hand hand) {
@@ -206,7 +239,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    }
 
    private ItemStackHandler createHandler(){
-      return new ItemStackHandler(17){
+      return new ItemStackHandler(21){
          @Override
          protected void onContentsChanged(int slot){
             markLoadedDirty();
@@ -216,7 +249,11 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
          public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             switch (slot) {
                case 15: return stack.getItem()==Items.DISPENSER;
-               case 16: return (stack.getItem()==Items.ARROW || stack.getItem()==Items.TNT || stack.getItem()==Items.SPLASH_POTION || stack.getItem()==ModItems.HEXCORE.get());
+               case 16: 
+               case 17: 
+               case 18: 
+               case 19: return stack.getItem()==Items.SPLASH_POTION;
+               case 20: return (stack.getItem()==Items.CRAFTING_TABLE || stack.getItem()==Items.FURNACE);
                default: return super.isItemValid(slot, stack);     
             }
          }
@@ -226,6 +263,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
             switch (slot) {
                case 15: return 1;
                case 16: return 10;
+               case 17: return 1;
                default: return super.getSlotLimit(slot);     
             }
          }
