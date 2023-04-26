@@ -72,7 +72,7 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
         this.goalSelector.addGoal(2, new SitGoal(this));
         this.goalSelector.addGoal(5, new PlunderPoroEntity.RangedAttackGoal(this, 1, 70, 13));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, MonsterEntity.class, 3.0F, 1D, 1.4D));
-        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 20.0F, 2.0F, false));
+        this.goalSelector.addGoal(6, new FollowOwnerGoal(this, 1.0D, 10.0F, 2.0F, false));
         this.goalSelector.addGoal(8, new WaterAvoidingRandomWalkingGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
