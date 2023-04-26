@@ -4,9 +4,9 @@ import javax.annotation.Nullable;
 
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
-import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SChatPacket;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -66,23 +66,21 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
     
     @Override
     public void tick() {
-        if(this.estado==1){
+        if(this.getTileData().getInt("state")==1 && !this.world.isRemote){
             ticks++;
             if(ticks==550) setEstado(false);
             if(inDesert){
                 if(ticks==180) this.world.playSound(null, pos, ModSoundEvents.REKSAI_AWAKEN.get(), SoundCategory.AMBIENT, 3, 1);
                 if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("The floor trembles"), ChatType.CHAT, Util.DUMMY_UUID));
                 if(ticks==500){
-                    RekSaiEntity reksai=new RekSaiEntity(ModEntityTypes.REKSAI.get(), this.world);
-                    reksai.setPosition(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
-                    this.world.addEntity(reksai);
+                    ModEntityTypes.REKSAI.get().spawn(world.getServer().func_241755_D_(), null, null, this.getPos(), SpawnReason.TRIGGERED, false, false);
                     this.world.destroyBlock(pos, false);
                 }
             }else{
                 if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("Nothing happens"), ChatType.CHAT, Util.DUMMY_UUID));
             }
             if(ticks==1) if(this.world.getBiome(this.pos).getRegistryName().toString().contains("desert")) inDesert=true;
-        }else if(this.estado==2){
+        }else if(this.getTileData().getInt("state")==2){
             ticks++;
             if(ticks==30) setEstado(true);
         }
@@ -90,7 +88,7 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
 
     public void setEstado(boolean setZero) {
         ticks=0; inDesert=false;
-        if(this.estado==0 || this.estado==2){ 
+        if(this.getTileData().getInt("state")==0 || this.getTileData().getInt("state")==2){ 
             this.estado=1; 
         }else{ 
             this.estado=2; 
