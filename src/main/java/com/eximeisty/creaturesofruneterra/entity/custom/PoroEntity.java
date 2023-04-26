@@ -6,6 +6,7 @@ import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.FollowOwnerGoal;
@@ -32,6 +33,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -183,18 +185,15 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
             if(this.isTamed() && this.isOwner(playerIn)){
                 if(item == Items.ANVIL){
                     if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
-                    FabledPoroEntity fableporo=new FabledPoroEntity(ModEntityTypes.FABLEDPORO.get(), this.world);
-                    switchEntity(fableporo, playerIn);
+                    switchEntity(ModEntityTypes.FABLEDPORO.get(), playerIn);
                 }
                 if(item == Items.HEART_OF_THE_SEA){
                     if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
-                    PlunderPoroEntity plunderporo=new PlunderPoroEntity(ModEntityTypes.PLUNDERPORO.get(), this.world);
-                    switchEntity(plunderporo, playerIn);
+                    switchEntity(ModEntityTypes.PLUNDERPORO.get(), playerIn);
                 }
                 if(item == Items.CHEST){
                     if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
-                    PatchedPorobotEntity patchedporobot=new PatchedPorobotEntity(ModEntityTypes.PATCHEDPOROBOT.get(), this.world);
-                    switchEntity(patchedporobot, playerIn);
+                    switchEntity(ModEntityTypes.PATCHEDPOROBOT.get(), playerIn);
                 }
                 if(itemstack!=ItemStack.EMPTY){
                     if(item.canEquip(itemstack, EquipmentSlotType.HEAD, this)){
@@ -215,14 +214,11 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
         } 
     }
 
-    public void switchEntity(TameableEntity poro, PlayerEntity owner){
+    public void switchEntity(EntityType<?> poro, PlayerEntity owner){
         this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
         this.entityDropItem(this.getHeldItemMainhand());
-        poro.setPosition(this.getPosX(), this.getPosY(), this.getPosZ());
-        poro.setTamedBy(owner);
-        poro.setTamed(true);
-        poro.setOwnerId(owner.getUniqueID());
-        this.world.addEntity(poro);
+        TameableEntity entity= (TameableEntity)poro.spawn(world.getServer().func_241755_D_(), null, null, new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ()), SpawnReason.NATURAL, false, false);
+        entity.setTamedBy(owner);
         this.remove();
     }
 
