@@ -139,7 +139,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
 
     public void tick() {
         super.tick();
-        if(dataManager.get(FORGE)){
+        if(this.getHeldItem(Hand.MAIN_HAND)!=ItemStack.EMPTY){//dataManager.get(FORGE)){
             ticks++;
             if(ticks==100){
                 dataManager.set(FORGE, false);
@@ -166,20 +166,19 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             boolean flag = this.isOwner(playerIn);
             return flag ? ActionResultType.CONSUME : ActionResultType.PASS;
         }else{
-            if(this.isOwner(playerIn)){
-                int day=(int)(this.world.getDayTime()/24000);
-                if(itemstack.isRepairable() && dataManager.get(DAY)!=day){
-                    dataManager.set(DAY, day);
-                    dataManager.set(FORGE, true);
-                    this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
-                    forgeItem=itemstack.copy();
-                    this.setHeldItem(Hand.MAIN_HAND, forgeItem);
-                    itemstack.shrink(1);
-                    return ActionResultType.SUCCESS;
-                }else if(itemstack.isRepairable()){
-                    if(!this.world.isRemote) this.world.setEntityState(this, (byte)13);
-                    return ActionResultType.SUCCESS;
-                }
+            int day=(int)(this.world.getDayTime()/24000);
+            if(itemstack.isRepairable() && dataManager.get(DAY)!=day){
+                dataManager.set(DAY, day);
+                dataManager.set(FORGE, true);
+                this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
+                forgeItem=itemstack.copy();
+                this.setHeldItem(Hand.MAIN_HAND, forgeItem);
+                itemstack.shrink(1);
+                return ActionResultType.SUCCESS;
+            }else if(itemstack.isRepairable()){
+                if(!this.world.isRemote) this.world.setEntityState(this, (byte)13);
+                return ActionResultType.SUCCESS;
+            }else if(this.isOwner(playerIn)){
                 this.setSitting(!dataManager.get(STATE));
             }
             return super.getEntityInteractionResult(playerIn, hand);
