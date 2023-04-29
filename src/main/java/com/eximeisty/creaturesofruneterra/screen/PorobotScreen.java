@@ -12,6 +12,7 @@ import net.minecraft.util.text.ITextComponent;
 
 public class PorobotScreen extends ContainerScreen<PorobotContainer>{
     private final ResourceLocation GUI = new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/gui/porobot_gui.png");
+    private final ResourceLocation GUI_CRAFTING = new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/gui/porobot_gui_crafting.png");
 
     public PorobotScreen(PorobotContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
         super(screenContainer, inv, titleIn);
@@ -27,9 +28,13 @@ public class PorobotScreen extends ContainerScreen<PorobotContainer>{
     @Override @Deprecated
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1f, 1f, 1f, 1f);
-        this.minecraft.getTextureManager().bindTexture(GUI);
+        switch (this.container.getSlot(20+9+3*9).getStack().getItem().toString()) {
+            case "crafting_table": this.minecraft.getTextureManager().bindTexture(GUI_CRAFTING); break;
+            case "furnace": break;
+            default: this.minecraft.getTextureManager().bindTexture(GUI); break;
+        }
         int i = this.guiLeft;
         int j = this.guiTop;
-        this.blit(matrixStack, i, j, 0, 0, this.xSize, this.ySize);
-    }    
+        this.blit(matrixStack, i, j, 0, 0, 239, 168);
+    }
 }
