@@ -253,7 +253,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    }
 
    private ItemStackHandler createHandler(){
-      return new ItemStackHandler(21){
+      return new ItemStackHandler(31){
          @Override
          protected void onContentsChanged(int slot){
             if(slot==15) changeItem(Hand.MAIN_HAND, slot);
