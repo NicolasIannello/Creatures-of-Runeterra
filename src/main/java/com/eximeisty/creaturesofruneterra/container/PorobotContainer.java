@@ -11,7 +11,6 @@ import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.CraftingResultSlot;
-//import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.RecipeBookContainer;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -86,8 +85,26 @@ public class PorobotContainer extends RecipeBookContainer<CraftingInventory> {
                         });
                         x+=18;
                     }
-                    x=0; y+=18; index+=3;
+                    x=0; y+=18; //index+=3;
                 }
+                this.addSlot(new SlotItemHandler(h, index+1, 179+18, 17){
+                    @OnlyIn(Dist.CLIENT)
+                    public boolean isEnabled() {
+                        return getSlot(20+9+3*9).getStack().getItem()==Items.FURNACE;
+                    }
+                });
+                this.addSlot(new SlotItemHandler(h, index+2, 179+18, 17+18*2){
+                    @OnlyIn(Dist.CLIENT)
+                    public boolean isEnabled() {
+                        return getSlot(20+9+3*9).getStack().getItem()==Items.FURNACE;
+                    }
+                });
+                this.addSlot(new SlotItemHandler(h, index+3, 197, 133){
+                    @OnlyIn(Dist.CLIENT)
+                    public boolean isEnabled() {
+                        return getSlot(20+9+3*9).getStack().getItem()==Items.FURNACE;
+                    }
+                });
             });
         }
     }
@@ -140,7 +157,7 @@ public class PorobotContainer extends RecipeBookContainer<CraftingInventory> {
     private static final int VANILLA_SLOT_COUNT = HOTBAR_SLOT_COUNT + PLAYER_INVENTORY_SLOT_COUNT;
     private static final int VANILLA_FIRST_SLOT_INDEX = 0;
     private static final int TE_INVENTORY_FIRST_SLOT_INDEX = VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT;
-    private static final int TE_INVENTORY_SLOT_COUNT = 31;
+    private static final int TE_INVENTORY_SLOT_COUNT = 34;
 
     @Override
     public ItemStack transferStackInSlot(PlayerEntity playerIn, int index) {
