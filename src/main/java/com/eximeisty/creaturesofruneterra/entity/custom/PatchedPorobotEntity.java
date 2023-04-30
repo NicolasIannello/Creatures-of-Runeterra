@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import com.eximeisty.creaturesofruneterra.container.PorobotContainer;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
@@ -23,10 +24,14 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.PotionEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.crafting.AbstractCookingRecipe;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -45,6 +50,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -70,6 +76,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    public boolean playSound=false;
    public int animTicks=0;
    public int cd=400;
+   public int burnTime, burnTimeTotal, cookTime, cookTimeTotal;
 
    public PatchedPorobotEntity(EntityType<? extends TameableEntity> type, World worldIn) {
       super(type, worldIn);
@@ -173,6 +180,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
       }else{
          cd--;
       }
+      if(itemHandler.getStackInSlot(20).getItem()==Items.FURNACE) furnaceLogic();
    }
 
    public void throwPotion(String match){
@@ -205,6 +213,101 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
       }else{
          cd=150;
       }
+   }
+
+   public boolean isHeating(){
+      return this.burnTime>0;
+   }
+
+   protected boolean canSmelt(@Nullable IRecipe<?> recipeIn) {
+      if (!itemHandler.getStackInSlot(22).isEmpty() && recipeIn != null) {
+         ItemStack itemstack = recipeIn.getRecipeOutput();
+         if (itemstack.isEmpty()) {
+            return false;
+         } else {
+            ItemStack itemstack1 = itemHandler.getStackInSlot(24);
+            if (itemstack1.isEmpty()) {
+               return true;
+            } else if (!itemstack1.isItemEqual(itemstack)) {
+               return false;
+            } else if (itemstack1.getCount() + itemstack.getCount() <= itemHandler.getSlotLimit(24) && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
+               return true;
+            } else {
+               return itemstack1.getCount() + itemstack.getCount() <= itemstack.getMaxStackSize(); // Forge fix: make furnace respect stack sizes in furnace recipes
+            }
+         }
+      } else {
+         return false;
+      }
+   }
+
+   private void smelt(@Nullable IRecipe<?> recipe) {
+      if (recipe != null && this.canSmelt(recipe)) {
+         ItemStack itemstack = itemHandler.getStackInSlot(22);
+         ItemStack itemstack1 = recipe.getRecipeOutput();
+         ItemStack itemstack2 = itemHandler.getStackInSlot(24);
+         if (itemstack2.isEmpty()) {
+            itemHandler.setStackInSlot(24, itemstack1);
+         } else if (itemstack2.getItem() == itemstack1.getItem()) {
+            itemHandler.getStackInSlot(24).grow(itemstack1.getCount());
+         }
+         if (itemstack.getItem() == Blocks.WET_SPONGE.asItem() && !itemHandler.getStackInSlot(23).isEmpty() && itemHandler.getStackInSlot(23).getItem() == Items.BUCKET) {
+            itemHandler.insertItem(23, new ItemStack(Items.WATER_BUCKET), false);
+         }
+         itemstack.shrink(1);
+      }
+   }
+
+   protected int getCookTime(Inventory inv) {
+      return this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, inv, this.world).map(AbstractCookingRecipe::getCookTime).orElse(this.world.getRecipeManager().getRecipe(IRecipeType.CAMPFIRE_COOKING, inv, this.world).map(AbstractCookingRecipe::getCookTime).orElse(200));
+   }
+
+   @Deprecated
+   public void furnaceLogic(){
+      boolean flag = this.isHeating();
+      boolean flag1 = false;
+      if(this.isHeating()) burnTime--;
+
+      if(!this.world.isRemote){
+         if (this.isHeating() || !itemHandler.getStackInSlot(23).isEmpty() && !itemHandler.getStackInSlot(22).isEmpty()) {
+            Inventory inv = new Inventory(itemHandler.getStackInSlot(22), itemHandler.getStackInSlot(23));
+            IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe(IRecipeType.SMELTING, inv, this.world).orElse(null);
+            if (!this.isHeating() && this.canSmelt(irecipe)) {
+               this.burnTime = ForgeHooks.getBurnTime(itemHandler.getStackInSlot(23));
+               this.burnTimeTotal = this.burnTime;
+               this.cookTimeTotal= this.getCookTime(inv);
+               if (this.isHeating()) {
+                  flag1 = true;
+                  if (itemHandler.getStackInSlot(23).hasContainerItem())
+                     itemHandler.insertItem(23, itemHandler.getStackInSlot(23).getContainerItem(), false);
+                  else if (!itemHandler.getStackInSlot(23).isEmpty()) {
+                     itemHandler.getStackInSlot(23).shrink(1);
+                     if (itemHandler.getStackInSlot(23).isEmpty()) {
+                        itemHandler.insertItem(23, itemHandler.getStackInSlot(23).getContainerItem(), false);
+                     }
+                  }
+               }
+            }
+            if (this.isHeating() && this.canSmelt(irecipe)) {
+               ++this.cookTime;
+               if (this.cookTime == this.cookTimeTotal) {
+                  this.cookTime = 0;
+                  this.cookTimeTotal = this.getCookTime(inv);
+                  this.smelt(irecipe);
+                  flag1 = true;
+               }
+            } else {
+               this.cookTime = 0;
+            }
+         }else if (!this.isHeating() && this.cookTime > 0) {
+            this.cookTime = MathHelper.clamp(this.cookTime - 2, 0, this.cookTimeTotal);
+         }
+
+         if (flag != this.isHeating()) {
+            flag1 = true;
+         }
+      }
+      if (flag1) this.markLoadedDirty();
    }
 /*-------------------------------INVENTORY------------------------------------------------------- */
    public ActionResultType getEntityInteractionResult(PlayerEntity playerIn, Hand hand) {
@@ -253,7 +356,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    }
 
    private ItemStackHandler createHandler(){
-      return new ItemStackHandler(31){
+      return new ItemStackHandler(34){
          @Override
          protected void onContentsChanged(int slot){
             if(slot==15) changeItem(Hand.MAIN_HAND, slot);
@@ -261,7 +364,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
             markLoadedDirty();
          }
 
-         @Override
+         @Override @Deprecated
          public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
             switch (slot) {
                case 15: return stack.getItem()==Items.DISPENSER;
@@ -270,6 +373,8 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
                case 18: 
                case 19: return stack.getItem()==Items.SPLASH_POTION;
                case 20: return (stack.getItem()==Items.CRAFTING_TABLE || stack.getItem()==Items.FURNACE);
+               case 23: return ForgeHooks.getBurnTime(stack)>0;
+               case 24: return !(stack.getAttachedEntity()==null);
                default: return super.isItemValid(slot, stack);     
             }
          }
