@@ -12,6 +12,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.AgeableEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -186,26 +187,29 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
          this.dataManager.set(CLOSE, true);
       }
       if(cd<=0){
-         boolean flag= (this.getDistanceSq(this.getOwner())<=20 && itemHandler.getStackInSlot(15).getItem()==Items.DISPENSER && (itemHandler.getStackInSlot(16).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(17).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(18).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(19).getItem()==Items.SPLASH_POTION));
-         if(this.getOwner().isBurning() && flag) this.throwPotion("fire");
-         if(this.getOwner().getHealth()<=10 && flag) this.throwPotion("health|regeneration|strength|slowness|water");
-      }else{
+         boolean flag= (itemHandler.getStackInSlot(15).getItem()==Items.DISPENSER && (itemHandler.getStackInSlot(16).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(17).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(18).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(19).getItem()==Items.SPLASH_POTION));
+         if(this.isBurning() && flag) this.throwPotion("fire", this, 100, 50);
+         if(this.getHealth()<=this.getMaxHealth()/2 && flag) this.throwPotion("health|regeneration|strength|slowness|water", this, 100, 50);
+         if(cd<=0){
+            if(this.getOwner().isBurning() && flag && this.getDistanceSq(this.getOwner())<=20) this.throwPotion("fire", this.getOwner(), 1000, 150);
+            if(this.getOwner().getHealth()<=this.getOwner().getMaxHealth()/2 && flag && this.getDistanceSq(this.getOwner())<=20) this.throwPotion("health|regeneration|strength|slowness|water", this.getOwner(), 1000, 150);
+         }
+      }else if(cd>0){
          cd--;
       }
       if(itemHandler.getStackInSlot(20).getItem()==Items.FURNACE) furnaceLogic();
    }
 
-   public void throwPotion(String match){
-      Vector3d vector3d = this.getOwner().getMotion();
-      double d0 = this.getOwner().getPosX() + vector3d.x - this.getPosX();
-      double d1 = this.getOwner().getPosYEye() - (double)1.1F - this.getPosY();
-      double d2 = this.getOwner().getPosZ() + vector3d.z - this.getPosZ();
+   public void throwPotion(String match, LivingEntity obj, int cd1, int cd2){
+      Vector3d vector3d = obj.getMotion();
+      double d0 = obj.getPosX() + vector3d.x - this.getPosX();
+      double d1 = obj.getPosYEye() - (double)1.1F - this.getPosY();
+      double d2 = obj.getPosZ() + vector3d.z - this.getPosZ();
       float f = MathHelper.sqrt(d0 * d0 + d2 * d2);
       
       Potion potion = null;
-      int i=15;
+      int i=16;
       do {
-         i++;
          if(!itemHandler.getStackInSlot(i).isEmpty()){
             Potion potionPlaceHolder = PotionUtils.getPotionFromItem(itemHandler.getStackInSlot(i));
             Pattern pattern = Pattern.compile(match, Pattern.CASE_INSENSITIVE);
@@ -213,6 +217,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
             boolean matchFound = matcher.find();
             if(matchFound) potion = potionPlaceHolder;
          }
+         i++;
       } while (potion==null && i<=19);
       if(potion!=null){
          PotionEntity potionentity = new PotionEntity(this.world, this);
@@ -220,10 +225,10 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
          potionentity.rotationPitch -= -20.0F;
          potionentity.shoot(d0, d1 + (double)(f * 0.2F), d2, 0.75F, 8.0F);
          this.world.addEntity(potionentity);
-         itemHandler.extractItem(i, 1, false);
-         cd=1000;
+         itemHandler.extractItem(i-1, 1, false);
+         cd=cd1;
       }else{
-         cd=150;
+         cd=cd2;
       }
    }
 
@@ -408,6 +413,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
       burnTimeTotal=compound.getInt("burnTimeTotal");
       cookTime=compound.getInt("cookTime");
       cookTimeTotal=compound.getInt("cookTimeTotal");
+      cd= compound.getInt("cd")>100?compound.getInt("cd"):100;
       super.readAdditional(compound);
    }
 
@@ -418,6 +424,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
       compound.putInt("burnTimeTotal", dataManager.get(BURNTIMETOTAL));
       compound.putInt("cookTime", dataManager.get(COOKTIME));
       compound.putInt("cookTimeTotal", dataManager.get(COOKTIMETOTAL));
+      compound.putInt("cd", cd);
       super.writeAdditional(compound);
    }
 
