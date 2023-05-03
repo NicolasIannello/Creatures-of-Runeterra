@@ -29,13 +29,22 @@ public class PorobotScreen extends ContainerScreen<PorobotContainer>{
     @Override @Deprecated
     protected void drawGuiContainerBackgroundLayer(MatrixStack matrixStack, float partialTicks, int x, int y) {
         RenderSystem.color4f(1f, 1f, 1f, 1f);
+        boolean furnace = false;
         switch (this.container.getSlot(20+9+3*9).getStack().getItem().toString()) {
             case "crafting_table": this.minecraft.getTextureManager().bindTexture(GUI_CRAFTING); break;
-            case "furnace": this.minecraft.getTextureManager().bindTexture(GUI_FURNACE); break;
+            case "furnace": this.minecraft.getTextureManager().bindTexture(GUI_FURNACE); furnace=true; break;
             default: this.minecraft.getTextureManager().bindTexture(GUI); break;
         }
         int i = this.guiLeft;
         int j = this.guiTop;
         this.blit(matrixStack, i, j, 0, 0, 239, 168);
+        if(furnace){
+            if (this.container.poro.isLit()) {
+                int k = this.container.poro.getBurnLeftScaled();
+                this.blit(matrixStack, i+196, j+34+18-k, 0, 168+18-k, 18, k);
+            }
+            int l = this.container.poro.getCookProgressionScaled();
+            this.blit(matrixStack, i+190, j+77, 18, 168, 31, l);
+        }
     }
 }
