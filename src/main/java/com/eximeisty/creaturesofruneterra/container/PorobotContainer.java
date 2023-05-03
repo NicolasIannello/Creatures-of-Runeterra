@@ -31,7 +31,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PorobotContainer extends RecipeBookContainer<CraftingInventory> {
-    private final PatchedPorobotEntity poro;
+    public final PatchedPorobotEntity poro;
     private final PlayerEntity playerEntity;
     private final IItemHandler playerInventory;
     private final CraftingInventory craftMatrix = new CraftingInventory(this, 3, 3);
