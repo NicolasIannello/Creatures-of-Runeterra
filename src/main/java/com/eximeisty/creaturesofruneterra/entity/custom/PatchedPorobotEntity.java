@@ -72,6 +72,10 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    private static final DataParameter<Boolean> STATE = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
    private static final DataParameter<Boolean> OPEN = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
    private static final DataParameter<Boolean> CLOSE = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
+   private static final DataParameter<Integer> BURNTIME = EntityDataManager.createKey(PoroEntity.class, DataSerializers.VARINT);
+   private static final DataParameter<Integer> BURNTIMETOTAL = EntityDataManager.createKey(PoroEntity.class, DataSerializers.VARINT);
+   private static final DataParameter<Integer> COOKTIME = EntityDataManager.createKey(PoroEntity.class, DataSerializers.VARINT);
+   private static final DataParameter<Integer> COOKTIMETOTAL = EntityDataManager.createKey(PoroEntity.class, DataSerializers.VARINT);
    public int playersUsing=0;
    public boolean playSound=false;
    public int animTicks=0;
@@ -150,6 +154,10 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
       dataManager.register(STATE, false);
       dataManager.register(OPEN, false);
       dataManager.register(CLOSE, false);
+      dataManager.register(BURNTIME, 0);
+      dataManager.register(BURNTIMETOTAL, 0);
+      dataManager.register(COOKTIME, 0);
+      dataManager.register(COOKTIMETOTAL, 0);
    }
 
    @Override
@@ -213,6 +221,22 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
       }else{
          cd=150;
       }
+   }
+
+   public int getCookProgressionScaled() {
+      int i = dataManager.get(COOKTIME);
+      int j = dataManager.get(COOKTIMETOTAL);
+      return j != 0 && i != 0 ? i * 48 / j : 0;
+   }
+
+   public int getBurnLeftScaled() {
+      int i = dataManager.get(BURNTIMETOTAL);
+      if (i == 0) i = 200;
+      return dataManager.get(BURNTIME) * 17 / i;
+   }
+
+   public boolean isLit(){
+      return dataManager.get(BURNTIMETOTAL)>0;
    }
 
    public boolean isHeating(){
@@ -306,6 +330,10 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
          if (flag != this.isHeating()) {
             flag1 = true;
          }
+         dataManager.set(BURNTIME, burnTime);
+         dataManager.set(BURNTIMETOTAL, burnTimeTotal);
+         dataManager.set(COOKTIME, cookTime);
+         dataManager.set(COOKTIMETOTAL, cookTimeTotal);
       }
       if (flag1) this.markLoadedDirty();
    }
@@ -346,12 +374,24 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    public void readAdditional(CompoundNBT compound) {
       itemHandler.deserializeNBT(compound.getCompound("inv"));
       this.dataManager.set(STATE, compound.getBoolean("Sitting"));
+      this.dataManager.set(BURNTIME, compound.getInt("burnTime"));
+      this.dataManager.set(BURNTIMETOTAL, compound.getInt("burnTimeTotal"));
+      this.dataManager.set(COOKTIME, compound.getInt("cookTime"));
+      this.dataManager.set(COOKTIMETOTAL, compound.getInt("cookTimeTotal"));
+      burnTime=compound.getInt("burnTime");
+      burnTimeTotal=compound.getInt("burnTimeTotal");
+      cookTime=compound.getInt("cookTime");
+      cookTimeTotal=compound.getInt("cookTimeTotal");
       super.readAdditional(compound);
    }
 
    @Override
    public void writeAdditional(CompoundNBT compound) {
       compound.put("inv", itemHandler.serializeNBT());
+      compound.putInt("burnTime", dataManager.get(BURNTIME));
+      compound.putInt("burnTimeTotal", dataManager.get(BURNTIMETOTAL));
+      compound.putInt("cookTime", dataManager.get(COOKTIME));
+      compound.putInt("cookTimeTotal", dataManager.get(COOKTIMETOTAL));
       super.writeAdditional(compound);
    }
 
