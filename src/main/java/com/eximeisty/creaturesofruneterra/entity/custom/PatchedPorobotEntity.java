@@ -36,6 +36,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ActionResultType;
@@ -64,6 +66,8 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    private AnimationFactory factory = new AnimationFactory(this);
@@ -290,8 +294,13 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    public void furnaceLogic(){
       boolean flag = this.isHeating();
       boolean flag1 = false;
-      if(this.isHeating()) burnTime--;
-
+      if(this.isHeating()) {
+         burnTime--;
+         if (rand.nextDouble() < 0.1D) {
+            world.playSound(null, this.getPosition(), SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.NEUTRAL, 1F, 1F);     
+            this.world.setEntityState(this, (byte)13);
+         }
+      }
       if(!this.world.isRemote){
          if (this.isHeating() || !itemHandler.getStackInSlot(23).isEmpty() && !itemHandler.getStackInSlot(22).isEmpty()) {
             Inventory inv = new Inventory(itemHandler.getStackInSlot(22), itemHandler.getStackInSlot(23));
@@ -336,6 +345,23 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
          dataManager.set(COOKTIMETOTAL, cookTimeTotal);
       }
       if (flag1) this.markLoadedDirty();
+   }
+
+   @OnlyIn(Dist.CLIENT)
+   public void handleStatusUpdate(byte id) {
+      if (id == 13) {
+         this.spawnParticles(ParticleTypes.SMOKE, ParticleTypes.FLAME);
+         this.spawnParticles(ParticleTypes.SMOKE, ParticleTypes.FLAME);
+      } else {
+         super.handleStatusUpdate(id);
+      }
+   }
+
+   @OnlyIn(Dist.CLIENT)
+   protected void spawnParticles(IParticleData particleData, IParticleData particleData2) {
+      double d0 = this.rand.nextGaussian() * 0.02D, d1 = this.rand.nextGaussian() * 0.02D, d2 = this.rand.nextGaussian() * 0.02D;
+      world.addParticle(particleData, this.getPosXRandom(0.5D), this.getPosYRandom(), this.getPosZRandom(0.5D), d0, d1, d2);
+      world.addParticle(particleData2, this.getPosXRandom(0.5D), this.getPosYRandom(), this.getPosZRandom(0.5D), d0, d1, d2);
    }
 /*-------------------------------INVENTORY------------------------------------------------------- */
    public ActionResultType getEntityInteractionResult(PlayerEntity playerIn, Hand hand) {
