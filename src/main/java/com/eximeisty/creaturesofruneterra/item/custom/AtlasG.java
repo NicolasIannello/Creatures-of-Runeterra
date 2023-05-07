@@ -40,6 +40,10 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public String controllerName = "controller";
     private boolean hand=false;
     private int dashTicks=0;
+    private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge", false).addAnimation("animation.atlasg.full", true);
+    private static final AnimationBuilder CHARGE2_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge2", false).addAnimation("animation.atlasg.full2", true);
+    private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.idle", true);;
+    private static final AnimationBuilder IDLE2_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.idle2", true);;
 
     public AtlasG(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builder) {
         super(tier, attackDamageIn, attackSpeedIn, builder.setISTER(()-> AtlasGRenderer::new));
@@ -122,10 +126,13 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public void onAnimationSync(int id, int state) {
         final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
         controller.markNeedsReload();
-        String dois="";
-        if(hand) dois="2";
-        if (state == 1) controller.setAnimation(new AnimationBuilder().addAnimation("animation.atlasg.charge"+dois, false).addAnimation("animation.atlasg.full"+dois, true));
-        if (state == 2) controller.setAnimation(new AnimationBuilder().addAnimation("animation.atlasg.idle"+dois, true));
+        if(hand){
+            if (state == 1) controller.setAnimation(CHARGE2_ANIM);
+            if (state == 2) controller.setAnimation(IDLE2_ANIM);
+        }else{
+            if (state == 1) controller.setAnimation(CHARGE_ANIM);
+            if (state == 2) controller.setAnimation(IDLE_ANIM);
+        }
     }
 
     public static boolean isCharged(ItemStack stack) {

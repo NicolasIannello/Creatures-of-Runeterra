@@ -21,6 +21,8 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class SaiElytraItem extends SaiArmorItem{
     private AnimationFactory factory = new AnimationFactory(this);
+    private static final AnimationBuilder NEW_ANIM = new AnimationBuilder().addAnimation("animation.model.new", true);
+    private static final AnimationBuilder AIR_ANIM = new AnimationBuilder().addAnimation("animation.model.air", true);
 
     public SaiElytraItem(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builder) {
         super(materialIn, slot, builder);
@@ -30,9 +32,9 @@ public class SaiElytraItem extends SaiArmorItem{
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
 		LivingEntity livingEntity = event.getExtraDataOfType(LivingEntity.class).get(0);
         if(livingEntity.isOnGround()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.new", true));
+            event.getController().setAnimation(NEW_ANIM);
         }else{
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.model.air", true));
+            event.getController().setAnimation(AIR_ANIM);
         }
         return PlayState.CONTINUE;
     }

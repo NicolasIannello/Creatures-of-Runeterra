@@ -49,6 +49,8 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
                             "Just you and me Fishbones!",
                             "FISHBONES! We're doin' it!"
                             };
+    private static final AnimationBuilder RELOAD_ANIM = new AnimationBuilder().addAnimation("animation.fishbones.reload", false).addAnimation("animation.fishbones.charged", true);
+    private static final AnimationBuilder FIRE_ANIM = new AnimationBuilder().addAnimation("animation.fishbones.fire", false).addAnimation("animation.fishbones.idle", true);
 
     public Fishbones(Properties properties) {
         super(properties.setISTER(()-> FishbonesRenderer::new));
@@ -164,10 +166,10 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
         final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
         controller.markNeedsReload();
         if (state == 2) {
-			controller.setAnimation(new AnimationBuilder().addAnimation("animation.fishbones.reload", false).addAnimation("animation.fishbones.charged", true));
+			controller.setAnimation(RELOAD_ANIM);
 		}
         if (state == 3) {
-			controller.setAnimation(new AnimationBuilder().addAnimation("animation.fishbones.fire", false).addAnimation("animation.fishbones.idle", true));
+			controller.setAnimation(FIRE_ANIM);
 		}
     }
 

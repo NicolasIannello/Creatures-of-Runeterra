@@ -42,6 +42,10 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
     private int AttackCD=0;
     private int HeavyCD=100;
     private int ticks=0;
+    private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.idle", true);
+    private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.walk", true);
+    private static final AnimationBuilder ATTACK_ANIM = new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.attack", false);
+    private static final AnimationBuilder HEAVY_ANIM = new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.heavy", false);
 
     public XerSaiDunebreakerEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -71,20 +75,20 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.walk", true));
+            event.getController().setAnimation(WALK_ANIM);
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.idle", true));
+        event.getController().setAnimation(IDLE_ANIM);
         return PlayState.CONTINUE;
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if ( dataManager.get(STATE) == 1 ) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.attack", false));
+            event.getController().setAnimation(ATTACK_ANIM);
 			return PlayState.CONTINUE;
 		}
         if ( dataManager.get(STATE) == 2 ) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.xersai_dunebreaker.heavy", false));
+            event.getController().setAnimation(HEAVY_ANIM);
 			return PlayState.CONTINUE;
 		}
         event.getController().clearAnimationCache();

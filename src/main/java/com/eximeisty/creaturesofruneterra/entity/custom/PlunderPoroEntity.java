@@ -52,6 +52,10 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
     private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(PlunderPoroEntity.class, DataSerializers.BOOLEAN);
     private int ticks=0;
     public ItemStack forgeItem=ItemStack.EMPTY;
+    private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.plunderporo.idle", true);
+    private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.plunderporo.walk", true);
+    private static final AnimationBuilder SIT_ANIM = new AnimationBuilder().addAnimation("animation.plunderporo.sit", true);
+    private static final AnimationBuilder SHOT_ANIM = new AnimationBuilder().addAnimation("animation.plunderporo.shoot", false);
 
     public PlunderPoroEntity(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -81,20 +85,20 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if(dataManager.get(STATE)){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.plunderporo.sit", true));
+            event.getController().setAnimation(SIT_ANIM);
             return PlayState.CONTINUE;
         }
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.plunderporo.walk", true));
+            event.getController().setAnimation(WALK_ANIM);
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.plunderporo.idle", true));
+        event.getController().setAnimation(IDLE_ANIM);
         return PlayState.CONTINUE;
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if(dataManager.get(ATTACK)){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.plunderporo.shoot", false));
+            event.getController().setAnimation(SHOT_ANIM);
             return PlayState.CONTINUE;
         }
         event.getController().clearAnimationCache();

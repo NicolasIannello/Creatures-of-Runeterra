@@ -31,6 +31,11 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     private AnimationFactory factory = new AnimationFactory(this);
     public String controllerName = "controller";
     public int cd=0;
+    private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.idle", false);
+    private static final AnimationBuilder DERECHA_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.derecha", true);
+    private static final AnimationBuilder IZQUIERDA_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.izquierda", true);
+    private static final AnimationBuilder ATTACKD_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackD", false).addAnimation("animation.dunebreaker_shield.derecha", true);
+    private static final AnimationBuilder ATTACKI_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackI", false).addAnimation("animation.dunebreaker_shield.izquierda", true);
 
     public DunebreakerShield(Properties properties) {
         super(properties.setISTER(()-> DunebreakerShieldRenderer::new));
@@ -107,11 +112,11 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     public void onAnimationSync(int id, int state) {
         final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
 		controller.markNeedsReload();
-        if (state == 0) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.idle", false));
-        if (state == 1) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.derecha", true));
-        if (state == 2) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.izquierda", true));
-        if (state == 3) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackD", false).addAnimation("animation.dunebreaker_shield.derecha", true));
-        if (state == 4) controller.setAnimation(new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackI", false).addAnimation("animation.dunebreaker_shield.izquierda", true));
+        if (state == 0) controller.setAnimation(IDLE_ANIM);
+        if (state == 1) controller.setAnimation(DERECHA_ANIM);
+        if (state == 2) controller.setAnimation(IZQUIERDA_ANIM);
+        if (state == 3) controller.setAnimation(ATTACKD_ANIM);
+        if (state == 4) controller.setAnimation(ATTACKI_ANIM);
     }
 
     @Override

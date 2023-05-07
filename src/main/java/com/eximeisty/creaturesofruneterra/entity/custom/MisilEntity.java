@@ -25,6 +25,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
+    private static final AnimationBuilder DEFAULT_ANIM = new AnimationBuilder().addAnimation("animation.misil.default", true);
 
     public MisilEntity(EntityType<? extends MisilEntity> type, World worldIn) {
         super(type, worldIn);
@@ -75,7 +76,7 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
     }
 
 	public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.misil.default", true));
+        event.getController().setAnimation(DEFAULT_ANIM);
         return PlayState.CONTINUE;
     }
 

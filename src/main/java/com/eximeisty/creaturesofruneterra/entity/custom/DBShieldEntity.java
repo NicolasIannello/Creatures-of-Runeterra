@@ -25,6 +25,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class DBShieldEntity extends AbstractArrowEntity implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
     private int ticks=0;
+    private static final AnimationBuilder ANIM = new AnimationBuilder().addAnimation("animation.dbshield.new", true);
 
     public DBShieldEntity(EntityType<? extends DBShieldEntity> type, World worldIn) {
         super(type, worldIn);
@@ -73,7 +74,7 @@ public class DBShieldEntity extends AbstractArrowEntity implements IAnimatable{
     }
 
 	public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.dbshield.new", true));
+        event.getController().setAnimation(ANIM);
         return PlayState.CONTINUE;
     }
 

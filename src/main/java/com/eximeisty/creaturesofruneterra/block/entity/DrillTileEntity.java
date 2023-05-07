@@ -29,6 +29,8 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
     public int estado=0;
     public int ticks=0;
     public boolean inDesert=false;
+    private static final AnimationBuilder TRANS_ANIM = new AnimationBuilder().addAnimation("animation.drill.trans", false).addAnimation("animation.drill.drill", true);
+    private static final AnimationBuilder TRANS2_ANIM = new AnimationBuilder().addAnimation("animation.drill.trans2", false);
 
     public DrillTileEntity() {
         super(ModTiles.DRILL.get());
@@ -36,9 +38,9 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
 
 	private <E extends TileEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if(this.getTileData().getInt("state")==1){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drill.trans", false).addAnimation("animation.drill.drill", true));
+            event.getController().setAnimation(TRANS_ANIM);
         }else if(this.getTileData().getInt("state")==2){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.drill.trans2", false));
+            event.getController().setAnimation(TRANS2_ANIM);
         }
         return PlayState.CONTINUE;
 	}

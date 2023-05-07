@@ -50,6 +50,10 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
     private static final DataParameter<Boolean> ATTACK = EntityDataManager.createKey(PoroEntity.class, DataSerializers.BOOLEAN);
     private double velocidad=0.2;
     private int ticks=0;
+    private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.poro.idle", true);
+    private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.poro.walk", true);
+    private static final AnimationBuilder SIT_ANIM = new AnimationBuilder().addAnimation("animation.poro.sit", true);
+    private static final AnimationBuilder ATTACK_ANIM = new AnimationBuilder().addAnimation("animation.poro.attack", false);
 
     public PoroEntity(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -107,20 +111,20 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if(dataManager.get(STATE)){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.sit", true));
+            event.getController().setAnimation(SIT_ANIM);
             return PlayState.CONTINUE;
         }
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.walk", true));
+            event.getController().setAnimation(WALK_ANIM);
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.idle", true));
+        event.getController().setAnimation(IDLE_ANIM);
         return PlayState.CONTINUE;
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if(dataManager.get(ATTACK)){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.poro.attack", false));
+            event.getController().setAnimation(ATTACK_ANIM);
             return PlayState.CONTINUE;
         }
         event.getController().clearAnimationCache();

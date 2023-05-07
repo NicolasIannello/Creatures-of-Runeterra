@@ -86,6 +86,12 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    public int animTicks=0;
    public int cd=400;
    public int burnTime, burnTimeTotal, cookTime, cookTimeTotal;
+   private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.porobot.idle", true);
+   private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.porobot.walk", true);
+   private static final AnimationBuilder SIT_ANIM = new AnimationBuilder().addAnimation("animation.porobot.sit", true);
+   private static final AnimationBuilder OPEN_ANIM = new AnimationBuilder().addAnimation("animation.porobot.open", false).addAnimation("animation.porobot.hold", true);
+   private static final AnimationBuilder CLOSE_ANIM = new AnimationBuilder().addAnimation("animation.porobot.close", false);
+
 
    public PatchedPorobotEntity(EntityType<? extends TameableEntity> type, World worldIn) {
       super(type, worldIn);
@@ -114,24 +120,24 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
 
    public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
       if (event.isMoving()) {
-         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.walk", true));
+         event.getController().setAnimation(WALK_ANIM);
          return PlayState.CONTINUE;
       }
       if(dataManager.get(STATE)){
-         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.sit", true));
+         event.getController().setAnimation(SIT_ANIM);
          return PlayState.CONTINUE;
       }
-      event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.idle", true));
+      event.getController().setAnimation(IDLE_ANIM);
       return PlayState.CONTINUE;
    }
 
    public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
       if(dataManager.get(OPEN)){
-         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.open", false).addAnimation("animation.porobot.hold", true));
+         event.getController().setAnimation(OPEN_ANIM);
          return PlayState.CONTINUE;
       }
       if(dataManager.get(CLOSE)){
-         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.porobot.close", false));
+         event.getController().setAnimation(CLOSE_ANIM);
          return PlayState.CONTINUE;
       }
       event.getController().clearAnimationCache();

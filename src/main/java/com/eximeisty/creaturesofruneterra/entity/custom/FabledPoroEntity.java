@@ -49,6 +49,11 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
     private double velocidad=0.25;
     private int ticks=0;
     public ItemStack forgeItem=ItemStack.EMPTY;
+    private static final AnimationBuilder FORGE_ANIM = new AnimationBuilder().addAnimation("animation.fabledporo.forge", true);
+    private static final AnimationBuilder SIT_ANIM = new AnimationBuilder().addAnimation("animation.fabledporo.sit", true);
+    private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.fabledporo.walk", true);
+    private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.fabledporo.idle", true);
+    private static final AnimationBuilder ATTACK_ANIM = new AnimationBuilder().addAnimation("animation.fabledporo.attack", false);
 
     public FabledPoroEntity(EntityType<? extends TameableEntity> type, World worldIn) {
         super(type, worldIn);
@@ -89,24 +94,24 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if(dataManager.get(FORGE)){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.fabledporo.forge", true));
+            event.getController().setAnimation(FORGE_ANIM);
             return PlayState.CONTINUE;
         }
         if(dataManager.get(STATE)){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.fabledporo.sit", true));
+            event.getController().setAnimation(SIT_ANIM);
             return PlayState.CONTINUE;
         }
         if (event.isMoving()) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.fabledporo.walk", true));
+            event.getController().setAnimation(WALK_ANIM);
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.fabledporo.idle", true));
+        event.getController().setAnimation(IDLE_ANIM);
         return PlayState.CONTINUE;
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if(dataManager.get(ATTACK)){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.fabledporo.attack", false));
+            event.getController().setAnimation(ATTACK_ANIM);
             return PlayState.CONTINUE;
         }
         event.getController().clearAnimationCache();

@@ -67,6 +67,21 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private final CoRPartEntity leg;
     private final CoRPartEntity tail;
     private final CoRPartEntity tail2;
+    private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.walk", true);
+    private static final AnimationBuilder RUN_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.run", true);
+    private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.idle", true);
+    private static final AnimationBuilder IDLE2_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.idle2", true);
+    private static final AnimationBuilder ATTACK1_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.attack1", false);
+    private static final AnimationBuilder SPIN_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.spin", false);
+    private static final AnimationBuilder ATTACK12_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.attack1", false).addAnimation("animation.Reksai.attack2", false);
+    private static final AnimationBuilder SPIN2_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.spin", false).addAnimation("animation.Reksai.spin", false);
+    private static final AnimationBuilder SLAM_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.slam", false);
+    private static final AnimationBuilder RDOWN_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.RDown", true);
+    private static final AnimationBuilder RTRANS_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.RTrans", false);
+    private static final AnimationBuilder R2_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.R2", true);
+    private static final AnimationBuilder BURROW_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.burrow", false).addAnimation("animation.Reksai.charge", true);
+    private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.charge", true);
+    private static final AnimationBuilder SALIR_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.salir", false);
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -114,63 +129,63 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
         if (event.isMoving()) {
             if(dataManager.get(RUN)==0){
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.walk", true));
+                event.getController().setAnimation(WALK_ANIM);
             }else{
-                event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.run", true));
+                event.getController().setAnimation(RUN_ANIM);
             }
             return PlayState.CONTINUE;
         }
         if(dataManager.get(RUN)==0){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.idle", true));
+            event.getController().setAnimation(IDLE_ANIM);
         }else{
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.idle2", true));
+            event.getController().setAnimation(IDLE2_ANIM);
         }
         return PlayState.CONTINUE;
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
         if (dataManager.get(STATE)==7) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.attack1", false));
+            event.getController().setAnimation(ATTACK1_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==9) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.spin", false));
+            event.getController().setAnimation(SPIN_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==8) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.attack1", false).addAnimation("animation.Reksai.attack2", false));
+            event.getController().setAnimation(ATTACK12_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==10) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.spin", false).addAnimation("animation.Reksai.spin", false));
+            event.getController().setAnimation(SPIN2_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==11) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.slam", false));
+            event.getController().setAnimation(SLAM_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==1) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.RDown", true));
+            event.getController().setAnimation(RDOWN_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==6){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.RTrans", false));
+            event.getController().setAnimation(RTRANS_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==2) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.R2", true));
+            event.getController().setAnimation(R2_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==3) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.burrow", false).addAnimation("animation.Reksai.charge", true));
+            event.getController().setAnimation(BURROW_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==4) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.charge", true));
+            event.getController().setAnimation(CHARGE_ANIM);
             return PlayState.CONTINUE;
         }
         if (dataManager.get(STATE)==5) {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.Reksai.salir", false));
+            event.getController().setAnimation(SALIR_ANIM);
             return PlayState.CONTINUE;
         }
         event.getController().clearAnimationCache();
