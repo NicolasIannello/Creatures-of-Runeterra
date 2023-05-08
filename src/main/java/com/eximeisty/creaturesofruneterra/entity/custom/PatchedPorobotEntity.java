@@ -196,7 +196,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
          boolean flag= (itemHandler.getStackInSlot(15).getItem()==Items.DISPENSER && (itemHandler.getStackInSlot(16).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(17).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(18).getItem()==Items.SPLASH_POTION || itemHandler.getStackInSlot(19).getItem()==Items.SPLASH_POTION));
          if(this.isBurning() && flag) this.throwPotion("fire", this, 100, 50);
          if(this.getHealth()<=this.getMaxHealth()/2 && flag) this.throwPotion("health|regeneration|strength|slowness|water", this, 100, 50);
-         if(cd<=0){
+         if(cd<=0 && this.getOwner()!=null){
             if(this.getOwner().isBurning() && flag && this.getDistanceSq(this.getOwner())<=20) this.throwPotion("fire", this.getOwner(), 1000, 150);
             if(this.getOwner().getHealth()<=this.getOwner().getMaxHealth()/2 && flag && this.getDistanceSq(this.getOwner())<=20) this.throwPotion("health|regeneration|strength|slowness|water", this.getOwner(), 1000, 150);
          }
@@ -378,7 +378,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    public ActionResultType getEntityInteractionResult(PlayerEntity playerIn, Hand hand) {
       if (!world.isRemote) {
          if(playerIn.isSecondaryUseActive()){
-            this.setSitting(!dataManager.get(STATE));
+            if(this.getOwner()==playerIn) this.setSitting(!dataManager.get(STATE));
          }else if(playerIn.getDistance(this)<=3){
             INamedContainerProvider containerProvider = createContainerProvider(world, this.getEntityId());
             NetworkHooks.openGui((ServerPlayerEntity)playerIn, containerProvider, buf -> buf.writeInt(this.getEntityId()));
