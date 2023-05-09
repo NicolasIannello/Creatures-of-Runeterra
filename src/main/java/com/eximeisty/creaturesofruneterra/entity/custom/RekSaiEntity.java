@@ -1,8 +1,7 @@
 package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import java.util.EnumSet;
-// import java.util.List;
-// import javax.annotation.Nullable;
+import java.util.function.Predicate;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
@@ -19,16 +18,12 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.RandomWalkingGoal;
-import net.minecraft.entity.merchant.villager.AbstractVillagerEntity;
-import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-//import net.minecraft.pathfinding.ClimberPathNavigator;
 import net.minecraft.pathfinding.Path;
-//import net.minecraft.pathfinding.PathNavigator;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityPredicates;
@@ -82,6 +77,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final AnimationBuilder BURROW_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.burrow", false).addAnimation("animation.Reksai.charge", true);
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.charge", true);
     private static final AnimationBuilder SALIR_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.salir", false);
+    private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
+        if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity) return false;
+        if(p_213797_0_ instanceof CoRPartEntity) if( ((CoRPartEntity)p_213797_0_).getParent() instanceof RekSaiEntity ) return false; 
+        return true;
+    };
 
     public RekSaiEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
@@ -109,11 +109,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.registerGoals();
         this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
         this.goalSelector.addGoal(2, new RekSaiEntity.MeleeAttackGoal(this, 1D, false));
-        this.goalSelector.addGoal(9, new RandomWalkingGoal(this, velocidad,70));
-        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
-        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
-        this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, AbstractVillagerEntity.class, false));
-        this.targetSelector.addGoal(6, new NearestAttackableTargetGoal<>(this, IronGolemEntity.class, false));
+        this.goalSelector.addGoal(5, new RandomWalkingGoal(this, velocidad,50));
+        this.targetSelector.addGoal(4, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
+        this.targetSelector.addGoal( 2, new NearestAttackableTargetGoal<>( this, MobEntity.class, 0, false, false, NOT_THIS));
     }
 
     public void addTrackingPlayer(ServerPlayerEntity player) {
