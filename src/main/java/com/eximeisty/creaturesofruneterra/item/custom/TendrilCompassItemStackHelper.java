@@ -19,6 +19,8 @@ public class TendrilCompassItemStackHelper {
 	private static final String rotationName = "rotation";
 	private static final String rotaName = "rota";
 	private static final String lastUpdateTickName = "last_update_tick";
+	private static BlockPos obj=null;
+	private static double range=6;
 	
 	public static void setDimensionAndPos( ItemStack stack, World world, BlockPos pos ) {
 		CompoundNBT compound = new CompoundNBT();
@@ -31,19 +33,42 @@ public class TendrilCompassItemStackHelper {
 		return world.getDimensionKey().toString().contains("nether");
 	}
 
+	// static BlockPos findObj(World world, LivingEntity entity){
+	// 	BlockPos obj=null;
+	// 	double lastDistance=1000, X=entity.getPosX(), Y=entity.getPosY(), Z=entity.getPosZ();
+	// 	for(double i = Y+6; i>=Y-6; i--){
+	// 		for(double j = X+6; j>=X-6; j--){
+	// 			for(double n = Z+6; n>=Z-6; n--){
+	// 				if( world.getBlockState(new BlockPos(j, i, n))==Blocks.ANCIENT_DEBRIS.getDefaultState() && entity.getDistanceSq(j, i, n)<lastDistance){
+	// 					obj=new BlockPos(j, i, n);
+	// 					lastDistance=entity.getDistanceSq(j, i, n);
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	return obj;
+	// }
+
 	static BlockPos findObj(World world, LivingEntity entity){
-		BlockPos obj=null;
-		double lastDistance=1000, X=entity.getPosX(), Y=entity.getPosY(), Z=entity.getPosZ();
-		for(double i = Y+6; i>=Y-6; i--){
+		if(obj!=null) if(world.getBlockState(obj)!=Blocks.ANCIENT_DEBRIS.getDefaultState() || entity.getDistanceSq(obj.getX(), obj.getY(), obj.getZ())>100) obj=null;
+
+		double X=entity.getPosX(), Y=entity.getPosY(), Z=entity.getPosZ();
+		for(double i = Y+range; i>=Y+range-3; i--){
 			for(double j = X+6; j>=X-6; j--){
 				for(double n = Z+6; n>=Z-6; n--){
-					if( world.getBlockState(new BlockPos(j, i, n))==Blocks.ANCIENT_DEBRIS.getDefaultState() && entity.getDistanceSq(j, i, n)<lastDistance){
-						obj=new BlockPos(j, i, n);
-						lastDistance=entity.getDistanceSq(j, i, n);
+					if( world.getBlockState(new BlockPos(j, i, n))==Blocks.ANCIENT_DEBRIS.getDefaultState()){
+						if(obj==null){
+							obj=new BlockPos(j, i, n);
+						}else if(entity.getDistanceSq(j, i, n)<entity.getDistanceSq(obj.getX(), obj.getY(), obj.getZ())) {
+							obj=new BlockPos(j, i, n);
+						}
 					}
 				}
 			}
 		}
+		range+=-3;
+		if(range<-6) range=6;
+
 		return obj;
 	}
 	
