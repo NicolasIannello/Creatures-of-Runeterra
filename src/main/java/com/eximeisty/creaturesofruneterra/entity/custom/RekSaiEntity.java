@@ -50,6 +50,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private double velocidad=0.4;
     private float damage=(float)1;
     private double grabTicks=1;
+    private double deathTicks=0;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
     private float dañoSalto=0;
     private boolean spawnAnim=false;
@@ -290,10 +291,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             dataManager.set(RUN, 1);
         }
         if(this.getHealth()<=1){
-            grabTicks++;
-            if(grabTicks==3) this.world.playSound(null, this.getPosition(), ModSoundEvents.REKSAI_ESCAPE.get(), SoundCategory.HOSTILE, 3, 1);
+            deathTicks++;
+            if(deathTicks==3) this.world.playSound(null, this.getPosition(), ModSoundEvents.REKSAI_ESCAPE.get(), SoundCategory.HOSTILE, 3, 1);
             dataManager.set(STATE, 3);
-            if(grabTicks==30){
+            if(deathTicks==30){
                 this.head.remove();
                 this.body.remove();
                 this.leg.remove();
