@@ -7,6 +7,7 @@ import com.eximeisty.creaturesofruneterra.entity.custom.PatchedPorobotEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PlunderPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.BulletEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
@@ -89,7 +90,7 @@ public class ModEntityTypes {
     //ITEMS
     public static final RegistryObject<EntityType<MisilEntity>> MISIL = 
     ENTITY_TYPES.register("misil", 
-        ()-> EntityType.Builder.<MisilEntity>create(MisilEntity::new, EntityClassification.MISC).size(2.0F, 1.5F).trackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
+        ()-> EntityType.Builder.<MisilEntity>create(MisilEntity::new, EntityClassification.MISC).size(0.5F, 0.5F).trackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
     );
 
     public static final RegistryObject<EntityType<DBShieldEntity>> DBSHIELD = 
@@ -100,6 +101,11 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<HexcoreEntity>> HEXCORE = 
     ENTITY_TYPES.register("hexcore", 
         ()-> EntityType.Builder.<HexcoreEntity>create(HexcoreEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).trackingRange(4).updateInterval(10).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "hexcore").toString())
+    );
+
+    public static final RegistryObject<EntityType<BulletEntity>> BULLET = 
+    ENTITY_TYPES.register("bullet", 
+        ()-> EntityType.Builder.<BulletEntity>create(BulletEntity::new, EntityClassification.MISC).size(0.25F, 0.25F).trackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "bullet").toString())
     );
 
     public static void register(IEventBus eventBus){
