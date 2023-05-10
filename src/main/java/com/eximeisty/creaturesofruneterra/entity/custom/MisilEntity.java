@@ -26,6 +26,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
     private static final AnimationBuilder DEFAULT_ANIM = new AnimationBuilder().addAnimation("animation.misil.default", true);
+    private int ticks=0;
 
     public MisilEntity(EntityType<? extends MisilEntity> type, World worldIn) {
         super(type, worldIn);
@@ -39,9 +40,14 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
         super(ModEntityTypes.MISIL.get(), shooter, worldIn);
     }
 
-    @Override
-    public boolean canBeCollidedWith() {
-        return true;
+    public void tick() {
+        ticks++;
+        if(ticks==100 && !world.isRemote){
+            boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.getShooter());
+            this.world.createExplosion((Entity)null, this.getPosX(), this.getPosY(), this.getPosZ(), (float)2, flag, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
+            this.remove();
+        }
+        super.tick();
     }
 
     @Override
@@ -63,7 +69,7 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
         if (!this.world.isRemote) {
             Entity entity = result.getEntity();
             Entity entity1 = this.getShooter();
-            entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 6.0F);
+            entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 14.0F);
             if (entity1 instanceof LivingEntity) {
                 this.applyEnchantments((LivingEntity)entity1, entity);
             }
