@@ -22,7 +22,6 @@ import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
-import net.minecraft.entity.projectile.ArrowEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -163,17 +162,18 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
 
     @Override
     public void attackEntityWithRangedAttack(LivingEntity target, float distanceFactor) {
-        AbstractArrowEntity abstractarrowentity = this.fireArrow(new ItemStack(Items.ARROW), distanceFactor);
-        abstractarrowentity = new ArrowEntity(this.world, this);
+        AbstractArrowEntity bulletEntity = this.fireArrow(new ItemStack(Items.ARROW), distanceFactor);
+        bulletEntity = new BulletEntity(world, this);
         double d0 = target.getPosX() - this.getPosX();
-        double d1 = target.getPosYHeight(0.3333333333333333D) - abstractarrowentity.getPosY();
+        double d1 = target.getPosYHeight(0.3333333333333333D) - bulletEntity.getPosY();
         double d2 = target.getPosZ() - this.getPosZ();
         double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
-        abstractarrowentity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.world.getDifficulty().getId() * 4));
-        this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-        abstractarrowentity.setIsCritical(true);
-        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + 0D);
-        this.world.addEntity(abstractarrowentity);        
+        bulletEntity.setHitSound(SoundEvents.BLOCK_BLASTFURNACE_FIRE_CRACKLE);
+        bulletEntity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.world.getDifficulty().getId() * 4));
+        this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 0.3F, 4.0F);
+        bulletEntity.setIsCritical(true);
+        bulletEntity.setDamage(bulletEntity.getDamage() + 0D);
+        this.world.addEntity(bulletEntity);        
     }
 
     protected AbstractArrowEntity fireArrow(ItemStack arrowStack, float distanceFactor) {
