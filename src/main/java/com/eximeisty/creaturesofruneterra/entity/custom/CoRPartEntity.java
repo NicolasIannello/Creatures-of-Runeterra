@@ -1,5 +1,6 @@
 package com.eximeisty.creaturesofruneterra.entity.custom;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -9,6 +10,8 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CoRPartEntity extends CreatureEntity{
@@ -32,7 +35,16 @@ public class CoRPartEntity extends CreatureEntity{
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
+        if(source==DamageSource.IN_WALL) breakBB(getBoundingBox());
         return this.parent==null ? super.attackEntityFrom(source, amount) : this.parent.attackEntityFrom(source, amount);
+    }
+
+    protected void breakBB(AxisAlignedBB bb){
+        BlockPos.getAllInBox(bb).forEach(pos->{
+            if( this.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && this.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && this.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState() && this.world.getBlockState(pos)!=Blocks.BEDROCK.getDefaultState()){
+                this.world.setBlockState(pos, Blocks.AIR.getDefaultState());
+            }
+        });
     }
 
     @Override
@@ -44,7 +56,6 @@ public class CoRPartEntity extends CreatureEntity{
 
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
-        if(!this.world.isRemote && this.getParent()==null) this.remove();
     }
 
     public void readAdditional(CompoundNBT compound) {
