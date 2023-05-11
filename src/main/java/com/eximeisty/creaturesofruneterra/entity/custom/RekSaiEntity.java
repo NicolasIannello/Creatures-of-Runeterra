@@ -17,7 +17,9 @@ import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.RandomWalkingGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
+import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
@@ -79,7 +81,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.charge", true);
     private static final AnimationBuilder SALIR_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.salir", false);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
-        if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity) return false;
+        if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity || p_213797_0_ instanceof WaterMobEntity) return false;
         if(p_213797_0_ instanceof CoRPartEntity) if( ((CoRPartEntity)p_213797_0_).getParent() instanceof RekSaiEntity ) return false; 
         return true;
     };
@@ -110,10 +112,11 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.registerGoals();
         this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
         this.goalSelector.addGoal(2, new RekSaiEntity.MeleeAttackGoal(this, 1D, false));
-        this.goalSelector.addGoal(5, new RandomWalkingGoal(this, velocidad,50));
-        this.targetSelector.addGoal(4, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, velocidad,50));
+        this.goalSelector.addGoal(3, new SwimGoal(this));
+        this.targetSelector.addGoal(6, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
-        this.targetSelector.addGoal( 2, new NearestAttackableTargetGoal<>( this, MobEntity.class, 0, false, false, NOT_THIS));
+        this.targetSelector.addGoal( 5, new NearestAttackableTargetGoal<>( this, MobEntity.class, 0, false, false, NOT_THIS));
     }
 
     public void addTrackingPlayer(ServerPlayerEntity player) {
@@ -321,6 +324,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         private int cd=40;
         private int slam=(int)(Math.random() * 60 + 80);
         private int ticks=0;
+        private int lastHit=0;
         private double lastX;
         private double lastY;
         private double lastZ;
@@ -335,6 +339,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         public boolean shouldExecute() { 
             LivingEntity livingentity = this.attacker.getAttackTarget();
             if (livingentity == null) {
+                if(dataManager.get(STATE)==4 || dataManager.get(STATE)==2 || dataManager.get(STATE)==1 || dataManager.get(STATE)==3) dataManager.set(STATE, 5);
                 return false;
             } else if (!livingentity.isAlive()) {
                 return false;
@@ -390,6 +395,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(charge>0) --charge;
             if(cd>0) --cd;
             if(slam>0) --slam;
+            lastHit++;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
             /*??????*/if(dataManager.get(STATE)==0 || (dataManager.get(STATE)>=7 && dataManager.get(STATE)<=10)) this.attacker.setMoveForward(1);//this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
@@ -404,6 +410,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
+            if(dataManager.get(STATE)==0 && lastHit>300){
+                dataManager.set(STATE, 3);
+                leap=true;
+            }
             if(distToEnemySqr<100 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0){
                 //lastAttack=0;
                 int chance=(int)(Math.random() * 5); int running=0;
@@ -477,7 +487,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     this.lastX = this.attacker.getAttackTarget().getPosX();
                     this.lastY = this.attacker.getAttackTarget().getPosY();
                     this.lastZ = this.attacker.getAttackTarget().getPosZ();
-                    if (this.attacker.getPosY()+10.0D<this.lastY && leap==false){
+                    if ((this.attacker.getPosY()+10.0D<this.lastY && leap==false) || leap){
                         leap=true;
                     }else{
                         if((this.lastX-this.attacker.getPosX())<=10 && (this.lastX-this.attacker.getPosX())>=-10){
@@ -557,6 +567,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), this.attacker.damage*20);
                     enemy.stopRiding();
                     enemy.startRiding(this.attacker, true);
+                    lastHit=0;
                 }
                 if(enemy.isRidingSameEntity(this.attacker)==false && grab==true){
                     enemy.startRiding(this.attacker, true);
@@ -568,6 +579,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     grab=false;
                     ticks=0;
                     dañoSalto=0;
+                    lastHit=0;
                     charge=(int)(Math.random() * 5 + 30);
                     leap=false;
                     dataManager.set(STATE, 0);
@@ -583,6 +595,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             this.attacker.world.getEntitiesWithinAABB(LivingEntity.class, bb).stream().forEach(livingEntity -> {
                 if(!livingEntity.isEntityEqual(this.attacker) && !(livingEntity instanceof CoRPartEntity)) {
                     livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), damage);
+                    lastHit=0;
                     if(!livingEntity.world.isRemote && canKnockback) livingEntity.applyKnockback(knockbackStrenght, livingEntity.getPosX()+this.attacker.getPosX(), livingEntity.getPosZ()+this.attacker.getPosZ());
                 }
             });
@@ -590,7 +603,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
 
         protected void breakBB(AxisAlignedBB bb){
             BlockPos.getAllInBox(bb).forEach(pos->{
-                if( this.attacker.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
+                if( this.attacker.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.BEDROCK.getDefaultState()){
                     this.attacker.world.setBlockState(pos, Blocks.AIR.getDefaultState());
                 }
             });
