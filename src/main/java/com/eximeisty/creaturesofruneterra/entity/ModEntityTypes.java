@@ -45,7 +45,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<RekSaiEntity>> REKSAI=
     ENTITY_TYPES.register("reksai", 
-        ()-> EntityType.Builder.create(RekSaiEntity::new, EntityClassification.MONSTER).immuneToFire().size(0.6f,2f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
+        ()-> EntityType.Builder.create(RekSaiEntity::new, EntityClassification.MONSTER).immuneToFire().size(0.6f,9f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
     );
 
     //POROS
