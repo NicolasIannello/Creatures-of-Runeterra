@@ -99,7 +99,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 600)//600
         .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4)//0.4
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)//15?
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 400)//30?
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 80)//30?
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 4)//?
         .createMutableAttribute(Attributes.KNOCKBACK_RESISTANCE, 10)
         .createMutableAttribute(Attributes.ARMOR, 8)
@@ -110,13 +110,13 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     @Override
     protected void registerGoals(){
         super.registerGoals();
-        this.goalSelector.addGoal( 1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
+        this.goalSelector.addGoal(1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
         this.goalSelector.addGoal(2, new RekSaiEntity.MeleeAttackGoal(this, 1D, false));
-        this.goalSelector.addGoal(4, new WaterAvoidingRandomWalkingGoal(this, velocidad,50));
-        this.goalSelector.addGoal(3, new SwimGoal(this));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, velocidad,50));
+        this.goalSelector.addGoal(4, new SwimGoal(this));
         this.targetSelector.addGoal(6, (new HurtByTargetGoal(this)).setCallsForHelp(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
-        this.targetSelector.addGoal( 5, new NearestAttackableTargetGoal<>( this, MobEntity.class, 0, false, false, NOT_THIS));
+        this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>( this, MobEntity.class, 0, false, false, NOT_THIS));
     }
 
     public void addTrackingPlayer(ServerPlayerEntity player) {
@@ -398,8 +398,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             lastHit++;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
-            /*??????*/if(dataManager.get(STATE)==0 || (dataManager.get(STATE)>=7 && dataManager.get(STATE)<=10)) this.attacker.setMoveForward(1);//this.attacker.getLookController().setLookPositionWithEntity(livingentity, 30.0F, 30.0F);
-            if(dataManager.get(STATE)==4) this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
+            this.attacker.setRotation((float)(this.attacker.getLookVec().x*livingentity.getPosX()), (float)(this.attacker.getLookVec().z*livingentity.getPosZ()));
 
             double d0 = this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
 
