@@ -35,7 +35,10 @@ public class CoRPartEntity extends CreatureEntity{
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if(source==DamageSource.IN_WALL) breakBB(getBoundingBox());
+        if(source==DamageSource.IN_WALL){
+            if(parent instanceof RekSaiEntity) if(!(Boolean)((RekSaiEntity)parent).getDataManager().getAll().get(17).getValue()) breakBB(getBoundingBox());
+            return false;
+        }
         return this.parent==null ? super.attackEntityFrom(source, amount) : this.parent.attackEntityFrom(source, amount);
     }
 
