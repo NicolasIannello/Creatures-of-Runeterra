@@ -19,7 +19,6 @@ import net.minecraft.entity.ai.goal.HurtByTargetGoal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.ai.goal.SwimGoal;
 import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
-import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
@@ -48,6 +47,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
+    private static final DataParameter<Boolean> HEAL = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BOOLEAN);
     private AnimationFactory factory = new AnimationFactory(this);
     private double velocidad=0.4;
     private float damage=(float)1;
@@ -81,7 +81,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.charge", true);
     private static final AnimationBuilder SALIR_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.salir", false);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
-        if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity || p_213797_0_ instanceof WaterMobEntity) return false;
+        if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity || (!(p_213797_0_ instanceof PlayerEntity) && (p_213797_0_.isInWaterOrBubbleColumn() || p_213797_0_.getEntityWorld().getBlockState(new BlockPos(p_213797_0_.getPosX(),p_213797_0_.getPosY()-1,p_213797_0_.getPosZ()))==Blocks.WATER.getDefaultState()))) return false;
         if(p_213797_0_ instanceof CoRPartEntity) if( ((CoRPartEntity)p_213797_0_).getParent() instanceof RekSaiEntity ) return false; 
         return true;
     };
@@ -218,7 +218,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         super.registerData();
         dataManager.register(STATE, 5);
         dataManager.register(RUN, 0);
-        //dataManager.register(SPAWN, 0);
+        dataManager.register(HEAL, false);
     }
     
     public void tick() {
@@ -325,9 +325,13 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         private int slam=(int)(Math.random() * 60 + 80);
         private int ticks=0;
         private int lastHit=0;
+        private int waterTick=0;
         private double lastX;
         private double lastY;
         private double lastZ;
+        private double attackerLastX;
+        private double attackerLastZ;
+        private double attackerLastY;
 
         public MeleeAttackGoal(RekSaiEntity creature, double speedIn, boolean useLongMemory) {
             this.attacker = creature;
@@ -405,7 +409,37 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if ((this.longMemory || this.attacker.getEntitySenses().canSee(livingentity)) && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || livingentity.getDistanceSq(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRNG().nextFloat() < 0.05F)) {
                 this.targetX = livingentity.getPosX(); this.targetY = livingentity.getPosY(); this.targetZ = livingentity.getPosZ();
             }
-            this.checkAndPerformAttack(livingentity, d0);
+            if(livingentity instanceof PlayerEntity && livingentity.isInWaterOrBubbleColumn() || livingentity.getEntityWorld().getBlockState(new BlockPos(targetX,targetY-1,targetZ))==Blocks.WATER.getDefaultState()){
+                if(waterTick<=150) waterTick++;
+            }else{
+                if(waterTick>=150){
+                    dataManager.set(HEAL, false);
+                    dataManager.set(STATE, 5);
+                    this.attacker.setPositionAndUpdate(attackerLastX, attackerLastY, attackerLastZ);
+                    ticks=0;
+                }
+                waterTick=0;
+            }
+
+            if(waterTick>=150){
+                this.goHealing();
+            }else{
+                this.checkAndPerformAttack(livingentity, d0);
+            }
+        }
+
+        public void goHealing(){
+            ticks++;
+            if(ticks==30){
+                dataManager.set(HEAL, true);
+                this.attackerLastX=this.attacker.getPosX(); this.attackerLastZ=this.attacker.getPosZ(); this.attackerLastY=this.attacker.getPosY();
+            }
+            if(dataManager.get(STATE)==0){
+                dataManager.set(STATE, 3);
+            }else if(dataManager.get(STATE)==3 && ticks>30){
+                this.attacker.setPositionAndUpdate(attackerLastX, -15, attackerLastZ);
+                this.attacker.heal(0.5F);
+            }
         }
         
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
