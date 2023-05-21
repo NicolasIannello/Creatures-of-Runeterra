@@ -235,49 +235,26 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             tail2.setParent(this);
             this.world.addEntity(tail2);
             spawn=true;
-            //dataManager.set(SPAWN, 1);
         }
-        if(dataManager.get(RUN)==0){
-            this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY()+10, this.getLookVec().z*8+this.getPosZ());
-            //if(dataManager.get(STATE)!=4){
-                this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+9, this.getLookVec().z*3.5+this.getPosZ());
-            // }else{
-            //     this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY(), this.getLookVec().z*3.5+this.getPosZ());
-            // }
+        if(dataManager.get(STATE)==4){
+            this.leg.setPosition(this.getLookVec().x*-3+this.getPosX(), this.getPosY(), this.getLookVec().z*-3+this.getPosZ());
+            this.tail.setPosition(this.getLookVec().x*-8.5+this.getPosX(), this.getPosY(), this.getLookVec().z*-8.5+this.getPosZ());
+            this.tail2.setPosition(this.getLookVec().x*-13+this.getPosX(), this.getPosY(), this.getLookVec().z*-13+this.getPosZ());
+            this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY(), this.getLookVec().z*8+this.getPosZ());
+            this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY(), this.getLookVec().z*3.5+this.getPosZ());
         }else{
-            this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY()+8, this.getLookVec().z*8+this.getPosZ());
-            //if(dataManager.get(STATE)!=4){
+            if(dataManager.get(RUN)==0){
+                this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY()+10, this.getLookVec().z*8+this.getPosZ());
+                this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+9, this.getLookVec().z*3.5+this.getPosZ());
+            }else{
+                this.head.setPosition(this.getLookVec().x*8+this.getPosX(), this.getPosY()+8, this.getLookVec().z*8+this.getPosZ());
                 this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*3.5+this.getPosZ());
-            // }else{
-            //     this.body.setPosition(this.getLookVec().x*3.5+this.getPosX(), this.getPosY(), this.getLookVec().z*3.5+this.getPosZ());
-            // }
+            }
+            this.leg.setPosition(this.getLookVec().x*-3+this.getPosX(), this.getPosY(), this.getLookVec().z*-3+this.getPosZ());
+            this.tail.setPosition(this.getLookVec().x*-8.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*-8.5+this.getPosZ());
+            if(dataManager.get(STATE)!=2) this.tail2.setPosition(this.getLookVec().x*-13+this.getPosX(), this.getPosY()+8, this.getLookVec().z*-13+this.getPosZ());
         }
-        this.leg.setPosition(this.getLookVec().x*-3+this.getPosX(), this.getPosY(), this.getLookVec().z*-3+this.getPosZ());
-        this.tail.setPosition(this.getLookVec().x*-8.5+this.getPosX(), this.getPosY()+7, this.getLookVec().z*-8.5+this.getPosZ());
-        if(dataManager.get(STATE)!=2) this.tail2.setPosition(this.getLookVec().x*-13+this.getPosX(), this.getPosY()+8, this.getLookVec().z*-13+this.getPosZ());
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
-        // if (!this.world.isRemote) {
-        //     if(dataManager.get(STATE)==0 && this.getHealth()>this.getMaxHealth()/2){
-        //         if(dataManager.get(RUN)==0){
-        //             lastAttack++;
-        //             if(lastAttack>250){
-        //                 velocidad=0.4;
-        //                 this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
-        //                 dataManager.set(RUN, 1);
-        //                 lastAttack=0;
-        //             }
-        //         }else{
-        //             run--;
-        //             if(run<=0){
-        //                 velocidad=0.6;
-        //                 this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
-        //                 dataManager.set(RUN, 0);
-        //                 run=150;
-        //             }
-        //         }
-        //         return;
-        //     }
-        // }
         if(!spawnAnim){
             grabTicks++;
             if(grabTicks==3) this.world.playSound(null, this.getPosition(), ModSoundEvents.REKSAI_APP.get(), SoundCategory.HOSTILE, 3, 1);
@@ -332,6 +309,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         private double attackerLastX;
         private double attackerLastZ;
         private double attackerLastY;
+        private double sumaX, sumaZ;
 
         public MeleeAttackGoal(RekSaiEntity creature, double speedIn, boolean useLongMemory) {
             this.attacker = creature;
@@ -354,10 +332,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     if(this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ())>120){
                         this.path = this.attacker.getNavigator().pathfind(livingentity, 0);
                     }else{
-                        this.attacker.getNavigator().clearPath();
+                        return true;//this.attacker.getNavigator().clearPath();
                     }
                 }
-                if(dataManager.get(STATE)==4) this.path = this.attacker.getNavigator().pathfind(this.lastX, this.lastY, this.lastZ, 0);
+                if(dataManager.get(STATE)==4) return true;//this.path = this.attacker.getNavigator().pathfind(this.lastX, this.lastY, this.lastZ, 0);
                 if (this.path != null) {
                     return true;
                 } else {
@@ -369,11 +347,18 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         public boolean shouldContinueExecuting() {
             LivingEntity livingentity = this.attacker.getAttackTarget();
             if (livingentity == null) {
+                ticks=0;
+                this.attacker.dataManager.set(STATE, 0);
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 return false;
             } else if (!livingentity.isAlive()) {
+                ticks=0;
+                this.attacker.dataManager.set(STATE, 0);
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 return false;
             } else if (!this.longMemory) {
-                return !this.attacker.getNavigator().noPath();
+                //return !this.attacker.getNavigator().noPath();
+                return this.attacker.dataManager.get(STATE)==4 ? true : !this.attacker.getNavigator().noPath();
             } else if (!this.attacker.isWithinHomeDistanceFromPosition(livingentity.getPosition())) {
                 return false;
             } else {                
@@ -382,7 +367,8 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         }
         
         public void startExecuting() {
-            if(dataManager.get(STATE)==0 || dataManager.get(STATE)==4) this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
+            if(dataManager.get(STATE)==0 /*|| dataManager.get(STATE)==4*/) this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
+            //if(dataManager.get(STATE)==0 || dataManager.get(STATE)==4) this.attacker.getNavigator().setPath(this.path, this.speedTowardsTarget);
             this.attacker.setAggroed(true);
         }
         
@@ -563,15 +549,19 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             }
             if(dataManager.get(STATE)==4){
                 ++ticks;
-                //this.attacker.getLookController().setLookPosition(this.lastX, this.lastY, this.lastZ, 30.0F, 30.0F);
                 AxisAlignedBB bb= this.attacker.leg.getBoundingBox();
                 this.breakBB(bb);
                 this.attackBB(bb, this.attacker.damage*25, true, 10);
-                if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks==120){
+                if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks>60){
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                     dataManager.set(STATE, 5);
                     ticks=0;
                 }
+                if(ticks==1){
+                    sumaX=(this.lastX-this.attacker.getPosX())/30;
+                    sumaZ=(this.lastZ-this.attacker.getPosZ())/30;
+                }
+                this.attacker.setPositionAndRotation(this.attacker.getPosX()+sumaX, this.attacker.getPosY(), this.attacker.getPosZ()+sumaZ, (float)this.attacker.getLookVec().x, (float)this.attacker.getLookVec().z);
                 return;
             }
             if(dataManager.get(STATE)==5){
