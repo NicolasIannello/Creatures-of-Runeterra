@@ -10,6 +10,7 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.Explosion;
@@ -59,9 +60,16 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
         super.onImpact(result);
         if (!this.world.isRemote) {
             boolean flag = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this.getShooter());
+            this.attackBB(this.getBoundingBox().expand(3, 3, 3).expand(-3, -3, -3));
             this.world.createExplosion((Entity)null, this.getPosX(), this.getPosY(), this.getPosZ(), (float)2, flag, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
             this.remove();
         }
+    }
+
+    protected void attackBB(AxisAlignedBB bb){
+        this.world.getEntitiesWithinAABB(LivingEntity.class, bb).stream().forEach(livingEntity -> {
+            livingEntity.attackEntityFrom(DamageSource.causeArrowDamage(this, livingEntity), 6);
+        });
     }
 
     protected void onEntityHit(EntityRayTraceResult result) {
@@ -69,7 +77,7 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
         if (!this.world.isRemote) {
             Entity entity = result.getEntity();
             Entity entity1 = this.getShooter();
-            entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 14.0F);
+            entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 9.0F);
             if (entity1 instanceof LivingEntity) {
                 this.applyEnchantments((LivingEntity)entity1, entity);
             }
