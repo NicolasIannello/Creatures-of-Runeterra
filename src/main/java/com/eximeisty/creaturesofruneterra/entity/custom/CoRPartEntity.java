@@ -39,6 +39,7 @@ public class CoRPartEntity extends CreatureEntity{
             if(parent instanceof RekSaiEntity) if(!(Boolean)((RekSaiEntity)parent).getDataManager().getAll().get(17).getValue()) breakBB(getBoundingBox());
             return false;
         }
+        if(source==DamageSource.DROWN) return false;
         return this.parent==null ? super.attackEntityFrom(source, amount) : this.parent.attackEntityFrom(source, amount);
     }
 
