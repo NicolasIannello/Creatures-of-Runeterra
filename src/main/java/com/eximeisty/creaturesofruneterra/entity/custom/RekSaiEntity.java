@@ -80,6 +80,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private static final AnimationBuilder BURROW_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.burrow", false).addAnimation("animation.Reksai.charge", true);
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.charge", true);
     private static final AnimationBuilder SALIR_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.salir", false);
+    private static final AnimationBuilder THROW_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.throw", false);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
         if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity || (!(p_213797_0_ instanceof PlayerEntity) && (p_213797_0_.isInWaterOrBubbleColumn() || p_213797_0_.getEntityWorld().getBlockState(new BlockPos(p_213797_0_.getPosX(),p_213797_0_.getPosY()-1,p_213797_0_.getPosZ()))==Blocks.WATER.getDefaultState()))) return false;
         if(p_213797_0_ instanceof CoRPartEntity) if( ((CoRPartEntity)p_213797_0_).getParent() instanceof RekSaiEntity ) return false; 
@@ -191,6 +192,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             event.getController().setAnimation(SALIR_ANIM);
             return PlayState.CONTINUE;
         }
+        if (dataManager.get(STATE)==12) {
+            event.getController().setAnimation(THROW_ANIM);
+            return PlayState.CONTINUE;
+        }
         event.getController().clearAnimationCache();
         return PlayState.STOP;
     }
@@ -300,6 +305,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
         private int charge=(int)(Math.random() * 60 + 40);
         private int cd=40;
         private int slam=(int)(Math.random() * 60 + 80);
+        private int throwcd=(int)(Math.random() * 300 + 150);
         private int ticks=0;
         private int lastHit=0;
         private int waterTick=0;
@@ -385,6 +391,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(charge>0) --charge;
             if(cd>0) --cd;
             if(slam>0) --slam;
+            if(throwcd>0) --throwcd;
             lastHit++;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
@@ -433,6 +440,23 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 dataManager.set(STATE, 3);
                 leap=true;
             }
+            if(distToEnemySqr<100 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && throwcd<=0){
+                dataManager.set(STATE, 12);                
+            }
+            if(dataManager.get(STATE)==12){
+                ticks++;
+                System.out.println(ticks);
+                if(ticks>15 && ticks<23){
+                    double posx=this.attacker.getLookVec().x*10+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*10+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
+                    AxisAlignedBB bb= new AxisAlignedBB(posx+5, posy, posz+5, posx-5, posy+9, posz-5);
+                    this.attackBB(bb, this.attacker.damage*4, false, 0, true);
+                }
+                if(ticks>35){
+                    dataManager.set(STATE, 0);
+                    ticks=0;
+                    throwcd=(int)(Math.random() * 300 + 150);
+                }
+            }
             if(distToEnemySqr<100 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0){
                 //lastAttack=0;
                 int chance=(int)(Math.random() * 5); int running=0;
@@ -449,7 +473,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if((ticks>15 && ticks<20) || (ticks>40 && ticks<45)){
                     double posx=this.attacker.getLookVec().x*8+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*8+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
                     AxisAlignedBB bb= new AxisAlignedBB(posx+7, posy, posz+7, posx-7, posy+5, posz-7);
-                    this.attackBB(bb, this.attacker.damage*10, false, 0);
+                    this.attackBB(bb, this.attacker.damage*10, false, 0, false);
                 }
                 if((ticks==25 && dataManager.get(STATE)==7) || ticks==55){
                     dataManager.set(STATE, 0);
@@ -462,7 +486,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 ticks++;
                 if((ticks>=3 && ticks<=8) || (ticks>=13 && ticks<=18)){
                     AxisAlignedBB bb= this.attacker.getBoundingBox().expand(8, 0, 8).expand(-8, 7, -8);
-                    this.attackBB(bb, this.attacker.damage*15, true, 0.4F);
+                    this.attackBB(bb, this.attacker.damage*15, true, 0.4F, false);
                 }
                 if((ticks==10 && dataManager.get(STATE)==9) || ticks==20){
                     dataManager.set(STATE, 0);
@@ -485,7 +509,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(ticks>=25 && ticks<=30){
                     double posx=this.attacker.getLookVec().x*23+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*23+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
                     AxisAlignedBB bb= new AxisAlignedBB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).union(this.attacker.leg.getBoundingBox());
-                    this.attackBB(bb, this.attacker.damage*25, true, 3F);
+                    this.attackBB(bb, this.attacker.damage*25, true, 3F, false);
                 }
                 if(ticks==40){
                     dataManager.set(STATE, 0);
@@ -551,7 +575,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 ++ticks;
                 AxisAlignedBB bb= this.attacker.leg.getBoundingBox();
                 this.breakBB(bb);
-                this.attackBB(bb, this.attacker.damage*25, true, 10);
+                this.attackBB(bb, this.attacker.damage*25, true, 10, false);
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks>60){
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                     dataManager.set(STATE, 5);
@@ -614,11 +638,12 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             return;
         }
 
-        protected void attackBB(AxisAlignedBB bb, float damage, boolean canKnockback, float knockbackStrenght){
+        protected void attackBB(AxisAlignedBB bb, float damage, boolean canKnockback, float knockbackStrenght, boolean motion){
             this.attacker.world.getEntitiesWithinAABB(LivingEntity.class, bb).stream().forEach(livingEntity -> {
                 if(!livingEntity.isEntityEqual(this.attacker) && !(livingEntity instanceof CoRPartEntity)) {
                     livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), damage);
                     lastHit=0;
+                    if(motion) livingEntity.setMotion(this.attacker.getLookVec().x*4, 4.5, this.attacker.getLookVec().z*4);
                     if(!livingEntity.world.isRemote && canKnockback) livingEntity.applyKnockback(knockbackStrenght, livingEntity.getPosX()+this.attacker.getPosX(), livingEntity.getPosZ()+this.attacker.getPosZ());
                 }
             });
