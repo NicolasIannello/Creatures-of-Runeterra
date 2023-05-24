@@ -54,7 +54,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     private double grabTicks=1;
     private double deathTicks=0;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.PURPLE, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
-    private float dañoSalto=0;
+    private float jumpDamage=0;
     private boolean spawnAnim=false;
     private boolean spawn=false;
     // private int lastAttack=0;
@@ -622,17 +622,17 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 if(this.attacker.isOnGround() && ticks>1){
                     enemy.stopRiding();
                     enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
-                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), this.attacker.damage*(dañoSalto+15));
+                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), this.attacker.damage*(jumpDamage+15));
                     grab=false;
                     ticks=0;
-                    dañoSalto=0;
+                    jumpDamage=0;
                     lastHit=0;
                     charge=(int)(Math.random() * 5 + 30);
                     leap=false;
                     dataManager.set(STATE, 0);
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 }else{
-                    dañoSalto=this.attacker.fallDistance;
+                    jumpDamage=this.attacker.fallDistance;
                 }
             }
             return;
