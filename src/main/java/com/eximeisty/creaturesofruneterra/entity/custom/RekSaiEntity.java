@@ -445,7 +445,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             }
             if(dataManager.get(STATE)==12){
                 ticks++;
-                System.out.println(ticks);
                 if(ticks>15 && ticks<23){
                     double posx=this.attacker.getLookVec().x*10+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*10+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
                     AxisAlignedBB bb= new AxisAlignedBB(posx+5, posy, posz+5, posx-5, posy+9, posz-5);
