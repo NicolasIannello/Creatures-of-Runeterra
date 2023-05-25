@@ -205,12 +205,12 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
                 if(itemstack!=ItemStack.EMPTY){
                     if(item.canEquip(itemstack, EquipmentSlotType.HEAD, this)){
                         this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
-                        this.setItemStackToSlot(EquipmentSlotType.HEAD, itemstack);
+                        this.setItemStackToSlot(EquipmentSlotType.HEAD, itemstack.copy());
                         itemstack.shrink(1);
                         return ActionResultType.SUCCESS;
                     }else if(itemstack.isRepairable()){
                         this.entityDropItem(this.getHeldItemMainhand());
-                        this.setHeldItem(Hand.MAIN_HAND, itemstack);
+                        this.setHeldItem(Hand.MAIN_HAND, itemstack.copy());
                         itemstack.shrink(1);
                         return ActionResultType.SUCCESS;
                     }
