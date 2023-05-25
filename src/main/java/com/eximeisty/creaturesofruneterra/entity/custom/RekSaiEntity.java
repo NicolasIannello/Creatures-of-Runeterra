@@ -37,6 +37,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.server.ServerBossInfo;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.IAnimationTickable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -44,7 +45,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-public class RekSaiEntity extends CreatureEntity implements IAnimatable {
+public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimationTickable {
     private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> HEAL = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BOOLEAN);
@@ -740,4 +741,6 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     protected void collideWithEntity(Entity p_82167_1_) { }
     @Override
     protected void collideWithNearbyEntities() { }
+    @Override
+    public int tickTimer() { return ticksExisted; }
 }
