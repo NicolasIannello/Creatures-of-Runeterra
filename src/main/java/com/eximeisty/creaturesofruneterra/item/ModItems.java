@@ -49,19 +49,19 @@ public class ModItems {
 
         //TOOLS
         public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
-        () -> new SwordItem(ModItemTier.SAI, 15, -2.4F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+        () -> new SwordItem(ModItemTier.SAI, 8, -2.4F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_SHOVEL = ITEMS.register("sai_shovel",
-        () -> new ShovelItem(ModItemTier.SAI, 3F, -3.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+        () -> new ShovelItem(ModItemTier.SAI, 2F, -3.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_PICKAXE = ITEMS.register("sai_pickaxe",
-        () -> new PickaxeItem(ModItemTier.SAI, 3, -2.8F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+        () -> new PickaxeItem(ModItemTier.SAI, 2, -2.8F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_AXE = ITEMS.register("sai_axe",
-        () -> new AxeItem(ModItemTier.SAI, 25.0F, -3.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+        () -> new AxeItem(ModItemTier.SAI, 11.0F, -3.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_HOE = ITEMS.register("sai_hoe",
-        () -> new HoeItem(ModItemTier.SAI, -7, 0.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+        () -> new HoeItem(ModItemTier.SAI, -4, 0.0F, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow", 
         () -> new SaiBowItem(new Item.Properties().maxStackSize(1).maxDamage(384).group(ModItemGroup.COR_GROUP).isImmuneToFire()));

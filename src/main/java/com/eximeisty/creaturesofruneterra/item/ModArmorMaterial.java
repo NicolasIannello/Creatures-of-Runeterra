@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.api.distmarker.Dist;
 
 public enum ModArmorMaterial implements IArmorMaterial{
-    SAI("sai", 45, new int[]{8, 15, 20, 7}, 30, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 5.0F, 0.3F, () -> {
+    SAI("sai", 45, new int[]{5, 9, 11, 6}, 20, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 5.0F, 0.25F, () -> {
         return Ingredient.fromItems(ModItems.REKSAI_PLAQUE.get());
     });
     
