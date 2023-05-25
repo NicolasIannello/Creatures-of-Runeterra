@@ -447,7 +447,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 ticks++;
                 if(ticks>15 && ticks<23){
                     double posx=this.attacker.getLookVec().x*10+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*10+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
-                    AxisAlignedBB bb= new AxisAlignedBB(posx+5, posy, posz+5, posx-5, posy+9, posz-5);
+                    AxisAlignedBB bb= new AxisAlignedBB(posx+5, posy, posz+5, posx-5, posy+9, posz-5).union(this.attacker.leg.getBoundingBox());
                     this.attackBB(bb, this.attacker.damage*4, false, 0, true);
                 }
                 if(ticks>35){
@@ -471,7 +471,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                 ticks++;
                 if((ticks>15 && ticks<20) || (ticks>40 && ticks<45)){
                     double posx=this.attacker.getLookVec().x*8+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*8+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
-                    AxisAlignedBB bb= new AxisAlignedBB(posx+7, posy, posz+7, posx-7, posy+5, posz-7);
+                    AxisAlignedBB bb= new AxisAlignedBB(posx+7, posy, posz+7, posx-7, posy+5, posz-7).union(this.attacker.leg.getBoundingBox());
                     this.attackBB(bb, this.attacker.damage*10, false, 0, false);
                 }
                 if((ticks==25 && dataManager.get(STATE)==7) || ticks==55){
@@ -484,7 +484,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
             if(dataManager.get(STATE)==9 || dataManager.get(STATE)==10){
                 ticks++;
                 if((ticks>=3 && ticks<=8) || (ticks>=13 && ticks<=18)){
-                    AxisAlignedBB bb= this.attacker.getBoundingBox().expand(8, 0, 8).expand(-8, 7, -8);
+                    AxisAlignedBB bb= this.attacker.getBoundingBox().expand(8, 0, 8).expand(-8, 7, -8).union(this.attacker.leg.getBoundingBox());
                     this.attackBB(bb, this.attacker.damage*15, true, 0.4F, false);
                 }
                 if((ticks==10 && dataManager.get(STATE)==9) || ticks==20){
@@ -632,6 +632,15 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 }else{
                     jumpDamage=this.attacker.fallDistance;
+                }
+                if(ticks>800){
+                    enemy.stopRiding();
+                    grab=false;
+                    ticks=0;
+                    jumpDamage=0;
+                    leap=false;
+                    dataManager.set(STATE, 0);
+                    this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                 }
             }
             return;
