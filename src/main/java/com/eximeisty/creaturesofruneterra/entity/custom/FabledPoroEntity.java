@@ -93,7 +93,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
     }
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if(dataManager.get(ATTACK)){
+        if(!dataManager.get(ATTACK)){
             if(dataManager.get(FORGE)){
                 event.getController().setAnimation(FORGE_ANIM);
                 return PlayState.CONTINUE;

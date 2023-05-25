@@ -83,7 +83,7 @@ public class PlunderPoroEntity extends TameableEntity implements IAnimatable, IR
     }
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if(dataManager.get(ATTACK)){
+        if(!dataManager.get(ATTACK)){
             if(dataManager.get(STATE)){
                 event.getController().setAnimation(SIT_ANIM);
                 return PlayState.CONTINUE;

@@ -119,7 +119,7 @@ public class PatchedPorobotEntity extends TameableEntity implements IAnimatable{
    }
 
    public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-      if(dataManager.get(OPEN) || dataManager.get(CLOSE)){
+      if(!dataManager.get(OPEN) || !dataManager.get(CLOSE)){
          if (event.isMoving()) {
             event.getController().setAnimation(WALK_ANIM);
             return PlayState.CONTINUE;
