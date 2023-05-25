@@ -131,20 +131,23 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable {
     }
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        if (event.isMoving()) {
+        if(dataManager.get(STATE)==0){
+            if (event.isMoving()) {
+                if(dataManager.get(RUN)==0){
+                    event.getController().setAnimation(WALK_ANIM);
+                }else{
+                    event.getController().setAnimation(RUN_ANIM);
+                }
+                return PlayState.CONTINUE;
+            }
             if(dataManager.get(RUN)==0){
-                event.getController().setAnimation(WALK_ANIM);
+                event.getController().setAnimation(IDLE_ANIM);
             }else{
-                event.getController().setAnimation(RUN_ANIM);
+                event.getController().setAnimation(IDLE2_ANIM);
             }
             return PlayState.CONTINUE;
         }
-        if(dataManager.get(RUN)==0){
-            event.getController().setAnimation(IDLE_ANIM);
-        }else{
-            event.getController().setAnimation(IDLE2_ANIM);
-        }
-        return PlayState.CONTINUE;
+        return PlayState.STOP;
     }
 
     public <E extends IAnimatable> PlayState predicate2(AnimationEvent<E> event) {
