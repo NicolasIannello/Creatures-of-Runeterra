@@ -68,7 +68,7 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
 
     protected void attackBB(AxisAlignedBB bb){
         this.world.getEntitiesWithinAABB(LivingEntity.class, bb).stream().forEach(livingEntity -> {
-            livingEntity.attackEntityFrom(DamageSource.causeArrowDamage(this, livingEntity), 6);
+            livingEntity.attackEntityFrom(DamageSource.causeArrowDamage(this, livingEntity), 4);
         });
     }
 
@@ -77,7 +77,7 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
         if (!this.world.isRemote) {
             Entity entity = result.getEntity();
             Entity entity1 = this.getShooter();
-            entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 9.0F);
+            entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 6.0F);
             if (entity1 instanceof LivingEntity) {
                 this.applyEnchantments((LivingEntity)entity1, entity);
             }

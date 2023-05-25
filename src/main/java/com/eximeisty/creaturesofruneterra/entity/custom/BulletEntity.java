@@ -57,7 +57,7 @@ public class BulletEntity extends AbstractArrowEntity implements IAnimatable{
         if (!this.world.isRemote) {
             Entity entity = result.getEntity();
             Entity entity1 = this.getShooter();
-            entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 6.0F);
+            entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 4.0F);
             if (entity1 instanceof LivingEntity) {
                 this.applyEnchantments((LivingEntity)entity1, entity);
             }

@@ -57,9 +57,9 @@ public class SaiBowItem extends BowItem{
 
                     int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
                     if (j > 0) {
-                        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + (double)j * 2D + 6D);
+                        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + (double)j * 2D + 4D);
                     }else{
-                        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + 6D);
+                        abstractarrowentity.setDamage(abstractarrowentity.getDamage() + 4D);
                     }
 
                     int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
