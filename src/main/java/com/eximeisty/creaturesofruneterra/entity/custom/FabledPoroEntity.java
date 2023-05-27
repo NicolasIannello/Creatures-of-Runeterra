@@ -26,6 +26,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
@@ -147,8 +148,9 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
 
     public void tick() {
         super.tick();
-        if(this.getHeldItem(Hand.MAIN_HAND)!=ItemStack.EMPTY){//dataManager.get(FORGE)){
+        if(this.getHeldItem(Hand.MAIN_HAND)!=ItemStack.EMPTY && dataManager.get(FORGE)){
             ticks++;
+            if(ticks==10 || ticks==30 || ticks==50 || ticks==70 || ticks==90) this.world.playSound(null, this.getPosition(), SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.NEUTRAL, 0.5F, 1);
             if(ticks==100){
                 dataManager.set(FORGE, false);
                 if(!dataManager.get(STATE)) this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
@@ -175,7 +177,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             return flag ? ActionResultType.CONSUME : ActionResultType.PASS;
         }else{
             int day=(int)(this.world.getDayTime()/24000);
-            if(itemstack.isRepairable() && dataManager.get(DAY)!=day){
+            if(itemstack.isRepairable() /*&& dataManager.get(DAY)!=day*/){
                 dataManager.set(DAY, day);
                 dataManager.set(FORGE, true);
                 this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
@@ -221,12 +223,14 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
     public void writeAdditional(CompoundNBT compound) {
         super.writeAdditional(compound);
         compound.putInt("day", this.dataManager.get(DAY));
-     }
+        compound.putBoolean("forge", this.dataManager.get(FORGE));
+    }
 
     public void readAdditional(CompoundNBT compound) {
         super.readAdditional(compound);
         this.dataManager.set(STATE, compound.getBoolean("Sitting"));
         this.dataManager.set(DAY, compound.getInt("day"));
+        this.dataManager.set(FORGE, compound.getBoolean("forge"));
     }
 
     protected SoundEvent getAmbientSound() { return SoundEvents.ENTITY_EVOKER_AMBIENT; }
