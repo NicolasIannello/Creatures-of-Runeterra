@@ -9,6 +9,8 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -50,6 +52,11 @@ public class BulletEntity extends AbstractArrowEntity implements IAnimatable{
         if (!this.world.isRemote) {
             this.remove();
         }
+    }
+
+    @Override
+    protected SoundEvent getHitEntitySound(){
+        return SoundEvents.ENTITY_SHULKER_BULLET_HIT;
     }
 
     protected void onEntityHit(EntityRayTraceResult result) {
