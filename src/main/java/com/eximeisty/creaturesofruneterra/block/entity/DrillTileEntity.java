@@ -68,12 +68,23 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
     
     @Override
     public void tick() {
+        if(this.getTileData().getBoolean("shake")) {
+            this.world.getPlayers().forEach(player ->{
+                if(player.getDistanceSq(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ())<200){
+                    player.rotationYaw+=Math.random()*(3+3)-3; 
+                    player.rotationPitch+=Math.random()*(3+3)-3;
+                }
+            });
+        }
         if(this.getTileData().getInt("state")==1 && !this.world.isRemote){
             ticks++;
             if(ticks==550) setEstado(false);
             if(inDesert){
                 if(ticks==180) this.world.playSound(null, pos, ModSoundEvents.REKSAI_AWAKEN.get(), SoundCategory.AMBIENT, 3, 1);
-                if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("The floor trembles"), ChatType.CHAT, Util.DUMMY_UUID));
+                if(ticks==250) {
+                    this.getTileData().putBoolean("shake", true);
+                    this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("The floor trembles"), ChatType.CHAT, Util.DUMMY_UUID));
+                }
                 if(ticks==500){
                     ModEntityTypes.REKSAI.get().spawn(world.getServer().func_241755_D_(), null, null, this.getPos(), SpawnReason.TRIGGERED, false, false);
                     this.world.destroyBlock(pos, false);
@@ -97,6 +108,7 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
         }
         if(setZero) this.estado=0;
         this.getTileData().putInt("state", estado);
+        this.getTileData().putBoolean("shake", false);
         //this.markDirty();
         this.world.notifyBlockUpdate(this.pos, this.getBlockState(), this.getBlockState(), 2);
 	}
