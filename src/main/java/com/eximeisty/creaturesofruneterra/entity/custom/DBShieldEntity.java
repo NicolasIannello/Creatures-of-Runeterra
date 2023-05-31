@@ -10,6 +10,8 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -59,6 +61,11 @@ public class DBShieldEntity extends AbstractArrowEntity implements IAnimatable{
 
     protected void onImpact(RayTraceResult result) {
         super.onImpact(result);
+    }
+
+    @Override
+    protected SoundEvent getHitEntitySound(){
+        return SoundEvents.BLOCK_CHORUS_FLOWER_DEATH;
     }
 
     protected void onEntityHit(EntityRayTraceResult result) {
