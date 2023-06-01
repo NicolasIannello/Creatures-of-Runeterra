@@ -40,6 +40,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public String controllerName = "controller";
     private boolean hand=false;
     private int dashTicks=0;
+    private boolean pound=false;
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge", false).addAnimation("animation.atlasg.full", true);
     private static final AnimationBuilder CHARGE2_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge2", false).addAnimation("animation.atlasg.full2", true);
     private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.idle", true);;
@@ -81,18 +82,33 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         }
         if(getState(stack)==3){
             dashTicks++;
-            entityIn.world.getEntitiesWithinAABB(LivingEntity.class, new AxisAlignedBB(entityIn.getBoundingBox().minX-1.0D,entityIn.getBoundingBox().minY,entityIn.getBoundingBox().minZ-1.0D,entityIn.getBoundingBox().maxX+1.0D,entityIn.getBoundingBox().maxY,entityIn.getBoundingBox().maxZ+1.0D)).stream().forEach(livingEntity -> {
-                if(!livingEntity.isEntityEqual(entityIn)) livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)entityIn), 6);
-                if(!livingEntity.world.isRemote) livingEntity.applyKnockback(1.5F, livingEntity.getPosX()-entityIn.getPosX(), livingEntity.getPosZ()-entityIn.getPosZ());
-            });
-            BlockPos.getAllInBox(new AxisAlignedBB(entityIn.getBoundingBox().minX-0.5D,entityIn.getBoundingBox().minY,entityIn.getBoundingBox().minZ-0.5D,entityIn.getBoundingBox().maxX+0.5D,entityIn.getBoundingBox().maxY,entityIn.getBoundingBox().maxZ+0.5D))
-            .forEach(pos->{
-                if(entityIn.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && entityIn.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && entityIn.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
-                    if(entityIn.world.getBlockState(pos).getBlockHardness(worldIn, pos)>=0 && entityIn.world.getBlockState(pos).getBlockHardness(worldIn, pos)<=80) entityIn.world.destroyBlock(pos, true, entityIn);
-                }
-            });
-            if(dashTicks>=20 &&/*&& entityIn.isOnGround()*/!(entityIn.getMotion().x<=-0.1 || entityIn.getMotion().x>=0.1 || entityIn.getMotion().y<=-0.1 || entityIn.getMotion().y>=0.1)) setState(stack, 1);
+            attackBB(entityIn.getBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), entityIn);
+            breakBB(entityIn.getBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5).offset(entityIn.getLookVec().x*1.5, 0, entityIn.getLookVec().z*1.5), entityIn, worldIn);
+            if(entityIn.fallDistance>=7) pound=true;
+            if(dashTicks>=20 && (!entityIn.isOnGround())) dashTicks-=3;
+            if(entityIn.isOnGround() && pound){
+                breakBB(entityIn.getBoundingBox().expand(1, -2, 1).expand(-1, 0, -1).contract(0, 2, 0), entityIn, worldIn);
+                breakBB(entityIn.getBoundingBox().expand(2, -1, 2).expand(-2, 0, -2).contract(0, 2, 0), entityIn, worldIn);
+                attackBB(entityIn.getBoundingBox().expand(2, 0, 2).expand(-2, 0, -2), entityIn);
+                pound=false;
+            }
+            if(dashTicks>=20) setState(stack, 1);
         }
+    }
+
+    public void breakBB(AxisAlignedBB bb, Entity player, World worldIn){
+        BlockPos.getAllInBox(bb).forEach(pos->{
+            if(player.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && player.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && player.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
+                if(player.world.getBlockState(pos).getBlockHardness(worldIn, pos)>=0 && player.world.getBlockState(pos).getBlockHardness(worldIn, pos)<=80) player.world.destroyBlock(pos, true, player);
+            }
+        });
+    }
+
+    public void attackBB(AxisAlignedBB bb, Entity player){
+        player.world.getEntitiesWithinAABB(LivingEntity.class, player.getBoundingBox().expand(2, 0, 2).expand(-2, 0, -2)).stream().forEach(livingEntity -> {
+            if(!livingEntity.isEntityEqual(player)) livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)player), 15);
+            if(!livingEntity.world.isRemote) livingEntity.applyKnockback(2.5F, livingEntity.getPosX()-player.getPosX(), livingEntity.getPosZ()-player.getPosZ());
+        });
     }
 
     public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerentity, Hand handIn) {
