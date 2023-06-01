@@ -15,6 +15,8 @@ import net.minecraft.stats.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.Hand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -40,6 +42,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public String controllerName = "controller";
     private boolean hand=false;
     private int dashTicks=0;
+    private int soundTicks=0;
     private boolean pound=false;
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge", false).addAnimation("animation.atlasg.full", true);
     private static final AnimationBuilder CHARGE2_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge2", false).addAnimation("animation.atlasg.full2", true);
@@ -115,6 +118,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         ItemStack stack = playerentity.getHeldItem(handIn);
         playerentity.setActiveHand(handIn);
         if(isCharged(stack)){
+            worldIn.playSound(playerentity, playerentity.getPosition(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.PLAYERS, 5, 0.9f);
             setState(stack, 3);
             playerentity.getCooldownTracker().setCooldown(this, 20);
             playerentity.setMotion(playerentity.getLookVec().x*2, 0.1, playerentity.getLookVec().z*2);
@@ -124,6 +128,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
                 });
             }
         }else{
+            playSounds(worldIn, playerentity);
             dashTicks=0;
             setState(stack, 2);
             playerentity.getCooldownTracker().setCooldown(this, 25);
@@ -136,6 +141,21 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         }
         setCharged(stack, !isCharged(stack));
         return ActionResult.resultConsume(stack);
+    }
+
+    public void playSounds(World worldIn, PlayerEntity player){
+        if(soundTicks==0) worldIn.playSound(player, player.getPosition(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.PLAYERS, 3, 1);
+        if(soundTicks==10) worldIn.playSound(player, player.getPosition(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.PLAYERS, 3, 1.5f);
+        if(soundTicks==20) worldIn.playSound(player, player.getPosition(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.PLAYERS, 3, 0.7f);
+        if(soundTicks==30) worldIn.playSound(player, player.getPosition(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.PLAYERS, 3, 1f);
+        if(soundTicks==40) worldIn.playSound(player, player.getPosition(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.PLAYERS, 3, 1.2f);
+        if(soundTicks==50) worldIn.playSound(player, player.getPosition(), SoundEvents.BLOCK_PISTON_CONTRACT, SoundCategory.PLAYERS, 3, 0.3f);
+        soundTicks++;
+        if(soundTicks>50){
+            soundTicks=0;
+        }else{
+            playSounds(worldIn, player);
+        }
     }
 
     @Override
