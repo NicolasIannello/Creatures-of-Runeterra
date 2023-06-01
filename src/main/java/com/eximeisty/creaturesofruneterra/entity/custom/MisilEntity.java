@@ -10,6 +10,7 @@ import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
@@ -64,6 +65,11 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
             this.world.createExplosion((Entity)null, this.getPosX(), this.getPosY(), this.getPosZ(), (float)2, flag, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
             this.remove();
         }
+    }
+
+    @Override
+    protected SoundEvent getHitEntitySound(){
+        return null;
     }
 
     protected void attackBB(AxisAlignedBB bb){
