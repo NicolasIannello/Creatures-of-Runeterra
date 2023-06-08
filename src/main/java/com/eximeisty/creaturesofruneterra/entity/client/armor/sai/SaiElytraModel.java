@@ -20,7 +20,7 @@ public class SaiElytraModel extends AnimatedGeoModel<SaiElytraItem>{
 
     @Override
     public ResourceLocation getTextureLocation(SaiElytraItem object) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/model/armor/sai_elytra.png");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/model/armor/sai_armor.png");
     }
     
 }
