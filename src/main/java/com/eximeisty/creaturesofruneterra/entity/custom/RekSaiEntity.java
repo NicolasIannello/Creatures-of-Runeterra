@@ -82,6 +82,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.charge", true);
     private static final AnimationBuilder SALIR_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.salir", false);
     private static final AnimationBuilder THROW_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.throw", false);
+    private static final AnimationBuilder APPEAR_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.appear", false);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
         if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity || (!(p_213797_0_ instanceof PlayerEntity) && (p_213797_0_.isInWaterOrBubbleColumn() || p_213797_0_.getEntityWorld().getBlockState(new BlockPos(p_213797_0_.getPosX(),p_213797_0_.getPosY()-1,p_213797_0_.getPosZ()))==Blocks.WATER.getDefaultState()))) return false;
         if(p_213797_0_ instanceof CoRPartEntity) if( ((CoRPartEntity)p_213797_0_).getParent() instanceof RekSaiEntity ) return false; 
@@ -200,6 +201,10 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
             event.getController().setAnimation(THROW_ANIM);
             return PlayState.CONTINUE;
         }
+        if (dataManager.get(STATE)==20) {
+            event.getController().setAnimation(APPEAR_ANIM);
+            return PlayState.CONTINUE;
+        }
         event.getController().clearAnimationCache();
         return PlayState.STOP;
     }
@@ -225,7 +230,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
 
     protected void registerData() {
         super.registerData();
-        dataManager.register(STATE, 5);
+        dataManager.register(STATE, 20);
         dataManager.register(RUN, 0);
         dataManager.register(HEAL, false);
     }
@@ -267,7 +272,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
         if(!spawnAnim){
             grabTicks++;
             if(grabTicks==3) this.world.playSound(null, this.getPosition(), ModSoundEvents.REKSAI_APP.get(), SoundCategory.HOSTILE, 3, 1);
-            if(grabTicks==20){
+            if(grabTicks==35){
                 grabTicks=1.0D;
                 dataManager.set(STATE, 0);
                 spawnAnim=true;
