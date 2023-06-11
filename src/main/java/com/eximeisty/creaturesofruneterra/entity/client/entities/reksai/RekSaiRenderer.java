@@ -5,10 +5,7 @@ import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.ClippingHelper;
-
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -24,11 +21,6 @@ public class RekSaiRenderer extends GeoEntityRenderer<RekSaiEntity> {
     public ResourceLocation getEntityTexture(RekSaiEntity entity) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/reksai.png");
     }
-
-    @Override
-	public RenderType getRenderType(RekSaiEntity animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
-	}
 
     @Override
 	public void renderEarly(RekSaiEntity animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {

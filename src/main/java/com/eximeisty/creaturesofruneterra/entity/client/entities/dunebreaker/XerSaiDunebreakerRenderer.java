@@ -5,8 +5,6 @@ import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-
-import net.minecraft.client.renderer.RenderType;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -15,7 +13,6 @@ public class XerSaiDunebreakerRenderer extends GeoEntityRenderer<XerSaiDunebreak
 
     public XerSaiDunebreakerRenderer(EntityRendererManager renderManager) {
         super(renderManager, new XerSaiDunebreakerModel());
-        //this.shadowRadius = 0.3f;
     }
 
     @Override
@@ -24,8 +21,8 @@ public class XerSaiDunebreakerRenderer extends GeoEntityRenderer<XerSaiDunebreak
     }
 
     @Override
-	public RenderType getRenderType(XerSaiDunebreakerEntity animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        stack.scale(1.5F, 1.5F, 1.5F);
-        return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
-	}
+	public void renderEarly(XerSaiDunebreakerEntity animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+        stackIn.scale(1.5F, 1.5F, 1.5F);
+        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);    
+    }
 }
