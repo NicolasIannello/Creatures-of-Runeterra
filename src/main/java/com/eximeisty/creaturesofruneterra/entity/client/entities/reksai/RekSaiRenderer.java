@@ -27,9 +27,14 @@ public class RekSaiRenderer extends GeoEntityRenderer<RekSaiEntity> {
 
     @Override
 	public RenderType getRenderType(RekSaiEntity animatable, float partialTicks, MatrixStack stack, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, ResourceLocation textureLocation) {
-        stack.scale(4.5F, 4.5F, 4.5F);
         return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
 	}
+
+    @Override
+	public void renderEarly(RekSaiEntity animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
+        stackIn.scale(4.5F, 4.5F, 4.5F);
+        super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);    
+    }
 
     @Override
     protected float getDeathMaxRotation(RekSaiEntity entityLivingBaseIn) {
