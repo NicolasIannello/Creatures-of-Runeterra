@@ -81,7 +81,11 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         if (!worldIn.isRemote && !isCharged(stack)) {
             final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityIn);
-            GeckoLibNetwork.syncAnimation(target, this, id, 2);
+            if(hand){
+                GeckoLibNetwork.syncAnimation(target, this, id, 2);
+            }else{
+                GeckoLibNetwork.syncAnimation(target, this, id, 4);
+            }
         }
         if(getState(stack)==3){
             dashTicks++;
@@ -137,7 +141,11 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         if (!worldIn.isRemote && !isCharged(stack)) {
             final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
             final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> playerentity);
-            GeckoLibNetwork.syncAnimation(target, this, id, 1);
+            if(handIn==Hand.MAIN_HAND){
+                GeckoLibNetwork.syncAnimation(target, this, id, 3);
+            }else{
+                GeckoLibNetwork.syncAnimation(target, this, id, 1);
+            }
         }
         setCharged(stack, !isCharged(stack));
         return ActionResult.resultConsume(stack);
@@ -162,13 +170,10 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public void onAnimationSync(int id, int state) {
         final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
         controller.markNeedsReload();
-        if(hand){
-            if (state == 1) controller.setAnimation(CHARGE2_ANIM);
-            if (state == 2) controller.setAnimation(IDLE2_ANIM);
-        }else{
-            if (state == 1) controller.setAnimation(CHARGE_ANIM);
-            if (state == 2) controller.setAnimation(IDLE_ANIM);
-        }
+        if (state == 1) controller.setAnimation(CHARGE2_ANIM);
+        if (state == 2) controller.setAnimation(IDLE2_ANIM);
+        if (state == 3) controller.setAnimation(CHARGE_ANIM);
+        if (state == 4) controller.setAnimation(IDLE_ANIM);
     }
 
     public static boolean isCharged(ItemStack stack) {
