@@ -8,6 +8,8 @@ import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.item.client.fishbones.FishbonesRenderer;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
@@ -79,7 +81,7 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
     public void onPlayerStoppedUsing(ItemStack stack, World worldIn, LivingEntity entityLiving, int timeLeft) {
         if (entityLiving instanceof PlayerEntity) {
             PlayerEntity playerentity = (PlayerEntity)entityLiving;
-            boolean flag = playerentity.abilities.isCreativeMode;
+            boolean flag = playerentity.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
             ItemStack itemstack = playerentity.findAmmo(stack);
             if(isCharged(stack)){
                 playerentity.getCooldownTracker().setCooldown(this, 10);
@@ -93,7 +95,7 @@ public class Fishbones extends ShootableItem implements IAnimatable , ISyncable{
                 boolean flag1 = playerentity.abilities.isCreativeMode || (itemstack.getItem() instanceof MisilItem && ((MisilItem)itemstack.getItem()).isInfinite(itemstack, stack, playerentity));
                 if (!worldIn.isRemote) {
                     if(isCharged(stack)==true){
-                        MisilItem misilitem = (MisilItem)(itemstack.getItem() instanceof MisilItem ? itemstack.getItem() : ModItems.MISIL);
+                        MisilItem misilitem = (MisilItem)(itemstack.getItem() instanceof MisilItem ? itemstack.getItem() : ModItems.MISIL.get());
                         MisilEntity misilentity = misilitem.createMisil(worldIn, itemstack, playerentity);
 
                         misilentity= customMisil(misilentity);
