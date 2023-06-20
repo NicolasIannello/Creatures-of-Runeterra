@@ -252,15 +252,16 @@ public class XerSaiDunebreakerEntity extends CreatureEntity implements IAnimatab
                 if(dataManager.get(STATE)==2){
                     if(ticks==1){
                         this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",-0.35,AttributeModifier.Operation.ADDITION)); 
-                        this.attacker.getAttribute(Attributes.ATTACK_DAMAGE).applyPersistentModifier(new AttributeModifier("damage",30,AttributeModifier.Operation.ADDITION)); 
+                        this.attacker.getAttribute(Attributes.ATTACK_DAMAGE).applyPersistentModifier(new AttributeModifier("damage",10,AttributeModifier.Operation.ADDITION)); 
                     }
                     if(distToEnemySqr<=22 && ticks==30 ){
                         this.attacker.attackEntityAsMob(enemy);
+                        enemy.setMotion(this.attacker.getLookVec().x*2, 2, this.attacker.getLookVec().z*2);
                     }
                     if(ticks==45){
                         dataManager.set(STATE, 0);
                         this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).applyPersistentModifier(new AttributeModifier("speed",0.35,AttributeModifier.Operation.ADDITION)); 
-                        this.attacker.getAttribute(Attributes.ATTACK_DAMAGE).applyPersistentModifier(new AttributeModifier("damage",-30,AttributeModifier.Operation.ADDITION)); 
+                        this.attacker.getAttribute(Attributes.ATTACK_DAMAGE).applyPersistentModifier(new AttributeModifier("damage",-10,AttributeModifier.Operation.ADDITION)); 
                     }
                 }
                 ++ticks;
