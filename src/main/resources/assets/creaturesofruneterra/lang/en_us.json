@@ -36,5 +36,9 @@
     "item.creaturesofruneterra.tendril_compass":"Tendril compass",
     "entity.creaturesofruneterra.patchedporobot":"Patched Porobot",
     "entity.creaturesofruneterra.xersai_dunebreaker":"Xer'Sai dunebreaker",
-    "entity.creaturesofruneterra.exaltedporo":"Exalted poro"
+    "entity.creaturesofruneterra.exaltedporo":"Exalted poro",
+    "item.creaturesofruneterra.fabledporo_spawn_egg":"Fabled poro Spawn Egg",
+    "item.creaturesofruneterra.plunderporo_spawn_egg":"Plunder poro Spawn Egg",
+    "item.creaturesofruneterra.porobot_spawn_egg":"Porobot Spawn Egg",
+    "item.creaturesofruneterra.exaltedporo_spawn_egg":"Exalted poro Spawn Egg"
 }

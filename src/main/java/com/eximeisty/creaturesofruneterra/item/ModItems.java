@@ -111,6 +111,18 @@ public class ModItems {
         public static final RegistryObject<ModSpawnEggItem> PORO_SPAWN_EGG = ITEMS.register("poro_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.PORO, 0xffffff, 0xdde5e4, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
+        public static final RegistryObject<ModSpawnEggItem> FABLEDPORO_SPAWN_EGG = ITEMS.register("fabledporo_spawn_egg",
+        () -> new ModSpawnEggItem(ModEntityTypes.FABLEDPORO, 0xffffff, 0x2e2b2b, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<ModSpawnEggItem> PLUNDERPORO_SPAWN_EGG = ITEMS.register("plunderporo_spawn_egg",
+        () -> new ModSpawnEggItem(ModEntityTypes.PLUNDERPORO, 0xffffff, 0x0c6822, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<ModSpawnEggItem> POROBOT_SPAWN_EGG = ITEMS.register("porobot_spawn_egg",
+        () -> new ModSpawnEggItem(ModEntityTypes.PATCHEDPOROBOT, 0xc25719, 0x612c0e, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<ModSpawnEggItem> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
+        () -> new ModSpawnEggItem(ModEntityTypes.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
         //BLOCKS
         public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
         () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));
