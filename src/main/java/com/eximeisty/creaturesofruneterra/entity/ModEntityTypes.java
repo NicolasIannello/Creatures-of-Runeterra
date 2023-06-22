@@ -10,6 +10,7 @@ import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.BulletEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.ExaltedPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
@@ -67,6 +68,11 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<PatchedPorobotEntity>> PATCHEDPOROBOT=
     ENTITY_TYPES.register("patchedporobot", 
         ()-> EntityType.Builder.create(PatchedPorobotEntity::new, EntityClassification.CREATURE).size(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "patchedporobot").toString())
+    );
+
+    public static final RegistryObject<EntityType<ExaltedPoroEntity>> EXALTEDPORO=
+    ENTITY_TYPES.register("exaltedporo",
+        ()-> EntityType.Builder.create(ExaltedPoroEntity::new, EntityClassification.CREATURE).size(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "exaltedporo").toString())
     );
     
     //PART ENTITIES
