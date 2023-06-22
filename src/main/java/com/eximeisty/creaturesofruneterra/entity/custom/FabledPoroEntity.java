@@ -177,16 +177,17 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
             return flag ? ActionResultType.CONSUME : ActionResultType.PASS;
         }else{
             int day=(int)(this.world.getDayTime()/24000);
-            if(itemstack.isRepairable() /*&& dataManager.get(DAY)!=day*/){
-                dataManager.set(DAY, day);
-                dataManager.set(FORGE, true);
-                this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
-                forgeItem=itemstack.copy();
-                this.setHeldItem(Hand.MAIN_HAND, forgeItem);
-                itemstack.shrink(1);
-                return ActionResultType.SUCCESS;
-            }else if(itemstack.isRepairable()){
-                if(!this.world.isRemote) this.world.setEntityState(this, (byte)13);
+            if(itemstack.isRepairable()){
+                if(dataManager.get(DAY)!=day){
+                    dataManager.set(DAY, day);
+                    dataManager.set(FORGE, true);
+                    this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
+                    forgeItem=itemstack.copy();
+                    this.setHeldItem(Hand.MAIN_HAND, forgeItem);
+                    itemstack.shrink(1);
+                }else{
+                    if(!this.world.isRemote) this.world.setEntityState(this, (byte)13);
+                }
                 return ActionResultType.SUCCESS;
             }else if(this.isOwner(playerIn)){
                 this.setSitting(!dataManager.get(STATE));
