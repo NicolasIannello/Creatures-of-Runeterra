@@ -202,6 +202,10 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
                     if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
                     switchEntity(ModEntityTypes.PATCHEDPOROBOT.get(), playerIn);
                 }
+                if(item == Items.GOLD_BLOCK){
+                    if (!playerIn.abilities.isCreativeMode) itemstack.shrink(1);
+                    switchEntity(ModEntityTypes.EXALTEDPORO.get(), playerIn);
+                }
                 if(itemstack!=ItemStack.EMPTY){
                     if(item.canEquip(itemstack, EquipmentSlotType.HEAD, this)){
                         this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
