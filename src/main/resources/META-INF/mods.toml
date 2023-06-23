@@ -1,0 +1,29 @@
+modLoader="javafml" #mandatory
+loaderVersion="[45,)" #mandatory
+license="All rights reserved"
+#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
+[[mods]] #mandatory
+modId="creaturesofruneterra" #mandatory
+version="0.6.0" #mandatory
+displayName="Creatures of Runeterra" #mandatory
+#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
+#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
+logoFile="logo.png" #optional
+credits="Eximeisty" #optional
+authors="Eximeisty" #optional
+#displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
+description='''
+Creatures of Runeterra is a mod that plans to bring to life the universe of Runeterra into minecraft.
+'''
+[[dependencies.creaturesofruneterra]] #optional
+    modId="forge" #mandatory
+    mandatory=true #mandatory
+    versionRange="[45,)" #mandatory
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.creaturesofruneterra]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.4,1.20)"
+    ordering="NONE"
+    side="BOTH"
