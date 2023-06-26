@@ -17,7 +17,7 @@ public class XerSaiDunebreakerModel extends GeoModel<XerSaiDunebreakerEntity> {
 
     @Override
     public ResourceLocation getModelResource(XerSaiDunebreakerEntity animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/xersai_dunebreaker.geo.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/xersai_dunebreaker.geo.json");
     }
 
     @Override
@@ -27,7 +27,7 @@ public class XerSaiDunebreakerModel extends GeoModel<XerSaiDunebreakerEntity> {
 
     @Override
     public ResourceLocation getAnimationResource(XerSaiDunebreakerEntity animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/xersai_dunebreaker.animation.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/xersai_dunebreaker.animation.json");
     }
 
     @Override
