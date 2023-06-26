@@ -29,6 +29,9 @@ public class ModItems {
     public static final RegistryObject<Item> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.XERSAI_DUNEBREAKER, 0x9F2BAF, 0x370E45,
                     new Item.Properties()));
+    public static final RegistryObject<Item> FABLEDPORO_SPAWN_EGG = ITEMS.register("fabledporo_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.FABLEDPORO, 0xffffff, 0x2e2b2b,
+                    new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);

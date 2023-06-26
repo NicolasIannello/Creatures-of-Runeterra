@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra;
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import net.minecraft.client.renderer.RenderType;
@@ -45,7 +46,7 @@ public class CreaturesofRuneterra{
             //BLOCKS
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
-            event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);
+            event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
         }
     }
 
@@ -58,6 +59,7 @@ public class CreaturesofRuneterra{
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
             EntityRenderers.register(ModEntities.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
+            EntityRenderers.register(ModEntities.FABLEDPORO.get(), FabledPoroRenderer::new);
         }
     }
 }

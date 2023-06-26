@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -19,6 +20,13 @@ public class ModEntities {
             ENTITY_TYPES.register("xersai_dunebreaker",
                     () -> EntityType.Builder.of(XerSaiDunebreakerEntity::new, MobCategory.CREATURE).sized(3f, 2.5f)
                             .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString()));
+
+    //POROS
+
+    public static final RegistryObject<EntityType<FabledPoroEntity>> FABLEDPORO=
+            ENTITY_TYPES.register("fabledporo",
+                    ()-> EntityType.Builder.of(FabledPoroEntity::new, MobCategory.CREATURE).sized(0.8f,1f)
+                            .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fabledporo").toString()));
 
     public static void register(IEventBus eventBus){
         ENTITY_TYPES.register(eventBus);
