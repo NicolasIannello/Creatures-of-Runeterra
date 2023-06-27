@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -22,7 +23,10 @@ public class ModEntities {
                             .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString()));
 
     //POROS
-
+    public static final RegistryObject<EntityType<PoroEntity>> PORO=
+            ENTITY_TYPES.register("poro",
+                    ()-> EntityType.Builder.of(PoroEntity::new, MobCategory.CREATURE).sized(0.8f,1f)
+                            .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "poro").toString()));
     public static final RegistryObject<EntityType<FabledPoroEntity>> FABLEDPORO=
             ENTITY_TYPES.register("fabledporo",
                     ()-> EntityType.Builder.of(FabledPoroEntity::new, MobCategory.CREATURE).sized(0.8f,1f)
