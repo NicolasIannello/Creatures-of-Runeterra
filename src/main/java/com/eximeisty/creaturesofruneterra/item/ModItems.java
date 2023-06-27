@@ -32,6 +32,11 @@ public class ModItems {
             () -> new ForgeSpawnEggItem(ModEntities.PORO, 0xffffff, 0xdde5e4, new Item.Properties()));
     public static final RegistryObject<Item> FABLEDPORO_SPAWN_EGG = ITEMS.register("fabledporo_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.FABLEDPORO, 0xffffff, 0x2e2b2b, new Item.Properties()));
+    public static final RegistryObject<Item> PLUNDERPORO_SPAWN_EGG = ITEMS.register("plunderporo_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.PLUNDERPORO, 0xffffff, 0x0c6822, new Item.Properties()));
+    public static final RegistryObject<Item> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties()));
+
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
