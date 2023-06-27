@@ -2,8 +2,11 @@ package com.eximeisty.creaturesofruneterra;
 
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.ExaltedPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
@@ -48,6 +51,7 @@ public class CreaturesofRuneterra{
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
             event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
+            event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
         }
     }
 
@@ -62,6 +66,9 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
             EntityRenderers.register(ModEntities.PORO.get(), PoroRenderer::new);
             EntityRenderers.register(ModEntities.FABLEDPORO.get(), FabledPoroRenderer::new);
+            EntityRenderers.register(ModEntities.PLUNDERPORO.get(), PlunderPoroRenderer::new);
+            EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
+            EntityRenderers.register(ModEntities.BULLET.get(), BulletRenderer::new);
         }
     }
 }
