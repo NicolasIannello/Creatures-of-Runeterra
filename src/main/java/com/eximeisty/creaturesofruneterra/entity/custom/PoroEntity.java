@@ -185,7 +185,7 @@ public class PoroEntity extends TamableAnimal implements GeoEntity {
                 }
                 if(item == Items.HEART_OF_THE_SEA){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
-                    //switchEntity(ModEntities.PLUNDERPORO.get(), playerIn);
+                    switchEntity(ModEntities.PLUNDERPORO.get(), playerIn);
                 }
                 if(item == Items.CHEST){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
@@ -193,7 +193,7 @@ public class PoroEntity extends TamableAnimal implements GeoEntity {
                 }
                 if(item == Items.GOLD_BLOCK){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
-                    //switchEntity(ModEntities.EXALTEDPORO.get(), playerIn);
+                    switchEntity(ModEntities.EXALTEDPORO.get(), playerIn);
                 }
                 if(itemstack!=ItemStack.EMPTY){
                     if(item.canEquip(itemstack, EquipmentSlot.HEAD, this)){
@@ -219,7 +219,7 @@ public class PoroEntity extends TamableAnimal implements GeoEntity {
         this.dropEquipment();
         TamableAnimal entity= (TamableAnimal)poro.spawn(this.level.getServer().overworld(), (ItemStack) null, null, this.getOnPos().above(), MobSpawnType.NATURAL, false, false);
         entity.tame(owner);
-        this.remove(RemovalReason.DISCARDED);
+        this.discard();
     }
 
     protected void defineSynchedData() {
