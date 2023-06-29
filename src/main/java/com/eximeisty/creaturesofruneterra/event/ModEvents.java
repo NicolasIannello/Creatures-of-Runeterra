@@ -21,6 +21,12 @@ public class ModEvents {
         event.put(ModEntities.FABLEDPORO.get(), FabledPoroEntity.setAttributes());
         event.put(ModEntities.PLUNDERPORO.get(), PlunderPoroEntity.setAttributes());
         event.put(ModEntities.EXALTEDPORO.get(), ExaltedPoroEntity.setAttributes());
+        event.put(ModEntities.REKSAI.get(), RekSaiEntity.setAttributes());
+        //PART ENTITIES
+        event.put(ModEntities.WIVHIV.get(), CoRPartEntity.setAttributes());
+        event.put(ModEntities.WVIHV.get(), CoRPartEntity.setAttributes());
+        event.put(ModEntities.WVIIHVI.get(), CoRPartEntity.setAttributes());
+        event.put(ModEntities.WIIIHIII.get(), CoRPartEntity.setAttributes());
     }
 
     @SubscribeEvent

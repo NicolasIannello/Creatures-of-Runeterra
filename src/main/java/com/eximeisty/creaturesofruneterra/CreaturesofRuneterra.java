@@ -4,12 +4,15 @@ import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.empty.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.ExaltedPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.util.ModSounds;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,6 +35,7 @@ public class CreaturesofRuneterra{
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModEntities.register(modEventBus);
+        ModSounds.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -50,7 +54,7 @@ public class CreaturesofRuneterra{
             //BLOCKS
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
-            event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
+            event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
             event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
         }
     }
@@ -69,6 +73,12 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.PLUNDERPORO.get(), PlunderPoroRenderer::new);
             EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
             EntityRenderers.register(ModEntities.BULLET.get(), BulletRenderer::new);
+            EntityRenderers.register(ModEntities.REKSAI.get(), RekSaiRenderer::new);
+            //PART ENTITIES
+            EntityRenderers.register(ModEntities.WIVHIV.get(), EmptyRenderer::new);
+            EntityRenderers.register(ModEntities.WVIHV.get(), EmptyRenderer::new);
+            EntityRenderers.register(ModEntities.WVIIHVI.get(), EmptyRenderer::new);
+            EntityRenderers.register(ModEntities.WIIIHIII.get(), EmptyRenderer::new);
         }
     }
 }

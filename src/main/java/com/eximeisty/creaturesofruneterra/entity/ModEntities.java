@@ -19,6 +19,11 @@ public class ModEntities {
             ENTITY_TYPES.register("xersai_dunebreaker",
                     () -> EntityType.Builder.of(XerSaiDunebreakerEntity::new, MobCategory.CREATURE).sized(3f, 2.5f)
                             .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString()));
+    public static final RegistryObject<EntityType<RekSaiEntity>> REKSAI=
+            ENTITY_TYPES.register("reksai",
+                    ()-> EntityType.Builder.of(RekSaiEntity::new, MobCategory.MONSTER).fireImmune().sized(1f,1f)
+                            .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
+            );
 
     //POROS
     public static final RegistryObject<EntityType<PoroEntity>> PORO=
@@ -38,6 +43,28 @@ public class ModEntities {
             ENTITY_TYPES.register("exaltedporo",
                     ()-> EntityType.Builder.of(ExaltedPoroEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f)
                             .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "exaltedporo").toString())
+            );
+
+    //PART ENTITIES
+    public static final RegistryObject<EntityType<CoRPartEntity>> WIVHIV=
+            ENTITY_TYPES.register("wichiv",
+                    ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(4f,4f)
+                            .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wichiv").toString())
+            );
+    public static final RegistryObject<EntityType<CoRPartEntity>> WVIHV=
+            ENTITY_TYPES.register("wvihv",
+                    ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(6f,5f)
+                            .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wvihv").toString())
+            );
+    public static final RegistryObject<EntityType<CoRPartEntity>> WVIIHVI=
+            ENTITY_TYPES.register("wviihvi",
+                    ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(7f,6f)
+                            .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wviihvi").toString())
+            );
+    public static final RegistryObject<EntityType<CoRPartEntity>> WIIIHIII=
+            ENTITY_TYPES.register("wiiihiii",
+                    ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(3f,3f)
+                            .build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wiiihiii").toString())
             );
 
     //ITEMS
