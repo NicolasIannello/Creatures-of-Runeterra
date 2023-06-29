@@ -431,7 +431,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             if(entityData.get(STATE)==0){
                 entityData.set(STATE, 3);
             }else if(entityData.get(STATE)==3 && ticks>30){
-                this.attacker.setPos(attackerLastX, -15, attackerLastZ);//??????
+                this.attacker.setPos(attackerLastX, -75, attackerLastZ);//??????
                 this.attacker.heal(0.5F);
             }
         }
@@ -446,12 +446,12 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             }
             if(entityData.get(STATE)==12){
                 ticks++;
-                if(ticks>15 && ticks<23){
+                if(ticks>15/2 && ticks<23/2){
                     double posx=this.attacker.getLookAngle().x*10+this.attacker.getX(); double posz=this.attacker.getLookAngle().z*10+this.attacker.getZ(); double posy=this.attacker.getY();
-                    AABB bb= new AABB(posx+5, posy, posz+5, posx-5, posy+9, posz-5).intersect(this.attacker.leg.getBoundingBox());
+                    AABB bb= new AABB(posx+5, posy, posz+5, posx-5, posy+9, posz-5).minmax(this.attacker.leg.getBoundingBox());
                     this.attackBB(bb, this.attacker.damage*4, false, 0, true);
                 }
-                if(ticks>35){
+                if(ticks>35/2){
                     entityData.set(STATE, 0);
                     ticks=0;
                     throwcd=(int)(Math.random() * 300 + 150);
@@ -470,12 +470,12 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             }
             if(entityData.get(STATE)==7 || entityData.get(STATE)==8){
                 ticks++;
-                if((ticks>15 && ticks<20) || (ticks>40 && ticks<45)){
+                if((ticks>15/2 && ticks<20/2) || (ticks>40/2 && ticks<45/2)){
                     double posx=this.attacker.getLookAngle().x*8+this.attacker.getX(); double posz=this.attacker.getLookAngle().z*8+this.attacker.getZ(); double posy=this.attacker.getY();
-                    AABB bb= new AABB(posx+7, posy, posz+7, posx-7, posy+5, posz-7).intersect(this.attacker.leg.getBoundingBox());
+                    AABB bb= new AABB(posx+7, posy, posz+7, posx-7, posy+5, posz-7).minmax(this.attacker.leg.getBoundingBox());
                     this.attackBB(bb, this.attacker.damage*10, false, 0, false);
                 }
-                if((ticks==25 && entityData.get(STATE)==7) || ticks==55){
+                if((ticks==25/2 && entityData.get(STATE)==7) || ticks==55/2){
                     entityData.set(STATE, 0);
                     ticks=0;
                     cd=(int)(Math.random() * 20 + 20);
@@ -484,11 +484,11 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             }
             if(entityData.get(STATE)==9 || entityData.get(STATE)==10){
                 ticks++;
-                if((ticks>=3 && ticks<=8) || (ticks>=13 && ticks<=18)){
-                    AABB bb= this.attacker.getBoundingBox().inflate(8, 0, 8).inflate(-8, 7, -8).intersect(this.attacker.leg.getBoundingBox());
+                if((ticks>=3/2 && ticks<=8/2) || (ticks>=13/2 && ticks<=18/2)){
+                    AABB bb= this.attacker.getBoundingBox().expandTowards(8, 0, 8).expandTowards(-8, 7, -8).minmax(this.attacker.leg.getBoundingBox());
                     this.attackBB(bb, this.attacker.damage*15, true, 0.4F, false);
                 }
-                if((ticks==10 && entityData.get(STATE)==9) || ticks==20){
+                if((ticks==10/2 && entityData.get(STATE)==9) || ticks==20/2){
                     entityData.set(STATE, 0);
                     ticks=0;
                     cd=(int)(Math.random() * 20 + 20);
@@ -506,12 +506,12 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             }
             if(entityData.get(STATE)==11){
                 ticks++;
-                if(ticks>=25 && ticks<=30){
+                if(ticks>=25/2 && ticks<=30/2){
                     double posx=this.attacker.getLookAngle().x*23+this.attacker.getX(); double posz=this.attacker.getLookAngle().z*23+this.attacker.getZ(); double posy=this.attacker.getY();
-                    AABB bb= new AABB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).intersect(this.attacker.leg.getBoundingBox());
+                    AABB bb= new AABB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).minmax(this.attacker.leg.getBoundingBox());
                     this.attackBB(bb, this.attacker.damage*25, true, 3F, false);
                 }
-                if(ticks==40){
+                if(ticks==40/2){
                     entityData.set(STATE, 0);
                     ticks=0;
                     slam=(int)(Math.random() * 60 + 80);
@@ -526,7 +526,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             }
             if(entityData.get(STATE)==3){
                 ++ticks;
-                if(ticks==20){
+                if(ticks==20/2){
                     this.lastX = this.attacker.getTarget().getX();
                     this.lastY = this.attacker.getTarget().getY();
                     this.lastZ = this.attacker.getTarget().getZ();
@@ -551,7 +551,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
                         } 
                     }
                 }
-                if(ticks==30){
+                if(ticks==30/2){
                     ticks=0;
                     if(leap==true){
                         charge=(int)(Math.random() * 150 + 30);
@@ -591,7 +591,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             }
             if(entityData.get(STATE)==5){
                 ++ticks;
-                if(ticks==20){
+                if(ticks==20/2){
                     charge=(int)(Math.random() * 150 + 30);
                     ticks=0;
                     entityData.set(STATE, 0);
@@ -599,7 +599,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
                 return;
             }
             if(entityData.get(STATE)==2 || entityData.get(STATE)==1 || entityData.get(STATE)==6){
-                AABB bb= this.attacker.leg.getBoundingBox().intersect(this.attacker.tail2.getBoundingBox());
+                AABB bb= this.attacker.leg.getBoundingBox().minmax(this.attacker.tail2.getBoundingBox());
                 this.breakBB(bb);
                 //???this.attackBB(bb, this.attacker.damage*5, true, 5);
                 if(this.attacker.fallDistance>0){
@@ -635,7 +635,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
                 }else{
                     jumpDamage=this.attacker.fallDistance;
                 }
-                if(ticks>800){
+                if(ticks>800/2){
                     enemy.stopRiding();
                     grab=false;
                     ticks=0;
