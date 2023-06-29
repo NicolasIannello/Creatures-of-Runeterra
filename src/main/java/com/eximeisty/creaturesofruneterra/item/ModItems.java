@@ -36,6 +36,8 @@ public class ModItems {
             () -> new ForgeSpawnEggItem(ModEntities.PLUNDERPORO, 0xffffff, 0x0c6822, new Item.Properties()));
     public static final RegistryObject<Item> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties()));
+    public static final RegistryObject<Item> REKSAI_SPAWN_EGG = ITEMS.register("reksai_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.REKSAI, 0x9F2BAF, 0x005f8f, new Item.Properties()));
 
 
     public static void register(IEventBus eventBus) {
