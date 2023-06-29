@@ -34,13 +34,15 @@ public class RekSaiModel extends AnimatedTickingGeoModel<RekSaiEntity> {
         IBone jaw = this.getAnimationProcessor().getBone("jaw");
 
 		EntityModelData extraData = (EntityModelData) customPredicate.getExtraDataOfType(EntityModelData.class).get(0);
-		if (head != null) {
+		if(entity.getDataManager().get(entity.STATE)!=1 && entity.getDataManager().get(entity.STATE)!=2 && entity.getDataManager().get(entity.STATE)!=6){
+            if (head != null) {
 			head.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
 			head.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
-		}
-        if (jaw != null) {
-			jaw.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
-			jaw.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
-		}
+		    }
+            if (jaw != null) {
+                jaw.setRotationX(extraData.headPitch * ((float) Math.PI / 180F));
+                jaw.setRotationY(extraData.netHeadYaw * ((float) Math.PI / 180F));
+            }
+        }
 	}
 }
