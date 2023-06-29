@@ -74,6 +74,7 @@ public class PoroEntity extends TamableAnimal implements GeoEntity {
                 double d0 = this.getAttackReachSqr(enemy);
                 if (distToEnemySqr <= d0 && !this.mob.getEntityData().get(ATTACK)) {
                     this.resetAttackCooldown();
+                    this.mob.doHurtTarget(enemy);
                     this.mob.swing(InteractionHand.MAIN_HAND);
                     this.mob.getEntityData().set(ATTACK, true);
                 }
