@@ -46,7 +46,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimationTickable {
-    private static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
+    public static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Boolean> HEAL = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BOOLEAN);
     private AnimationFactory factory = new AnimationFactory(this);
@@ -628,13 +628,15 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
                     enemy.startRiding(this.attacker, true);
                 }
                 if(this.attacker.isOnGround() && ticks>1){
-                    enemy.stopRiding();
-                    enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
-                    enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), this.attacker.damage*(jumpDamage+15));
+                    if(grab){
+                        enemy.stopRiding();
+                        enemy.setPositionAndUpdate(this.attacker.getLookVec().x*-8+this.attacker.getPosX(), this.attacker.getPosY(), this.attacker.getLookVec().z*-8+this.attacker.getPosZ());
+                        enemy.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), this.attacker.damage*(jumpDamage+15));
+                        lastHit=0;
+                    }
                     grab=false;
                     ticks=0;
                     jumpDamage=0;
-                    lastHit=0;
                     charge=(int)(Math.random() * 5 + 30);
                     leap=false;
                     dataManager.set(STATE, 0);
