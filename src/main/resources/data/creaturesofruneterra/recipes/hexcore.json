@@ -17,6 +17,7 @@
         }
     },
     "result":{
+        "count": 4,
         "item":"creaturesofruneterra:hexcore"
     }
 }
