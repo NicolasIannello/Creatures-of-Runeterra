@@ -66,13 +66,13 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
     private static final RawAnimation IDLE2_ANIM = RawAnimation.begin().then("animation.Reksai.idle2", Animation.LoopType.LOOP);
     private static final RawAnimation ATTACK1_ANIM = RawAnimation.begin().then("animation.Reksai.attack1", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation SPIN_ANIM = RawAnimation.begin().then("animation.Reksai.spin", Animation.LoopType.PLAY_ONCE);
-    private static final RawAnimation ATTACK12_ANIM = RawAnimation.begin().then("animation.Reksai.attack1", Animation.LoopType.PLAY_ONCE).begin().then("animation.Reksai.attack2", Animation.LoopType.PLAY_ONCE);
-    private static final RawAnimation SPIN2_ANIM = RawAnimation.begin().then("animation.Reksai.spin", Animation.LoopType.PLAY_ONCE).begin().then("animation.Reksai.spin", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation ATTACK12_ANIM = RawAnimation.begin().then("animation.Reksai.attack1", Animation.LoopType.PLAY_ONCE).then("animation.Reksai.attack2", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation SPIN2_ANIM = RawAnimation.begin().then("animation.Reksai.spin", Animation.LoopType.PLAY_ONCE).then("animation.Reksai.spin", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation SLAM_ANIM = RawAnimation.begin().then("animation.Reksai.slam", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation RDOWN_ANIM = RawAnimation.begin().then("animation.Reksai.RDown", Animation.LoopType.LOOP);
     private static final RawAnimation RTRANS_ANIM = RawAnimation.begin().then("animation.Reksai.RTrans", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation R2_ANIM = RawAnimation.begin().then("animation.Reksai.R2", Animation.LoopType.LOOP);
-    private static final RawAnimation BURROW_ANIM = RawAnimation.begin().then("animation.Reksai.burrow", Animation.LoopType.PLAY_ONCE).begin().then("animation.Reksai.charge", Animation.LoopType.LOOP);
+    private static final RawAnimation BURROW_ANIM = RawAnimation.begin().then("animation.Reksai.burrow", Animation.LoopType.PLAY_ONCE).then("animation.Reksai.charge", Animation.LoopType.LOOP);
     private static final RawAnimation CHARGE_ANIM = RawAnimation.begin().then("animation.Reksai.charge", Animation.LoopType.LOOP);
     private static final RawAnimation SALIR_ANIM = RawAnimation.begin().then("animation.Reksai.salir", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation THROW_ANIM = RawAnimation.begin().then("animation.Reksai.throw", Animation.LoopType.PLAY_ONCE);
