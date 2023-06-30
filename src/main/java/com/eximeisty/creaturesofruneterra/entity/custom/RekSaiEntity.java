@@ -605,7 +605,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
                 if(this.attacker.fallDistance>0){
                     if(ticks==0){
                         entityData.set(STATE, 6);
-                    }else if(ticks==20){
+                    }else if(ticks==20/2){
                         entityData.set(STATE, 1);
                     }
                     ++ticks;
@@ -621,13 +621,15 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
                     enemy.startRiding(this.attacker, true);
                 }
                 if(this.attacker.isOnGround() && ticks>1){
-                    enemy.stopRiding();
-                    enemy.setPos(this.attacker.getLookAngle().x*-8+this.attacker.getX(), this.attacker.getY(), this.attacker.getLookAngle().z*-8+this.attacker.getZ());
-                    enemy.hurt(damageSources().mobAttack(this.attacker), this.attacker.damage*(jumpDamage+15));
+                    if(grab){
+                        enemy.stopRiding();
+                        enemy.setPos(this.attacker.getLookAngle().x*-8+this.attacker.getX(), this.attacker.getY(), this.attacker.getLookAngle().z*-8+this.attacker.getZ());
+                        enemy.hurt(damageSources().mobAttack(this.attacker), this.attacker.damage*(jumpDamage+15));
+                        lastHit=0;
+                    }
                     grab=false;
                     ticks=0;
                     jumpDamage=0;
-                    lastHit=0;
                     charge=(int)(Math.random() * 5 + 30);
                     leap=false;
                     entityData.set(STATE, 0);

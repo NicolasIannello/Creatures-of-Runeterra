@@ -2,7 +2,6 @@ package com.eximeisty.creaturesofruneterra.entity.client.entities.reksai;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.constant.DataTickets;
 import software.bernie.geckolib.core.animatable.model.CoreGeoBone;
@@ -34,7 +33,7 @@ public class RekSaiModel extends GeoModel<RekSaiEntity> {
         CoreGeoBone jaw = this.getAnimationProcessor().getBone("jaw");
 
         EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-		if(animatable.getEntityData().get(animatable.STATE)==0){
+        if(animatable.getEntityData().get(animatable.STATE)!=1 && animatable.getEntityData().get(animatable.STATE)!=2 && animatable.getEntityData().get(animatable.STATE)!=6){
             if (head != null) {
                 head.setRotX(entityData.headPitch() * ((float) Math.PI / 180F));
                 head.setRotY(entityData.netHeadYaw() * ((float) Math.PI / 180F));
