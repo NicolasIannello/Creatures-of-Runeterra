@@ -1,0 +1,30 @@
+{
+  "type": "creaturesofruneterra:xersai_dunebreaker",
+  "pools": [
+    {
+      "rolls": 2,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "weight": 60,
+          "name": "minecraft:bone"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "creaturesofruneterra:dunebreaker_horn"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 10,
+          "name": "creaturesofruneterra:dunebreaker_fang"
+        },
+        {
+          "type": "minecraft:item",
+          "weight": 20,
+          "name": "minecraft:air"
+        }
+      ]
+    }
+  ]
+}
