@@ -2,7 +2,10 @@ package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
+import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.TieredItem;
+import net.minecraft.world.item.Tiers;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -24,6 +27,11 @@ public class ModItems {
             () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> REKSAI_CLAW = ITEMS.register("reksai_claw",
             () -> new Item(new Item.Properties()));
+
+    //WEAPONS
+    public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
+            () -> new AtlasG(Tiers.DIAMOND, 4, -2F, new Item.Properties().durability(400)));
+
 
     //SPAWN EGGS
     public static final RegistryObject<Item> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",

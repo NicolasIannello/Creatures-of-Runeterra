@@ -50,7 +50,7 @@ public class CreaturesofRuneterra{
         if(event.getTab() == ModCreativeModeTabs.COR_TAB) {
             //ITEMS
             event.accept(ModItems.GEMSTONE);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
-            event.accept(ModItems.REKSAI_PLAQUE);
+            event.accept(ModItems.REKSAI_PLAQUE);event.accept(ModItems.ATLASG);
             //BLOCKS
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
