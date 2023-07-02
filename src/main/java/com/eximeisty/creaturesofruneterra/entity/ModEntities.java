@@ -68,6 +68,11 @@ public class ModEntities {
             );
 
     //ITEMS
+    public static final RegistryObject<EntityType<MisilEntity>> MISIL =
+            ENTITY_TYPES.register("misil",
+                    ()-> EntityType.Builder.<MisilEntity>of(MisilEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
+                            .setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
+            );
     public static final RegistryObject<EntityType<BulletEntity>> BULLET =
             ENTITY_TYPES.register("bullet",
                     ()-> EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC).sized(0.25F, 0.25F)

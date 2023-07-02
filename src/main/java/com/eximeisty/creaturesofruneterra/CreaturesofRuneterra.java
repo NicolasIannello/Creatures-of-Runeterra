@@ -7,6 +7,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.Xer
 import com.eximeisty.creaturesofruneterra.entity.client.entities.empty.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.ExaltedPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
@@ -50,7 +51,7 @@ public class CreaturesofRuneterra{
         if(event.getTab() == ModCreativeModeTabs.COR_TAB) {
             //ITEMS
             event.accept(ModItems.GEMSTONE);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
-            event.accept(ModItems.REKSAI_PLAQUE);event.accept(ModItems.ATLASG);
+            event.accept(ModItems.REKSAI_PLAQUE);event.accept(ModItems.MISIL);event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);
             //BLOCKS
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
@@ -74,6 +75,8 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
             EntityRenderers.register(ModEntities.BULLET.get(), BulletRenderer::new);
             EntityRenderers.register(ModEntities.REKSAI.get(), RekSaiRenderer::new);
+            EntityRenderers.register(ModEntities.BULLET.get(), BulletRenderer::new);
+            EntityRenderers.register(ModEntities.MISIL.get(), MisilRenderer::new);
             //PART ENTITIES
             EntityRenderers.register(ModEntities.WIVHIV.get(), EmptyRenderer::new);
             EntityRenderers.register(ModEntities.WVIHV.get(), EmptyRenderer::new);
