@@ -7,6 +7,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -115,7 +116,7 @@ public class AtlasG extends PickaxeItem implements GeoItem {
             dashTicks=0;
             setState(stack, 2);
             playerentity.getCooldowns().addCooldown(this, 25);
-            //playerentity.addStat(Stats.ITEM_USED.get(this));
+            playerentity.awardStat(Stats.ITEM_USED.get(this));
         }
         if (!worldIn.isClientSide && !isCharged(stack)) {
             if(handIn==InteractionHand.MAIN_HAND){
