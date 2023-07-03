@@ -336,7 +336,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
             this.attacker = creature;
             this.speedTowardsTarget = speedIn;
             this.longMemory = useLongMemory;
-            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+            this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
         
         public boolean shouldExecute() { 
