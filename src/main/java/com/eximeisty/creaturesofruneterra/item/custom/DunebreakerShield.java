@@ -5,6 +5,7 @@ import com.eximeisty.creaturesofruneterra.item.client.dunebreakershield.Dunebrea
 
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
@@ -71,17 +72,12 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
         }
         return ActionResult.resultConsume(itemstack);
     }
-
-    @SuppressWarnings("resource")
-    public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
-        if(cd>0) cd--;
-        if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown() && cd==0){
-            // PlayerEntity playerentity = (PlayerEntity)livingEntityIn;
-            // playerentity.getCooldownTracker().setCooldown(this, 400);
-            cd=10;
+    
+    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+        if(cd==195){
             if (!worldIn.isRemote) {
-                DBShieldEntity shieldEntity = new DBShieldEntity(worldIn, livingEntityIn);
-                shieldEntity.setDirectionAndMovement(livingEntityIn, livingEntityIn.rotationPitch, livingEntityIn.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
+                DBShieldEntity shieldEntity = new DBShieldEntity(worldIn, (LivingEntity)entityIn);
+                shieldEntity.setDirectionAndMovement(entityIn, entityIn.rotationPitch, entityIn.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
                 shieldEntity.setDamage(2);
                 shieldEntity.setKnockbackStrength(2);
                 shieldEntity.ticksExisted = 35;
@@ -89,14 +85,22 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
                 shieldEntity.setPierceLevel((byte)4);
                 
                 final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
-                final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> livingEntityIn);
-                if(livingEntityIn.getHeldItemMainhand().getDisplayName().getString().contains("Dunebreaker")){
+                final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityIn);
+                if(((LivingEntity)entityIn).getHeldItemMainhand().getDisplayName().getString().contains("Dunebreaker")){
                     GeckoLibNetwork.syncAnimation(target, this, id, 3);
                 }else{
                     GeckoLibNetwork.syncAnimation(target, this, id, 4);
                 }
                 worldIn.addEntity(shieldEntity);
             }
+        }
+        if(cd>0) cd--;
+    }
+
+    @SuppressWarnings("resource")
+    public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
+        if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown() && cd==0){
+            cd=200;
         }
     }
 
