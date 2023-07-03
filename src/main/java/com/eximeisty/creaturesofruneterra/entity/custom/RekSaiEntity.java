@@ -127,7 +127,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
     }
 
     public <T extends GeoAnimatable> PlayState predicate(AnimationState<T> event)  {
-        if(entityData.get(STATE)==0){
+        if(entityData.get(STATE)==0 || event.getController().getAnimationState()== AnimationController.State.STOPPED){
             if (event.isMoving()) {
                 if(entityData.get(RUN)==0){
                     event.getController().setAnimation(WALK_ANIM);
@@ -403,38 +403,38 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             if ((this.longMemory || this.attacker.getSensing().hasLineOfSight(livingentity)) && (this.targetX == 0.0D && this.targetY == 0.0D && this.targetZ == 0.0D || livingentity.distanceToSqr(this.targetX, this.targetY, this.targetZ) >= 1.0D || this.attacker.getRandom().nextFloat() < 0.05F)) {
                 this.targetX = livingentity.getX(); this.targetY = livingentity.getY(); this.targetZ = livingentity.getZ();
             }
-            if(livingentity instanceof Player && livingentity.isInWaterOrBubble() || livingentity.getLevel().getBlockState(new BlockPos((int)targetX,(int)targetY-1,(int)targetZ))==Blocks.WATER.defaultBlockState()){
-                if(waterTick<=150) waterTick++;
-            }else{
-                if(waterTick>=150){
-                    entityData.set(HEAL, false);
-                    entityData.set(STATE, 5);
-                    this.attacker.setPos(attackerLastX, attackerLastY, attackerLastZ);//??????
-                    ticks=0;
-                }
-                waterTick=0;
-            }
-
-            if(waterTick>=150){
-                this.goHealing();
-            }else{
+//            if(livingentity instanceof Player && livingentity.isInWaterOrBubble() || livingentity.getLevel().getBlockState(new BlockPos((int)targetX,(int)targetY-1,(int)targetZ))==Blocks.WATER.defaultBlockState()){
+//                if(waterTick<=150) waterTick++;
+//            }else{
+//                if(waterTick>=150){
+//                    entityData.set(HEAL, false);
+//                    entityData.set(STATE, 5);
+//                    this.attacker.setPos(attackerLastX, attackerLastY, attackerLastZ);//??????
+//                    ticks=0;
+//                }
+//                waterTick=0;
+//            }
+//
+//            if(waterTick>=150){
+//                this.goHealing();
+//            }else{
                 this.checkAndPerformAttack(livingentity, d0);
-            }
+            //}
         }
 
-        public void goHealing(){
-            ticks++;
-            if(ticks==30){
-                entityData.set(HEAL, true);
-                this.attackerLastX=this.attacker.getX(); this.attackerLastZ=this.attacker.getZ(); this.attackerLastY=this.attacker.getY();
-            }
-            if(entityData.get(STATE)==0){
-                entityData.set(STATE, 3);
-            }else if(entityData.get(STATE)==3 && ticks>30){
-                this.attacker.setPos(attackerLastX, -75, attackerLastZ);//??????
-                this.attacker.heal(0.5F);
-            }
-        }
+//        public void goHealing(){
+//            ticks++;
+//            if(ticks==30){
+//                entityData.set(HEAL, true);
+//                this.attackerLastX=this.attacker.getX(); this.attackerLastZ=this.attacker.getZ(); this.attackerLastY=this.attacker.getY();
+//            }
+//            if(entityData.get(STATE)==0){
+//                entityData.set(STATE, 3);
+//            }else if(entityData.get(STATE)==3 && ticks>30){
+//                this.attacker.setPos(attackerLastX, -75, attackerLastZ);//??????
+//                this.attacker.heal(0.5F);
+//            }
+//        }
         
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
             if(entityData.get(STATE)==0 && lastHit>300){
@@ -620,7 +620,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
                 if(this.attacker.hasPassenger(enemy) && grab==true){//if(enemy.isRidingSameEntity(this.attacker)==false && grab==true){
                     enemy.startRiding(this.attacker, true);
                 }
-                if(this.attacker.isOnGround() && ticks>1){
+                if((this.attacker.isOnGround() || this.attacker.isInWater()) && ticks>1){
                     if(grab){
                         enemy.stopRiding();
                         enemy.setPos(this.attacker.getLookAngle().x*-8+this.attacker.getX(), this.attacker.getY(), this.attacker.getLookAngle().z*-8+this.attacker.getZ());
