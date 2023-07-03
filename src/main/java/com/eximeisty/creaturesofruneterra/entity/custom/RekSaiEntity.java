@@ -51,7 +51,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
     public static final DataParameter<Integer> STATE = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     private static final DataParameter<Integer> RUN = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.VARINT);
     public static final DataParameter<Boolean> HEAL = EntityDataManager.createKey(RekSaiEntity.class, DataSerializers.BOOLEAN);
-    private AnimationFactory factory = new AnimationFactory(this);
+    private AnimationFactory factory = new AnimationFactory(this); 
     private double velocidad=0.4;
     private float damage=(float)1;
     private double grabTicks=1;
