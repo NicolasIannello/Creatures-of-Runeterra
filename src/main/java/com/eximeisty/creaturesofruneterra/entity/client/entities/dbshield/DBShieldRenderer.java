@@ -23,6 +23,7 @@ public class DBShieldRenderer extends GeoProjectilesRenderer<DBShieldEntity> {
     @Override
 	public void renderEarly(DBShieldEntity animatable, MatrixStack stackIn, float ticks, IRenderTypeBuffer renderTypeBuffer, IVertexBuilder vertexBuilder, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float partialTicks) {
         stackIn.scale(2.5F, 2.5F, 2.5F);
+        stackIn.translate(0F, -0.5F, 0F);
         super.renderEarly(animatable, stackIn, ticks, renderTypeBuffer, vertexBuilder, packedLightIn, packedOverlayIn, red, green, blue, partialTicks);    
     }
 }
