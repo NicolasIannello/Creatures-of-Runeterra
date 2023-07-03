@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.item;
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
+import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
 import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
 import com.eximeisty.creaturesofruneterra.item.custom.MisilItem;
 import net.minecraft.world.item.Item;
@@ -37,6 +38,9 @@ public class ModItems {
             () -> new Fishbones(new Item.Properties().durability(150)));
     public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
             () -> new AtlasG(Tiers.DIAMOND, 4, -2F, new Item.Properties().durability(400)));
+    public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
+            () -> new DunebreakerShield(new Item.Properties().durability(600)));
+
 
     //SPAWN EGGS
     public static final RegistryObject<Item> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",

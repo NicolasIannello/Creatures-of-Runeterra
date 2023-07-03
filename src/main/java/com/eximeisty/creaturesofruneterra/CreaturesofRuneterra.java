@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra;
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.empty.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.ExaltedPoroRenderer;
@@ -14,7 +15,6 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRe
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.util.ModSounds;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -52,6 +52,7 @@ public class CreaturesofRuneterra{
             //ITEMS
             event.accept(ModItems.GEMSTONE);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
             event.accept(ModItems.REKSAI_PLAQUE);event.accept(ModItems.MISIL);event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);
+            event.accept(ModItems.DUNEBREAKER_SHIELD);
             //BLOCKS
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
@@ -77,6 +78,7 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.REKSAI.get(), RekSaiRenderer::new);
             EntityRenderers.register(ModEntities.BULLET.get(), BulletRenderer::new);
             EntityRenderers.register(ModEntities.MISIL.get(), MisilRenderer::new);
+            EntityRenderers.register(ModEntities.DBSHIELD.get(), DBShieldRenderer::new);
             //PART ENTITIES
             EntityRenderers.register(ModEntities.WIVHIV.get(), EmptyRenderer::new);
             EntityRenderers.register(ModEntities.WVIHV.get(), EmptyRenderer::new);

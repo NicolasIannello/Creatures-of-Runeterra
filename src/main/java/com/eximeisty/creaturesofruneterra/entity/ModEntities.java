@@ -73,6 +73,11 @@ public class ModEntities {
                     ()-> EntityType.Builder.<MisilEntity>of(MisilEntity::new, MobCategory.MISC).sized(0.5F, 0.5F)
                             .setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
             );
+    public static final RegistryObject<EntityType<DBShieldEntity>> DBSHIELD =
+            ENTITY_TYPES.register("dbshield",
+                    ()-> EntityType.Builder.<DBShieldEntity>of(DBShieldEntity::new, MobCategory.MISC).sized(2.5F, 2.0F)
+                            .setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "dbshield").toString())
+            );
     public static final RegistryObject<EntityType<BulletEntity>> BULLET =
             ENTITY_TYPES.register("bullet",
                     ()-> EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC).sized(0.25F, 0.25F)
