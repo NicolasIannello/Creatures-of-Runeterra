@@ -322,7 +322,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
             this.attacker = creature;
             this.speedTowardsTarget = speedIn;
             this.longMemory = useLongMemory;
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.JUMP, Goal.Flag.LOOK));
+            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
         }
         
         public boolean canUse() { 
