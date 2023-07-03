@@ -33,7 +33,7 @@ public class RekSaiModel extends GeoModel<RekSaiEntity> {
         CoreGeoBone jaw = this.getAnimationProcessor().getBone("jaw");
 
         EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-        if(animatable.getEntityData().get(animatable.STATE)!=1 && animatable.getEntityData().get(animatable.STATE)!=2 && animatable.getEntityData().get(animatable.STATE)!=6){
+        if(animatable.getEntityData().get(RekSaiEntity.STATE)!=1 && animatable.getEntityData().get(RekSaiEntity.STATE)!=2 && animatable.getEntityData().get(RekSaiEntity.STATE)!=6){
             if (head != null) {
                 head.setRotX(entityData.headPitch() * ((float) Math.PI / 180F));
                 head.setRotY(entityData.netHeadYaw() * ((float) Math.PI / 180F));
