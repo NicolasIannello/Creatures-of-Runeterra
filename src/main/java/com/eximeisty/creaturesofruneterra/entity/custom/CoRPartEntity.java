@@ -36,7 +36,7 @@ public class CoRPartEntity extends CreatureEntity{
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if(source==DamageSource.IN_WALL){
-            if(parent instanceof RekSaiEntity) if(!(Boolean)((RekSaiEntity)parent).getDataManager().getAll().get(17).getValue()) breakBB(getBoundingBox());
+            if(parent instanceof RekSaiEntity) if(!(Boolean)((RekSaiEntity)parent).getDataManager().get(RekSaiEntity.HEAL)) breakBB(getBoundingBox());
             return false;
         }
         if(source==DamageSource.DROWN) return false;
