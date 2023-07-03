@@ -4,6 +4,7 @@ import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
+
 public class FishbonesModel extends GeoModel<Fishbones> {
 
     @Override
