@@ -50,14 +50,19 @@ public class CreaturesofRuneterra{
     private void addCreative(CreativeModeTabEvent.BuildContents event) {
         if(event.getTab() == ModCreativeModeTabs.COR_TAB) {
             //ITEMS
-            event.accept(ModItems.GEMSTONE);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
-            event.accept(ModItems.REKSAI_PLAQUE);event.accept(ModItems.MISIL);event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);
-            event.accept(ModItems.DUNEBREAKER_SHIELD);
+            event.accept(ModItems.GEMSTONE);event.accept(ModItems.MISIL);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
+            event.accept(ModItems.REKSAI_PLAQUE);
+            //TOOLS
+
+            //ARMORS
+            event.accept(ModItems.SAI_HELMET);event.accept(ModItems.SAI_CHESTPLATE);event.accept(ModItems.SAI_LEGGINGS);event.accept(ModItems.SAI_BOOTS);event.accept(ModItems.SAI_ELYTRA);
+            //WEAPONS
+            event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);event.accept(ModItems.DUNEBREAKER_SHIELD);
             //BLOCKS
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
             event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
-            event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
+            event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);/*porobot*/event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
         }
     }
 

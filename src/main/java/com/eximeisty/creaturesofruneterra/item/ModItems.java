@@ -2,12 +2,9 @@ package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
-import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
-import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
-import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
-import com.eximeisty.creaturesofruneterra.item.custom.MisilItem;
+import com.eximeisty.creaturesofruneterra.item.custom.*;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.TieredItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,6 +30,18 @@ public class ModItems {
     public static final RegistryObject<Item> REKSAI_CLAW = ITEMS.register("reksai_claw",
             () -> new Item(new Item.Properties()));
 
+    //ARMORS
+    public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
+            () -> new SaiArmorItem(ModArmorMaterials.SAI, ArmorItem.Type.HELMET, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> SAI_CHESTPLATE = ITEMS.register("sai_chestplate",
+            () -> new SaiArmorItem(ModArmorMaterials.SAI, ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> SAI_LEGGINGS = ITEMS.register("sai_leggings",
+            () -> new SaiArmorItem(ModArmorMaterials.SAI, ArmorItem.Type.LEGGINGS, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> SAI_BOOTS = ITEMS.register("sai_boots",
+            () -> new SaiArmorItem(ModArmorMaterials.SAI, ArmorItem.Type.BOOTS, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> SAI_ELYTRA = ITEMS.register("sai_elytra",
+            () -> new SaiElytraItem(ModArmorMaterials.SAI, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+
     //WEAPONS
     public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
             () -> new Fishbones(new Item.Properties().durability(150)));
@@ -40,7 +49,6 @@ public class ModItems {
             () -> new AtlasG(Tiers.DIAMOND, 4, -2F, new Item.Properties().durability(400)));
     public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
             () -> new DunebreakerShield(new Item.Properties().durability(600)));
-
 
     //SPAWN EGGS
     public static final RegistryObject<Item> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",
