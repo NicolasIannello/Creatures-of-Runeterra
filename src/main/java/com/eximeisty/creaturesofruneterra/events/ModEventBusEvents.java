@@ -6,6 +6,7 @@ import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.ExaltedPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.FiddlesticksEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PatchedPorobotEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PlunderPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
@@ -33,6 +34,7 @@ public class ModEventBusEvents {
         event.put(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.PATCHEDPOROBOT.get(), PatchedPorobotEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksEntity.setCustomAttributes().create());
         //PART ENTITIES
         event.put(ModEntityTypes.WIVHIV.get(), CoRPartEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.WVIHV.get(), CoRPartEntity.setCustomAttributes().create());

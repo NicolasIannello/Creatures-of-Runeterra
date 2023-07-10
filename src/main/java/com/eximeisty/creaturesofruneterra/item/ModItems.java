@@ -123,6 +123,9 @@ public class ModItems {
         public static final RegistryObject<ModSpawnEggItem> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
+        public static final RegistryObject<ModSpawnEggItem> FIDDLESTICKS_SPAWN_EGG = ITEMS.register("fiddlesticks_spawn_egg",
+        () -> new ModSpawnEggItem(ModEntityTypes.FIDDLESTICKS, 0x0f0705, 0x3b1210, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
         //BLOCKS
         public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
         () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));

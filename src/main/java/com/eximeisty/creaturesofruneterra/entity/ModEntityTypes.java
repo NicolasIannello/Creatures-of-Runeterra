@@ -12,6 +12,7 @@ import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.ExaltedPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.FiddlesticksEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerxarethEntity;
@@ -44,9 +45,14 @@ public class ModEntityTypes {
         ()-> EntityType.Builder.create(XerSaiDunebreakerEntity::new, EntityClassification.MONSTER).size(3f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString())
     );
 
+    //BOSSES
     public static final RegistryObject<EntityType<RekSaiEntity>> REKSAI=
     ENTITY_TYPES.register("reksai", 
         ()-> EntityType.Builder.create(RekSaiEntity::new, EntityClassification.MONSTER).immuneToFire().size(1f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
+    );
+    public static final RegistryObject<EntityType<FiddlesticksEntity>> FIDDLESTICKS=
+    ENTITY_TYPES.register("fiddlesticks", 
+        ()-> EntityType.Builder.create(FiddlesticksEntity::new, EntityClassification.MONSTER).size(1f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
     );
 
     //POROS
