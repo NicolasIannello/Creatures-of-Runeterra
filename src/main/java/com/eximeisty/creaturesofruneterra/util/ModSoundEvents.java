@@ -12,12 +12,20 @@ import net.minecraftforge.registries.ForgeRegistries;
 public class ModSoundEvents {
     public static final DeferredRegister<SoundEvent>  SOUND_EVENTS = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, CreaturesofRuneterra.MOD_ID);
 
+    //Rek'sai
     public static final RegistryObject<SoundEvent> REKSAI_APP = registerSoundEvent("reksai_app");
     public static final RegistryObject<SoundEvent> REKSAI_AWAKEN = registerSoundEvent("reksai_awaken");
     public static final RegistryObject<SoundEvent> REKSAI_ESCAPE = registerSoundEvent("reksai_escape");
     public static final RegistryObject<SoundEvent> REKSAI_HIT = registerSoundEvent("reksai_hit");
     public static final RegistryObject<SoundEvent> REKSAI_JUMP = registerSoundEvent("reksai_jump");
     public static final RegistryObject<SoundEvent> REKSAI_ANGRY = registerSoundEvent("reksai_angry");
+    //Fiddle
+    public static final RegistryObject<SoundEvent> FIDDLESTICKS_ATTACK = registerSoundEvent("fiddlesticks_attack");
+    public static final RegistryObject<SoundEvent> FIDDLESTICKS_CHANNEL = registerSoundEvent("fiddlesticks_channel");
+    public static final RegistryObject<SoundEvent> FIDDLESTICKS_DEATH = registerSoundEvent("fiddlesticks_death");
+    public static final RegistryObject<SoundEvent> FIDDLESTICKS_HURT = registerSoundEvent("fiddlesticks_hurt");
+    public static final RegistryObject<SoundEvent> FIDDLESTICKS_RUN = registerSoundEvent("fiddlesticks_run");
+    public static final RegistryObject<SoundEvent> FIDDLESTICKS_LINE = registerSoundEvent("fiddlesticks_line");
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name){
         return SOUND_EVENTS.register(name, ()-> new SoundEvent(new ResourceLocation(CreaturesofRuneterra.MOD_ID, name)));
