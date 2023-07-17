@@ -25,6 +25,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.SoundCategory;
@@ -47,7 +48,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
     public static final DataParameter<Integer> STATE = EntityDataManager.createKey(FiddlesticksEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this); 
     private float damage=(float)0.1;
-    private float velocidad=(float)0.5;
+    private float velocidad=(float)0.4;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(true).setCreateFog(true);
     private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.walk", true);
     private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.idle", true);
@@ -69,7 +70,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
         return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 400)
-        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.5)
+        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4)
         .createMutableAttribute(Attributes.ATTACK_DAMAGE, 2)
         .createMutableAttribute(Attributes.FOLLOW_RANGE, 80)
         .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 4)
@@ -84,7 +85,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
         super.registerGoals();
         this.goalSelector.addGoal(1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
         this.goalSelector.addGoal(2, new FiddlesticksEntity.MeleeAttackGoal(this, 1D, false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 0.4,50));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1D,50));
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>( this, MobEntity.class, 0, false, false, NOT_THIS));
@@ -166,9 +167,9 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
         private double targetX;
         private double targetY;
         private double targetZ;
-        private int channel=(int)(Math.random() * 400 + 100);
-        private int blind=(int)(Math.random() * 400 + 300);
-        private int run=(int)(Math.random() * 100 + 150);
+        private int channel=600;
+        private int blind=800;
+        private int run=400;
         private int lastHit=0;
         private int ticks=0;
         private int cd=0;
@@ -245,6 +246,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             if (channel>0) --channel;
             if (blind>0) --blind;
             if (run>0) --run;
+            if (cd>0) --cd;
             lastHit++;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
@@ -258,36 +260,54 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
         }
 
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
-            if(dataManager.get(STATE)==0 && lastHit>300){
+            boolean flag = dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0;
+            if(flag && lastHit>300){
 
             }
-            if(distToEnemySqr<10 && dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0){
+            if(distToEnemySqr>=30 && flag && blind<=0 && this.attacker.getAttackTarget() instanceof PlayerEntity){
+                dataManager.set(STATE, 6);
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
+            }
+            if(distToEnemySqr<15 && flag){
                 int chance=(int)(Math.random() * 2)+1;
                 dataManager.set(STATE, chance);
-                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
             }
             if(dataManager.get(STATE)>0) ticks++;
             switch (dataManager.get(STATE)) {
                 case 1:
-                    animNotifys(15, 20, 25, 10, true, 20*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get());
+                    animNotifys(15, 20, 25, true, 20*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get());
                     break;
                 case 2:
-                    animNotifys(10, 15, 20, 10, true, 15*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get());
+                    animNotifys(10, 15, 20, true, 15*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get());
+                    break;
+                case 6:
+                    animNotifys(7, 40, 50, 60, false, ModSoundEvents.FIDDLESTICKS_CHANNEL.get(), false);
+                    break;
+                case 7:
+                    animNotifys(0, 100, 100, 15, true, null, true);
                     break;
             }
         }
 
-        protected void animNotifys(int bbStart, int bbEnd, int reset, int cd, boolean ms, float damage, double growXZ, double growY, double offsetX, double offsetY, double offsetZ, SoundEvent sound){
+        protected void animNotifys(int state ,int start, int end, int reset, boolean ms, SoundEvent sound, boolean blind){
+            if(ticks==2 && sound!=null) this.attacker.world.playSound(null, this.attacker.getPosition(), sound, SoundCategory.HOSTILE, 1, 1);
+            if(ticks>start && ticks<end && this.attacker.getEntitySenses().canSee(this.attacker.getAttackTarget())) this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 20*40));
+            if(ticks>reset) resetState(ms, state, blind);
+        }
+
+        protected void animNotifys(int bbStart, int bbEnd, int reset, boolean ms, float damage, double growXZ, double growY, double offsetX, double offsetY, double offsetZ, SoundEvent sound){
             AxisAlignedBB bb= this.attacker.getBoundingBox().grow(growXZ, growY, growXZ).offset(offsetX, offsetY, offsetZ);
             if(ticks==2 && sound!=null) this.attacker.world.playSound(null, this.attacker.getPosition(), sound, SoundCategory.HOSTILE, 1, 1);
             if(ticks>bbStart && ticks<bbEnd) attackBB(bb, damage);
-            if(ticks>reset) resetState(cd, ms);
+            if(ticks>reset) resetState(ms, 0, false);
         }
 
-        protected void resetState(int cd, boolean ms){
-            dataManager.set(STATE, 0);
+        protected void resetState(boolean ms, int value, boolean blindReset){
+            dataManager.set(STATE, value);
             ticks=0;
-            cd=(int)(Math.random() * 20 + cd);
+            cd=(int)(Math.random() * 15 + 5);
+            if(blindReset) blind = (int)(Math.random() * 400 + 400);
             if(ms) this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
         }
 
@@ -302,9 +322,6 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
 
         protected void breakBB(AxisAlignedBB bb){
             BlockPos.getAllInBox(bb).forEach(pos->{
-                // if( this.attacker.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState() && this.attacker.world.getBlockState(pos)!=Blocks.BEDROCK.getDefaultState()){
-                //     this.attacker.world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                // }
                 if(pos.getY()==this.attacker.getPosY()) this.attacker.world.setBlockState(pos, Blocks.WHITE_CARPET.getDefaultState());
             });
         }
@@ -313,11 +330,6 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             return (double)(this.attacker.getWidth() * 2.0F * this.attacker.getWidth() * 2.0F + attackTarget.getWidth());
         }
     }
-
-    // public boolean attackEntityFrom(DamageSource source, float amount) {
-    //     super.attackEntityFrom(source, amount);
-    //     return false;
-    // }
 
     @Override
     protected int getExperiencePoints(PlayerEntity player){ return 75+this.world.rand.nextInt(25); }
