@@ -32,6 +32,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.server.ServerBossInfo;
@@ -291,8 +292,20 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
         }
 
         protected void animNotifys(int state ,int start, int end, int reset, boolean ms, SoundEvent sound, boolean blind){
+            double d0 = this.attacker.getPosX() - this.attacker.getAttackTarget().getPosX();
+            double d1 = this.attacker.getPosY() - 1 - this.attacker.getAttackTarget().getPosY();
+            double d2 = this.attacker.getPosZ() - this.attacker.getAttackTarget().getPosZ();
+            double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
+            float x = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+            float y = (float) (-(MathHelper.atan2(d1, d3) * (180D / Math.PI)));
+            
             if(ticks==2 && sound!=null) this.attacker.world.playSound(null, this.attacker.getPosition(), sound, SoundCategory.HOSTILE, 1, 1);
-            if(ticks>start && ticks<end && this.attacker.getEntitySenses().canSee(this.attacker.getAttackTarget())) this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 20*40));
+            if(ticks>start && ticks<end){
+                if(this.attacker.getEntitySenses().canSee(this.attacker.getAttackTarget())){
+                    this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 20*40));
+                    if(MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationYaw, x)<65 && MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationPitch, y)<50) this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.NAUSEA, 20*40));
+                }
+            }
             if(ticks>reset) resetState(ms, state, blind);
         }
 
