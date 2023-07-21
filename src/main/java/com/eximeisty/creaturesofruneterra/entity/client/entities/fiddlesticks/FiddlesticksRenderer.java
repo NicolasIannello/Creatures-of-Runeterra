@@ -11,14 +11,16 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 
 public class FiddlesticksRenderer extends GeoEntityRenderer<FiddlesticksEntity> {
 
+	@SuppressWarnings("unchecked")
     public FiddlesticksRenderer(EntityRendererManager renderManager) {
         super(renderManager, new FiddlesticksModel());
         //this.shadowRadius = 0.3f;
+		this.addLayer(new FiddlesticksEmissiveLayer(this));
     }
 
     @Override
     public ResourceLocation getEntityTexture(FiddlesticksEntity entity) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/fiddlesticks.png");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/fiddlesticks-normal.png");
     }
 
     @Override
