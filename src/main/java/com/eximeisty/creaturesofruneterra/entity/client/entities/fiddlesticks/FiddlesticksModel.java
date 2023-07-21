@@ -19,6 +19,6 @@ public class FiddlesticksModel extends AnimatedTickingGeoModel<FiddlesticksEntit
 
     @Override
     public ResourceLocation getTextureLocation(FiddlesticksEntity object) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/fiddlesticks.png");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/fiddlesticks-normal.png");
     }
 }
