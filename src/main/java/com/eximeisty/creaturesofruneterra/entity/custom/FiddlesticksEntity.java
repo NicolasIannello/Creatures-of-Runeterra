@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
@@ -26,13 +27,17 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.server.ServerBossInfo;
@@ -265,6 +270,11 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             if(flag && lastHit>300){
 
             }
+            if(distToEnemySqr>=300 && flag && run<=0 && teleportToEntity(this.attacker.getAttackTarget())){
+                dataManager.set(STATE, -1);
+                this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.65);
+                this.attacker.world.playSound(null, this.attacker.getPosition(), ModSoundEvents.FIDDLESTICKS_RUN.get(), SoundCategory.HOSTILE, 2, 1);
+            }
             if(distToEnemySqr>=30 && flag && blind<=0 && this.attacker.getAttackTarget() instanceof PlayerEntity){
                 dataManager.set(STATE, 6);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
@@ -276,11 +286,20 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             }
             if(dataManager.get(STATE)>0) ticks++;
             switch (dataManager.get(STATE)) {
+                case -1:
+                    if(distToEnemySqr<15) {
+                        dataManager.set(STATE, 3);
+                        this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.25);
+                    }
+                    break;
                 case 1:
-                    animNotifys(15, 20, 25, true, 20*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get());
+                    animNotifys(15, 20, 25, true, 20*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), false);
                     break;
                 case 2:
-                    animNotifys(10, 15, 20, true, 15*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get());
+                    animNotifys(10, 15, 20, true, 15*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), false);
+                    break;
+                case 3:
+                    animNotifys(7, 12, 20, true, 40*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), true);
                     break;
                 case 6:
                     animNotifys(7, 40, 50, 60, false, ModSoundEvents.FIDDLESTICKS_CHANNEL.get(), false);
@@ -306,28 +325,33 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
                     if(MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationYaw, x)<65 && MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationPitch, y)<50) this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.NAUSEA, 20*40));
                 }
             }
-            if(ticks>reset) resetState(ms, state, blind);
+            if(ticks>reset) resetState(ms, state, blind, false);
         }
 
-        protected void animNotifys(int bbStart, int bbEnd, int reset, boolean ms, float damage, double growXZ, double growY, double offsetX, double offsetY, double offsetZ, SoundEvent sound){
+        protected void animNotifys(int bbStart, int bbEnd, int reset, boolean ms, float damage, double growXZ, double growY, double offsetX, double offsetY, double offsetZ, SoundEvent sound, boolean runAttack){
             AxisAlignedBB bb= this.attacker.getBoundingBox().grow(growXZ, growY, growXZ).offset(offsetX, offsetY, offsetZ);
             if(ticks==2 && sound!=null) this.attacker.world.playSound(null, this.attacker.getPosition(), sound, SoundCategory.HOSTILE, 1, 1);
-            if(ticks>bbStart && ticks<bbEnd) attackBB(bb, damage);
-            if(ticks>reset) resetState(ms, 0, false);
+            if(ticks>bbStart && ticks<bbEnd) attackBB(bb, damage, runAttack);
+            if(ticks>reset) resetState(ms, 0, false, runAttack);
         }
 
-        protected void resetState(boolean ms, int value, boolean blindReset){
+        protected void resetState(boolean ms, int value, boolean blindReset, boolean runReset){
             dataManager.set(STATE, value);
             ticks=0;
             cd=(int)(Math.random() * 15 + 5);
             if(blindReset) blind = (int)(Math.random() * 400 + 400);
+            if(runReset) run = (int)(Math.random() * 200 + 200);
             if(ms) this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
         }
 
-        protected void attackBB(AxisAlignedBB bb, float damage){
+        protected void attackBB(AxisAlignedBB bb, float damage, boolean runAttack){
             this.attacker.world.getEntitiesWithinAABB(LivingEntity.class, bb).stream().forEach(livingEntity -> {
                 if(!livingEntity.isEntityEqual(this.attacker)) {
                     livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), damage);
+                    if (runAttack){
+                        this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.POISON, 20*30));
+                        this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.WITHER, 20*15));
+                    }
                     lastHit=0;
                 }
             });
@@ -337,6 +361,35 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             BlockPos.getAllInBox(bb).forEach(pos->{
                 if(pos.getY()==this.attacker.getPosY()) this.attacker.world.setBlockState(pos, Blocks.WHITE_CARPET.getDefaultState());
             });
+        }
+
+        private boolean teleportToEntity(Entity p_70816_1_) {
+            Vector3d vector3d = new Vector3d(this.attacker.getPosX() - p_70816_1_.getPosX(), this.attacker.getPosYHeight(0.5D) - p_70816_1_.getPosYEye(), this.attacker.getPosZ() - p_70816_1_.getPosZ());
+            vector3d = vector3d.normalize();
+            double x = p_70816_1_.getLookVec().x*-20 + p_70816_1_.getPosX();
+            double z = p_70816_1_.getLookVec().z*-20 + p_70816_1_.getPosZ();
+            double y = this.attacker.getPosY() + (double)(this.attacker.rand.nextInt(16) - 8) - vector3d.y * 40.0D;
+            return teleportTo(x, y, z);
+        }
+
+        private boolean teleportTo(double x, double y, double z) {
+            BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable(x, y, z);
+            while(blockpos$mutable.getY() > 0 && !this.attacker.world.getBlockState(blockpos$mutable).getMaterial().blocksMovement()) blockpos$mutable.move(Direction.DOWN);
+            BlockState blockstate = this.attacker.world.getBlockState(blockpos$mutable);
+            boolean flag = blockstate.getMaterial().blocksMovement();
+            boolean flag1 = blockstate.getFluidState().isTagged(FluidTags.WATER);
+            if (flag && !flag1) {
+                net.minecraftforge.event.entity.living.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this.attacker, x, y, z);
+                if (event.isCanceled()) return false;
+                boolean flag2 = this.attacker.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ(), true);
+                if (flag2 && !this.attacker.isSilent()) {
+                    this.attacker.world.playSound((PlayerEntity)null, this.attacker.prevPosX, this.attacker.prevPosY, this.attacker.prevPosZ, SoundEvents.ENTITY_ENDERMAN_TELEPORT, this.attacker.getSoundCategory(), 1.0F, 1.0F);
+                    this.attacker.playSound(SoundEvents.ENTITY_ENDERMAN_TELEPORT, 1.0F, 1.0F);
+                }
+                return flag2;
+            } else { 
+                return false;
+            }
         }
         
         protected double getAttackReachSqr(LivingEntity attackTarget) {
