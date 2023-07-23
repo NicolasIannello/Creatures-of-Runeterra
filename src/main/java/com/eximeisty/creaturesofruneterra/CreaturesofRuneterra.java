@@ -21,6 +21,7 @@ import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.container.ModContainers;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.FiddleProyectile.FiddleProyectileRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
@@ -96,6 +97,7 @@ public class CreaturesofRuneterra {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BULLET.get(), BulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DBSHIELD.get(), DBShieldRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.HEXCORE.get(), new HexcoreRenderer());
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FIDDLE_PROYECTILE.get(), FiddleProyectileRenderer::new);
         //PART ENTITIES
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WIVHIV.get(), EmptyRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WVIHV.get(), EmptyRenderer::new);
