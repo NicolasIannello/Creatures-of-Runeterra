@@ -27,9 +27,8 @@ public class FiddlesticksEmissiveLayer extends GeoLayerRenderer {
     public void render(MatrixStack matrixStackIn, IRenderTypeBuffer bufferIn, int packedLightIn, Entity entityLivingBaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         RenderType cameo =  RenderType.getEntityAlpha(LAYER, 0.5F);
         matrixStackIn.push();
-        //a little offset
         matrixStackIn.scale(0.67F, 0.67F, 0.67F);
-        matrixStackIn.translate(0.0d, 0.0d, 0.0d);
+        matrixStackIn.translate(-0.0005d, -0.0115d, 0.004);
         this.getRenderer().render(this.getEntityModel().getModel(MODEL), entityLivingBaseIn, partialTicks, cameo, matrixStackIn, bufferIn, bufferIn.getBuffer(cameo), packedLightIn, OverlayTexture.NO_OVERLAY, 1f, 1f, 1f, 1f);
         matrixStackIn.pop();
     }
