@@ -67,7 +67,7 @@ public class FiddleProyectileEntity extends Entity {
       this.setShooter(ownerIn);
       BlockPos blockpos = ownerIn.getPosition();
       double d0 = (double)blockpos.getX() + 0.5D;
-      double d1 = (double)blockpos.getY() + 0.5D;
+      double d1 = (double)blockpos.getY() + 2.2D;
       double d2 = (double)blockpos.getZ() + 0.5D;
       this.setLocationAndAngles(d0, d1, d2, this.rotationYaw, this.rotationPitch);
       this.target = targetIn;
@@ -300,8 +300,12 @@ public class FiddleProyectileEntity extends Entity {
       if (flag) {
          this.applyEnchantments(livingentity, entity);
          if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WEAKNESS, 200));
-            entity1.heal(5F);
+            if(entity1 instanceof FiddlesticksEntity){
+               entity1.heal(5F);
+               ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WEAKNESS, 20*10));
+            }else{
+               ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 20*15));
+            }
          }
       }
    }
