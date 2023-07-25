@@ -12,6 +12,7 @@ import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.ExaltedPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.FiddleDummyEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.FiddleProyectileEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.FiddlesticksEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
@@ -53,7 +54,7 @@ public class ModEntityTypes {
     );
     public static final RegistryObject<EntityType<FiddlesticksEntity>> FIDDLESTICKS=
     ENTITY_TYPES.register("fiddlesticks", 
-        ()-> EntityType.Builder.create(FiddlesticksEntity::new, EntityClassification.MONSTER).size(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
+        ()-> EntityType.Builder.create(FiddlesticksEntity::new, EntityClassification.MONSTER).size(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddlesticks").toString())
     );
 
     //POROS
@@ -98,6 +99,10 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<CoRPartEntity>> WIIIHIII=
     ENTITY_TYPES.register("wiiihiii", 
         ()-> EntityType.Builder.create(CoRPartEntity::new, EntityClassification.MONSTER).immuneToFire().size(3f,3f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wiiihiii").toString())
+    );
+    public static final RegistryObject<EntityType<FiddleDummyEntity>> FIDDLEDUMMY=
+    ENTITY_TYPES.register("fiddle_dummy", 
+        ()-> EntityType.Builder.create(FiddleDummyEntity::new, EntityClassification.MONSTER).size(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_dummy").toString())
     );
 
     //ITEMS
