@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.entity.custom;
 import java.util.EnumSet;
 import java.util.function.Predicate;
 
+import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
 import net.minecraft.block.BlockState;
@@ -12,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.ai.goal.Goal;
@@ -56,7 +58,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, IAnimationTickable {
     public static final DataParameter<Integer> STATE = EntityDataManager.createKey(FiddlesticksEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this); 
-    private float damage=(float)0.1;
+    private float damage=(float)1;
     private float velocidad=(float)0.4;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(true).setCreateFog(true);
     private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.walk", true);
@@ -70,9 +72,10 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
     private static final AnimationBuilder CHANNELREVERT_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.channelrevert", false);
     private static final AnimationBuilder BLINDREVERT_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.blindrevert", false);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
-        if(!(p_213797_0_ instanceof PlayerEntity) && (p_213797_0_ instanceof WaterMobEntity || (p_213797_0_.isInWaterOrBubbleColumn() || p_213797_0_.getEntityWorld().getBlockState(new BlockPos(p_213797_0_.getPosX(),p_213797_0_.getPosY()-1,p_213797_0_.getPosZ()))==Blocks.WATER.getDefaultState()))) return false;
+        if(!(p_213797_0_ instanceof PlayerEntity) && (p_213797_0_ instanceof FiddlesticksEntity || p_213797_0_ instanceof FiddleDummyEntity || p_213797_0_ instanceof WaterMobEntity || (p_213797_0_.isInWaterOrBubbleColumn() || p_213797_0_.getEntityWorld().getBlockState(new BlockPos(p_213797_0_.getPosX(),p_213797_0_.getPosY()-1,p_213797_0_.getPosZ()))==Blocks.WATER.getDefaultState()))) return false;
         return true;
     };
+
     public FiddlesticksEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
     }
@@ -257,7 +260,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             if (blind>0) --blind;
             if (run>0) --run;
             if (cd>0) --cd;
-            lastHit++;
+            if(dataManager.get(STATE)<=0) lastHit++;
 
             LivingEntity livingentity = this.attacker.getAttackTarget();
             double d0 = this.attacker.getDistanceSq(livingentity.getPosX(), livingentity.getPosY(), livingentity.getPosZ());
@@ -271,13 +274,45 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
 
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
             boolean flag = dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0;
-            if((channel<=0 || lastHit>300) && flag){
+            if((channel<=0 || lastHit>400) && flag && distToEnemySqr>200){
                 Vector3d vector3d = new Vector3d(this.attacker.getPosX() - this.attacker.getAttackTarget().getPosX(), this.attacker.getPosYHeight(0.5D) - this.attacker.getAttackTarget().getPosYEye(), this.attacker.getPosZ() - this.attacker.getAttackTarget().getPosZ());
                 vector3d = vector3d.normalize();
-                double x = this.attacker.getAttackTarget().getLookVec().x*-7 + this.attacker.getAttackTarget().getPosX();
-                double z = this.attacker.getAttackTarget().getLookVec().z*-7 + this.attacker.getAttackTarget().getPosZ();
-                double y = this.attacker.getPosY() + (double)(this.attacker.rand.nextInt(16) - 8) - vector3d.y * 40.0D;
-                if(teleportTo(x, y, z)){
+                BlockPos pos[]= new BlockPos[3];
+                BlockPos posFiddle=null;
+                int chance=(int)(Math.random() * 4);
+                int j=0;
+                double a=0,b=0,c=1,d=1;
+                for (int i = 0; i < 4; i++) {
+                    switch (i) {
+                        case 0:
+                            a=this.attacker.getAttackTarget().getLookVec().x*7;
+                            b=this.attacker.getAttackTarget().getLookVec().z*7;
+                            break;
+                        case 1:
+                            c=-1;d=-1;
+                            break;
+                        case 2:
+                            a=(this.attacker.getAttackTarget().getLookVec().x+0.9D)*7;
+                            b=(this.attacker.getAttackTarget().getLookVec().z+0.9D)*7;
+                            if(a>=1) a+=(this.attacker.getAttackTarget().getLookVec().x+0.9D-1)*7;
+                            if(b>=1) b+=(this.attacker.getAttackTarget().getLookVec().z+0.9D-1)*7;
+                            break;
+                        case 3:
+                            c=1;d=1;
+                            break;
+                    }
+                    double x = (a)*c + this.attacker.getAttackTarget().getPosX();
+                    double z = (b)*d + this.attacker.getAttackTarget().getPosZ();
+                    double y = this.attacker.getPosY() + (double)(this.attacker.rand.nextInt(16) - 8) - vector3d.y * 40.0D;
+                    if(i!=chance) { 
+                        pos[j]= new BlockPos(x,y,z);
+                        j++; 
+                    } else { 
+                        posFiddle= new BlockPos(x,y,z); 
+                    }
+                }
+                if(spawnDummies(pos, posFiddle)){
+                    lastHit=0;
                     prevHealth = this.attacker.getHealth();
                     dataManager.set(STATE, 4);
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
@@ -382,11 +417,11 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             });
         }
 
-        protected void breakBB(AxisAlignedBB bb){
-            BlockPos.getAllInBox(bb).forEach(pos->{
-                if(pos.getY()==this.attacker.getPosY()) this.attacker.world.setBlockState(pos, Blocks.WHITE_CARPET.getDefaultState());
-            });
-        }
+        // protected void breakBB(AxisAlignedBB bb){
+        //     BlockPos.getAllInBox(bb).forEach(pos->{
+        //         if(pos.getY()==this.attacker.getPosY()) this.attacker.world.setBlockState(pos, Blocks.WHITE_CARPET.getDefaultState());
+        //     });
+        // }
 
         private boolean teleportToEntity(Entity p_70816_1_) {
             Vector3d vector3d = new Vector3d(this.attacker.getPosX() - p_70816_1_.getPosX(), this.attacker.getPosYHeight(0.5D) - p_70816_1_.getPosYEye(), this.attacker.getPosZ() - p_70816_1_.getPosZ());
@@ -415,6 +450,29 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             } else { 
                 return false;
             }
+        }
+
+        public boolean spawnDummies(BlockPos pos[], BlockPos posFiddle){
+            BlockPos pos2[]= new BlockPos[3];
+            int i=0;
+            for (BlockPos blockPos : pos) {
+                final int j = new Integer(i);
+                BlockPos.getAllInBox(new AxisAlignedBB(blockPos).grow(2, 3, 2)).forEach(position->{
+                    if(this.attacker.world.getBlockState(position.down()).getMaterial().blocksMovement() && this.attacker.world.getBlockState(position)==Blocks.AIR.getDefaultState() && pos2[j]==null) pos2[j]=position;
+                });
+                if(pos2[j]!=null) i++;
+            }
+            if(pos2.length>=1 && teleportTo(posFiddle.getX(), posFiddle.getY(), posFiddle.getZ())){
+                for (BlockPos blockPos2 : pos2) {
+                    if(blockPos2!=null){
+                        FiddleDummyEntity dummy = (FiddleDummyEntity)ModEntityTypes.FIDDLEDUMMY.get().spawn(world.getServer().func_241755_D_(), null, null, blockPos2, SpawnReason.NATURAL, false, false);
+                        dummy.setParent(this.attacker);
+                    }
+                }
+            }else{
+                return false;
+            }
+            return true;
         }
         
         protected double getAttackReachSqr(LivingEntity attackTarget) {
