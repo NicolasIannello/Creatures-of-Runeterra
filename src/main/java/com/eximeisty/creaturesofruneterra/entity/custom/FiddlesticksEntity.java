@@ -59,6 +59,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
     public static final DataParameter<Integer> STATE = EntityDataManager.createKey(FiddlesticksEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this); 
     private float damage=(float)1;
+    private double deathTicks=0;
     private float velocidad=(float)0.4;
     private final ServerBossInfo bossInfo = (ServerBossInfo)(new ServerBossInfo(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(true).setCreateFog(true);
     private static final AnimationBuilder WALK_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.walk", true);
@@ -71,6 +72,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
     private static final AnimationBuilder BLIND_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.blind", false).addAnimation("animation.Fiddlesticks.blindloop", true);
     private static final AnimationBuilder CHANNELREVERT_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.channelrevert", false);
     private static final AnimationBuilder BLINDREVERT_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.blindrevert", false);
+    private static final AnimationBuilder DEATH_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.death", false).addAnimation("animation.Fiddlesticks.deathloop", true);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
         if(!(p_213797_0_ instanceof PlayerEntity) && (p_213797_0_ instanceof FiddlesticksEntity || p_213797_0_ instanceof FiddleDummyEntity || p_213797_0_ instanceof WaterMobEntity || (p_213797_0_.isInWaterOrBubbleColumn() || p_213797_0_.getEntityWorld().getBlockState(new BlockPos(p_213797_0_.getPosX(),p_213797_0_.getPosY()-1,p_213797_0_.getPosZ()))==Blocks.WATER.getDefaultState()))) return false;
         return true;
@@ -136,6 +138,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
                 case 5: event.getController().setAnimation(CHANNELREVERT_ANIM); break;
                 case 6: event.getController().setAnimation(BLIND_ANIM); break;
                 case 7: event.getController().setAnimation(BLINDREVERT_ANIM); break;
+                case 8: event.getController().setAnimation(DEATH_ANIM); break;
             }
             return PlayState.CONTINUE;
         }
@@ -169,6 +172,19 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
     public void tick() {
         super.tick();
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+        if(this.getHealth()<=1){
+            deathTicks++;
+            dataManager.set(STATE, 8);
+            this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
+            if(deathTicks==3) {
+                this.world.playSound(null, this.getPosition(), ModSoundEvents.FIDDLESTICKS_DEATH.get(), SoundCategory.HOSTILE, 3, 1);
+            }
+            if(deathTicks>80){
+                this.onKillCommand();
+            }else{
+                this.setHealth(1);
+            }
+        }
     }
 
     public class MeleeAttackGoal extends Goal {
@@ -303,7 +319,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
                     }
                     double x = (a)*c + this.attacker.getAttackTarget().getPosX();
                     double z = (b)*d + this.attacker.getAttackTarget().getPosZ();
-                    double y = this.attacker.getPosY() + (double)(this.attacker.rand.nextInt(16) - 8) - vector3d.y * 40.0D;
+                    double y = this.attacker.getAttackTarget().getPosY();
                     if(i!=chance) { 
                         pos[j]= new BlockPos(x,y,z);
                         j++; 
@@ -457,7 +473,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             int i=0;
             for (BlockPos blockPos : pos) {
                 final int j = new Integer(i);
-                BlockPos.getAllInBox(new AxisAlignedBB(blockPos).grow(2, 3, 2)).forEach(position->{
+                BlockPos.getAllInBox(new AxisAlignedBB(blockPos).grow(1, 4, 1)).forEach(position->{
                     if(this.attacker.world.getBlockState(position.down()).getMaterial().blocksMovement() && this.attacker.world.getBlockState(position)==Blocks.AIR.getDefaultState() && pos2[j]==null) pos2[j]=position;
                 });
                 if(pos2[j]!=null) i++;
