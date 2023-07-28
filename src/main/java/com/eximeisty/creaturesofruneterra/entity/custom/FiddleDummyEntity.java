@@ -20,6 +20,9 @@ import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.util.DamageSource;
@@ -38,10 +41,12 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class FiddleDummyEntity extends CreatureEntity implements IAnimatable, IAnimationTickable {
+    public static final DataParameter<Integer> STATE = EntityDataManager.createKey(FiddlesticksEntity.class, DataSerializers.VARINT);
     private AnimationFactory factory = new AnimationFactory(this);
     private int parent;
     private int ticks=0;
     private static final AnimationBuilder CHANNEL_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.channel", false).addAnimation("animation.Fiddlesticks.channelloop", true);
+    private static final AnimationBuilder DEATH_ANIM = new AnimationBuilder().addAnimation("animation.Fiddlesticks.channeldummy", false).addAnimation("animation.Fiddlesticks.deathloop", true);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
         if(!(p_213797_0_ instanceof PlayerEntity) && (p_213797_0_ instanceof FiddlesticksEntity || p_213797_0_ instanceof FiddleDummyEntity || p_213797_0_ instanceof WaterMobEntity || (p_213797_0_.isInWaterOrBubbleColumn() || p_213797_0_.getEntityWorld().getBlockState(new BlockPos(p_213797_0_.getPosX(),p_213797_0_.getPosY()-1,p_213797_0_.getPosZ()))==Blocks.WATER.getDefaultState()))) return false;
         return true;
@@ -68,8 +73,14 @@ public class FiddleDummyEntity extends CreatureEntity implements IAnimatable, IA
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>( this, MobEntity.class, 0, false, false, NOT_THIS));
     }
 
+    protected void registerData() {
+        super.registerData();
+        dataManager.register(STATE, 0);
+    }
+
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(CHANNEL_ANIM); 
+        AnimationBuilder anim= (dataManager.get(STATE)==0) ? CHANNEL_ANIM : DEATH_ANIM;
+        event.getController().setAnimation(anim);
         return PlayState.CONTINUE;
     }
 
@@ -86,7 +97,11 @@ public class FiddleDummyEntity extends CreatureEntity implements IAnimatable, IA
     public void tick() {
         super.tick();
         ticks++;
-        if(ticks>400) this.remove();
+        if(ticks==400) dataManager.set(STATE, 1); 
+        if(ticks>460){
+            this.onKillCommand();
+        }
+        if(this.getHealth()<=1) dataManager.set(STATE, 1);
     }
 
     @Override
