@@ -6,6 +6,7 @@ import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
 import com.eximeisty.creaturesofruneterra.item.custom.DrillItem;
 import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
+import com.eximeisty.creaturesofruneterra.item.custom.FiddleArmorItem;
 import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
 import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
 import com.eximeisty.creaturesofruneterra.item.custom.MisilItem;
@@ -84,6 +85,12 @@ public class ModItems {
 
         public static final RegistryObject<Item> SAI_ELYTRA = ITEMS.register("sai_elytra",
         () -> new SaiElytraItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> FIDDLE_HELMET = ITEMS.register("fiddle_helmet",
+        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> FIDDLE_CHESTPLATE = ITEMS.register("fiddle_chestplate",
+        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         //WEAPONS
         public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
