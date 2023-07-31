@@ -28,7 +28,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
     final String quote = "[SHIFT]+[LClick] to use hability";
     public String controllerName = "controller";
-    public int cd=100;
+    public int cd=10000;
     public int tiros=0;
     private List<Entity> targets = Lists.newArrayList();
     //private static final AnimationBuilder ANIM = new AnimationBuilder().addAnimation("animation.fiddle_armor2.open", false);
@@ -56,7 +56,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
                 worldIn.getEntitiesWithinAABB(LivingEntity.class, entityIn.getBoundingBox().grow(5)).stream().forEach(entity ->{
                     if(targets.size()<6 && entity!=entityIn)targets.add(entity); 
                 });
-            cd=100;
+            cd=10000;
         }
         if(!targets.isEmpty()){
             worldIn.addEntity(new FiddleProyectileEntity(worldIn, (LivingEntity)entityIn, targets.get(0), Direction.DOWN.getAxis()));
