@@ -20,7 +20,7 @@ public class FiddleArmorModel extends AnimatedGeoModel<FiddleArmorItem>{
 
     @Override
     public ResourceLocation getTextureLocation(FiddleArmorItem object) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/model/armor/fiddle_armor2.png");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/model/armor/fiddle_armor_new2.png");
     }
     
 }
