@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.google.common.collect.Lists;
 
-import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -294,18 +293,19 @@ public class FiddleProyectileEntity extends Entity {
 
    protected void onEntityHit(EntityRayTraceResult result) {
       Entity entity = result.getEntity();
-      CreatureEntity entity1 = (CreatureEntity)this.getShooter();
+      LivingEntity entity1 = (LivingEntity)this.getShooter();
       LivingEntity livingentity = entity1 instanceof LivingEntity ? (LivingEntity)entity1 : null;
       boolean flag = entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, livingentity).setProjectile(), 4.0F);
       if (flag) {
          this.applyEnchantments(livingentity, entity);
          if (entity instanceof LivingEntity) {
             if(entity1 instanceof FiddlesticksEntity){
-               entity1.heal(5F);
+               entity1.heal(6F);
                ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WEAKNESS, 20*10));
             }else{
                ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 20*15));
             }
+            if(entity1 instanceof PlayerEntity) entity1.heal(2);
          }
       }
    }
