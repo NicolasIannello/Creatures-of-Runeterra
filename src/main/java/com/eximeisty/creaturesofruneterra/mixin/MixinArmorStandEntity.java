@@ -27,6 +27,6 @@ public class MixinArmorStandEntity {
             if(i>=6){ x--; r+=-2;}
         }
 
-        //System.out.println("f1:"+flag1+" f2:"+flag2);
+        System.out.println("f1:"+flag1+" f2:"+flag2);
     }
 }
