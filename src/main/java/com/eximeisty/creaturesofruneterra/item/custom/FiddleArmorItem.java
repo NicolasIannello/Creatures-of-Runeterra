@@ -13,6 +13,7 @@ import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -78,5 +79,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
 	}
 
     @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) { return false; }
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) { 
+        return this.getArmorMaterial()==ArmorMaterial.CHAIN ? Items.CHAIN==repair.getItem() : false; 
+    }
 }
