@@ -43,6 +43,8 @@
     "item.creaturesofruneterra.exaltedporo_spawn_egg":"Exalted poro Spawn Egg",
     "item.creaturesofruneterra.fiddlesticks_spawn_egg":"Fiddlesticks Spawn Egg",
     "entity.creaturesofruneterra.fiddlesticks":"Fiddlesticks, the ancient fear",
-    "item.creaturesofruneterra.fiddle_helmet":"fiddle's bear trap",
-    "item.creaturesofruneterra.fiddle_chestplate":"fiddle's bird cage"
+    "item.creaturesofruneterra.fiddle_helmet":"Scarecrow helmet",
+    "item.creaturesofruneterra.fiddle_chestplate":"Scarecrow chestplate",
+    "item.creaturesofruneterra.fiddle_beartrap":"Fiddle's bear trap",
+    "item.creaturesofruneterra.fiddle_birdcage":"Fiddle's bird cage"
 }

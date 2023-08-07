@@ -87,10 +87,16 @@ public class ModItems {
         () -> new SaiElytraItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> FIDDLE_HELMET = ITEMS.register("fiddle_helmet",
-        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new FiddleArmorItem(ArmorMaterial.CHAIN, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> FIDDLE_CHESTPLATE = ITEMS.register("fiddle_chestplate",
-        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+        () -> new FiddleArmorItem(ArmorMaterial.CHAIN, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> FIDDLE_BEARTRAP = ITEMS.register("fiddle_beartrap",
+        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
+
+        public static final RegistryObject<Item> FIDDLE_BIRDCAGE = ITEMS.register("fiddle_birdcage",
+        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
         //WEAPONS
         public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
