@@ -99,7 +99,13 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
         super.registerGoals();
         this.goalSelector.addGoal(1, new NearestAttackableTargetGoal<>( this, PlayerEntity.class, false ));
         this.goalSelector.addGoal(2, new FiddlesticksEntity.MeleeAttackGoal(this, 1D, false));
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1D,50));
+        this.goalSelector.addGoal(3, new WaterAvoidingRandomWalkingGoal(this, 1D,50){
+            @Override
+            public boolean shouldContinueExecuting() {
+                if(this.creature.getDataManager().get(STATE)==8) return false;
+                return !this.creature.getNavigator().noPath() && !this.creature.isBeingRidden();
+            }
+        });
         this.goalSelector.addGoal(0, new SwimGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>( this, MobEntity.class, 0, false, false, NOT_THIS));
@@ -515,6 +521,12 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
                 }
                 break;
         }
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if(source.isFireDamage()) return false;
+        return super.attackEntityFrom(source, amount);
     }
 
     @Override
