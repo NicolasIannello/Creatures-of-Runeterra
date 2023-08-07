@@ -10,6 +10,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
@@ -28,7 +29,7 @@ import software.bernie.geckolib3.item.GeoArmorItem;
 
 public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
-    final String quote = "[SHIFT]+[LClick] to use hability";
+    final String quote = "["+Minecraft.getInstance().gameSettings.keyBindSneak.getKeyDescription().replace("key.", "")+"]+["+Minecraft.getInstance().gameSettings.keyBindPickBlock.getKeyDescription().replace("key.", "")+"] to use hability";//"[SHIFT]+[LClick] to use hability";
     public String controllerName = "controller";
     public int cd=10000;
     public int tiros=0;
@@ -54,7 +55,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     }
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(this.getEquipmentSlot()==EquipmentSlotType.CHEST && entityIn.getArmorInventoryList().toString().contains("fiddle_chestplate") && Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown() && Minecraft.getInstance().gameSettings.keyBindUseItem.isKeyDown() && cd<=0 && !worldIn.isRemote){
+        if(this.getEquipmentSlot()==EquipmentSlotType.CHEST && entityIn.getArmorInventoryList().toString().contains("fiddle_birdcage") && Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown() && Minecraft.getInstance().gameSettings.keyBindPickBlock.isKeyDown() && cd<=0 && !worldIn.isRemote){
                 worldIn.getEntitiesWithinAABB(LivingEntity.class, entityIn.getBoundingBox().grow(5)).stream().forEach(entity ->{
                     if(targets.size()<6 && entity!=entityIn)targets.add(entity); 
                 });
@@ -73,7 +74,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     }
 
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        if(this.getEquipmentSlot()==EquipmentSlotType.CHEST) tooltip.add(new TranslationTextComponent(quote));
+        if(this.getEquipmentSlot()==EquipmentSlotType.CHEST && this.getArmorMaterial()==ArmorMaterial.NETHERITE) tooltip.add(new TranslationTextComponent(quote));
 	}
 
     @Override
