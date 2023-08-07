@@ -49,7 +49,7 @@ public class MixinArmorStandEntity {
                 if(flag3){
                     tick++;
                     if(tick%10==0) clase.world.playSound(null, clase.getPosition().add((Math.random() * 20)-10, 0, (Math.random() * 20)-10), SoundEvents.PARTICLE_SOUL_ESCAPE, SoundCategory.AMBIENT, (float)(Math.random() * 5)+5, (float)(Math.random() * 2)+1);
-                    if(tick%50==0){
+                    if(tick%50==0 && !clase.world.isRemote){
                         int lightings = (int)(Math.random() * 3)+1;
                         for (int i = 0; i < lightings; i++) { 
                             double lx = clase.getPosXRandom(8), lz = clase.getPosZRandom(8);
@@ -57,7 +57,7 @@ public class MixinArmorStandEntity {
                             EntityType.LIGHTNING_BOLT.spawn(clase.world.getServer().func_241755_D_(), null, null, new BlockPos(lx, clase.getPosY(), lz), SpawnReason.EVENT, false, false);
                         }
                     }
-                    if(tick>215){
+                    if(tick>215 && !clase.world.isRemote){
                         EntityType.LIGHTNING_BOLT.spawn(clase.world.getServer().func_241755_D_(), null, null, clase.getPosition(), SpawnReason.EVENT, false, false);
                         ModEntityTypes.FIDDLESTICKS.get().spawn(clase.world.getServer().func_241755_D_(), null, null, clase.getPosition(), SpawnReason.EVENT, false, false);
                         clase.remove();
