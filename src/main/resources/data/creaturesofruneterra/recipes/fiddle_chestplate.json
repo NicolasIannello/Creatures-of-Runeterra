@@ -1,0 +1,19 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        " 1 ",
+        "222",
+        "2 2"
+    ],
+    "key":{
+        "1":{
+            "item":"minecraft:leather_chestplate"
+        },
+        "2":{
+            "item":"minecraft:chain"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:fiddle_chestplate"
+    }
+}
