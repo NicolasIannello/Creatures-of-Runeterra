@@ -373,7 +373,10 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
                     animNotifys(7, 12, 20, true, 40*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), true);
                     break;
                 case 4:
-                    if(ticks%10==0) this.attacker.world.addEntity(new FiddleProyectileEntity(this.attacker.world, this.attacker, this.attacker.getAttackTarget(), Direction.DOWN.getAxis()));
+                    if(ticks%10==0){ 
+                        this.attacker.world.addEntity(new FiddleProyectileEntity(this.attacker.world, this.attacker, this.attacker.getAttackTarget(), Direction.DOWN.getAxis()));
+                        this.attacker.world.playSound(null, this.attacker.getPosition(), SoundEvents.PARTICLE_SOUL_ESCAPE, SoundCategory.AMBIENT, (float)(Math.random() * 5)+5, (float)(Math.random() * 2)+1);
+                    }
                     if(ticks>200 || (prevHealth-100)>this.attacker.getHealth()) {
                         ticks=0;
                         dataManager.set(STATE, 5);
