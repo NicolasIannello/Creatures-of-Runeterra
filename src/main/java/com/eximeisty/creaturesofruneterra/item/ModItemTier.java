@@ -12,6 +12,9 @@ public enum ModItemTier implements IItemTier{
     }),
     ATLAS(4, 1600, 10.0F, 5.0F, 10, () -> {
         return Ingredient.fromItems(ModItems.GEMSTONE.get());
+    }),
+    FIDDLE(5, 800, 7.0F, 6.0F, 15, () -> {
+        return null;
     });
 
     private final int harvestLevel;
