@@ -7,6 +7,7 @@ import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
 import com.eximeisty.creaturesofruneterra.item.custom.DrillItem;
 import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
 import com.eximeisty.creaturesofruneterra.item.custom.FiddleArmorItem;
+import com.eximeisty.creaturesofruneterra.item.custom.FiddleScythe;
 import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
 import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
 import com.eximeisty.creaturesofruneterra.item.custom.MisilItem;
@@ -103,10 +104,13 @@ public class ModItems {
         () -> new Fishbones(new Item.Properties().maxDamage(150).group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
-        () -> new AtlasG(ModItemTier.ATLAS, 4, -2F, new Item.Properties().maxDamage(400).group(ModItemGroup.COR_GROUP)));
+        () -> new AtlasG(ModItemTier.ATLAS, 4, -1.5F, new Item.Properties().maxDamage(400).group(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
         () -> new DunebreakerShield(new Item.Properties().maxDamage(600).group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
+        () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().maxDamage(100).group(ModItemGroup.COR_GROUP)));
         
         //SPAWN EGGS
         public static final RegistryObject<ModSpawnEggItem> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
