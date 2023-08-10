@@ -61,6 +61,11 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     }
 
     public <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event) {
+        if(event.getController().getCurrentAnimation()!=null){
+            return PlayState.CONTINUE;
+        }else{
+            event.getController().setAnimation(IDLE_ANIM);
+        }
         return PlayState.CONTINUE;
     }
 
