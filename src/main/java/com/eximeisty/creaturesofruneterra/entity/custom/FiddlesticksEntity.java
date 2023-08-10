@@ -4,6 +4,7 @@ import java.util.EnumSet;
 import java.util.function.Predicate;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
 import net.minecraft.block.BlockState;
@@ -23,6 +24,7 @@ import net.minecraft.entity.ai.goal.WaterAvoidingRandomWalkingGoal;
 import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -530,6 +532,13 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
     public boolean attackEntityFrom(DamageSource source, float amount) {
         if(source.isFireDamage()) return false;
         return super.attackEntityFrom(source, amount);
+    }
+
+    protected void dropInventory() {
+        super.dropInventory();
+        this.entityDropItem(new ItemStack(ModItems.FIDDLESCYTHE.get(), 1));
+        this.entityDropItem(new ItemStack(ModItems.FIDDLE_BEARTRAP.get(), 1));
+        this.entityDropItem(new ItemStack(ModItems.FIDDLE_BIRDCAGE.get(), 1));
     }
 
     @Override
