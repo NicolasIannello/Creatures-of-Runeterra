@@ -207,7 +207,7 @@ public class FiddleDummyEntity extends CreatureEntity implements IAnimatable, IA
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
             ticks++;
             if(ticks%10==0) {
-                this.attacker.world.addEntity(new FiddleProyectileEntity(this.attacker.world, this.attacker, this.attacker.getAttackTarget(), Direction.DOWN.getAxis()));
+                this.attacker.world.addEntity(new FiddleProyectileEntity(this.attacker.world, this.attacker, this.attacker.getAttackTarget(), Direction.DOWN.getAxis(), getParent()));
                 this.attacker.world.playSound(null, this.attacker.getPosition(), SoundEvents.PARTICLE_SOUL_ESCAPE, SoundCategory.AMBIENT, (float)(Math.random() * 5)+5, (float)(Math.random() * 2)+1);
             }
         }
