@@ -366,17 +366,17 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
                     }
                     break;
                 case 1:
-                    animNotifys(15, 20, 25, true, 20*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), false);
+                    animNotifys(15, 20, 25, true, 20*this.attacker.damage, 2, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), false);
                     break;
                 case 2:
-                    animNotifys(10, 15, 20, true, 15*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), false);
+                    animNotifys(10, 15, 20, true, 15*this.attacker.damage, 2, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), false);
                     break;
                 case 3:
-                    animNotifys(7, 12, 20, true, 40*this.attacker.damage, 1, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), true);
+                    animNotifys(7, 12, 20, true, 40*this.attacker.damage, 2, 0, this.attacker.getLookVec().x*2, 0, this.attacker.getLookVec().z*2, ModSoundEvents.FIDDLESTICKS_ATTACK.get(), true);
                     break;
                 case 4:
                     if(ticks%10==0){ 
-                        this.attacker.world.addEntity(new FiddleProyectileEntity(this.attacker.world, this.attacker, this.attacker.getAttackTarget(), Direction.DOWN.getAxis()));
+                        this.attacker.world.addEntity(new FiddleProyectileEntity(this.attacker.world, this.attacker, this.attacker.getAttackTarget(), Direction.DOWN.getAxis(), null));
                         this.attacker.world.playSound(null, this.attacker.getPosition(), SoundEvents.PARTICLE_SOUL_ESCAPE, SoundCategory.AMBIENT, (float)(Math.random() * 5)+5, (float)(Math.random() * 2)+1);
                     }
                     if(ticks>200 || (prevHealth-100)>this.attacker.getHealth()) {
@@ -388,7 +388,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
                     if(ticks>10) resetState(true, 0, false, false, true);
                     break;
                 case 6:
-                    animNotifys(7, 40, 50, 60, false, ModSoundEvents.FIDDLESTICKS_CHANNEL.get());
+                    animNotifys(7, 70, 80, 90, false, ModSoundEvents.FIDDLESTICKS_CHANNEL.get());
                     break;
                 case 7:
                     if(ticks>15) resetState(true, 0, true, false, false);
@@ -407,8 +407,8 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             if(ticks==2 && sound!=null) this.attacker.world.playSound(null, this.attacker.getPosition(), sound, SoundCategory.HOSTILE, 1, 1);
             if(ticks>start && ticks<end){
                 if(this.attacker.getEntitySenses().canSee(this.attacker.getAttackTarget())){
-                    this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 20*40));
-                    if(MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationYaw, x)<65 && MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationPitch, y)<50) this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.NAUSEA, 20*40));
+                    this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 20*30));
+                    if(MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationYaw, x)<65 && MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationPitch, y)<50) this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.NAUSEA, 20*30));
                 }
             }
             if(ticks>reset) resetState(ms, state, false, false, false);
