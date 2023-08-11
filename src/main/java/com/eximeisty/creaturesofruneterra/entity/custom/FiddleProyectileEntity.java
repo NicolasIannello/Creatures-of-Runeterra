@@ -48,6 +48,7 @@ public class FiddleProyectileEntity extends Entity {
    private double targetDeltaZ;
    @Nullable
    private UUID targetUniqueId;
+   private LivingEntity parent;
 
    public FiddleProyectileEntity(EntityType<? extends FiddleProyectileEntity> type, World world) {
       super(type, world);
@@ -61,9 +62,10 @@ public class FiddleProyectileEntity extends Entity {
       this.setMotion(motionXIn, motionYIn, motionZIn);
    }
 
-   public FiddleProyectileEntity(World worldIn, LivingEntity ownerIn, Entity targetIn, Direction.Axis p_i46772_4_) {
+   public FiddleProyectileEntity(World worldIn, LivingEntity ownerIn, Entity targetIn, Direction.Axis p_i46772_4_, @Nullable LivingEntity parent) {
       this(ModEntityTypes.FIDDLE_PROYECTILE.get(), worldIn);
       this.setShooter(ownerIn);
+      this.parent = parent;
       BlockPos blockpos = ownerIn.getPosition();
       double d0 = (double)blockpos.getX() + 0.5D;
       double d1 = (double)blockpos.getY() + 2.2D;
@@ -303,6 +305,7 @@ public class FiddleProyectileEntity extends Entity {
                entity1.heal(6F);
                ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.WEAKNESS, 20*10));
             }else{
+               if(parent!=null) parent.heal(3F);
                ((LivingEntity)entity).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 20*15));
             }
             if(entity1 instanceof PlayerEntity) entity1.heal(2);
