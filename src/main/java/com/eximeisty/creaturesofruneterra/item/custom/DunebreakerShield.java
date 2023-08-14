@@ -1,10 +1,13 @@
 package com.eximeisty.creaturesofruneterra.item.custom;
 
+import java.util.List;
+
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.item.client.dunebreakershield.DunebreakerShieldRenderer;
 
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -37,6 +42,7 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     private static final AnimationBuilder IZQUIERDA_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.izquierda", true);
     private static final AnimationBuilder ATTACKD_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackD", false).addAnimation("animation.dunebreaker_shield.derecha", true);
     private static final AnimationBuilder ATTACKI_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackI", false).addAnimation("animation.dunebreaker_shield.izquierda", true);
+    final String quote = "["+Minecraft.getInstance().gameSettings.keyBindAttack.getKeyDescription().replace("key.", "")+"]+["+Minecraft.getInstance().gameSettings.keyBindUseItem.getKeyDescription().replace("key.", "")+"] to use hability";
 
     public DunebreakerShield(Properties properties) {
         super(properties.setISTER(()-> DunebreakerShieldRenderer::new));
@@ -122,6 +128,10 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
         if (state == 3) controller.setAnimation(ATTACKD_ANIM);
         if (state == 4) controller.setAnimation(ATTACKI_ANIM);
     }
+
+    public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(new TranslationTextComponent(quote));
+	}
 
     @Override
 	public boolean isShield(ItemStack stack, LivingEntity entity) {
