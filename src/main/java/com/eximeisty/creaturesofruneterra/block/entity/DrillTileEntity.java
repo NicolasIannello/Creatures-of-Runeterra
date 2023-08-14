@@ -70,7 +70,7 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
     public void tick() {
         if(this.getTileData().getBoolean("shake")) {
             this.world.getPlayers().forEach(player ->{
-                if(player.getDistanceSq(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ())<200){
+                if(player.getDistanceSq(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ())<400){
                     player.rotationYaw+=Math.random()*(3+3)-3; 
                     player.rotationPitch+=Math.random()*(3+3)-3;
                 }
