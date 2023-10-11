@@ -1,0 +1,28 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "IOI",
+        "ONO",
+        "BHB"
+    ],
+    "key":{
+        "B":{
+            "item":"minecraft:blaze_rod"
+        },
+        "H":{
+            "item":"creaturesofruneterra:dunebreaker_horn"
+        },
+        "O":{
+            "item":"minecraft:obsidian"
+        },
+        "N":{
+            "item":"minecraft:nether_star"
+        },
+        "I":{
+            "item":"minecraft:iron_ingot"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:drill"
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "2 2",
+        "222",
+        "222"
+    ],
+    "key":{
+        "2":{
+            "item":"creaturesofruneterra:reksai_plaque"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:sai_chestplate"
+    }
+}

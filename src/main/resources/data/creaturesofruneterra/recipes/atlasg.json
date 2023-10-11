@@ -1,0 +1,28 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "ILI",
+        "LGL",
+        "OPO"
+    ],
+    "key":{
+        "L":{
+            "item":"minecraft:lapis_block"
+        },
+        "G":{
+            "item":"creaturesofruneterra:gemstone"
+        },
+        "O":{
+            "item":"minecraft:gold_block"
+        },
+        "I":{
+            "item":"minecraft:gold_ingot"
+        },
+        "P":{
+            "item":"minecraft:sticky_piston"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:atlasg"
+    }
+}

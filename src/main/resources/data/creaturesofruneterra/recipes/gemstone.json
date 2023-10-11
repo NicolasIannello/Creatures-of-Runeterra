@@ -1,0 +1,22 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "LBL",
+        "BHB",
+        "LBL"
+    ],
+    "key":{
+        "L":{
+            "item":"minecraft:lapis_lazuli"
+        },
+        "H":{
+            "item":"creaturesofruneterra:hexcore"
+        },
+        "B":{
+            "item":"minecraft:blaze_powder"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:gemstone"
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        " C ",
+        "TMT",
+        "TET"
+    ],
+    "key":{
+        "C":{
+            "item":"creaturesofruneterra:sai_chestplate"
+        },
+        "T":{
+            "item":"creaturesofruneterra:tendril"
+        },
+        "E":{
+            "item":"minecraft:elytra"
+        },
+        "M":{
+            "item":"minecraft:magma_cream"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:sai_elytra"
+    }
+}
