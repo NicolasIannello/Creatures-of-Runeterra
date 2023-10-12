@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 
+import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
 import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiBowItem;
 import com.eximeisty.creaturesofruneterra.item.custom.TendrilCompassItem;
@@ -88,16 +89,16 @@ public class ModItems {
 //
 //        //WEAPONS
 //        public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
-//        () -> new Fishbones(new Item.Properties().maxDamage(150).tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
-//        () -> new AtlasG(ModItemTier.ATLAS, 4, -1.5F, new Item.Properties().maxDamage(400).tab(ModItemGroup.COR_GROUP)));
-//
+//        () -> new Fishbones(new Item.Properties().durability(150).tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
+        () -> new AtlasG(ModItemTier.ATLAS, 4, -1.5F, new Item.Properties().durability(400).tab(ModItemGroup.COR_GROUP)));
+
 //        public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
-//        () -> new DunebreakerShield(new Item.Properties().maxDamage(600).tab(ModItemGroup.COR_GROUP)));
+//        () -> new DunebreakerShield(new Item.Properties().durability(600).tab(ModItemGroup.COR_GROUP)));
 //
 //        public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
-//        () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().maxDamage(100).tab(ModItemGroup.COR_GROUP)));
+//        () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().durability(100).tab(ModItemGroup.COR_GROUP)));
 //
 //        //SPAWN EGGS
 //        public static final RegistryObject<ModSpawnEggItem> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
