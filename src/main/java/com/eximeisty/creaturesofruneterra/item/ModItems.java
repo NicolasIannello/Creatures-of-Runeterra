@@ -4,6 +4,7 @@ import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 
 import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiBowItem;
+import com.eximeisty.creaturesofruneterra.item.custom.TendrilCompassItem;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -53,10 +54,10 @@ public class ModItems {
 
         public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow",
         () -> new SaiBowItem(new Item.Properties().stacksTo(1).durability(384).tab(ModItemGroup.COR_GROUP).fireResistant()));
-//
-//        public static final RegistryObject<Item> TENDRIL_COMPASS = ITEMS.register("tendril_compass",
-//        () -> new TendrilCompassItem(new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
+
+        public static final RegistryObject<Item> TENDRIL_COMPASS = ITEMS.register("tendril_compass",
+        () -> new TendrilCompassItem(new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
 //        //ARMORS
 //        public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
 //        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));

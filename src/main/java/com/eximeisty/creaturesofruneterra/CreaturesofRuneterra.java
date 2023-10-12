@@ -48,8 +48,8 @@ public class CreaturesofRuneterra
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-    ModItemModelProperties.addCustomItemProperties();
-    EntityRenderers.register(ModEntityTypes.HEXCORE.get(), HexcoreRenderer::new);
+        ModItemModelProperties.addCustomItemProperties();
+        EntityRenderers.register(ModEntityTypes.HEXCORE.get(), HexcoreRenderer::new);
    }
 
     private void setup(final FMLCommonSetupEvent event) {

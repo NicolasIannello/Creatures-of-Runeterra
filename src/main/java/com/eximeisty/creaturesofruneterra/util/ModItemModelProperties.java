@@ -1,7 +1,7 @@
 package com.eximeisty.creaturesofruneterra.util;
 
-
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.item.custom.TendrilCompassPropertyGetter;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -9,6 +9,7 @@ import net.minecraft.world.item.Item;
 public class ModItemModelProperties {
     public static void addCustomItemProperties() {
         makeBow(ModItems.SAI_BOW.get());
+        makeCompass(ModItems.TENDRIL_COMPASS.get());
     }
 
     private static void makeBow(Item item) {
@@ -26,8 +27,8 @@ public class ModItemModelProperties {
         });
     }
 
-//	public static void makeCompass( Item item ) {
-//		ItemModelsProperties.registerProperty(item, new ResourceLocation( "angle" ), new TendrilCompassPropertyGetter());
-//	}
+	public static void makeCompass( Item item ) {
+        ItemProperties.register(item, new ResourceLocation( "angle" ), new TendrilCompassPropertyGetter());
+	}
 	
 }
