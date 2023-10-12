@@ -25,6 +25,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+import software.bernie.geckolib3.GeckoLib;
 
 import java.util.stream.Collectors;
 
@@ -43,6 +44,8 @@ public class CreaturesofRuneterra
 
         eventBus.addListener(this::setup);
         eventBus.addListener(this::clientSetup);
+
+        GeckoLib.initialize();
 
         MinecraftForge.EVENT_BUS.register(this);
     }
