@@ -4,6 +4,7 @@ import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -47,8 +48,9 @@ public class CreaturesofRuneterra
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
-        EntityRenderers.register(ModEntityTypes.HEXCORE.get(), HexcoreRenderer::new);
-    }
+    ModItemModelProperties.addCustomItemProperties();
+    EntityRenderers.register(ModEntityTypes.HEXCORE.get(), HexcoreRenderer::new);
+   }
 
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
