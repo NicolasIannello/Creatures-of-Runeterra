@@ -3,8 +3,7 @@ package com.eximeisty.creaturesofruneterra.item;
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 
 import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -36,39 +35,39 @@ public class ModItems {
         () -> new Item(new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
         //TOOLS
-//        public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
-//        () -> new SwordItem(ModItemTier.SAI, 8, -2.4F, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
-//
-//        public static final RegistryObject<Item> SAI_SHOVEL = ITEMS.register("sai_shovel",
-//        () -> new ShovelItem(ModItemTier.SAI, 2F, -3.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
-//
-//        public static final RegistryObject<Item> SAI_PICKAXE = ITEMS.register("sai_pickaxe",
-//        () -> new PickaxeItem(ModItemTier.SAI, 2, -2.8F, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
-//
-//        public static final RegistryObject<Item> SAI_AXE = ITEMS.register("sai_axe",
-//        () -> new AxeItem(ModItemTier.SAI, 11.0F, -3.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
-//
-//        public static final RegistryObject<Item> SAI_HOE = ITEMS.register("sai_hoe",
-//        () -> new HoeItem(ModItemTier.SAI, -4, 0.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
+        public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
+        () -> new SwordItem(ModItemTier.SAI, 8+5, -2.4F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> SAI_SHOVEL = ITEMS.register("sai_shovel",
+        () -> new ShovelItem(ModItemTier.SAI, 2F+5, -3.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> SAI_PICKAXE = ITEMS.register("sai_pickaxe",
+        () -> new PickaxeItem(ModItemTier.SAI, 2+5, -2.8F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> SAI_AXE = ITEMS.register("sai_axe",
+        () -> new AxeItem(ModItemTier.SAI, 11.0F+5, -3.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> SAI_HOE = ITEMS.register("sai_hoe",
+        () -> new HoeItem(ModItemTier.SAI, -4+5, 0.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 //
 //        public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow",
-//        () -> new SaiBowItem(new Item.Properties().stacksTo(1).maxDamage(384).tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
+//        () -> new SaiBowItem(new Item.Properties().stacksTo(1).maxDamage(384).tab(ModItemGroup.COR_GROUP).fireResistant()));
 //
 //        public static final RegistryObject<Item> TENDRIL_COMPASS = ITEMS.register("tendril_compass",
 //        () -> new TendrilCompassItem(new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
 //        //ARMORS
 //        public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
-//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
+//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 //
 //        public static final RegistryObject<Item> SAI_CHESTPLATE = ITEMS.register("sai_chestplate",
-//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
+//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 //
 //        public static final RegistryObject<Item> SAI_LEGGINGS = ITEMS.register("sai_leggings",
-//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.LEGS, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
+//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.LEGS, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 //
 //        public static final RegistryObject<Item> SAI_BOOTS = ITEMS.register("sai_boots",
-//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.FEET, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
+//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.FEET, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 //
 //        public static final RegistryObject<Item> SAI_ELYTRA = ITEMS.register("sai_elytra",
 //        () -> new SaiElytraItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
@@ -80,10 +79,10 @@ public class ModItems {
 //        () -> new FiddleArmorItem(ArmorMaterial.CHAIN, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
 //        public static final RegistryObject<Item> FIDDLE_BEARTRAP = ITEMS.register("fiddle_beartrap",
-//        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
+//        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 //
 //        public static final RegistryObject<Item> FIDDLE_BIRDCAGE = ITEMS.register("fiddle_birdcage",
-//        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).isImmuneToFire()));
+//        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 //
 //        //WEAPONS
 //        public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
