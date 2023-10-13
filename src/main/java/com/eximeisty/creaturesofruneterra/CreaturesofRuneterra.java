@@ -7,6 +7,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRend
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
+import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -42,6 +43,7 @@ public class CreaturesofRuneterra
 
         ModItems.register(eventBus);
         ModBlocks.register(eventBus);
+        ModSoundEvents.register(eventBus);
         ModEntityTypes.register(eventBus);
 
         eventBus.addListener(this::setup);
