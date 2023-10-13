@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.HexcoreEntity;
 
 
@@ -97,10 +98,10 @@ public class ModEntityTypes {
         ()-> EntityType.Builder.<MisilEntity>of(MisilEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
     );
 
-//    public static final RegistryObject<EntityType<DBShieldEntity>> DBSHIELD =
-//    ENTITY_TYPES.register("dbshield",
-//        ()-> EntityType.Builder.<DBShieldEntity>of(DBShieldEntity::new, MobCategory.MISC).sized(2.5F, 2.0F).setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "dbshield").toString())
-//    );
+    public static final RegistryObject<EntityType<DBShieldEntity>> DBSHIELD =
+    ENTITY_TYPES.register("dbshield",
+        ()-> EntityType.Builder.<DBShieldEntity>of(DBShieldEntity::new, MobCategory.MISC).sized(2.5F, 2.0F).setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "dbshield").toString())
+    );
 
     public static final RegistryObject<EntityType<HexcoreEntity>> HEXCORE = 
     ENTITY_TYPES.register("hexcore", 

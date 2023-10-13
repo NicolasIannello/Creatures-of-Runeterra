@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra;
 
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
@@ -55,6 +56,7 @@ public class CreaturesofRuneterra
         ModItemModelProperties.addCustomItemProperties();
         EntityRenderers.register(ModEntityTypes.HEXCORE.get(), HexcoreRenderer::new);
         EntityRenderers.register(ModEntityTypes.MISIL.get(), MisilRenderer::new);
+        EntityRenderers.register(ModEntityTypes.DBSHIELD.get(), DBShieldRenderer::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
