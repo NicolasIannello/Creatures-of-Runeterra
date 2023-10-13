@@ -2,10 +2,7 @@ package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 
-import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
-import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
-import com.eximeisty.creaturesofruneterra.item.custom.SaiBowItem;
-import com.eximeisty.creaturesofruneterra.item.custom.TendrilCompassItem;
+import com.eximeisty.creaturesofruneterra.item.custom.*;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -22,8 +19,8 @@ public class ModItems {
         public static final RegistryObject<Item> GEMSTONE = ITEMS.register("gemstone",
         () -> new Item(new Item.Properties().stacksTo(10).tab(ModItemGroup.COR_GROUP)));
 
-//        public static final RegistryObject<Item> MISIL = ITEMS.register("misil",
-//        () -> new MisilItem(new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+        public static final RegistryObject<Item> MISIL = ITEMS.register("misil",
+        () -> new MisilItem(new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> DUNEBREAKER_HORN = ITEMS.register("dunebreaker_horn",
         () -> new Item(new Item.Properties().tab(ModItemGroup.COR_GROUP)));
@@ -86,10 +83,10 @@ public class ModItems {
 //
 //        public static final RegistryObject<Item> FIDDLE_BIRDCAGE = ITEMS.register("fiddle_birdcage",
 //        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
-//
-//        //WEAPONS
-//        public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
-//        () -> new Fishbones(new Item.Properties().durability(150).tab(ModItemGroup.COR_GROUP)));
+
+        //WEAPONS
+        public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
+        () -> new Fishbones(new Item.Properties().durability(150).tab(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
         () -> new AtlasG(ModItemTier.ATLAS, 4, -1.5F, new Item.Properties().durability(400).tab(ModItemGroup.COR_GROUP)));
