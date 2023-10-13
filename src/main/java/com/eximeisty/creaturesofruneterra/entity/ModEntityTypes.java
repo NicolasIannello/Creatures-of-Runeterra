@@ -4,6 +4,7 @@ import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.HexcoreEntity;
 
 
+import com.eximeisty.creaturesofruneterra.entity.custom.MisilEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -89,13 +90,13 @@ public class ModEntityTypes {
 //    ENTITY_TYPES.register("fiddle_dummy",
 //        ()-> EntityType.Builder.of(FiddleDummyEntity::new, MobCategory.MONSTER).sized(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_dummy").toString())
 //    );
-//
-//    //ITEMS
-//    public static final RegistryObject<EntityType<MisilEntity>> MISIL =
-//    ENTITY_TYPES.register("misil",
-//        ()-> EntityType.Builder.<MisilEntity>of(MisilEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
-//    );
-//
+
+    //ITEMS
+    public static final RegistryObject<EntityType<MisilEntity>> MISIL =
+    ENTITY_TYPES.register("misil",
+        ()-> EntityType.Builder.<MisilEntity>of(MisilEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "misil").toString())
+    );
+
 //    public static final RegistryObject<EntityType<DBShieldEntity>> DBSHIELD =
 //    ENTITY_TYPES.register("dbshield",
 //        ()-> EntityType.Builder.<DBShieldEntity>of(DBShieldEntity::new, MobCategory.MISC).sized(2.5F, 2.0F).setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "dbshield").toString())
