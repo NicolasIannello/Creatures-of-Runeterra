@@ -91,9 +91,9 @@ public class ModItems {
         public static final RegistryObject<Item> ATLASG = ITEMS.register("atlasg",
         () -> new AtlasG(ModItemTier.ATLAS, 4, -1.5F, new Item.Properties().durability(400).tab(ModItemGroup.COR_GROUP)));
 
-//        public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
-//        () -> new DunebreakerShield(new Item.Properties().durability(600).tab(ModItemGroup.COR_GROUP)));
-//
+        public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
+        () -> new DunebreakerShield(new Item.Properties().durability(600).tab(ModItemGroup.COR_GROUP)));
+
 //        public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
 //        () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().durability(100).tab(ModItemGroup.COR_GROUP)));
 //
