@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.FiddleProyectileEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.HexcoreEntity;
 
 
@@ -112,11 +113,11 @@ public class ModEntityTypes {
 //    ENTITY_TYPES.register("bullet",
 //        ()-> EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "bullet").toString())
 //    );
-//
-//    public static final RegistryObject<EntityType<FiddleProyectileEntity>> FIDDLE_PROYECTILE =
-//    ENTITY_TYPES.register("fiddle_proyectile",
-//        ()-> EntityType.Builder.<FiddleProyectileEntity>of(FiddleProyectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(8).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_proyectile").toString())
-//    );
+
+    public static final RegistryObject<EntityType<FiddleProyectileEntity>> FIDDLE_PROYECTILE =
+    ENTITY_TYPES.register("fiddle_proyectile",
+        ()-> EntityType.Builder.<FiddleProyectileEntity>of(FiddleProyectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(8).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_proyectile").toString())
+    );
 
     public static void register(IEventBus eventBus){
         ENTITY_TYPES.register(eventBus);
