@@ -2,10 +2,7 @@ package com.eximeisty.creaturesofruneterra.events;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
-import com.eximeisty.creaturesofruneterra.entity.custom.ExaltedPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.PlunderPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.*;
 
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,7 +14,7 @@ public class ModEventBusEvents {
     public static void addEntityAttributes(EntityAttributeCreationEvent event) {
 //        event.put(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingEntity.setAttributes());
 //        event.put(ModEntityTypes.XERXARETH.get(), XerxarethEntity.setAttributes());
-//        event.put(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerEntity.setAttributes());
+        event.put(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerEntity.setAttributes());
 //        event.put(ModEntityTypes.REKSAI.get(), RekSaiEntity.setAttributes());
         event.put(ModEntityTypes.PORO.get(), PoroEntity.setAttributes());
         event.put(ModEntityTypes.FABLEDPORO.get(), FabledPoroEntity.setAttributes());

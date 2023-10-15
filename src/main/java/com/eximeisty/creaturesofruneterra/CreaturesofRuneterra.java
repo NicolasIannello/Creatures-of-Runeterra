@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra;
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.ExaltedPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
@@ -65,6 +66,8 @@ public class CreaturesofRuneterra
         EntityRenderers.register(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroRenderer::new);
         EntityRenderers.register(ModEntityTypes.FABLEDPORO.get(), FabledPoroRenderer::new);
         EntityRenderers.register(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
+        //VOID CREATURES
+        EntityRenderers.register(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {

@@ -27,10 +27,10 @@ public class ModEntityTypes {
 //        ()-> EntityType.Builder.of(XerxarethEntity::new, MobCategory.MONSTER).sized(8.5f,5.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xerxareth").toString())
 //    );
 
-//    public static final RegistryObject<EntityType<XerSaiDunebreakerEntity>> XERSAI_DUNEBREAKER=
-//    ENTITY_TYPES.register("xersai_dunebreaker",
-//        ()-> EntityType.Builder.of(XerSaiDunebreakerEntity::new, MobCategory.MONSTER).sized(3f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString())
-//    );
+    public static final RegistryObject<EntityType<XerSaiDunebreakerEntity>> XERSAI_DUNEBREAKER=
+    ENTITY_TYPES.register("xersai_dunebreaker",
+        ()-> EntityType.Builder.of(XerSaiDunebreakerEntity::new, MobCategory.MONSTER).sized(3f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_dunebreaker").toString())
+    );
 
     //BOSSES
 //    public static final RegistryObject<EntityType<RekSaiEntity>> REKSAI=
