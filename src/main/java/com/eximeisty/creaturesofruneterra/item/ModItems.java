@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.item;
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 
 import com.eximeisty.creaturesofruneterra.item.custom.*;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -56,33 +57,33 @@ public class ModItems {
         public static final RegistryObject<Item> TENDRIL_COMPASS = ITEMS.register("tendril_compass",
         () -> new TendrilCompassItem(new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
-//        //ARMORS
-//        public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
-//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
-//
-//        public static final RegistryObject<Item> SAI_CHESTPLATE = ITEMS.register("sai_chestplate",
-//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
-//
-//        public static final RegistryObject<Item> SAI_LEGGINGS = ITEMS.register("sai_leggings",
-//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.LEGS, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
-//
-//        public static final RegistryObject<Item> SAI_BOOTS = ITEMS.register("sai_boots",
-//        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlotType.FEET, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
-//
-//        public static final RegistryObject<Item> SAI_ELYTRA = ITEMS.register("sai_elytra",
-//        () -> new SaiElytraItem(ModArmorMaterial.SAI, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<Item> FIDDLE_HELMET = ITEMS.register("fiddle_helmet",
-//        () -> new FiddleArmorItem(ArmorMaterial.CHAIN, EquipmentSlotType.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<Item> FIDDLE_CHESTPLATE = ITEMS.register("fiddle_chestplate",
-//        () -> new FiddleArmorItem(ArmorMaterial.CHAIN, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<Item> FIDDLE_BEARTRAP = ITEMS.register("fiddle_beartrap",
-//        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
-//
-//        public static final RegistryObject<Item> FIDDLE_BIRDCAGE = ITEMS.register("fiddle_birdcage",
-//        () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+        //ARMORS
+        public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlot.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> SAI_CHESTPLATE = ITEMS.register("sai_chestplate",
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlot.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> SAI_LEGGINGS = ITEMS.register("sai_leggings",
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlot.LEGS, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> SAI_BOOTS = ITEMS.register("sai_boots",
+        () -> new SaiArmorItem(ModArmorMaterial.SAI, EquipmentSlot.FEET, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> SAI_ELYTRA = ITEMS.register("sai_elytra",
+        () -> new SaiElytraItem(ModArmorMaterial.SAI, EquipmentSlot.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> FIDDLE_HELMET = ITEMS.register("fiddle_helmet",
+        () -> new FiddleArmorItem(ArmorMaterials.CHAIN, EquipmentSlot.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> FIDDLE_CHESTPLATE = ITEMS.register("fiddle_chestplate",
+        () -> new FiddleArmorItem(ArmorMaterials.CHAIN, EquipmentSlot.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> FIDDLE_BEARTRAP = ITEMS.register("fiddle_beartrap",
+        () -> new FiddleArmorItem(ArmorMaterials.NETHERITE, EquipmentSlot.HEAD, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+
+        public static final RegistryObject<Item> FIDDLE_BIRDCAGE = ITEMS.register("fiddle_birdcage",
+        () -> new FiddleArmorItem(ArmorMaterials.NETHERITE, EquipmentSlot.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 
         //WEAPONS
         public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
