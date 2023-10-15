@@ -124,10 +124,10 @@ public class ModItems {
 
 //        public static final RegistryObject<Item> POROBOT_SPAWN_EGG = ITEMS.register("porobot_spawn_egg",
 //        () -> new ForgeSpawnEggItem(ModEntityTypes.PATCHEDPOROBOT, 0xc25719, 0x612c0e, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<Item> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
-//        () -> new ForgeSpawnEggItem(ModEntityTypes.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
+
+        public static final RegistryObject<Item> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntityTypes.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
 //        public static final RegistryObject<Item> FIDDLESTICKS_SPAWN_EGG = ITEMS.register("fiddlesticks_spawn_egg",
 //        () -> new ForgeSpawnEggItem(ModEntityTypes.FIDDLESTICKS, 0x0f0705, 0x3b1210, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //

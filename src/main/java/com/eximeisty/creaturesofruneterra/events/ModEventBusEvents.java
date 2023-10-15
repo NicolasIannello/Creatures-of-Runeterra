@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.events;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.entity.custom.ExaltedPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PlunderPoroEntity;
 import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
@@ -22,7 +23,7 @@ public class ModEventBusEvents {
         event.put(ModEntityTypes.FABLEDPORO.get(), FabledPoroEntity.setAttributes());
         event.put(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroEntity.setAttributes());
 //        event.put(ModEntityTypes.PATCHEDPOROBOT.get(), PatchedPorobotEntity.setAttributes());
-//        event.put(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroEntity.setAttributes());
+        event.put(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroEntity.setAttributes());
 //        event.put(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksEntity.setAttributes());
 //        event.put(ModEntityTypes.FIDDLEDUMMY.get(), FiddleDummyEntity.setAttributes());
         //PART ENTITIES

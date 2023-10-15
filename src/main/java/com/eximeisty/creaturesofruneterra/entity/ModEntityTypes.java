@@ -62,13 +62,13 @@ public class ModEntityTypes {
 //    ENTITY_TYPES.register("patchedporobot",
 //        ()-> EntityType.Builder.of(PatchedPorobotEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "patchedporobot").toString())
 //    );
-//
-//    public static final RegistryObject<EntityType<ExaltedPoroEntity>> EXALTEDPORO=
-//    ENTITY_TYPES.register("exaltedporo",
-//        ()-> EntityType.Builder.of(ExaltedPoroEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "exaltedporo").toString())
-//    );
-//
-//    //PART ENTITIES
+
+    public static final RegistryObject<EntityType<ExaltedPoroEntity>> EXALTEDPORO=
+    ENTITY_TYPES.register("exaltedporo",
+        ()-> EntityType.Builder.of(ExaltedPoroEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "exaltedporo").toString())
+    );
+
+    //PART ENTITIES
 //    public static final RegistryObject<EntityType<CoRPartEntity>> WIVHIV=
 //    ENTITY_TYPES.register("wichiv",
 //        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).immuneToFire().sized(4f,4f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wichiv").toString())
