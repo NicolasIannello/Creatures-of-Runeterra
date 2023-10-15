@@ -101,35 +101,35 @@ public class ModItems {
         () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().durability(100).tab(ModItemGroup.COR_GROUP)));
 
 //        //SPAWN EGGS
-//        public static final RegistryObject<ModSpawnEggItem> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+//        public static final RegistryObject<Item> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
+//        () -> new ForgeSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
-//        public static final RegistryObject<ModSpawnEggItem> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.XERSAI_DUNEBREAKER, 0x9F2BAF, 0x370E45, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+//        public static final RegistryObject<Item> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",
+//        () -> new ForgeSpawnEggItem(ModEntityTypes.XERSAI_DUNEBREAKER, 0x9F2BAF, 0x370E45, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
-//        public static final RegistryObject<ModSpawnEggItem> XERXARETH_SPAWN_EGG = ITEMS.register("xerxareth_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.XERXARETH, 0x9F2BAF, 0xF3D978, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+//        public static final RegistryObject<Item> XERXARETH_SPAWN_EGG = ITEMS.register("xerxareth_spawn_egg",
+//        () -> new ForgeSpawnEggItem(ModEntityTypes.XERXARETH, 0x9F2BAF, 0xF3D978, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
-//        public static final RegistryObject<ModSpawnEggItem> REKSAI_SPAWN_EGG = ITEMS.register("reksai_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.REKSAI, 0x9F2BAF, 0x005f8f, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+//        public static final RegistryObject<Item> REKSAI_SPAWN_EGG = ITEMS.register("reksai_spawn_egg",
+//        () -> new ForgeSpawnEggItem(ModEntityTypes.REKSAI, 0x9F2BAF, 0x005f8f, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> PORO_SPAWN_EGG = ITEMS.register("poro_spawn_egg",
         () -> new ForgeSpawnEggItem(ModEntityTypes.PORO, 0xffffff, 0xdde5e4, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
-//        public static final RegistryObject<ModSpawnEggItem> FABLEDPORO_SPAWN_EGG = ITEMS.register("fabledporo_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.FABLEDPORO, 0xffffff, 0x2e2b2b, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+//        public static final RegistryObject<Item> FABLEDPORO_SPAWN_EGG = ITEMS.register("fabledporo_spawn_egg",
+//        () -> new ForgeSpawnEggItem(ModEntityTypes.FABLEDPORO, 0xffffff, 0x2e2b2b, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> PLUNDERPORO_SPAWN_EGG = ITEMS.register("plunderporo_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntityTypes.PLUNDERPORO, 0xffffff, 0x0c6822, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
+//        public static final RegistryObject<Item> POROBOT_SPAWN_EGG = ITEMS.register("porobot_spawn_egg",
+//        () -> new ForgeSpawnEggItem(ModEntityTypes.PATCHEDPOROBOT, 0xc25719, 0x612c0e, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
-//        public static final RegistryObject<ModSpawnEggItem> PLUNDERPORO_SPAWN_EGG = ITEMS.register("plunderporo_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.PLUNDERPORO, 0xffffff, 0x0c6822, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+//        public static final RegistryObject<Item> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
+//        () -> new ForgeSpawnEggItem(ModEntityTypes.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
-//        public static final RegistryObject<ModSpawnEggItem> POROBOT_SPAWN_EGG = ITEMS.register("porobot_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.PATCHEDPOROBOT, 0xc25719, 0x612c0e, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<ModSpawnEggItem> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<ModSpawnEggItem> FIDDLESTICKS_SPAWN_EGG = ITEMS.register("fiddlesticks_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.FIDDLESTICKS, 0x0f0705, 0x3b1210, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+//        public static final RegistryObject<Item> FIDDLESTICKS_SPAWN_EGG = ITEMS.register("fiddlesticks_spawn_egg",
+//        () -> new ForgeSpawnEggItem(ModEntityTypes.FIDDLESTICKS, 0x0f0705, 0x3b1210, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
 //        //BLOCKS
 //        public static final RegistryObject<Item> DRILL = ITEMS.register("drill",

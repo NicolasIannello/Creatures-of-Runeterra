@@ -2,6 +2,8 @@ package com.eximeisty.creaturesofruneterra;
 
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
@@ -55,8 +57,10 @@ public class CreaturesofRuneterra
         EntityRenderers.register(ModEntityTypes.MISIL.get(), MisilRenderer::new);
         EntityRenderers.register(ModEntityTypes.DBSHIELD.get(), DBShieldRenderer::new);
         EntityRenderers.register(ModEntityTypes.FIDDLE_PROYECTILE.get(), FiddleProyectileRenderer::new);
+        EntityRenderers.register(ModEntityTypes.BULLET.get(), BulletRenderer::new);
         //POROS
         EntityRenderers.register(ModEntityTypes.PORO.get(), PoroRenderer::new);
+        EntityRenderers.register(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroRenderer::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {

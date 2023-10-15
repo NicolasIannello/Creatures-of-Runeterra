@@ -1,5 +1,6 @@
 package com.eximeisty.creaturesofruneterra.entity.custom;
 
+import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -187,7 +188,7 @@ public class PoroEntity extends TamableAnimal implements IAnimatable {
                 }
                 if(item == Items.HEART_OF_THE_SEA){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
-                    //switchEntity(ModEntityTypes.PLUNDERPORO.get(), playerIn);
+                    switchEntity(ModEntityTypes.PLUNDERPORO.get(), playerIn);
                 }
                 if(item == Items.CHEST){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
@@ -218,7 +219,7 @@ public class PoroEntity extends TamableAnimal implements IAnimatable {
 
     public void switchEntity(EntityType<?> poro, Player owner){
         this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItemInHand(InteractionHand.MAIN_HAND)));
-        this.dropEquipment();
+        this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItemBySlot(EquipmentSlot.HEAD)));
         TamableAnimal entity= (TamableAnimal)poro.spawn(this.level.getServer().overworld(), (ItemStack) null, null, this.getOnPos().above(), MobSpawnType.NATURAL, false, false);
         entity.tame(owner);
         this.discard();
