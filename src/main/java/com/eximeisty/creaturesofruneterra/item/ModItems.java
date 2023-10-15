@@ -116,8 +116,8 @@ public class ModItems {
         public static final RegistryObject<Item> PORO_SPAWN_EGG = ITEMS.register("poro_spawn_egg",
         () -> new ForgeSpawnEggItem(ModEntityTypes.PORO, 0xffffff, 0xdde5e4, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
-//        public static final RegistryObject<Item> FABLEDPORO_SPAWN_EGG = ITEMS.register("fabledporo_spawn_egg",
-//        () -> new ForgeSpawnEggItem(ModEntityTypes.FABLEDPORO, 0xffffff, 0x2e2b2b, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+        public static final RegistryObject<Item> FABLEDPORO_SPAWN_EGG = ITEMS.register("fabledporo_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntityTypes.FABLEDPORO, 0xffffff, 0x2e2b2b, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> PLUNDERPORO_SPAWN_EGG = ITEMS.register("plunderporo_spawn_egg",
         () -> new ForgeSpawnEggItem(ModEntityTypes.PLUNDERPORO, 0xffffff, 0x0c6822, new Item.Properties().tab(ModItemGroup.COR_GROUP)));

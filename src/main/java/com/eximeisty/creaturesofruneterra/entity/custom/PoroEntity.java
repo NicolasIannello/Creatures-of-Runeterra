@@ -184,7 +184,7 @@ public class PoroEntity extends TamableAnimal implements IAnimatable {
             if(this.isTame() && this.isOwnedBy(playerIn)){
                 if(item == Items.ANVIL){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
-                    //switchEntity(ModEntityTypes.FABLEDPORO.get(), playerIn);
+                    switchEntity(ModEntityTypes.FABLEDPORO.get(), playerIn);
                 }
                 if(item == Items.HEART_OF_THE_SEA){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);

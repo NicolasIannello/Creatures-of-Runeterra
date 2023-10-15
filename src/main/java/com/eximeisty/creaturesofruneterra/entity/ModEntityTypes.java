@@ -48,10 +48,10 @@ public class ModEntityTypes {
         ()-> EntityType.Builder.<PoroEntity>of(PoroEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "poro").toString())
     );
 
-//    public static final RegistryObject<EntityType<FabledPoroEntity>> FABLEDPORO=
-//    ENTITY_TYPES.register("fabledporo",
-//        ()-> EntityType.Builder.of(FabledPoroEntity::new, MobCategory.CREATURE).sized(0.8f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fabledporo").toString())
-//    );
+    public static final RegistryObject<EntityType<FabledPoroEntity>> FABLEDPORO=
+    ENTITY_TYPES.register("fabledporo",
+        ()-> EntityType.Builder.of(FabledPoroEntity::new, MobCategory.CREATURE).sized(0.8f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fabledporo").toString())
+    );
 
     public static final RegistryObject<EntityType<PlunderPoroEntity>> PLUNDERPORO=
     ENTITY_TYPES.register("plunderporo",

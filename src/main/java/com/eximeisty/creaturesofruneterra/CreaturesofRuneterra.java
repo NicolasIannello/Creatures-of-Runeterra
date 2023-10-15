@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra;
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer;
@@ -61,6 +62,7 @@ public class CreaturesofRuneterra
         //POROS
         EntityRenderers.register(ModEntityTypes.PORO.get(), PoroRenderer::new);
         EntityRenderers.register(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroRenderer::new);
+        EntityRenderers.register(ModEntityTypes.FABLEDPORO.get(), FabledPoroRenderer::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
