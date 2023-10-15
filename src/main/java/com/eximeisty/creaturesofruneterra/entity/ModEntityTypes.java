@@ -1,12 +1,9 @@
 package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
-import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FiddleProyectileEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.HexcoreEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.*;
 
 
-import com.eximeisty.creaturesofruneterra.entity.custom.MisilEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -44,13 +41,13 @@ public class ModEntityTypes {
 //    ENTITY_TYPES.register("fiddlesticks",
 //        ()-> EntityType.Builder.of(FiddlesticksEntity::new, MobCategory.MONSTER).sized(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddlesticks").toString())
 //    );
-//
-//    //POROS
-//    public static final RegistryObject<EntityType<PoroEntity>> PORO=
-//    ENTITY_TYPES.register("poro",
-//        ()-> EntityType.Builder.<PoroEntity>of(PoroEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "poro").toString())
-//    );
-//
+
+    //POROS
+    public static final RegistryObject<EntityType<PoroEntity>> PORO=
+    ENTITY_TYPES.register("poro",
+        ()-> EntityType.Builder.<PoroEntity>of(PoroEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "poro").toString())
+    );
+
 //    public static final RegistryObject<EntityType<FabledPoroEntity>> FABLEDPORO=
 //    ENTITY_TYPES.register("fabledporo",
 //        ()-> EntityType.Builder.of(FabledPoroEntity::new, MobCategory.CREATURE).sized(0.8f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fabledporo").toString())

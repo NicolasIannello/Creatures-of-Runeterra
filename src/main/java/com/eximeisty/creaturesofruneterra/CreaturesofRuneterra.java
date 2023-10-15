@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra;
 
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
@@ -12,6 +13,9 @@ import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
@@ -44,15 +48,20 @@ public class CreaturesofRuneterra
 
     private void clientSetup(final FMLClientSetupEvent event) {
         ModItemModelProperties.addCustomItemProperties();
+        //BLOCKS
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.TENDRIL.get(), RenderType.cutout());
+        //PROYECTILES
         EntityRenderers.register(ModEntityTypes.HEXCORE.get(), HexcoreRenderer::new);
         EntityRenderers.register(ModEntityTypes.MISIL.get(), MisilRenderer::new);
         EntityRenderers.register(ModEntityTypes.DBSHIELD.get(), DBShieldRenderer::new);
         EntityRenderers.register(ModEntityTypes.FIDDLE_PROYECTILE.get(), FiddleProyectileRenderer::new);
+        //POROS
+        EntityRenderers.register(ModEntityTypes.PORO.get(), PoroRenderer::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            ItemBlockRenderTypes.setRenderLayer(ModBlocks.TENDRIL.get(), RenderType.cutout());
+            SpawnPlacements.register(ModEntityTypes.PORO.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
         });
     }
 
