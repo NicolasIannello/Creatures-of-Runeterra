@@ -2,9 +2,11 @@ package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 
+import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.item.custom.*;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -110,10 +112,10 @@ public class ModItems {
 //
 //        public static final RegistryObject<ModSpawnEggItem> REKSAI_SPAWN_EGG = ITEMS.register("reksai_spawn_egg",
 //        () -> new ModSpawnEggItem(ModEntityTypes.REKSAI, 0x9F2BAF, 0x005f8f, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<ModSpawnEggItem> PORO_SPAWN_EGG = ITEMS.register("poro_spawn_egg",
-//        () -> new ModSpawnEggItem(ModEntityTypes.PORO, 0xffffff, 0xdde5e4, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
+
+        public static final RegistryObject<Item> PORO_SPAWN_EGG = ITEMS.register("poro_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntityTypes.PORO, 0xffffff, 0xdde5e4, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
 //        public static final RegistryObject<ModSpawnEggItem> FABLEDPORO_SPAWN_EGG = ITEMS.register("fabledporo_spawn_egg",
 //        () -> new ModSpawnEggItem(ModEntityTypes.FABLEDPORO, 0xffffff, 0x2e2b2b, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 //
