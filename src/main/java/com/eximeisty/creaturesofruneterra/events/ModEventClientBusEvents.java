@@ -1,10 +1,8 @@
 package com.eximeisty.creaturesofruneterra.events;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
-import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
-import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.model.EmptyModel;
 import com.eximeisty.creaturesofruneterra.entity.model.XerSaiHatchlingModel;
-import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.custom.FiddleArmorItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiElytraItem;
@@ -41,5 +39,6 @@ public class ModEventClientBusEvents {
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(XerSaiHatchlingModel.LAYER_LOCATION, XerSaiHatchlingModel::createBodyLayer);
+        event.registerLayerDefinition(EmptyModel.LAYER_LOCATION, EmptyModel::createBodyLayer);
     }
 }
