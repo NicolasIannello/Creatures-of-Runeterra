@@ -71,7 +71,7 @@ public class XerSaiDunebreakerEntity extends PathfinderMob implements IAnimatabl
         this.goalSelector.addGoal( 2, new NearestAttackableTargetGoal<>( this, Player.class, true ));
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.0D, false));
         this.goalSelector.addGoal(9, new RandomStrollGoal(this, 0.35,80));
-        this.targetSelector.addGoal(2, (new HurtByTargetGoal(this)));//.setAlertOthers(XerSaiHatchlingEntity.class));
+        this.targetSelector.addGoal(2, (new HurtByTargetGoal(this).setAlertOthers(XerSaiHatchlingEntity.class)));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(7, new NearestAttackableTargetGoal<>(this, Villager.class, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));

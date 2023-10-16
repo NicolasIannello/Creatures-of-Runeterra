@@ -1,6 +1,10 @@
 package com.eximeisty.creaturesofruneterra.events;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.model.XerSaiHatchlingModel;
+import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.custom.FiddleArmorItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiElytraItem;
@@ -9,6 +13,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.armor.sai.SaiArmorRender
 import com.eximeisty.creaturesofruneterra.entity.client.armor.sai.SaiElytraRenderer;
 
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -27,4 +32,14 @@ public class ModEventClientBusEvents {
 //    public static void registerBlockRenderers(final FMLClientSetupEvent event){
 //        ClientRegistry.bindTileEntityRenderer(ModTiles.DRILL.get(), DrillRenderer::new);
 //    }
+
+//    @SubscribeEvent
+//    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+//        event.registerEntityRenderer(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
+//    }
+
+    @SubscribeEvent
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(XerSaiHatchlingModel.LAYER_LOCATION, XerSaiHatchlingModel::createBodyLayer);
+    }
 }

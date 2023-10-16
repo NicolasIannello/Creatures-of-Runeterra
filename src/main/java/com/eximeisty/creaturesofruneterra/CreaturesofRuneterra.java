@@ -12,6 +12,7 @@ import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
+import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
@@ -68,6 +69,7 @@ public class CreaturesofRuneterra
         EntityRenderers.register(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
         //VOID CREATURES
         EntityRenderers.register(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
+        EntityRenderers.register(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {

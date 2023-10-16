@@ -100,9 +100,9 @@ public class ModItems {
         public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
         () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().durability(100).tab(ModItemGroup.COR_GROUP)));
 
-//        //SPAWN EGGS
-//        public static final RegistryObject<Item> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
-//        () -> new ForgeSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+        //SPAWN EGGS
+        public static final RegistryObject<Item> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",
         () -> new ForgeSpawnEggItem(ModEntityTypes.XERSAI_DUNEBREAKER, 0x9F2BAF, 0x370E45, new Item.Properties().tab(ModItemGroup.COR_GROUP)));

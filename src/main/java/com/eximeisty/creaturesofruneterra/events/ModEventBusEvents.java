@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ModEventBusEvents {
     @SubscribeEvent
     public static void addEntityAttributes(EntityAttributeCreationEvent event) {
-//        event.put(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingEntity.setAttributes());
+        event.put(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingEntity.setAttributes());
 //        event.put(ModEntityTypes.XERXARETH.get(), XerxarethEntity.setAttributes());
         event.put(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerEntity.setAttributes());
 //        event.put(ModEntityTypes.REKSAI.get(), RekSaiEntity.setAttributes());

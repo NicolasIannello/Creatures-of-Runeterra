@@ -17,10 +17,10 @@ public class ModEntityTypes {
     DeferredRegister.create(ForgeRegistries.ENTITIES, CreaturesofRuneterra.MOD_ID);
     
     //Void creatures
-//    public static final RegistryObject<EntityType<XerSaiHatchlingEntity>> XERSAI_HATCHLING=
-//    ENTITY_TYPES.register("xersai_hatchling",
-//        ()-> EntityType.Builder.of(XerSaiHatchlingEntity::new, MobCategory.MONSTER).sized(1.5f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_hatchling").toString())
-//    );
+    public static final RegistryObject<EntityType<XerSaiHatchlingEntity>> XERSAI_HATCHLING=
+    ENTITY_TYPES.register("xersai_hatchling",
+        ()-> EntityType.Builder.of(XerSaiHatchlingEntity::new, MobCategory.MONSTER).sized(1.5f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_hatchling").toString())
+    );
     
 //    public static final RegistryObject<EntityType<XerxarethEntity>> XERXARETH=
 //    ENTITY_TYPES.register("xerxareth",
