@@ -15,7 +15,7 @@ public class ModEventBusEvents {
         event.put(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingEntity.setAttributes());
 //        event.put(ModEntityTypes.XERXARETH.get(), XerxarethEntity.setAttributes());
         event.put(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerEntity.setAttributes());
-//        event.put(ModEntityTypes.REKSAI.get(), RekSaiEntity.setAttributes());
+        event.put(ModEntityTypes.REKSAI.get(), RekSaiEntity.setAttributes());
         event.put(ModEntityTypes.PORO.get(), PoroEntity.setAttributes());
         event.put(ModEntityTypes.FABLEDPORO.get(), FabledPoroEntity.setAttributes());
         event.put(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroEntity.setAttributes());
@@ -24,9 +24,9 @@ public class ModEventBusEvents {
 //        event.put(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksEntity.setAttributes());
 //        event.put(ModEntityTypes.FIDDLEDUMMY.get(), FiddleDummyEntity.setAttributes());
         //PART ENTITIES
-//        event.put(ModEntityTypes.WIVHIV.get(), CoRPartEntity.setAttributes());
-//        event.put(ModEntityTypes.WVIHV.get(), CoRPartEntity.setAttributes());
-//        event.put(ModEntityTypes.WVIIHVI.get(), CoRPartEntity.setAttributes());
-//        event.put(ModEntityTypes.WIIIHIII.get(), CoRPartEntity.setAttributes());
+        event.put(ModEntityTypes.WIVHIV.get(), CoRPartEntity.setAttributes());
+        event.put(ModEntityTypes.WVIHV.get(), CoRPartEntity.setAttributes());
+        event.put(ModEntityTypes.WVIIHVI.get(), CoRPartEntity.setAttributes());
+        event.put(ModEntityTypes.WIIIHIII.get(), CoRPartEntity.setAttributes());
     }
 }

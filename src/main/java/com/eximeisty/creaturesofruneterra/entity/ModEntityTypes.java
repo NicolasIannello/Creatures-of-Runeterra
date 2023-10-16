@@ -33,10 +33,10 @@ public class ModEntityTypes {
     );
 
     //BOSSES
-//    public static final RegistryObject<EntityType<RekSaiEntity>> REKSAI=
-//    ENTITY_TYPES.register("reksai",
-//        ()-> EntityType.Builder.of(RekSaiEntity::new, MobCategory.MONSTER).immuneToFire().sized(1f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
-//    );
+    public static final RegistryObject<EntityType<RekSaiEntity>> REKSAI=
+    ENTITY_TYPES.register("reksai",
+        ()-> EntityType.Builder.of(RekSaiEntity::new, MobCategory.MONSTER).fireImmune().sized(1f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
+    );
 //    public static final RegistryObject<EntityType<FiddlesticksEntity>> FIDDLESTICKS=
 //    ENTITY_TYPES.register("fiddlesticks",
 //        ()-> EntityType.Builder.of(FiddlesticksEntity::new, MobCategory.MONSTER).sized(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddlesticks").toString())
@@ -69,22 +69,22 @@ public class ModEntityTypes {
     );
 
     //PART ENTITIES
-//    public static final RegistryObject<EntityType<CoRPartEntity>> WIVHIV=
-//    ENTITY_TYPES.register("wichiv",
-//        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).immuneToFire().sized(4f,4f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wichiv").toString())
-//    );
-//    public static final RegistryObject<EntityType<CoRPartEntity>> WVIHV=
-//    ENTITY_TYPES.register("wvihv",
-//        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).immuneToFire().sized(6f,5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wvihv").toString())
-//    );
-//    public static final RegistryObject<EntityType<CoRPartEntity>> WVIIHVI=
-//    ENTITY_TYPES.register("wviihvi",
-//        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).immuneToFire().sized(7f,6f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wviihvi").toString())
-//    );
-//    public static final RegistryObject<EntityType<CoRPartEntity>> WIIIHIII=
-//    ENTITY_TYPES.register("wiiihiii",
-//        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).immuneToFire().sized(3f,3f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wiiihiii").toString())
-//    );
+    public static final RegistryObject<EntityType<CoRPartEntity>> WIVHIV=
+    ENTITY_TYPES.register("wichiv",
+        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(4f,4f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wichiv").toString())
+    );
+    public static final RegistryObject<EntityType<CoRPartEntity>> WVIHV=
+    ENTITY_TYPES.register("wvihv",
+        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(6f,5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wvihv").toString())
+    );
+    public static final RegistryObject<EntityType<CoRPartEntity>> WVIIHVI=
+    ENTITY_TYPES.register("wviihvi",
+        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(7f,6f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wviihvi").toString())
+    );
+    public static final RegistryObject<EntityType<CoRPartEntity>> WIIIHIII=
+    ENTITY_TYPES.register("wiiihiii",
+        ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(3f,3f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wiiihiii").toString())
+    );
 //    public static final RegistryObject<EntityType<FiddleDummyEntity>> FIDDLEDUMMY=
 //    ENTITY_TYPES.register("fiddle_dummy",
 //        ()-> EntityType.Builder.of(FiddleDummyEntity::new, MobCategory.MONSTER).sized(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_dummy").toString())

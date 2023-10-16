@@ -8,6 +8,8 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.Exa
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
+import com.eximeisty.creaturesofruneterra.entity.render.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
@@ -70,6 +72,13 @@ public class CreaturesofRuneterra
         //VOID CREATURES
         EntityRenderers.register(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
         EntityRenderers.register(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
+        //PART ENTITIES
+        EntityRenderers.register(ModEntityTypes.WIVHIV.get(), EmptyRenderer::new);
+        EntityRenderers.register(ModEntityTypes.WVIHV.get(), EmptyRenderer::new);
+        EntityRenderers.register(ModEntityTypes.WVIIHVI.get(), EmptyRenderer::new);
+        EntityRenderers.register(ModEntityTypes.WIIIHIII.get(), EmptyRenderer::new);
+        //BOSSES
+        EntityRenderers.register(ModEntityTypes.REKSAI.get(), RekSaiRenderer::new);
     }
 
     private void setup(final FMLCommonSetupEvent event) {

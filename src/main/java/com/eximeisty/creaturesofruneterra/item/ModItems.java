@@ -109,9 +109,9 @@ public class ModItems {
 
 //        public static final RegistryObject<Item> XERXARETH_SPAWN_EGG = ITEMS.register("xerxareth_spawn_egg",
 //        () -> new ForgeSpawnEggItem(ModEntityTypes.XERXARETH, 0x9F2BAF, 0xF3D978, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        public static final RegistryObject<Item> REKSAI_SPAWN_EGG = ITEMS.register("reksai_spawn_egg",
-//        () -> new ForgeSpawnEggItem(ModEntityTypes.REKSAI, 0x9F2BAF, 0x005f8f, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> REKSAI_SPAWN_EGG = ITEMS.register("reksai_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntityTypes.REKSAI, 0x9F2BAF, 0x005f8f, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
         public static final RegistryObject<Item> PORO_SPAWN_EGG = ITEMS.register("poro_spawn_egg",
         () -> new ForgeSpawnEggItem(ModEntityTypes.PORO, 0xffffff, 0xdde5e4, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
