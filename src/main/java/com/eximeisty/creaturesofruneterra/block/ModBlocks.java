@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.block;
 import java.util.function.Supplier;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.block.custom.DrillBlock;
 import com.eximeisty.creaturesofruneterra.block.custom.EmptyBlock;
 import com.eximeisty.creaturesofruneterra.item.ModItemGroup;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
@@ -10,6 +11,7 @@ import com.eximeisty.creaturesofruneterra.item.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -20,8 +22,8 @@ import net.minecraftforge.registries.RegistryObject;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS= DeferredRegister.create(ForgeRegistries.BLOCKS, CreaturesofRuneterra.MOD_ID);
 
-//    public static final RegistryObject<Block> DRILL= registerBlock("drill", () -> new DrillBlock(AbstractBlock.Properties.create(Material.ROCK)
-//    .harvestLevel(3).harvestTool(ToolType.PICKAXE).setRequiresTool().hardnessAndResistance(5F).notSolid()), false);
+    public static final RegistryObject<Block> DRILL= registerBlock("drill", () -> new DrillBlock(BlockBehaviour.Properties.copy(Blocks.OBSIDIAN)
+            .destroyTime(5F).noOcclusion()), false);
 
     public static final RegistryObject<Block> TENDRIL= registerBlock("tendril", () -> new EmptyBlock(BlockBehaviour.Properties.of(Material.LEAVES)
             .destroyTime(0.2F).noOcclusion().noCollission()), true);

@@ -1,6 +1,8 @@
 package com.eximeisty.creaturesofruneterra.events;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.block.ModTiles;
+import com.eximeisty.creaturesofruneterra.block.entity.client.drill.DrillRenderer;
 import com.eximeisty.creaturesofruneterra.entity.model.EmptyModel;
 import com.eximeisty.creaturesofruneterra.entity.model.XerSaiHatchlingModel;
 import com.eximeisty.creaturesofruneterra.item.custom.FiddleArmorItem;
@@ -26,15 +28,10 @@ public class ModEventClientBusEvents {
         GeoArmorRenderer.registerArmorRenderer(FiddleArmorItem.class, () -> new FiddleArmorRenderer());
     }
 
-//    @SubscribeEvent
-//    public static void registerBlockRenderers(final FMLClientSetupEvent event){
-//        ClientRegistry.bindTileEntityRenderer(ModTiles.DRILL.get(), DrillRenderer::new);
-//    }
-
-//    @SubscribeEvent
-//    public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
-//        event.registerEntityRenderer(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
-//    }
+    @SubscribeEvent
+    public static void registerBlockRenderers(final EntityRenderersEvent.RegisterRenderers event){
+        event.registerBlockEntityRenderer(ModTiles.DRILL.get(), DrillRenderer::new);
+    }
 
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
