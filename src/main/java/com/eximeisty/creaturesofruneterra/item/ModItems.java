@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 
+import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.item.custom.*;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -39,19 +40,19 @@ public class ModItems {
 
         //TOOLS
         public static final RegistryObject<Item> SAI_SWORD = ITEMS.register("sai_sword",
-        () -> new SwordItem(ModItemTier.SAI, 8+5, -2.4F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+        () -> new SwordItem(ModItemTier.SAI, 8, -2.4F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 
         public static final RegistryObject<Item> SAI_SHOVEL = ITEMS.register("sai_shovel",
-        () -> new ShovelItem(ModItemTier.SAI, 2F+5, -3.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+        () -> new ShovelItem(ModItemTier.SAI, 2F, -3.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 
         public static final RegistryObject<Item> SAI_PICKAXE = ITEMS.register("sai_pickaxe",
-        () -> new PickaxeItem(ModItemTier.SAI, 2+5, -2.8F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+        () -> new PickaxeItem(ModItemTier.SAI, 2, -2.8F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 
         public static final RegistryObject<Item> SAI_AXE = ITEMS.register("sai_axe",
-        () -> new AxeItem(ModItemTier.SAI, 11.0F+5, -3.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+        () -> new AxeItem(ModItemTier.SAI, 11.0F, -3.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 
         public static final RegistryObject<Item> SAI_HOE = ITEMS.register("sai_hoe",
-        () -> new HoeItem(ModItemTier.SAI, -4+5, 0.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
+        () -> new HoeItem(ModItemTier.SAI, -4, 0.0F, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 
         public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow",
         () -> new SaiBowItem(new Item.Properties().stacksTo(1).durability(384).tab(ModItemGroup.COR_GROUP).fireResistant()));
@@ -130,11 +131,11 @@ public class ModItems {
 
 //        public static final RegistryObject<Item> FIDDLESTICKS_SPAWN_EGG = ITEMS.register("fiddlesticks_spawn_egg",
 //        () -> new ForgeSpawnEggItem(ModEntityTypes.FIDDLESTICKS, 0x0f0705, 0x3b1210, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-//
-//        //BLOCKS
-//        public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
-//        () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().tab(ModItemGroup.COR_GROUP)));
-        
+
+        //BLOCKS
+        public static final RegistryObject<BlockItem> DRILL = ITEMS.register("drill",
+        () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
         }
