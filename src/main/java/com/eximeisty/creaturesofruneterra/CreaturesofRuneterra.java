@@ -19,6 +19,7 @@ import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
+import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -47,6 +48,7 @@ public class CreaturesofRuneterra
         ModBlocks.register(eventBus);
         ModSoundEvents.register(eventBus);
         ModEntityTypes.register(eventBus);
+        ModStructures.register(eventBus);
 
         eventBus.addListener(this::setup);
         eventBus.addListener(this::clientSetup);
