@@ -192,7 +192,7 @@ public class PoroEntity extends TamableAnimal implements IAnimatable {
                 }
                 if(item == Items.CHEST){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
-                    //switchEntity(ModEntityTypes.PATCHEDPOROBOT.get(), playerIn);
+                    switchEntity(ModEntityTypes.PATCHEDPOROBOT.get(), playerIn);
                 }
                 if(item == Items.GOLD_BLOCK){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);

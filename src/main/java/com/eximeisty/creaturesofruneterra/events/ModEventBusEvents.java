@@ -19,7 +19,7 @@ public class ModEventBusEvents {
         event.put(ModEntityTypes.PORO.get(), PoroEntity.setAttributes());
         event.put(ModEntityTypes.FABLEDPORO.get(), FabledPoroEntity.setAttributes());
         event.put(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroEntity.setAttributes());
-//        event.put(ModEntityTypes.PATCHEDPOROBOT.get(), PatchedPorobotEntity.setAttributes());
+        event.put(ModEntityTypes.PATCHEDPOROBOT.get(), PatchedPorobotEntity.setAttributes());
         event.put(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroEntity.setAttributes());
 //        event.put(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksEntity.setAttributes());
 //        event.put(ModEntityTypes.FIDDLEDUMMY.get(), FiddleDummyEntity.setAttributes());
