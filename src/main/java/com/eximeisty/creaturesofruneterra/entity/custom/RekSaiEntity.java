@@ -78,7 +78,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
     private static final RawAnimation THROW_ANIM = RawAnimation.begin().then("animation.Reksai.throw", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation APPEAR_ANIM = RawAnimation.begin().then("animation.Reksai.appear", Animation.LoopType.PLAY_ONCE);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
-        if(p_213797_0_ instanceof XerSaiDunebreakerEntity /*|| p_213797_0_ instanceof XerSaiHatchlingEntity */|| (!(p_213797_0_ instanceof Player) && (p_213797_0_.isInWaterOrBubble() || p_213797_0_.getLevel().getBlockState(p_213797_0_.getOnPos())== Blocks.WATER.defaultBlockState()))) return false;
+        if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity || (!(p_213797_0_ instanceof Player) && (p_213797_0_.isInWaterOrBubble() || p_213797_0_.getLevel().getBlockState(p_213797_0_.getOnPos())== Blocks.WATER.defaultBlockState()))) return false;
         if(p_213797_0_ instanceof CoRPartEntity) if( ((CoRPartEntity)p_213797_0_).getParent() instanceof RekSaiEntity ) return false; 
         return true;
     };
@@ -111,7 +111,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
         this.goalSelector.addGoal(2, new RekSaiEntity.MeleeAttackGoal(this, 1D, false));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, velocidad,50));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        //this.targetSelector.addGoal(6, (new HurtByTargetGoal(this)).setAlertOthers(XerSaiHatchlingEntity.class));
+        this.targetSelector.addGoal(6, (new HurtByTargetGoal(this)).setAlertOthers(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>( this, Mob.class, 0, false, false, NOT_THIS));
     }

@@ -16,6 +16,7 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void entityAttributeEvent(EntityAttributeCreationEvent event) {
+        event.put(ModEntities.XERSAI_HATCHLING.get(), XerSaiHatchlingEntity.setAttributes());
         event.put(ModEntities.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerEntity.setAttributes());
         event.put(ModEntities.PORO.get(), PoroEntity.setAttributes());
         event.put(ModEntities.FABLEDPORO.get(), FabledPoroEntity.setAttributes());
