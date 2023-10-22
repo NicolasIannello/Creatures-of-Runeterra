@@ -19,6 +19,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -113,7 +114,7 @@ public class RekSaiEntity extends PathfinderMob implements IAnimatable {
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1D, false));
         this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, velocidad,50));
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        //this.targetSelector.addGoal(6, (new HurtByTargetGoal(this)).setAlertOthers(XerSaiHatchlingEntity.class));
+        this.targetSelector.addGoal(6, (new HurtByTargetGoal(this)).setAlertOthers(XerSaiHatchlingEntity.class));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, false));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>( this, Mob.class, 0, false, false, NOT_THIS));
     }
