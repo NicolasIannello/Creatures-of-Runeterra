@@ -106,11 +106,11 @@ public class PatchedPorobotEntity extends TamableAnimal implements IAnimatable{
    protected void registerGoals() {
       this.goalSelector.addGoal(1, new PanicGoal(this, 1.2D){
          @Override
-         public boolean canUse() {
+         public void start() {
             TamableAnimal poro =(TamableAnimal)this.mob;
             this.mob.getEntityData().set(STATE, false);
             poro.setOrderedToSit(false);
-            return super.canUse();
+            super.canUse();
          }
       });
       this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
@@ -392,7 +392,7 @@ public class PatchedPorobotEntity extends TamableAnimal implements IAnimatable{
             playersUsing++;
             playSound=true;
          }
-		}
+      }
       return InteractionResult.SUCCESS;
    }
 
