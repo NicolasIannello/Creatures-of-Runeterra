@@ -64,7 +64,7 @@ public class PorobotContainer extends RecipeBookMenu<CraftingContainer> {
                 index++;
                 addSlot(new ResultSlot(playerInventory.player, this.craftMatrix, this.craftResult, index, 197, 133){
                     @OnlyIn(Dist.CLIENT)
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return getSlot(20+9+3*9).getItem().getItem()== Items.CRAFTING_TABLE;
                     }
                 });
@@ -72,7 +72,7 @@ public class PorobotContainer extends RecipeBookMenu<CraftingContainer> {
                     for(int j = 0; j < 3; ++j) {
                         addSlot(new Slot(this.craftMatrix, j + i * 3, 179+x, 17+y){
                             @OnlyIn(Dist.CLIENT)
-                            public boolean isEnabled() {
+                            public boolean isActive() {
                                 return getSlot(20+9+3*9).getItem().getItem()==Items.CRAFTING_TABLE;
                             }
                         });
@@ -82,19 +82,19 @@ public class PorobotContainer extends RecipeBookMenu<CraftingContainer> {
                 }
                 this.addSlot(new SlotItemHandler(h, index+1, 179+18, 17){
                     @OnlyIn(Dist.CLIENT)
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return getSlot(20+9+3*9).getItem().getItem()==Items.FURNACE;
                     }
                 });
                 this.addSlot(new SlotItemHandler(h, index+2, 179+18, 17+18*2){
                     @OnlyIn(Dist.CLIENT)
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return getSlot(20+9+3*9).getItem().getItem()==Items.FURNACE;
                     }
                 });
                 this.addSlot(new SlotItemHandler(h, index+3, 197, 133){
                     @OnlyIn(Dist.CLIENT)
-                    public boolean isEnabled() {
+                    public boolean isActive() {
                         return getSlot(20+9+3*9).getItem().getItem()==Items.FURNACE;
                     }
                 });
