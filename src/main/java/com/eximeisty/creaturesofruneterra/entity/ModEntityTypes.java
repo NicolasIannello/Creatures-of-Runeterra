@@ -37,10 +37,10 @@ public class ModEntityTypes {
     ENTITY_TYPES.register("reksai",
         ()-> EntityType.Builder.of(RekSaiEntity::new, MobCategory.MONSTER).fireImmune().sized(1f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "reksai").toString())
     );
-//    public static final RegistryObject<EntityType<FiddlesticksEntity>> FIDDLESTICKS=
-//    ENTITY_TYPES.register("fiddlesticks",
-//        ()-> EntityType.Builder.of(FiddlesticksEntity::new, MobCategory.MONSTER).sized(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddlesticks").toString())
-//    );
+    public static final RegistryObject<EntityType<FiddlesticksEntity>> FIDDLESTICKS=
+    ENTITY_TYPES.register("fiddlesticks",
+        ()-> EntityType.Builder.of(FiddlesticksEntity::new, MobCategory.MONSTER).sized(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddlesticks").toString())
+    );
 
     //POROS
     public static final RegistryObject<EntityType<PoroEntity>> PORO=
@@ -85,10 +85,10 @@ public class ModEntityTypes {
     ENTITY_TYPES.register("wiiihiii",
         ()-> EntityType.Builder.of(CoRPartEntity::new, MobCategory.MONSTER).fireImmune().sized(3f,3f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "wiiihiii").toString())
     );
-//    public static final RegistryObject<EntityType<FiddleDummyEntity>> FIDDLEDUMMY=
-//    ENTITY_TYPES.register("fiddle_dummy",
-//        ()-> EntityType.Builder.of(FiddleDummyEntity::new, MobCategory.MONSTER).sized(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_dummy").toString())
-//    );
+    public static final RegistryObject<EntityType<FiddleDummyEntity>> FIDDLEDUMMY=
+    ENTITY_TYPES.register("fiddle_dummy",
+        ()-> EntityType.Builder.of(FiddleDummyEntity::new, MobCategory.MONSTER).sized(0.75f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_dummy").toString())
+    );
 
     //ITEMS
     public static final RegistryObject<EntityType<MisilEntity>> MISIL =

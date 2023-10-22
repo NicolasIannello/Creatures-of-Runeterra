@@ -8,6 +8,8 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRe
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.ExaltedPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddleDummyRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddlesticksRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.patchedporobot.PatchedPorobotRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
@@ -89,6 +91,8 @@ public class CreaturesofRuneterra
         EntityRenderers.register(ModEntityTypes.WIIIHIII.get(), EmptyRenderer::new);
         //BOSSES
         EntityRenderers.register(ModEntityTypes.REKSAI.get(), RekSaiRenderer::new);
+        EntityRenderers.register(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksRenderer::new);
+        EntityRenderers.register(ModEntityTypes.FIDDLEDUMMY.get(), FiddleDummyRenderer::new);
         //SCREENS
         MenuScreens.register(ModContainers.POROBOT_CONTAINER.get(), PorobotScreen::new);
     }
