@@ -80,7 +80,7 @@ public class RekSaiEntity extends PathfinderMob implements IAnimatable {
     private static final AnimationBuilder THROW_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.throw", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
     private static final AnimationBuilder APPEAR_ANIM = new AnimationBuilder().addAnimation("animation.Reksai.appear", ILoopType.EDefaultLoopTypes.PLAY_ONCE);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
-        if(p_213797_0_ instanceof XerSaiDunebreakerEntity /*|| p_213797_0_ instanceof XerSaiHatchlingEntity */|| (!(p_213797_0_ instanceof Player) && (p_213797_0_.isInWaterOrBubble() || p_213797_0_.getLevel().getBlockState(p_213797_0_.getOnPos())== Blocks.WATER.defaultBlockState()))) return false;
+        if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity || (!(p_213797_0_ instanceof Player) && (p_213797_0_.isInWaterOrBubble() || p_213797_0_.getLevel().getBlockState(p_213797_0_.getOnPos())== Blocks.WATER.defaultBlockState()))) return false;
         if(p_213797_0_ instanceof CoRPartEntity) if( ((CoRPartEntity)p_213797_0_).getParent() instanceof RekSaiEntity ) return false; 
         return true;
     };
