@@ -5,13 +5,15 @@ import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
-import com.eximeisty.creaturesofruneterra.entity.client.entities.empty.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.ExaltedPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
+import com.eximeisty.creaturesofruneterra.entity.render.EmptyRenderer;
+import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
+import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.util.ModSounds;
@@ -50,7 +52,7 @@ public class CreaturesofRuneterra{
     private void addCreative(CreativeModeTabEvent.BuildContents event) {
         if(event.getTab() == ModCreativeModeTabs.COR_TAB) {
             //ITEMS
-            event.accept(ModItems.GEMSTONE);event.accept(ModItems.MISIL);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
+            event.accept(ModItems.HEXCORE);event.accept(ModItems.GEMSTONE);event.accept(ModItems.MISIL);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
             event.accept(ModItems.REKSAI_PLAQUE);
             //TOOLS
 
@@ -61,7 +63,7 @@ public class CreaturesofRuneterra{
             //BLOCKS
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
-            event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
+            event.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG);event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
             event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);/*porobot*/event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
         }
     }
@@ -74,16 +76,18 @@ public class CreaturesofRuneterra{
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            EntityRenderers.register(ModEntities.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
             EntityRenderers.register(ModEntities.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
             EntityRenderers.register(ModEntities.PORO.get(), PoroRenderer::new);
             EntityRenderers.register(ModEntities.FABLEDPORO.get(), FabledPoroRenderer::new);
             EntityRenderers.register(ModEntities.PLUNDERPORO.get(), PlunderPoroRenderer::new);
             EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
-            EntityRenderers.register(ModEntities.BULLET.get(), BulletRenderer::new);
             EntityRenderers.register(ModEntities.REKSAI.get(), RekSaiRenderer::new);
+            //ITEMS
             EntityRenderers.register(ModEntities.BULLET.get(), BulletRenderer::new);
             EntityRenderers.register(ModEntities.MISIL.get(), MisilRenderer::new);
             EntityRenderers.register(ModEntities.DBSHIELD.get(), DBShieldRenderer::new);
+            EntityRenderers.register(ModEntities.HEXCORE.get(), HexcoreRenderer::new);
             //PART ENTITIES
             EntityRenderers.register(ModEntities.WIVHIV.get(), EmptyRenderer::new);
             EntityRenderers.register(ModEntities.WVIHV.get(), EmptyRenderer::new);

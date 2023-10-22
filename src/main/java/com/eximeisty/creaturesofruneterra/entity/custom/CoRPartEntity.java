@@ -24,9 +24,8 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 
-public class CoRPartEntity extends PathfinderMob implements GeoEntity {
+public class CoRPartEntity extends PathfinderMob {
     public PathfinderMob parent;
-    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
     public CoRPartEntity(EntityType<? extends PathfinderMob> type, Level worldIn) {
         super(type, worldIn);
@@ -95,16 +94,4 @@ public class CoRPartEntity extends PathfinderMob implements GeoEntity {
     protected boolean shouldDespawnInPeaceful() { return true; }
     @Override
     public boolean canBeLeashed(Player p_21418_) { return false; }
-
-    public <T extends GeoAnimatable> PlayState predicate(AnimationState<T> event)  {
-        return PlayState.CONTINUE;
-    }
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers){
-        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
-    }
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache() {
-        return this.cache;
-    }
 }
