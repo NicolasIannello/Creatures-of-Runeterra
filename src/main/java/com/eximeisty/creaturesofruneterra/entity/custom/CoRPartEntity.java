@@ -50,6 +50,7 @@ public class CoRPartEntity extends PathfinderMob {
             return false;
         }
         if(source==damageSources().drown()) return false;
+        if(this.parent==null && !this.level.isClientSide) this.discard();
         return this.parent==null ? super.hurt(source, amount) : this.parent.hurt(source, amount);
     }
 
