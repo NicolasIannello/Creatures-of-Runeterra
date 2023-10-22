@@ -15,6 +15,10 @@ public class ModEntities {
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, CreaturesofRuneterra.MOD_ID);
 
     //Void creatures
+    public static final RegistryObject<EntityType<XerSaiHatchlingEntity>> XERSAI_HATCHLING=
+            ENTITY_TYPES.register("xersai_hatchling",
+                    ()-> EntityType.Builder.of(XerSaiHatchlingEntity::new, MobCategory.MONSTER).sized(1.5f,1f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "xersai_hatchling").toString())
+            );
     public static final RegistryObject<EntityType<XerSaiDunebreakerEntity>> XERSAI_DUNEBREAKER =
             ENTITY_TYPES.register("xersai_dunebreaker",
                     () -> EntityType.Builder.of(XerSaiDunebreakerEntity::new, MobCategory.CREATURE).sized(3f, 2.5f)
@@ -78,10 +82,19 @@ public class ModEntities {
                     ()-> EntityType.Builder.<DBShieldEntity>of(DBShieldEntity::new, MobCategory.MISC).sized(2.5F, 2.0F)
                             .setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "dbshield").toString())
             );
+    public static final RegistryObject<EntityType<HexcoreEntity>> HEXCORE =
+            ENTITY_TYPES.register("hexcore",
+                    ()-> EntityType.Builder.<HexcoreEntity>of(HexcoreEntity::new, MobCategory.MISC).sized(0.25F, 0.25F)
+                            .setTrackingRange(4).updateInterval(10).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "hexcore").toString())
+            );
     public static final RegistryObject<EntityType<BulletEntity>> BULLET =
             ENTITY_TYPES.register("bullet",
                     ()-> EntityType.Builder.<BulletEntity>of(BulletEntity::new, MobCategory.MISC).sized(0.25F, 0.25F)
                             .setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "bullet").toString())
+            );
+    public static final RegistryObject<EntityType<FiddleProyectileEntity>> FIDDLE_PROYECTILE =
+            ENTITY_TYPES.register("fiddle_proyectile",
+                    ()-> EntityType.Builder.<FiddleProyectileEntity>of(FiddleProyectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(8).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_proyectile").toString())
             );
 
     public static void register(IEventBus eventBus){

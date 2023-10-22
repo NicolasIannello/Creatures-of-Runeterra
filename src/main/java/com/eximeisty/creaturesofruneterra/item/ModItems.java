@@ -17,6 +17,8 @@ public class ModItems {
             DeferredRegister.create(ForgeRegistries.ITEMS, CreaturesofRuneterra.MOD_ID);
 
     //ITEMS
+    public static final RegistryObject<Item> HEXCORE = ITEMS.register("hexcore",
+            () -> new HexcoreItem(new Item.Properties().stacksTo(10)));
     public static final RegistryObject<Item> GEMSTONE = ITEMS.register("gemstone",
             () -> new Item(new Item.Properties().stacksTo(10)));
     public static final RegistryObject<Item> MISIL = ITEMS.register("misil",
@@ -51,6 +53,8 @@ public class ModItems {
             () -> new DunebreakerShield(new Item.Properties().durability(600)));
 
     //SPAWN EGGS
+    public static final RegistryObject<Item> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F, new Item.Properties()));
     public static final RegistryObject<Item> XERSAI_DUNEBREAKER_SPAWN_EGG = ITEMS.register("xersai_dunebreaker_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.XERSAI_DUNEBREAKER, 0x9F2BAF, 0x370E45, new Item.Properties()));
     public static final RegistryObject<Item> PORO_SPAWN_EGG = ITEMS.register("poro_spawn_egg",
