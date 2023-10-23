@@ -1,14 +1,23 @@
 {
-  "type": "creaturesofruneterra:sand_entrance",
+  "type": "minecraft:jigsaw",
 
-  "config": {
-    "start_pool": "creaturesofruneterra:voidsandcave/start_pool",
-    "size": 5
-  },
+  "start_pool": "creaturesofruneterra:voidsandcave/start_pool",
+
+  "size": 5,
+
+  "max_distance_from_center": 80,
 
   "biomes": "#creaturesofruneterra:has_structure/voidsandcave_biomes",
 
-  "adapt_noise": false,
+  "step": "surface_structures",
+
+  "start_height": {
+    "absolute": -13
+  },
+
+  "project_start_to_heightmap": "WORLD_SURFACE_WG",
+
+  "use_expansion_hack": false,
 
   "spawn_overrides": {
     "monster": {
