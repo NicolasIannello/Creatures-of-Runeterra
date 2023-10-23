@@ -16,12 +16,12 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = CreaturesofRuneterra.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModClientEvents {
-    @SubscribeEvent
-    public static void registerArmorRenderers(final FMLClientSetupEvent event){
+//    @SubscribeEvent
+//    public static void registerArmorRenderers(final FMLClientSetupEvent event){
 //        GeoArmorRenderer.registerArmorRenderer(SaiArmorItem.class, () -> new SaiArmorRenderer());
 //        GeoArmorRenderer.registerArmorRenderer(SaiElytraItem.class, () -> new SaiElytraRenderer());
 //        GeoArmorRenderer.registerArmorRenderer(FiddleArmorItem.class, () -> new FiddleArmorRenderer());
-    }
+//    }
 
     @SubscribeEvent
     public static void registerBlockRenderers(final EntityRenderersEvent.RegisterRenderers event){

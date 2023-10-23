@@ -57,9 +57,10 @@ public class CreaturesofRuneterra{
             event.accept(ModItems.HEXCORE);event.accept(ModItems.GEMSTONE);event.accept(ModItems.MISIL);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
             event.accept(ModItems.REKSAI_PLAQUE);
             //TOOLS
-
+            event.accept(ModItems.SAI_SWORD);event.accept(ModItems.SAI_PICKAXE);event.accept(ModItems.SAI_AXE);event.accept(ModItems.SAI_SHOVEL);event.accept(ModItems.SAI_HOE);
             //ARMORS
             event.accept(ModItems.SAI_HELMET);event.accept(ModItems.SAI_CHESTPLATE);event.accept(ModItems.SAI_LEGGINGS);event.accept(ModItems.SAI_BOOTS);event.accept(ModItems.SAI_ELYTRA);
+            event.accept(ModItems.FIDDLE_HELMET);event.accept(ModItems.FIDDLE_CHESTPLATE);event.accept(ModItems.FIDDLE_BEARTRAP);event.accept(ModItems.FIDDLE_BIRDCAGE);
             //WEAPONS
             event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);event.accept(ModItems.DUNEBREAKER_SHIELD);
             //BLOCKS
