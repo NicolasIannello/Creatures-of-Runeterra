@@ -98,8 +98,8 @@ public class ModItems {
     public static final RegistryObject<Item> DUNEBREAKER_SHIELD = ITEMS.register("dunebreaker_shield",
             () -> new DunebreakerShield(new Item.Properties().durability(600)));
 
-//    public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
-//            () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().durability(100)));
+    public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
+            () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().durability(100)));
 
     //SPAWN EGGS
     public static final RegistryObject<Item> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",

@@ -64,7 +64,7 @@ public class CreaturesofRuneterra{
             event.accept(ModItems.SAI_HELMET);event.accept(ModItems.SAI_CHESTPLATE);event.accept(ModItems.SAI_LEGGINGS);event.accept(ModItems.SAI_BOOTS);event.accept(ModItems.SAI_ELYTRA);
             event.accept(ModItems.FIDDLE_HELMET);event.accept(ModItems.FIDDLE_CHESTPLATE);event.accept(ModItems.FIDDLE_BEARTRAP);event.accept(ModItems.FIDDLE_BIRDCAGE);
             //WEAPONS
-            event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);event.accept(ModItems.DUNEBREAKER_SHIELD);
+            event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);event.accept(ModItems.DUNEBREAKER_SHIELD);event.accept(ModItems.FIDDLESCYTHE);
             //BLOCKS
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
