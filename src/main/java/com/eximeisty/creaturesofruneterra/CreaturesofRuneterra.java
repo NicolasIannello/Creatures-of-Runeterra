@@ -7,6 +7,8 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShie
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dunebreaker.XerSaiDunebreakerRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.ExaltedPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddleDummyRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddlesticksRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
@@ -65,6 +67,7 @@ public class CreaturesofRuneterra{
             //SPAWN EGGS
             event.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG);event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
             event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);/*porobot*/event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
+            event.accept(ModItems.FIDDLESTICKS_SPAWN_EGG);
         }
     }
 
@@ -82,6 +85,9 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.FABLEDPORO.get(), FabledPoroRenderer::new);
             EntityRenderers.register(ModEntities.PLUNDERPORO.get(), PlunderPoroRenderer::new);
             EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
+            //BOSSES
+            EntityRenderers.register(ModEntities.FIDDLESTICKS.get(), FiddlesticksRenderer::new);
+            EntityRenderers.register(ModEntities.FIDDLEDUMMY.get(), FiddleDummyRenderer::new);
             EntityRenderers.register(ModEntities.REKSAI.get(), RekSaiRenderer::new);
             //ITEMS
             EntityRenderers.register(ModEntities.BULLET.get(), BulletRenderer::new);

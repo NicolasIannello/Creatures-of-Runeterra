@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "creaturesofruneterra:item/dunebreaker_horn"
-  }
+    "parent":"item/generated",
+    "textures":{
+        "layer0":"creaturesofruneterra:item/dunebreaker_horn"
+    }
 }

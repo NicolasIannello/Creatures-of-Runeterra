@@ -17,12 +17,16 @@ public class ModEvents {
     @SubscribeEvent
     public static void entityAttributeEvent(EntityAttributeCreationEvent event) {
         event.put(ModEntities.XERSAI_HATCHLING.get(), XerSaiHatchlingEntity.setAttributes());
+//        event.put(ModEntities.XERXARETH.get(), XerxarethEntity.setAttributes());
         event.put(ModEntities.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerEntity.setAttributes());
+        event.put(ModEntities.REKSAI.get(), RekSaiEntity.setAttributes());
         event.put(ModEntities.PORO.get(), PoroEntity.setAttributes());
         event.put(ModEntities.FABLEDPORO.get(), FabledPoroEntity.setAttributes());
         event.put(ModEntities.PLUNDERPORO.get(), PlunderPoroEntity.setAttributes());
+        //event.put(ModEntities.PATCHEDPOROBOT.get(), PatchedPorobotEntity.setAttributes());
         event.put(ModEntities.EXALTEDPORO.get(), ExaltedPoroEntity.setAttributes());
-        event.put(ModEntities.REKSAI.get(), RekSaiEntity.setAttributes());
+        event.put(ModEntities.FIDDLESTICKS.get(), FiddlesticksEntity.setAttributes());
+        event.put(ModEntities.FIDDLEDUMMY.get(), FiddleDummyEntity.setAttributes());
         //PART ENTITIES
         event.put(ModEntities.WIVHIV.get(), CoRPartEntity.setAttributes());
         event.put(ModEntities.WVIHV.get(), CoRPartEntity.setAttributes());

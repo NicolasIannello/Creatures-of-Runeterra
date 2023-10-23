@@ -1,5 +1,5 @@
 {
-  "variants":{
-    "":{"model": "creaturesofruneterra:block/tendril"}
-  }
+    "variants":{
+        "":{"model": "creaturesofruneterra:block/tendril"}
+    }
 }
