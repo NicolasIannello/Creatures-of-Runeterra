@@ -1,4 +1,4 @@
-package com.eximeisty.creaturesofruneterra.item.client.armor;
+package com.eximeisty.creaturesofruneterra.item.client.armor.sai;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiElytraItem;

@@ -1,6 +1,6 @@
 package com.eximeisty.creaturesofruneterra.item.custom;
 
-import com.eximeisty.creaturesofruneterra.item.client.armor.SaiArmorRenderer;
+import com.eximeisty.creaturesofruneterra.item.client.armor.sai.SaiArmorRenderer;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
