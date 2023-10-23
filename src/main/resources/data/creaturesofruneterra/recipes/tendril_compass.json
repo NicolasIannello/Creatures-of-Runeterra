@@ -1,0 +1,22 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "2",
+        "3",
+        "1"
+    ],
+    "key":{
+        "2":{
+            "item":"creaturesofruneterra:tendril"
+        },
+        "3":{
+            "item":"minecraft:netherite_scrap"
+        },
+        "1":{
+            "item":"minecraft:blaze_powder"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:tendril_compass"
+    }
+}

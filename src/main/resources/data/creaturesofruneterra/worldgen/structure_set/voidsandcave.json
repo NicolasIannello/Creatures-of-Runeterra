@@ -1,0 +1,17 @@
+{
+  "structures": [
+    {
+      "structure": "creaturesofruneterra:voidsandcave",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "salt": 854795235,
+
+    "spacing": 100,
+
+    "separation": 50,
+
+    "type": "minecraft:random_spread"
+  }
+}

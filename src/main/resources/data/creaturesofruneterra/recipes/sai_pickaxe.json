@@ -1,0 +1,22 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "212",
+        " 3 ",
+        " 3 "
+    ],
+    "key":{
+        "1":{
+            "item":"creaturesofruneterra:reksai_claw"
+        },
+        "2":{
+            "item":"creaturesofruneterra:reksai_plaque"
+        },
+        "3":{
+            "item":"minecraft:bone"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:sai_pickaxe"
+    }
+}
