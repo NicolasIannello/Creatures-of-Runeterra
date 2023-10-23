@@ -537,9 +537,9 @@ public class FiddlesticksEntity extends PathfinderMob implements GeoEntity {
 
     protected void dropAllDeathLoot(DamageSource p_21192_) {
         super.dropAllDeathLoot(p_21192_);
-        //this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.FIDDLESCYTHE.get(), 1)));
-        //this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.FIDDLE_BEARTRAP.get(), 1)));
-        //this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.FIDDLE_BIRDCAGE.get(), 1)));
+        this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.FIDDLESCYTHE.get(), 1)));
+        this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.FIDDLE_BEARTRAP.get(), 1)));
+        this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), new ItemStack(ModItems.FIDDLE_BIRDCAGE.get(), 1)));
     }
 
     @Override
