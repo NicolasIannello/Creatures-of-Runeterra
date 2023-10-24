@@ -18,6 +18,7 @@ import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.util.ModSounds;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -59,7 +60,8 @@ public class CreaturesofRuneterra{
             event.accept(ModItems.HEXCORE);event.accept(ModItems.GEMSTONE);event.accept(ModItems.MISIL);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
             event.accept(ModItems.REKSAI_PLAQUE);
             //TOOLS
-            event.accept(ModItems.SAI_SWORD);event.accept(ModItems.SAI_PICKAXE);event.accept(ModItems.SAI_AXE);event.accept(ModItems.SAI_SHOVEL);event.accept(ModItems.SAI_HOE);
+            event.accept(ModItems.SAI_SWORD);event.accept(ModItems.SAI_PICKAXE);event.accept(ModItems.SAI_AXE);event.accept(ModItems.SAI_SHOVEL);event.accept(ModItems.SAI_HOE);event.accept(ModItems.SAI_BOW);
+            event.accept(ModItems.TENDRIL_COMPASS);
             //ARMORS
             event.accept(ModItems.SAI_HELMET);event.accept(ModItems.SAI_CHESTPLATE);event.accept(ModItems.SAI_LEGGINGS);event.accept(ModItems.SAI_BOOTS);event.accept(ModItems.SAI_ELYTRA);
             event.accept(ModItems.FIDDLE_HELMET);event.accept(ModItems.FIDDLE_CHESTPLATE);event.accept(ModItems.FIDDLE_BEARTRAP);event.accept(ModItems.FIDDLE_BIRDCAGE);
@@ -82,6 +84,7 @@ public class CreaturesofRuneterra{
     public static class ClientModEvents {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event) {
+            ModItemModelProperties.addCustomItemProperties();
             //ENTITIES
             EntityRenderers.register(ModEntities.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
             EntityRenderers.register(ModEntities.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);

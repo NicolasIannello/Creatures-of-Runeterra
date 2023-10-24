@@ -54,11 +54,11 @@ public class ModItems {
     public static final RegistryObject<Item> SAI_HOE = ITEMS.register("sai_hoe",
             () -> new HoeItem(ModItemTier.SAI, -4, 0.0F, new Item.Properties().fireResistant()));
 
-//    public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow",
-//            () -> new SaiBowItem(new Item.Properties().stacksTo(1).durability(384).fireResistant()));
-//
-//    public static final RegistryObject<Item> TENDRIL_COMPASS = ITEMS.register("tendril_compass",
-//            () -> new TendrilCompassItem(new Item.Properties()));
+    public static final RegistryObject<Item> SAI_BOW = ITEMS.register("sai_bow",
+            () -> new SaiBowItem(new Item.Properties().stacksTo(1).durability(384).fireResistant()));
+
+    public static final RegistryObject<Item> TENDRIL_COMPASS = ITEMS.register("tendril_compass",
+            () -> new TendrilCompassItem(new Item.Properties()));
 
     //ARMORS
     public static final RegistryObject<Item> SAI_HELMET = ITEMS.register("sai_helmet",
