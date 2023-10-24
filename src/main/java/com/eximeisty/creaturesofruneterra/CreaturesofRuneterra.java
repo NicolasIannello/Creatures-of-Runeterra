@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra;
 
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
+import com.eximeisty.creaturesofruneterra.container.ModContainers;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
@@ -10,6 +11,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.Fable
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddleDummyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddlesticksRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.patchedporobot.PatchedPorobotRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
@@ -18,8 +20,10 @@ import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.screen.PorobotScreen;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.util.ModSounds;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -42,6 +46,7 @@ public class CreaturesofRuneterra{
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModContainers.register(modEventBus);
         ModEntities.register(modEventBus);
         ModSounds.register(modEventBus);
 
@@ -71,7 +76,7 @@ public class CreaturesofRuneterra{
             event.accept(ModBlocks.TENDRIL);
             //SPAWN EGGS
             event.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG);event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
-            event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);/*porobot*/event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
+            event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);event.accept(ModItems.POROBOT_SPAWN_EGG);event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
             event.accept(ModItems.FIDDLESTICKS_SPAWN_EGG);
         }
     }
@@ -92,6 +97,7 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.FABLEDPORO.get(), FabledPoroRenderer::new);
             EntityRenderers.register(ModEntities.PLUNDERPORO.get(), PlunderPoroRenderer::new);
             EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
+            EntityRenderers.register(ModEntities.PATCHEDPOROBOT.get(), PatchedPorobotRenderer::new);
             //BOSSES
             EntityRenderers.register(ModEntities.FIDDLESTICKS.get(), FiddlesticksRenderer::new);
             EntityRenderers.register(ModEntities.FIDDLEDUMMY.get(), FiddleDummyRenderer::new);
@@ -106,6 +112,8 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.WVIHV.get(), EmptyRenderer::new);
             EntityRenderers.register(ModEntities.WVIIHVI.get(), EmptyRenderer::new);
             EntityRenderers.register(ModEntities.WIIIHIII.get(), EmptyRenderer::new);
+            //SCREENS
+            MenuScreens.register(ModContainers.POROBOT_CONTAINER.get(), PorobotScreen::new);
         }
     }
 }
