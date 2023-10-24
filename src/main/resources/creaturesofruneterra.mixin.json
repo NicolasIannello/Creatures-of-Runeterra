@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "package": "com.eximeisty.creaturesofruneterra.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "client": [
+        "MixinArmorStandEntity"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "refmap": "creaturesofruneterra.mixin-refmap.json"
+}
