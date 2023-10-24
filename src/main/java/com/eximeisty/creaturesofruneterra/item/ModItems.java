@@ -123,8 +123,8 @@ public class ModItems {
     public static final RegistryObject<Item> PLUNDERPORO_SPAWN_EGG = ITEMS.register("plunderporo_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.PLUNDERPORO, 0xffffff, 0x0c6822, new Item.Properties()));
 
-//    public static final RegistryObject<Item> POROBOT_SPAWN_EGG = ITEMS.register("porobot_spawn_egg",
-//            () -> new ForgeSpawnEggItem(ModEntities.PATCHEDPOROBOT, 0xc25719, 0x612c0e, new Item.Properties().);
+    public static final RegistryObject<Item> POROBOT_SPAWN_EGG = ITEMS.register("porobot_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.PATCHEDPOROBOT, 0xc25719, 0x612c0e, new Item.Properties()));
 
     public static final RegistryObject<Item> EXALTEDPORO_SPAWN_EGG = ITEMS.register("exaltedporo_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.EXALTEDPORO, 0xffffff, 0xeee839, new Item.Properties()));

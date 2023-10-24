@@ -56,10 +56,10 @@ public class ModEntities {
                     ()-> EntityType.Builder.of(PlunderPoroEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "plunderporo").toString())
             );
 
-//    public static final RegistryObject<EntityType<PatchedPorobotEntity>> PATCHEDPOROBOT=
-//            ENTITY_TYPES.register("patchedporobot",
-//                    ()-> EntityType.Builder.of(PatchedPorobotEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "patchedporobot").toString())
-//            );
+    public static final RegistryObject<EntityType<PatchedPorobotEntity>> PATCHEDPOROBOT=
+            ENTITY_TYPES.register("patchedporobot",
+                    ()-> EntityType.Builder.of(PatchedPorobotEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "patchedporobot").toString())
+            );
 
     public static final RegistryObject<EntityType<ExaltedPoroEntity>> EXALTEDPORO=
             ENTITY_TYPES.register("exaltedporo",

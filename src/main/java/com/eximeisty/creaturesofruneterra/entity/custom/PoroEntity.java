@@ -190,7 +190,7 @@ public class PoroEntity extends TamableAnimal implements GeoEntity {
                 }
                 if(item == Items.CHEST){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
-                    //switchEntity(ModEntities.PATCHEDPOROBOT.get(), playerIn);
+                    switchEntity(ModEntities.PATCHEDPOROBOT.get(), playerIn);
                 }
                 if(item == Items.GOLD_BLOCK){
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
@@ -198,8 +198,6 @@ public class PoroEntity extends TamableAnimal implements GeoEntity {
                 }
                 if(itemstack!=ItemStack.EMPTY){
                     if(item.canEquip(itemstack, EquipmentSlot.HEAD, this)){
-//                        this.dropEquipment();
-//                        this.equipItemIfPossible(itemstack.copy());
                         this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItemBySlot(EquipmentSlot.HEAD)));
                         this.setItemSlotAndDropWhenKilled(EquipmentSlot.HEAD, itemstack.copy());
                         itemstack.shrink(1);
