@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra;
 
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
+import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.container.ModContainers;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.bullet.BulletRenderer;
@@ -46,6 +47,7 @@ public class CreaturesofRuneterra{
 
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
+        ModTiles.register(modEventBus);
         ModContainers.register(modEventBus);
         ModEntities.register(modEventBus);
         ModSounds.register(modEventBus);
@@ -73,7 +75,7 @@ public class CreaturesofRuneterra{
             //WEAPONS
             event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);event.accept(ModItems.DUNEBREAKER_SHIELD);event.accept(ModItems.FIDDLESCYTHE);
             //BLOCKS
-            event.accept(ModBlocks.TENDRIL);
+            event.accept(ModBlocks.TENDRIL);event.accept(ModBlocks.DRILL);
             //SPAWN EGGS
             event.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG);event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
             event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);event.accept(ModItems.POROBOT_SPAWN_EGG);event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);

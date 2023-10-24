@@ -1,21 +1,21 @@
 package com.eximeisty.creaturesofruneterra.event;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.block.ModTiles;
+import com.eximeisty.creaturesofruneterra.block.entity.client.drill.DrillRenderer;
 import com.eximeisty.creaturesofruneterra.entity.model.EmptyModel;
 import com.eximeisty.creaturesofruneterra.entity.model.XerSaiHatchlingModel;
 
-import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
-import com.eximeisty.creaturesofruneterra.item.custom.SaiElytraItem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 
 @Mod.EventBusSubscriber(modid = CreaturesofRuneterra.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModClientEvents {
+
 //    @SubscribeEvent
 //    public static void registerArmorRenderers(final FMLClientSetupEvent event){
 //        GeoArmorRenderer.registerArmorRenderer(SaiArmorItem.class, () -> new SaiArmorRenderer());
@@ -25,7 +25,7 @@ public class ModClientEvents {
 
     @SubscribeEvent
     public static void registerBlockRenderers(final EntityRenderersEvent.RegisterRenderers event){
-        //event.registerBlockEntityRenderer(ModTiles.DRILL.get(), DrillRenderer::new);
+        event.registerBlockEntityRenderer(ModTiles.DRILL.get(), DrillRenderer::new);
     }
 
     @SubscribeEvent

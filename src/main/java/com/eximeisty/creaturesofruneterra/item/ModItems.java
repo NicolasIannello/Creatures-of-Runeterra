@@ -132,9 +132,9 @@ public class ModItems {
     public static final RegistryObject<Item> FIDDLESTICKS_SPAWN_EGG = ITEMS.register("fiddlesticks_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.FIDDLESTICKS, 0x0f0705, 0x3b1210, new Item.Properties()));
 
-    //BLOCKS
-//    public static final RegistryObject<BlockItem> DRILL = ITEMS.register("drill",
-//            () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().);
+//    BLOCKS
+    public static final RegistryObject<BlockItem> DRILL = ITEMS.register("drill",
+            () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
