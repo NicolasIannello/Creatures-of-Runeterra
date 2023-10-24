@@ -41,7 +41,6 @@ public class FiddleDummyRenderer extends GeoEntityRenderer<FiddleDummyEntity> {
     @Override
     public void preRender(PoseStack poseStack, FiddleDummyEntity animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.scale(1.5F, 1.5F, 1.5F);
-        poseStack.scale(1.5F, 1.5F, 1.5F);
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
