@@ -230,6 +230,7 @@ public class FabledPoroEntity extends TamableAnimal implements GeoEntity {
         this.entityData.set(STATE, compound.getBoolean("Sitting"));
         this.entityData.set(DAY, compound.getInt("day"));
         this.entityData.set(FORGE, compound.getBoolean("forge"));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
     }
 
     protected SoundEvent getAmbientSound() { return SoundEvents.EVOKER_AMBIENT; }
