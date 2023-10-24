@@ -17,6 +17,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.Plu
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.EmptyRenderer;
+import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
@@ -109,6 +110,7 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.MISIL.get(), MisilRenderer::new);
             EntityRenderers.register(ModEntities.DBSHIELD.get(), DBShieldRenderer::new);
             EntityRenderers.register(ModEntities.HEXCORE.get(), HexcoreRenderer::new);
+            EntityRenderers.register(ModEntities.FIDDLE_PROYECTILE.get(), FiddleProyectileRenderer::new);
             //PART ENTITIES
             EntityRenderers.register(ModEntities.WIVHIV.get(), EmptyRenderer::new);
             EntityRenderers.register(ModEntities.WVIHV.get(), EmptyRenderer::new);
