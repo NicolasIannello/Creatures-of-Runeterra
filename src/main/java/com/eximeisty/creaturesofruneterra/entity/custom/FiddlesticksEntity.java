@@ -462,7 +462,7 @@ public class FiddlesticksEntity extends PathfinderMob implements GeoEntity {
 
         private boolean teleportTo(double x, double y, double z) {
             BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos(x, y, z);
-            while(blockpos$mutable.getY() > 0 && !this.attacker.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) blockpos$mutable.move(Direction.DOWN);
+            while(blockpos$mutable.getY() > this.attacker.level.getMinBuildHeight() && !this.attacker.level.getBlockState(blockpos$mutable).getMaterial().blocksMotion()) blockpos$mutable.move(Direction.DOWN);
             BlockState blockstate = this.attacker.level.getBlockState(blockpos$mutable);
             boolean flag = blockstate.getMaterial().blocksMotion();
             boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
