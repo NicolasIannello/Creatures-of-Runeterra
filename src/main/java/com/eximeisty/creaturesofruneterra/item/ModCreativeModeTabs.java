@@ -19,7 +19,7 @@ public class ModCreativeModeTabs {
 
     public static final RegistryObject<CreativeModeTab> COR_TAB = CREATIVE_MODE_TABS.register("cor_tab",
             () -> CreativeModeTab.builder().icon(() -> new ItemStack(ModItems.SAI_HELMET.get()))
-                    .title(Component.translatable("creativemodetab.cor_tab"))
+                    .title(Component.translatable("Creatures of Runeterra"))
                     .displayItems((pParameters, pOutput) -> {
                         //ITEMS
                         pOutput.accept(ModItems.HEXCORE.get());pOutput.accept(ModItems.GEMSTONE.get());pOutput.accept(ModItems.MISIL.get());pOutput.accept(ModItems.DUNEBREAKER_FANG.get());pOutput.accept(ModItems.DUNEBREAKER_HORN.get());pOutput.accept(ModItems.REKSAI_CLAW.get());
