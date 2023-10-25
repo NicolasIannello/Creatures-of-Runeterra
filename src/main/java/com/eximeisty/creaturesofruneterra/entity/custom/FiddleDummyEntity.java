@@ -47,7 +47,7 @@ public class FiddleDummyEntity extends PathfinderMob implements GeoEntity {
     private static final RawAnimation CHANNEL_ANIM = RawAnimation.begin().then("animation.Fiddlesticks.channel", Animation.LoopType.PLAY_ONCE).then("animation.Fiddlesticks.channelloop", Animation.LoopType.LOOP);
     private static final RawAnimation DEATH_ANIM = RawAnimation.begin().then("animation.Fiddlesticks.channeldummy", Animation.LoopType.PLAY_ONCE).then("animation.Fiddlesticks.deathloop", Animation.LoopType.LOOP);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
-        if(!(p_213797_0_ instanceof Player) && (p_213797_0_ instanceof FiddlesticksEntity || p_213797_0_ instanceof FiddleDummyEntity || p_213797_0_ instanceof WaterAnimal || (p_213797_0_.isInWaterOrBubble() || p_213797_0_.getLevel().getBlockState(new BlockPos(p_213797_0_.getBlockX(),p_213797_0_.getBlockY()-1,p_213797_0_.getBlockZ()))== Blocks.WATER.defaultBlockState()))) return false;
+        if(!(p_213797_0_ instanceof Player) && (p_213797_0_ instanceof FiddlesticksEntity || p_213797_0_ instanceof FiddleDummyEntity || p_213797_0_ instanceof WaterAnimal || (p_213797_0_.isInWaterOrBubble() || p_213797_0_.level().getBlockState(new BlockPos(p_213797_0_.getBlockX(),p_213797_0_.getBlockY()-1,p_213797_0_.getBlockZ()))== Blocks.WATER.defaultBlockState()))) return false;
         return true;
     };
 
@@ -115,7 +115,7 @@ public class FiddleDummyEntity extends PathfinderMob implements GeoEntity {
     }
 
     public FiddlesticksEntity getParent(){
-        return (FiddlesticksEntity)this.level.getEntity(parent);
+        return (FiddlesticksEntity)this.level().getEntity(parent);
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -204,8 +204,8 @@ public class FiddleDummyEntity extends PathfinderMob implements GeoEntity {
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
             ticks++;
             if(ticks%10==0) {
-                this.attacker.level.addFreshEntity(new FiddleProyectileEntity(this.attacker.level, this.attacker, this.attacker.getTarget(), Direction.DOWN.getAxis(), getParent()));
-                this.attacker.level.playSound(null, this.attacker.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.AMBIENT, (float)(Math.random() * 5)+5, (float)(Math.random() * 2)+1);
+                this.attacker.level().addFreshEntity(new FiddleProyectileEntity(this.attacker.level(), this.attacker, this.attacker.getTarget(), Direction.DOWN.getAxis(), getParent()));
+                this.attacker.level().playSound(null, this.attacker.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.AMBIENT, (float)(Math.random() * 5)+5, (float)(Math.random() * 2)+1);
             }
         }
         
@@ -215,7 +215,7 @@ public class FiddleDummyEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public int getExperienceReward(){ return 5+this.level.random.nextInt(5); }
+    public int getExperienceReward(){ return 5+this.level().random.nextInt(5); }
     protected SoundEvent getHurtSound(DamageSource damageSourceIn){ return ModSounds.FIDDLESTICKS_HURT.get(); }
     @Override
     public boolean addEffect(MobEffectInstance effectInstanceIn, @Nullable Entity p_147209_) { return false; }

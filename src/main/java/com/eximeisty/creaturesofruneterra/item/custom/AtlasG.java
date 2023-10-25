@@ -51,8 +51,8 @@ public class AtlasG extends PickaxeItem implements GeoItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        Material material = state.getMaterial();
-        return  Blocks.OBSIDIAN.defaultBlockState()==state || Blocks.NETHERITE_BLOCK.defaultBlockState()==state || Blocks.ANCIENT_DEBRIS.defaultBlockState()==state ? 200 : material != Material.METAL && /*material != Material.ANVIL &&*/ material != Material.STONE ? 15 : this.speed;
+        //Material material = state.;
+        return  Blocks.OBSIDIAN.defaultBlockState()==state || Blocks.NETHERITE_BLOCK.defaultBlockState()==state || Blocks.ANCIENT_DEBRIS.defaultBlockState()==state ? 200 : /*material != Material.METAL && state != state.STONE ? 15 :*/ this.speed;
     }
 
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {

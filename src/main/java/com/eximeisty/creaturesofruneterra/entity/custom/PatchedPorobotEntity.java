@@ -52,8 +52,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.network.NetworkHooks;
@@ -267,7 +267,7 @@ public class PatchedPorobotEntity extends TamableAnimal implements GeoEntity {
             ItemStack itemstack1 = itemHandler.getStackInSlot(24);
             if (itemstack1.isEmpty()) {
                return true;
-            } else if (!itemstack1.sameItem(itemstack)) {
+            } else if (!itemstack1.is(itemstack.getItem())) {
                return false;
             } else if (itemstack1.getCount() + itemstack.getCount() <= itemHandler.getSlotLimit(24) && itemstack1.getCount() + itemstack.getCount() <= itemstack1.getMaxStackSize()) { // Forge fix: make furnace respect stack sizes in furnace recipes
                return true;
@@ -495,7 +495,7 @@ public class PatchedPorobotEntity extends TamableAnimal implements GeoEntity {
    @Nonnull
    @Override
    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side){
-      if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return handler.cast();
+      if(cap == ForgeCapabilities.ITEM_HANDLER) return handler.cast();
       return super.getCapability(cap, side);
    }
 

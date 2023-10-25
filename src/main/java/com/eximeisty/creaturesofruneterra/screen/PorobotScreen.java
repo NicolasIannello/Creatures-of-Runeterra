@@ -3,7 +3,6 @@ package com.eximeisty.creaturesofruneterra.screen;
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.container.PorobotContainer;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.GameRenderer;
@@ -33,23 +32,30 @@ public class PorobotScreen extends AbstractContainerScreen<PorobotContainer> {
         RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         boolean furnace = false;
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        switch (this.menu.getSlot(20+9+3*9).getItem().getItem().toString()) {
-            case "crafting_table": RenderSystem.setShaderTexture(0, GUI_CRAFTING); break;
-            case "furnace": RenderSystem.setShaderTexture(0, GUI_FURNACE); furnace=true; break;
-            default: RenderSystem.setShaderTexture(0, GUI); break;
-
-        }
+        //RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         int i = this.leftPos;
         int j = this.topPos;
-        this.blit(matrixStack, i, j, 0, 0, 239, 168);
+        switch (this.menu.getSlot(20+9+3*9).getItem().getItem().toString()) {
+            case "crafting_table":
+                RenderSystem.setShaderTexture(0, GUI_CRAFTING);
+                matrixStack.blit(GUI_CRAFTING, i, j, 0, 0, 239, 168);
+                break;
+            case "furnace":
+                RenderSystem.setShaderTexture(0, GUI_FURNACE); furnace=true;
+                matrixStack.blit(GUI_FURNACE, i, j, 0, 0, 239, 168);
+                break;
+            default:
+                RenderSystem.setShaderTexture(0, GUI);
+                matrixStack.blit(GUI, i, j, 0, 0, 239, 168);
+                break;
+        }
         if(furnace){
             if (this.menu.poro.isLit()) {
                 int k = this.menu.poro.getBurnLeftScaled();
-                this.blit(matrixStack, i+196, j+34+18-k, 0, 168+18-k, 18, k);
+                matrixStack.blit(GUI_FURNACE, i+196, j+34+18-k, 0, 168+18-k, 18, k);
             }
             int l = this.menu.poro.getCookProgressionScaled();
-            this.blit(matrixStack, i+190, j+77, 18, 168, 31, l);
+            matrixStack.blit(GUI_FURNACE, i+190, j+77, 18, 168, 31, l);
         }
     }
 }

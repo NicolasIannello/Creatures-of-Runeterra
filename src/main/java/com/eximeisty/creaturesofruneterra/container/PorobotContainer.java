@@ -16,7 +16,7 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
@@ -27,7 +27,7 @@ public class PorobotContainer extends RecipeBookMenu<CraftingContainer> {
     public final PatchedPorobotEntity poro;
     private final Player playerEntity;
     private final IItemHandler playerInventory;
-    private final CraftingContainer craftMatrix = new CraftingContainer(this, 3, 3);
+    private final CraftingContainer craftMatrix = new TransientCraftingContainer(this, 3, 3);
     private final ResultContainer craftResult = new ResultContainer();
     private final ContainerLevelAccess worldPosCallable;
 
@@ -41,7 +41,7 @@ public class PorobotContainer extends RecipeBookMenu<CraftingContainer> {
         layoutPlayerInventorySlots(8, 86);
 
         if(poro!=null){
-            poro.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->{
+            poro.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(h ->{
                 int x=0, y=0, index=0;
                 for (int j = 0; j < 3; j++) {
                     for (int i = 0; i < 5; i++) {
@@ -249,7 +249,7 @@ public class PorobotContainer extends RecipeBookMenu<CraftingContainer> {
 
     @Override
     public boolean recipeMatches(Recipe<? super CraftingContainer> pRecipe) {
-        return pRecipe.matches(this.craftMatrix, this.playerEntity.level);
+        return pRecipe.matches(this.craftMatrix, this.playerEntity.level());
     }
 
     @Override

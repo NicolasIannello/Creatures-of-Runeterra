@@ -41,7 +41,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 public class Fishbones extends ProjectileWeaponItem implements GeoItem {
-    protected static final Predicate<ItemStack> MISIL = (stack) -> stack.sameItem(new ItemStack(ModItems.MISIL.get()));
+    protected static final Predicate<ItemStack> MISIL = (stack) -> stack.is(ModItems.MISIL.get());
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public String controllerName = "controller";
     final int quote = (int) (Math.random() * 8);
