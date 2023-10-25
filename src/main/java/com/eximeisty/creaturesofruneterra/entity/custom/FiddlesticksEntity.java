@@ -462,9 +462,9 @@ public class FiddlesticksEntity extends PathfinderMob implements GeoEntity {
 
         private boolean teleportTo(double x, double y, double z) {
             BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos(x, y, z);
-            while(blockpos$mutable.getY() > this.attacker.level().getMinBuildHeight() && !this.attacker.level().getBlockState(blockpos$mutable).getMaterial().blocksMotion()) blockpos$mutable.move(Direction.DOWN);
+            while(blockpos$mutable.getY() > this.attacker.level().getMinBuildHeight() && !this.attacker.level().getBlockState(blockpos$mutable).blocksMotion()) blockpos$mutable.move(Direction.DOWN);
             BlockState blockstate = this.attacker.level().getBlockState(blockpos$mutable);
-            boolean flag = blockstate.getMaterial().blocksMotion();
+            boolean flag = blockstate.blocksMotion();
             boolean flag1 = blockstate.getFluidState().is(FluidTags.WATER);
             if (flag && !flag1) {
                 net.minecraftforge.event.entity.EntityTeleportEvent.EnderEntity event = net.minecraftforge.event.ForgeEventFactory.onEnderTeleport(this.attacker, x, y, z);
@@ -486,7 +486,7 @@ public class FiddlesticksEntity extends PathfinderMob implements GeoEntity {
             for (BlockPos blockPos : pos) {
                 final int j = Integer.valueOf(i);
                 BlockPos.betweenClosedStream(new AABB(blockPos).inflate(1, 4, 1)).forEach(position->{
-                    if(this.attacker.level().getBlockState(position.below()).getMaterial().blocksMotion() && this.attacker.level().getBlockState(position)==Blocks.AIR.defaultBlockState() && pos2[j]==null) pos2[j]=position;
+                    if(this.attacker.level().getBlockState(position.below()).blocksMotion() && this.attacker.level().getBlockState(position)==Blocks.AIR.defaultBlockState() && pos2[j]==null) pos2[j]=position;
                 });
                 if(pos2[j]!=null) i++;
             }
@@ -531,7 +531,7 @@ public class FiddlesticksEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if(source.is(DamageTypes.ON_FIRE)) return false;
+        if(source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE)) return false;
         return super.hurt(source, amount);
     }
 
