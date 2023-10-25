@@ -531,7 +531,7 @@ public class FiddlesticksEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if(source.is(DamageTypes.ON_FIRE)) return false;
+        if(source.is(DamageTypes.ON_FIRE) || source.is(DamageTypes.IN_FIRE)) return false;
         return super.hurt(source, amount);
     }
 
