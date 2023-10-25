@@ -16,6 +16,6 @@ public class ModCreativeModeTabs {
     @SubscribeEvent
     public static void registerCreativeModeTabs(CreativeModeTabEvent.Register event) {
         COR_TAB = event.registerCreativeModeTab(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "cor_tab"),
-                builder -> builder.icon(() -> new ItemStack(ModItems.SAI_HELMET.get())).title(Component.translatable("creativemodetab.cor_tab")));
+                builder -> builder.icon(() -> new ItemStack(ModItems.SAI_HELMET.get())).title(Component.translatable("Creatures of Runeterra")));
     }
 }
