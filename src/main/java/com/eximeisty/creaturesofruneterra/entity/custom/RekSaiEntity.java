@@ -509,7 +509,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
                 if(ticks>=25/2 && ticks<=30/2){
                     double posx=this.attacker.getLookAngle().x*23+this.attacker.getX(); double posz=this.attacker.getLookAngle().z*23+this.attacker.getZ(); double posy=this.attacker.getY();
                     AABB bb= new AABB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).minmax(this.attacker.leg.getBoundingBox());
-                    this.attackBB(bb, this.attacker.damage*25, true, 3F, false);
+                    this.attackBB(bb, this.attacker.damage*25, true, 1F, false);
                 }
                 if(ticks==40/2){
                     entityData.set(STATE, 0);
@@ -674,8 +674,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
         }
     }
 
-    public void positionRider(Entity passenger) {
-        super.positionRider(passenger);
+    public void positionRider(Entity passenger, Entity.MoveFunction p_19958_) {
         if (this.hasPassenger(passenger)) {
             double y, y2;
             if(entityData.get(STATE)==6 || grabTicks>1.0D && grabTicks<=14.0D){
@@ -695,7 +694,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
                     grabTicks=1.0D;
                 }
             }
-            passenger.setPos(this.getLookAngle().x*-8+this.getX(), y, this.getLookAngle().z*-8+this.getZ());
+            p_19958_.accept(passenger, this.getLookAngle().x*-8+this.getX(), y, this.getLookAngle().z*-8+this.getZ());
             this.tail2.setPos(this.getLookAngle().x*-8+this.getX(), y2, this.getLookAngle().z*-8+this.getZ());
         }
     }
