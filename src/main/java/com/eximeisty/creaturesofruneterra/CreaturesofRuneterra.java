@@ -49,6 +49,7 @@ public class CreaturesofRuneterra
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        ModCreativeModeTabs.register(modEventBus);
         ModItems.register(modEventBus);
         ModBlocks.register(modEventBus);
         ModTiles.register(modEventBus);
@@ -69,25 +70,6 @@ public class CreaturesofRuneterra
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
-        if(event.getTab() == ModCreativeModeTabs.COR_TAB) {
-            //ITEMS
-            event.accept(ModItems.HEXCORE);event.accept(ModItems.GEMSTONE);event.accept(ModItems.MISIL);event.accept(ModItems.DUNEBREAKER_FANG);event.accept(ModItems.DUNEBREAKER_HORN);event.accept(ModItems.REKSAI_CLAW);
-            event.accept(ModItems.REKSAI_PLAQUE);
-            //TOOLS
-            event.accept(ModItems.SAI_SWORD);event.accept(ModItems.SAI_PICKAXE);event.accept(ModItems.SAI_AXE);event.accept(ModItems.SAI_SHOVEL);event.accept(ModItems.SAI_HOE);event.accept(ModItems.SAI_BOW);
-            event.accept(ModItems.TENDRIL_COMPASS);
-            //ARMORS
-            event.accept(ModItems.SAI_HELMET);event.accept(ModItems.SAI_CHESTPLATE);event.accept(ModItems.SAI_LEGGINGS);event.accept(ModItems.SAI_BOOTS);event.accept(ModItems.SAI_ELYTRA);
-            event.accept(ModItems.FIDDLE_HELMET);event.accept(ModItems.FIDDLE_CHESTPLATE);event.accept(ModItems.FIDDLE_BEARTRAP);event.accept(ModItems.FIDDLE_BIRDCAGE);
-            //WEAPONS
-            event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);event.accept(ModItems.DUNEBREAKER_SHIELD);event.accept(ModItems.FIDDLESCYTHE);
-            //BLOCKS
-            event.accept(ModBlocks.TENDRIL);event.accept(ModBlocks.DRILL);
-            //SPAWN EGGS
-            event.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG);event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
-            event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);event.accept(ModItems.POROBOT_SPAWN_EGG);event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
-            event.accept(ModItems.FIDDLESTICKS_SPAWN_EGG);
-        }
     }
 
 //    @SubscribeEvent
