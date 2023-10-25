@@ -1,0 +1,31 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "GLQ",
+        "LDO",
+        "LOH"
+    ],
+    "key":{
+        "L":{
+            "item":"minecraft:lapis_block"
+        },
+        "G":{
+            "item":"creaturesofruneterra:gemstone"
+        },
+        "O":{
+            "item":"minecraft:gold_ingot"
+        },
+        "H":{
+            "item":"minecraft:iron_ingot"
+        },
+        "D":{
+            "item":"minecraft:dispenser"
+        },
+        "Q":{
+            "item":"minecraft:quartz_block"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:fishbones"
+    }
+}

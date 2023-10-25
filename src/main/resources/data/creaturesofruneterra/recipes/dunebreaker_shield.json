@@ -1,0 +1,21 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        " 3 ",
+        "121"
+    ],
+    "key":{
+        "1":{
+            "item":"creaturesofruneterra:dunebreaker_fang"
+        },
+        "2":{
+            "item":"minecraft:shield"
+        },
+        "3":{
+            "item":"creaturesofruneterra:dunebreaker_horn"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:dunebreaker_shield"
+    }
+}

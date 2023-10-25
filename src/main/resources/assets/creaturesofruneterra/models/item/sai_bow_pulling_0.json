@@ -1,0 +1,6 @@
+{
+    "parent": "creaturesofruneterra:item/sai_bow",
+    "textures": {
+        "layer0": "creaturesofruneterra:item/sai_bow_pulling_0"
+    }
+}
