@@ -93,7 +93,7 @@ public class AtlasG extends PickaxeItem implements GeoItem {
     public void attackBB(AABB bb, Entity player){
         player.level().getEntities(null, player.getBoundingBox().expandTowards(2, 0, 2).expandTowards(-2, 0, -2)).stream().forEach(livingEntity -> {
             if(!livingEntity.is(player)) livingEntity.hurt(player.level().damageSources().playerAttack((Player) player), 15);
-            if(!livingEntity.level().isClientSide) livingEntity.push(2.5F, livingEntity.getX()-player.getX(), livingEntity.getZ()-player.getZ());
+            if(!livingEntity.level().isClientSide) livingEntity.setDeltaMovement(player.getLookAngle().x*2, 0.2, player.getLookAngle().z*2);
         });
     }
 
