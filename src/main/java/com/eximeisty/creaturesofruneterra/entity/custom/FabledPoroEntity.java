@@ -232,6 +232,7 @@ public class FabledPoroEntity extends TameableEntity implements IAnimatable{
         this.dataManager.set(STATE, compound.getBoolean("Sitting"));
         this.dataManager.set(DAY, compound.getInt("day"));
         this.dataManager.set(FORGE, compound.getBoolean("forge"));
+        this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
     }
 
     protected SoundEvent getAmbientSound() { return SoundEvents.ENTITY_EVOKER_AMBIENT; }
