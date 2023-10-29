@@ -119,7 +119,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public void attackBB(AxisAlignedBB bb, Entity player){
         player.world.getEntitiesWithinAABB(LivingEntity.class, player.getBoundingBox().expand(2, 0, 2).expand(-2, 0, -2)).stream().forEach(livingEntity -> {
             if(!livingEntity.isEntityEqual(player)) livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)player), 15);
-            if(!livingEntity.world.isRemote) livingEntity.applyKnockback(2.5F, livingEntity.getPosX()-player.getPosX(), livingEntity.getPosZ()-player.getPosZ());
+            if(!livingEntity.world.isRemote) livingEntity.setMotion(player.getLookVec().x*2, 0.2, player.getLookVec().z*2);
         });
     }
 
