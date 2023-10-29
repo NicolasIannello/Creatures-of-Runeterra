@@ -531,7 +531,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
                 if(ticks>=25 && ticks<=30){
                     double posx=this.attacker.getLookVec().x*23+this.attacker.getPosX(); double posz=this.attacker.getLookVec().z*23+this.attacker.getPosZ(); double posy=this.attacker.getPosY();
                     AxisAlignedBB bb= new AxisAlignedBB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).union(this.attacker.leg.getBoundingBox());
-                    this.attackBB(bb, this.attacker.damage*25, true, 3F, false);
+                    this.attackBB(bb, this.attacker.damage*25, true, 1F, false);
                 }
                 if(ticks==40){
                     dataManager.set(STATE, 0);
@@ -597,7 +597,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
                 ++ticks;
                 AxisAlignedBB bb= this.attacker.leg.getBoundingBox();
                 this.breakBB(bb);
-                this.attackBB(bb, this.attacker.damage*25, true, 10, false);
+                this.attackBB(bb, this.attacker.damage*25, true, 1, false);
                 if(this.attacker.getDistanceSq(this.lastX, this.attacker.getPosY(), this.lastZ)<=30 || ticks>60){
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                     dataManager.set(STATE, 5);
@@ -677,7 +677,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
                     livingEntity.attackEntityFrom(DamageSource.causeMobDamage(this.attacker), damage);
                     lastHit=0;
                     if(motion) livingEntity.setMotion(this.attacker.getLookVec().x*4, 4.5, this.attacker.getLookVec().z*4);
-                    if(!livingEntity.world.isRemote && canKnockback) livingEntity.applyKnockback(knockbackStrenght, livingEntity.getPosX()+this.attacker.getPosX(), livingEntity.getPosZ()+this.attacker.getPosZ());
+                    if(!livingEntity.world.isRemote && canKnockback) livingEntity.applyKnockback((float)this.attacker.getLookVec().x*4, knockbackStrenght, this.attacker.getLookVec().z*4);
                 }
             });
         }
