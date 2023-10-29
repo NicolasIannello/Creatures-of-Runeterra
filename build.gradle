@@ -5,7 +5,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-version = '1.19.4-0.6.6'
+version = '1.19.4-'+mod_version
 group = 'com.eximeisty.creaturesofruneterra' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'creaturesofruneterra'
 
