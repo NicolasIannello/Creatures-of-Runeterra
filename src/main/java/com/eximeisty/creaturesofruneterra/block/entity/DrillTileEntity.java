@@ -6,6 +6,8 @@ import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SChatPacket;
@@ -66,15 +68,16 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
         handleUpdateTag(this.world.getBlockState(this.getPos()), pkt.getNbtCompound());
     }
     
-    @Override
+    @Override @SuppressWarnings("resource")
     public void tick() {
         if(this.getTileData().getBoolean("shake")) {
-            this.world.getPlayers().forEach(player ->{
-                if(player.getDistanceSq(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ())<400){
-                    player.rotationYaw+=Math.random()*(3+3)-3; 
-                    player.rotationPitch+=Math.random()*(3+3)-3;
+            ClientPlayerEntity pl = Minecraft.getInstance().player;
+            // this.world.getPlayers().forEach(player ->{
+                if(pl.getDistanceSq(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ())<400){
+                    pl.rotationYaw+=Math.random()*(3+3)-3; 
+                    pl.rotationPitch+=Math.random()*(3+3)-3;
                 }
-            });
+            // });
         }
         if(this.getTileData().getInt("state")==1 && !this.world.isRemote){
             ticks++;
