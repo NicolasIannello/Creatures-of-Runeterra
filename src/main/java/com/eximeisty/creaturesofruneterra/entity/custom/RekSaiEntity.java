@@ -513,7 +513,7 @@ public class RekSaiEntity extends PathfinderMob implements IAnimatable {
                 if(ticks>=25/2 && ticks<=30/2){
                     double posx=this.attacker.getLookAngle().x*23+this.attacker.getX(); double posz=this.attacker.getLookAngle().z*23+this.attacker.getZ(); double posy=this.attacker.getY();
                     AABB bb= new AABB(posx+3, posy, posz+3, posx-3, posy+5, posz-3).minmax(this.attacker.leg.getBoundingBox());
-                    this.attackBB(bb, this.attacker.damage*25, true, 3F, false);
+                    this.attackBB(bb, this.attacker.damage*25, true, 1F, false);
                 }
                 if(ticks==40/2){
                     entityData.set(STATE, 0);
@@ -579,7 +579,7 @@ public class RekSaiEntity extends PathfinderMob implements IAnimatable {
                 ++ticks;
                 AABB bb= this.attacker.leg.getBoundingBox();
                 this.breakBB(bb);
-                this.attackBB(bb, this.attacker.damage*25, true, 10, false);
+                this.attackBB(bb, this.attacker.damage*25, true, 1, false);
                 if(this.attacker.distanceToSqr(this.lastX, this.attacker.getY(), this.lastZ)<=30 || ticks>60){
                     this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
                     entityData.set(STATE, 5);
@@ -660,7 +660,7 @@ public class RekSaiEntity extends PathfinderMob implements IAnimatable {
                     livingEntity.hurt(DamageSource.mobAttack(this.attacker), damage);
                     lastHit=0;
                     if(motion) livingEntity.setDeltaMovement(this.attacker.getLookAngle().x*4, 4.5, this.attacker.getLookAngle().z*4);
-                    if(!livingEntity.level.isClientSide && canKnockback) livingEntity.push(knockbackStrenght, livingEntity.getX()+this.attacker.getX(), livingEntity.getZ()+this.attacker.getZ());
+                    if(!livingEntity.level.isClientSide && canKnockback) livingEntity.push(this.attacker.getLookAngle().x*4, knockbackStrenght, this.attacker.getLookAngle().z*4);
                 }
             });
         }
