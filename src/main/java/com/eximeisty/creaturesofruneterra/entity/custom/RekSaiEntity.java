@@ -76,7 +76,7 @@ public class RekSaiEntity extends PathfinderMob implements GeoEntity {
     private static final RawAnimation CHARGE_ANIM = RawAnimation.begin().then("animation.Reksai.charge", Animation.LoopType.LOOP);
     private static final RawAnimation SALIR_ANIM = RawAnimation.begin().then("animation.Reksai.salir", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation THROW_ANIM = RawAnimation.begin().then("animation.Reksai.throw", Animation.LoopType.PLAY_ONCE);
-    private static final RawAnimation APPEAR_ANIM = RawAnimation.begin().then("animation.Reksai.appear", Animation.LoopType.PLAY_ONCE);
+    private static final RawAnimation APPEAR_ANIM = RawAnimation.begin().then("animation.Reksai.salir", Animation.LoopType.PLAY_ONCE);
     private static final Predicate<LivingEntity> NOT_THIS = (p_213797_0_) -> {
         if(p_213797_0_ instanceof XerSaiDunebreakerEntity || p_213797_0_ instanceof XerSaiHatchlingEntity || (!(p_213797_0_ instanceof Player) && (p_213797_0_.isInWaterOrBubble() || p_213797_0_.getLevel().getBlockState(p_213797_0_.getOnPos())== Blocks.WATER.defaultBlockState()))) return false;
         if(p_213797_0_ instanceof CoRPartEntity) if( ((CoRPartEntity)p_213797_0_).getParent() instanceof RekSaiEntity ) return false; 
