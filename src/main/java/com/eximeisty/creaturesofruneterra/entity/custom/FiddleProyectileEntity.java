@@ -280,10 +280,15 @@ public class FiddleProyectileEntity extends Projectile {
       if (flag) {
          this.doEnchantDamageEffects(livingentity, entity);
          if (entity instanceof LivingEntity) {
-            ((LivingEntity)entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20*10));
+            if(entity1 instanceof FiddlesticksEntity){
+               ((FiddlesticksEntity)entity1).heal(6F);
+               ((LivingEntity)entity).addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 20*10));
+            }else{
+               if(parent!=null) parent.heal(3F);
+               ((LivingEntity)entity).addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 20*15));
+            }
+            if(entity1 instanceof Player) ((Player)entity1).heal(2);
          }
-         if(parent!=null) parent.heal(3F);
-         if(entity1 instanceof Player) ((Player) entity1).heal(2);
       }
 
    }

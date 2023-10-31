@@ -376,7 +376,7 @@ public class FiddlesticksEntity extends PathfinderMob implements IAnimatable, IA
                     break;
                 case 4:
                     if(ticks%10==0){
-                        this.attacker.level.addFreshEntity(new FiddleProyectileEntity(this.attacker.level, this.attacker, this.attacker.getTarget(), Direction.DOWN.getAxis(), null));
+                        this.attacker.level.addFreshEntity(new FiddleProyectileEntity(this.attacker.level, this.attacker, this.attacker.getTarget(), Direction.DOWN.getAxis(), this.attacker));
                         this.attacker.level.playSound(null, this.attacker.blockPosition(), SoundEvents.SOUL_ESCAPE, SoundSource.AMBIENT, (float)(Math.random() * 5)+5, (float)(Math.random() * 2)+1);
                     }
                     if(ticks>200 || (prevHealth-100)>this.attacker.getHealth()) {
