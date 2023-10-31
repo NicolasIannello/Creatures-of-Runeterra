@@ -97,7 +97,6 @@ public class DunebreakerShield extends Item implements IAnimatable, ISyncable {
                 }else{
                     GeckoLibNetwork.syncAnimation(target, this, id, 4);
                 }
-                System.out.println("shoot");
                 worldIn.addFreshEntity(shieldEntity);
             }
         }
@@ -106,7 +105,6 @@ public class DunebreakerShield extends Item implements IAnimatable, ISyncable {
 
     public void onUseTick(Level worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
         if(Minecraft.getInstance().mouseHandler.isLeftPressed() && cd==0){
-            System.out.println("use");
             cd=100;
         }
     }
