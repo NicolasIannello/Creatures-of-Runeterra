@@ -104,8 +104,6 @@ public class Fishbones extends ProjectileWeaponItem implements IAnimatable , ISy
                         misilentity= customMisil(misilentity);
                         misilentity.shootFromRotation(playerentity, playerentity.getRotationVector().x, playerentity.getRotationVector().y, 0.0F,1.0F * 3.0F, 1.0F);
                         misilentity.setBaseDamage(15);
-                        misilentity.setXRot(playerentity.getRotationVector().x);
-                        misilentity.setYRot(playerentity.getRotationVector().y);
                         misilentity.setKnockback(1);
                         misilentity.tickCount = 35;
                         misilentity.setNoGravity(true);
