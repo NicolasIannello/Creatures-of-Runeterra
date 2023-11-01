@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import software.bernie.geckolib.util.RenderUtils;
 
 public class DBShieldRenderer extends GeoEntityRenderer<DBShieldEntity> {
 
@@ -25,6 +26,7 @@ public class DBShieldRenderer extends GeoEntityRenderer<DBShieldEntity> {
     public void preRender(PoseStack poseStack, DBShieldEntity animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         poseStack.scale(2.5F, 2.5F, 2.5F);
         poseStack.translate(0D, -0.5D, 0D);
+        RenderUtils.faceRotation(poseStack, animatable, partialTick);
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
 }
