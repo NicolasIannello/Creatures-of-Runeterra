@@ -9,11 +9,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.AbstractArrowEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -49,6 +51,8 @@ public class MisilEntity extends AbstractArrowEntity implements IAnimatable{
             this.world.createExplosion((Entity)null, this.getPosX(), this.getPosY(), this.getPosZ(), (float)2, flag, flag ? Explosion.Mode.DESTROY : Explosion.Mode.NONE);
             this.remove();
         }
+        Vector3d vec31 = this.getMotion();
+        if(world.isRemote) this.world.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, this.getPosX() - vec31.x, this.getPosY() - vec31.y + 0.15D, this.getPosZ() - vec31.z, 0.0D, 0.0D, 0.0D);
         super.tick();
     }
 
