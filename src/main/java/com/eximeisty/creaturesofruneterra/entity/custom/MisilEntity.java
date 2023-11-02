@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.entity.custom;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -17,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -52,6 +54,8 @@ public class MisilEntity extends AbstractArrow implements IAnimatable{
             this.level.explode((Entity)null, this.getX(), this.getY(), this.getZ(), (float)2, flag, flag ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.NONE);
             this.discard();
         }
+        Vec3 vec31 = this.getDeltaMovement();
+        if(level.isClientSide) this.level.addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, this.getX() - vec31.x, this.getY() - vec31.y + 0.15D, this.getZ() - vec31.z, 0.0D, 0.0D, 0.0D);
         super.tick();
     }
 
