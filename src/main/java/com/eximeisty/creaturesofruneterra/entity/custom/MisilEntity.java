@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -46,6 +48,8 @@ public class MisilEntity extends AbstractArrow implements GeoEntity {
             this.level().explode((Entity)null, this.getX(), this.getY(), this.getZ(), (float)2, flag, flag ? Level.ExplosionInteraction.TNT : Level.ExplosionInteraction.NONE);
             this.discard();
         }
+        Vec3 vec31 = this.getDeltaMovement();
+        if(level().isClientSide) this.level().addParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, this.getX() - vec31.x, this.getY() - vec31.y + 0.15D, this.getZ() - vec31.z, 0.0D, 0.0D, 0.0D);
         super.tick();
     }
 
