@@ -53,7 +53,8 @@ public class FiddleProyectileRenderer extends EntityRenderer<FiddleProyectileEnt
          vertexconsumer = pBuffer.getBuffer(RENDER_TYPE5);
       }else{
          vertexconsumer = pBuffer.getBuffer(RENDER_TYPE);
-      }      vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 0.0F, 0, 0, 1);
+      }
+      vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 0.0F, 0, 0, 1);
       vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 1.0F, 0, 1, 1);
       vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 1.0F, 1, 1, 0);
       vertex(vertexconsumer, matrix4f, matrix3f, pPackedLight, 0.0F, 1, 0, 0);
