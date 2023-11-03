@@ -103,7 +103,7 @@ public class DrillTileEntity extends BlockEntity implements IAnimatable {
                     this.getLevel().getServer().getPlayerList().broadcastMessage(new TextComponent("The floor trembles"), ChatType.CHAT, Util.NIL_UUID);
                 }
                 if(ticks==500){
-                    ModEntityTypes.REKSAI.get().spawn(level.getServer().overworld(), null, null, this.worldPosition, MobSpawnType.EVENT, false, false);
+                    ModEntityTypes.REKSAI.get().spawn(level.getServer().getLevel(level.dimension()), null, null, this.worldPosition, MobSpawnType.EVENT, false, false);
                     this.level.destroyBlock(worldPosition, false);
                 }
             }else{
