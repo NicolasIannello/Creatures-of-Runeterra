@@ -228,7 +228,7 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
     public void switchEntity(EntityType<?> poro, PlayerEntity owner){
         this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
         this.entityDropItem(this.getHeldItemMainhand());
-        TameableEntity entity= (TameableEntity)poro.spawn(world.getServer().func_241755_D_(), null, null, new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ()), SpawnReason.NATURAL, false, false);
+        TameableEntity entity= (TameableEntity)poro.spawn(world.getServer().getWorld(world.getDimensionKey()), null, null, new BlockPos(this.getPosX(), this.getPosY(), this.getPosZ()), SpawnReason.NATURAL, false, false);
         entity.setTamedBy(owner);
         this.remove();
     }

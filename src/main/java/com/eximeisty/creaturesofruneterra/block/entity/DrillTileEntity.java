@@ -89,7 +89,7 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
                     this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("The floor trembles"), ChatType.CHAT, Util.DUMMY_UUID));
                 }
                 if(ticks==500){
-                    ModEntityTypes.REKSAI.get().spawn(world.getServer().func_241755_D_(), null, null, this.getPos(), SpawnReason.TRIGGERED, false, false);
+                    ModEntityTypes.REKSAI.get().spawn(world.getServer().getWorld(world.getDimensionKey()), null, null, this.getPos(), SpawnReason.TRIGGERED, false, false);
                     this.world.destroyBlock(pos, false);
                 }
             }else{
