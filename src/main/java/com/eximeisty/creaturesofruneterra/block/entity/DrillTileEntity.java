@@ -97,7 +97,7 @@ public class DrillTileEntity extends BlockEntity implements GeoBlockEntity {
                     this.getLevel().getServer().getPlayerList().broadcastSystemMessage(Component.translatable("The floor trembles"), true);
                 }
                 if(ticks==500){
-                    ModEntities.REKSAI.get().spawn(level.getServer().overworld(), (ItemStack) null, null, this.worldPosition, MobSpawnType.EVENT, false, false);
+                    ModEntities.REKSAI.get().spawn(level.getServer().getLevel(level.dimension()), (ItemStack) null, null, this.worldPosition, MobSpawnType.EVENT, false, false);
                     this.level.destroyBlock(worldPosition, false);
                 }
             }else{

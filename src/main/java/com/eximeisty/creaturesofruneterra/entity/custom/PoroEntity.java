@@ -218,7 +218,7 @@ public class PoroEntity extends TamableAnimal implements GeoEntity {
     public void switchEntity(EntityType<?> poro, Player owner){
         this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItemInHand(InteractionHand.MAIN_HAND)));
         this.level.addFreshEntity(new ItemEntity(this.level, this.getX(), this.getY(), this.getZ(), this.getItemBySlot(EquipmentSlot.HEAD)));
-        TamableAnimal entity= (TamableAnimal)poro.spawn(this.level.getServer().overworld(), (ItemStack) null, null, this.getOnPos().above(), MobSpawnType.NATURAL, false, false);
+        TamableAnimal entity= (TamableAnimal)poro.spawn(this.level.getServer().getLevel(this.level.dimension()), (ItemStack) null, null, this.getOnPos().above(), MobSpawnType.NATURAL, false, false);
         entity.tame(owner);
         this.discard();
     }
