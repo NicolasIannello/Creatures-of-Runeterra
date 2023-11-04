@@ -179,14 +179,14 @@ public class FiddlesticksEntity extends PathfinderMob implements GeoEntity {
     public void tick() {
         super.tick();
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-        if(this.getHealth()<=1){
+        if(this.getHealth()<=1 || deathTicks>0){
             deathTicks++;
             entityData.set(STATE, 8);
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
             if(deathTicks==3) {
                 this.level().playSound(null, this.blockPosition(), ModSounds.FIDDLESTICKS_DEATH.get(), SoundSource.HOSTILE, 3, 1);
             }
-            if(deathTicks>80 || deathTicks>0){
+            if(deathTicks>80){
                 this.kill();
             }else{
                 this.setHealth(1);
