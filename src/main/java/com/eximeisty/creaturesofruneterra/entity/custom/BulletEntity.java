@@ -57,11 +57,11 @@ public class BulletEntity extends AbstractArrow implements IAnimatable {
             Entity entity = p_37259_.getEntity();
             Entity entity1 = this.getOwner();
             entity.hurt( DamageSource.indirectMobAttack(this, (LivingEntity) entity1).setProjectile(), 4.0F);
-            if (entity1 instanceof LivingEntity) {
-                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity, entity1);
-                EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
-            }
-            this.doPostHurtEffects((LivingEntity) entity);
+//            if (entity1 instanceof LivingEntity) {
+//                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity, entity1);
+//                EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
+//            }
+//            this.doPostHurtEffects((LivingEntity) entity);
         }
     }
 
