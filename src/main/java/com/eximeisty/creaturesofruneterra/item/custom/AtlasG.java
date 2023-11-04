@@ -135,7 +135,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
             motion = new Vector3d(playerentity.getLookVec().x*2, 0.1, playerentity.getLookVec().z*2);
             playerentity.setMotion(motion);
             if (!worldIn.isRemote){
-                stack.damageItem(50, playerentity, (player) -> {
+                stack.damageItem(25, playerentity, (player) -> {
                     player.sendBreakAnimation(playerentity.getActiveHand());
                 });
             }

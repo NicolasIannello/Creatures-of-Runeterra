@@ -80,7 +80,7 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     }
     
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(cd==195){
+        if(cd==295){
             if (!worldIn.isRemote) {
                 DBShieldEntity shieldEntity = new DBShieldEntity(worldIn, (LivingEntity)entityIn);
                 shieldEntity.setDirectionAndMovement(entityIn, entityIn.rotationPitch, entityIn.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
@@ -106,7 +106,7 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     @SuppressWarnings("resource")
     public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
         if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown() && cd==0){
-            cd=200;
+            cd=300;
         }
     }
 
