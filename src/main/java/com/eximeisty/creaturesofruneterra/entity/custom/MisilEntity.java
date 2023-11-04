@@ -81,11 +81,11 @@ public class MisilEntity extends AbstractArrow implements GeoEntity {
             Entity entity = result.getEntity();
             Entity entity1 = this.getOwner();
             entity.hurt( damageSources().mobProjectile(this, (LivingEntity) entity1), 6.0F);
-            if (entity1 instanceof LivingEntity) {
-                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity1, entity);
-                EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
-                //this.applyEnchantments((LivingEntity)entity1, entity);
-            }
+//            if (entity1 instanceof LivingEntity) {
+//                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity1, entity);
+//                EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
+//                //this.applyEnchantments((LivingEntity)entity1, entity);
+//            }
         }
     }
 

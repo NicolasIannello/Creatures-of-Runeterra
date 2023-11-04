@@ -74,11 +74,11 @@ public class DBShieldEntity extends AbstractArrow implements GeoEntity {
             Entity entity = result.getEntity();
             Entity entity1 = this.getOwner();
             entity.hurt( damageSources().mobProjectile(this, (LivingEntity) entity1), 2.0F);
-            entity.push(this.getLookAngle().x*2,0.2,this.getLookAngle().z*2);
-            if (entity1 instanceof LivingEntity) {
-                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity, entity1);
-                EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
-            }
+//            entity.push(this.getLookAngle().x*2,0.2,this.getLookAngle().z*2);
+//            if (entity1 instanceof LivingEntity) {
+//                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity, entity1);
+//                EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
+//            }
         }
     }
 
