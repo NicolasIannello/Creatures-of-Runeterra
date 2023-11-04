@@ -32,14 +32,14 @@ public class FiddleScythe extends SwordItem implements IAnimatable {
         // speedModifier = new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", attackSpeedIn, AttributeModifier.Operation.ADDITION);
     }
 
-    public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+    //public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         // ItemStack item = entityIn.getHeldEquipment().iterator().next();
         // if(item==stack && !((PlayerEntity)entityIn).getAttribute(ForgeMod.REACH_DISTANCE.get()).hasModifier(reachModifier)){
         //     ((PlayerEntity)entityIn).getAttribute(ForgeMod.REACH_DISTANCE.get()).applyNonPersistentModifier(reachModifier);
         // }else if(!(item==stack)){
         //     ((PlayerEntity)entityIn).getAttribute(ForgeMod.REACH_DISTANCE.get()).removeModifier(reachModifier);
         // }
-    }
+    //}
 
     // public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerentity, Hand handIn) {
     //     ItemStack stack = playerentity.getHeldItem(handIn);
