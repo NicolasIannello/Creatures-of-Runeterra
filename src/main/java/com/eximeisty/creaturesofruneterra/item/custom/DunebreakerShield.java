@@ -87,6 +87,7 @@ public class DunebreakerShield extends Item implements IAnimatable, ISyncable {
                 shieldEntity.shootFromRotation(entityIn, entityIn.getRotationVector().x, entityIn.getRotationVector().y, 0.0F, 1.0F * 3.0F, 1.0F);
                 shieldEntity.setBaseDamage(2);
                 shieldEntity.tickCount = 35;
+                shieldEntity.setKnockback(2);
                 shieldEntity.setNoGravity(true);
                 shieldEntity.setPierceLevel((byte) 4);
 
