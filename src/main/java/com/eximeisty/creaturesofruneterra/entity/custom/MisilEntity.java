@@ -92,7 +92,7 @@ public class MisilEntity extends AbstractArrow implements IAnimatable{
             Entity entity1 = this.getOwner();
             entity.hurt(DamageSource.arrow(this, entity1), 6.0F);
             if (entity1 instanceof LivingEntity) {
-                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity, entity1);
+                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity1, entity);
                 EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
                 //this.applyEnchantments((LivingEntity)entity1, entity);
             }
