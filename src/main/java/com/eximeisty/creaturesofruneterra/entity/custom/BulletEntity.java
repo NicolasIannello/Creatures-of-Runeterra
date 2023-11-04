@@ -57,14 +57,13 @@ public class BulletEntity extends AbstractArrow implements GeoEntity {
         if (!this.level.isClientSide) {
             Entity entity = p_37259_.getEntity();
             Entity entity1 = this.getOwner();
-            DamageSource damagesource;
             entity.hurt( damageSources().mobProjectile(this, (LivingEntity) entity1), 4.0F);
-            if (entity1 instanceof LivingEntity) {
-                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity, entity1);
-                EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
-                //this.applyEnchantments((LivingEntity)entity1, entity);
-            }
-            this.doPostHurtEffects((LivingEntity) entity);
+//            if (entity1 instanceof LivingEntity && entity instanceof LivingEntity) {
+//                EnchantmentHelper.doPostHurtEffects((LivingEntity) entity, entity1);
+//                EnchantmentHelper.doPostDamageEffects((LivingEntity)entity1, entity);
+//                //this.applyEnchantments((LivingEntity)entity1, entity);
+//            }
+//            this.doPostHurtEffects((LivingEntity) entity);
         }
     }
 
