@@ -19,6 +19,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -44,6 +45,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     private int dashTicks=0;
     private int soundTicks=0;
     private boolean pound=false;
+    private Vector3d motion;
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge", false).addAnimation("animation.atlasg.full", true);
     private static final AnimationBuilder CHARGE2_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge2", false).addAnimation("animation.atlasg.full2", true);
     private static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.idle", true);;
@@ -119,7 +121,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     public void attackBB(AxisAlignedBB bb, Entity player){
         player.world.getEntitiesWithinAABB(LivingEntity.class, player.getBoundingBox().expand(2, 0, 2).expand(-2, 0, -2)).stream().forEach(livingEntity -> {
             if(!livingEntity.isEntityEqual(player)) livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)player), 15);
-            if(!livingEntity.world.isRemote) livingEntity.setMotion(player.getLookVec().x*2, 0.2, player.getLookVec().z*2);
+            if(!livingEntity.world.isRemote) livingEntity.setMotion(motion.add(0,0.1,0));//livingEntity.setMotion(player.getLookVec().x*2, 0.2, player.getLookVec().z*2);
         });
     }
 
@@ -130,7 +132,8 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
             worldIn.playSound(playerentity, playerentity.getPosition(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.PLAYERS, 5, 0.9f);
             setState(stack, 3);
             playerentity.getCooldownTracker().setCooldown(this, 20);
-            playerentity.setMotion(playerentity.getLookVec().x*2, 0.1, playerentity.getLookVec().z*2);
+            motion = new Vector3d(playerentity.getLookVec().x*2, 0.1, playerentity.getLookVec().z*2);
+            playerentity.setMotion(motion);
             if (!worldIn.isRemote){
                 stack.damageItem(50, playerentity, (player) -> {
                     player.sendBreakAnimation(playerentity.getActiveHand());
