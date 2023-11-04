@@ -74,7 +74,7 @@ public class DunebreakerShield extends Item implements GeoItem {
     }
 
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(cd==97){
+        if(cd==197){
             if (!worldIn.isClientSide) {
                 DBShieldEntity shieldEntity = new DBShieldEntity(worldIn, (LivingEntity) entityIn);
                 shieldEntity.shootFromRotation(entityIn, entityIn.getRotationVector().x, entityIn.getRotationVector().y, 0.0F, 1.0F * 3.0F, 1.0F);
@@ -97,7 +97,7 @@ public class DunebreakerShield extends Item implements GeoItem {
 
     public void onUseTick(Level worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
         if(Minecraft.getInstance().mouseHandler.isLeftPressed() && cd==0){
-            cd=100;
+            cd=200;
         }
     }
 
