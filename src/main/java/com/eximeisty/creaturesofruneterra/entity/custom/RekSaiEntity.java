@@ -290,7 +290,7 @@ public class RekSaiEntity extends CreatureEntity implements IAnimatable, IAnimat
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
             dataManager.set(RUN, 1);
         }
-        if(this.getHealth()<=1){
+        if(this.getHealth()<=1 || deathTicks>0){
             deathTicks++;
             if(deathTicks==3) this.world.playSound(null, this.getPosition(), ModSoundEvents.REKSAI_ESCAPE.get(), SoundCategory.HOSTILE, 3, 1);
             dataManager.set(STATE, 3);

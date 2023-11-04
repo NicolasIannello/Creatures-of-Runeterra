@@ -180,7 +180,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
     public void tick() {
         super.tick();
         this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
-        if(this.getHealth()<=1){
+        if(this.getHealth()<=1 || deathTicks>0){
             deathTicks++;
             dataManager.set(STATE, 8);
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
@@ -298,7 +298,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
 
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
             boolean flag = dataManager.get(STATE)==0 && this.attacker.isOnGround() && cd<=0;
-            if((channel<=0 || lastHit>400) && flag && distToEnemySqr>200){
+            if((channel<=0 || lastHit>400) && flag && distToEnemySqr>100){
                 Vector3d vector3d = new Vector3d(this.attacker.getPosX() - this.attacker.getAttackTarget().getPosX(), this.attacker.getPosYHeight(0.5D) - this.attacker.getAttackTarget().getPosYEye(), this.attacker.getPosZ() - this.attacker.getAttackTarget().getPosZ());
                 vector3d = vector3d.normalize();
                 BlockPos pos[]= new BlockPos[3];
@@ -343,7 +343,7 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
                     this.attacker.world.playSound(null, this.attacker.getPosition(), ModSoundEvents.FIDDLESTICKS_CHANNEL.get(), SoundCategory.HOSTILE, 2, 1);
                 }
             }
-            if(distToEnemySqr>=300 && flag && run<=0 && teleportToEntity(this.attacker.getAttackTarget())){
+            if(distToEnemySqr>=150 && flag && run<=0 && teleportToEntity(this.attacker.getAttackTarget())){
                 dataManager.set(STATE, -1);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.65);
                 this.attacker.world.playSound(null, this.attacker.getPosition(), ModSoundEvents.FIDDLESTICKS_RUN.get(), SoundCategory.HOSTILE, 2, 1);
