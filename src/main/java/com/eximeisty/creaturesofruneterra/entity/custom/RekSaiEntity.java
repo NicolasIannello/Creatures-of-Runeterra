@@ -280,7 +280,7 @@ public class RekSaiEntity extends PathfinderMob implements IAnimatable {
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(velocidad);
             entityData.set(RUN, 1);
         }
-        if(this.getHealth()<=1){
+        if(this.getHealth()<=1 || deathTicks>0){
             deathTicks++;
             if(deathTicks==3) this.level.playSound(null, this.getOnPos(), ModSoundEvents.REKSAI_ESCAPE.get(), SoundSource.HOSTILE, 3, 1);
             entityData.set(STATE, 3);

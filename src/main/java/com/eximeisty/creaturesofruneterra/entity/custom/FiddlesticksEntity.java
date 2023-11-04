@@ -180,7 +180,7 @@ public class FiddlesticksEntity extends PathfinderMob implements IAnimatable, IA
     public void tick() {
         super.tick();
         this.bossInfo.setProgress(this.getHealth() / this.getMaxHealth());
-        if(this.getHealth()<=1){
+        if(this.getHealth()<=1 || deathTicks>0){
             deathTicks++;
             entityData.set(STATE, 8);
             this.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0);
@@ -298,7 +298,7 @@ public class FiddlesticksEntity extends PathfinderMob implements IAnimatable, IA
 
         public void checkAndPerformAttack(LivingEntity enemy, double distToEnemySqr) {
             boolean flag = entityData.get(STATE)==0 && this.attacker.isOnGround() && cd<=0;
-            if((channel<=0 || lastHit>400/2) && flag && distToEnemySqr>200){
+            if((channel<=0 || lastHit>400/2) && flag && distToEnemySqr>100){
                 Vec3 vector3d = new Vec3(this.attacker.getX() - this.attacker.getTarget().getX(), this.attacker.getY(0.5D) - this.attacker.getTarget().getEyeY(), this.attacker.getZ() - this.attacker.getTarget().getZ());
                 vector3d = vector3d.normalize();
                 BlockPos pos[]= new BlockPos[3];
@@ -343,7 +343,7 @@ public class FiddlesticksEntity extends PathfinderMob implements IAnimatable, IA
                     this.attacker.level.playSound(null, this.attacker.blockPosition(), ModSoundEvents.FIDDLESTICKS_CHANNEL.get(), SoundSource.HOSTILE, 2, 1);
                 }
             }
-            if(distToEnemySqr>=300 && flag && run<=0 && teleportToEntity(this.attacker.getTarget())){
+            if(distToEnemySqr>=150 && flag && run<=0 && teleportToEntity(this.attacker.getTarget())){
                 entityData.set(STATE, -1);
                 this.attacker.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.65);
                 this.attacker.level.playSound(null, this.attacker.blockPosition(), ModSoundEvents.FIDDLESTICKS_RUN.get(), SoundSource.HOSTILE, 2, 1);
