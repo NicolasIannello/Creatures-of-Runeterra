@@ -76,7 +76,7 @@ public class DBShieldEntity extends AbstractArrowEntity implements IAnimatable{
             entity.attackEntityFrom(DamageSource.causeArrowDamage(this, entity1), 2.0F);
             if (entity1 instanceof LivingEntity) {
                 this.applyEnchantments((LivingEntity)entity1, entity);
-                ((LivingEntity)entity).setMotion(entity1.getLookVec().x*2, 0.2, entity1.getLookVec().z*2);
+                //((LivingEntity)entity).setMotion(entity1.getLookVec().x*2, 0.2, entity1.getLookVec().z*2);
             }
         }
     }
