@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
@@ -40,6 +41,7 @@ public class AtlasG extends PickaxeItem implements GeoItem {
     private int dashTicks=0;
     private int soundTicks=0;
     private boolean pound=false;
+    private Vec3 motion;
     private static final RawAnimation CHARGE_ANIM = RawAnimation.begin().then("animation.atlasg.charge", Animation.LoopType.PLAY_ONCE).then("animation.atlasg.full", Animation.LoopType.LOOP);
     private static final RawAnimation CHARGE2_ANIM = RawAnimation.begin().then("animation.atlasg.charge2", Animation.LoopType.PLAY_ONCE).then("animation.atlasg.full2", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("animation.atlasg.idle", Animation.LoopType.LOOP);
@@ -94,7 +96,7 @@ public class AtlasG extends PickaxeItem implements GeoItem {
     public void attackBB(AABB bb, Entity player){
         player.level.getEntities(null, player.getBoundingBox().expandTowards(2, 0, 2).expandTowards(-2, 0, -2)).stream().forEach(livingEntity -> {
             if(!livingEntity.is(player)) livingEntity.hurt(player.level.damageSources().playerAttack((Player) player), 15);
-            if(!livingEntity.level.isClientSide) livingEntity.setDeltaMovement(player.getLookAngle().x*2, 0.2, player.getLookAngle().z*2);
+            if(!livingEntity.level.isClientSide) livingEntity.setDeltaMovement(motion.add(0,0.1,0));//livingEntity.setDeltaMovement(player.getLookAngle().x*2, 0.2, player.getLookAngle().z*2);
         });
     }
 
@@ -105,7 +107,8 @@ public class AtlasG extends PickaxeItem implements GeoItem {
             worldIn.playSound(playerentity, playerentity.blockPosition(), SoundEvents.PISTON_EXTEND, SoundSource.PLAYERS, 5, 0.9f);
             setState(stack, 3);
             playerentity.getCooldowns().addCooldown(this, 20);
-            playerentity.setDeltaMovement(playerentity.getLookAngle().x*2, 0.1, playerentity.getLookAngle().z*2);
+            motion = new Vec3(playerentity.getLookAngle().x*2, 0.1, playerentity.getLookAngle().z*2);
+            playerentity.setDeltaMovement(motion);
             if (!worldIn.isClientSide){
                 stack.hurtAndBreak(50, playerentity, (player) -> {
                     player.broadcastBreakEvent(playerentity.getUsedItemHand());
