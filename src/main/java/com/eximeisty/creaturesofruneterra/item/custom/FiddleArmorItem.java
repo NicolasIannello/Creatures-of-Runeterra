@@ -28,7 +28,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
     final String quote = "["+Minecraft.getInstance().options.keyShift.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ]+["+Minecraft.getInstance().options.keyPickItem.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ] to use hability";//"[SHIFT]+[LClick] to use hability";
     public String controllerName = "controller";
-    public int cd=100;
+    public int cd=0;
     public int tiros=0;
     private List<Entity> targets = Lists.newArrayList();
     //private static final AnimationBuilder ANIM = new AnimationBuilder().addAnimation("animation.fiddle_armor2.open", false);
@@ -56,7 +56,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
             worldIn.getEntities(null, entityIn.getBoundingBox().inflate(5)).stream().forEach(entity ->{
                 if(targets.size()<6 && entity!=entityIn)targets.add(entity);
             });
-            cd=100;
+            cd=700;
         }
         if(!targets.isEmpty()){
             worldIn.addFreshEntity(new FiddleProyectileEntity(worldIn, (LivingEntity)entityIn, targets.get(0), Direction.DOWN.getAxis(), null));
