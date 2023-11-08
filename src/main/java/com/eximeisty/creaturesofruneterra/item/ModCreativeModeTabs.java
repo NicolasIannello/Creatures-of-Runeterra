@@ -30,8 +30,9 @@ public class ModCreativeModeTabs {
                         //ARMORS
                         pOutput.accept(ModItems.SAI_HELMET.get());pOutput.accept(ModItems.SAI_CHESTPLATE.get());pOutput.accept(ModItems.SAI_LEGGINGS.get());pOutput.accept(ModItems.SAI_BOOTS.get());pOutput.accept(ModItems.SAI_ELYTRA.get());
                         pOutput.accept(ModItems.FIDDLE_HELMET.get());pOutput.accept(ModItems.FIDDLE_CHESTPLATE.get());pOutput.accept(ModItems.FIDDLE_BEARTRAP.get());pOutput.accept(ModItems.FIDDLE_BIRDCAGE.get());
+                        pOutput.accept(ModItems.RHAAST_HELMET.get());pOutput.accept(ModItems.RHAAST_CHESTPLATE.get());pOutput.accept(ModItems.RHAAST_LEGGINGS.get());pOutput.accept(ModItems.RHAAST_BOOTS.get());
                         //WEAPONS
-                        pOutput.accept(ModItems.FISHBONES.get());pOutput.accept(ModItems.ATLASG.get());pOutput.accept(ModItems.DUNEBREAKER_SHIELD.get());pOutput.accept(ModItems.FIDDLESCYTHE.get());
+                        pOutput.accept(ModItems.FISHBONES.get());pOutput.accept(ModItems.ATLASG.get());pOutput.accept(ModItems.DUNEBREAKER_SHIELD.get());pOutput.accept(ModItems.FIDDLESCYTHE.get());pOutput.accept(ModItems.RHAAST.get());
                         //BLOCKS
                         pOutput.accept(ModBlocks.TENDRIL.get());pOutput.accept(ModBlocks.DRILL.get());
                         //SPAWN EGGS
