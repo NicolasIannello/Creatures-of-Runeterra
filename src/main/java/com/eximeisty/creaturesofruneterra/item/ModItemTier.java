@@ -11,4 +11,6 @@ public class ModItemTier {
             null, () -> Ingredient.of(ModItems.GEMSTONE.get()));
     public static final ForgeTier FIDDLE = new ForgeTier(5, 800, 7.0F, 6.0F, 15,
             null, () -> null);
+    public static final ForgeTier DARKIN = new ForgeTier(5, 100, 7.0F, 4.0F, 0,
+            null, () -> null);
 }
