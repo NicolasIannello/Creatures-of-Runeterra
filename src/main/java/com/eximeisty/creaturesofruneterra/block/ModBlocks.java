@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra.block;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.block.custom.DarkinThingyBlock;
 import com.eximeisty.creaturesofruneterra.block.custom.DrillBlock;
 import com.eximeisty.creaturesofruneterra.block.custom.EmptyBlock;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
@@ -27,6 +28,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> TENDRIL= registerBlock("tendril", () -> new EmptyBlock(BlockBehaviour.Properties.of().mapColor(MapColor.PLANT)
             .destroyTime(0.2F).noOcclusion().noCollission()), true);
+
+    public static final RegistryObject<Block> DARKIN_PEDESTAL= registerBlock("darkin_pedestal", () -> new DarkinThingyBlock(BlockBehaviour.Properties.copy(Blocks.OBSIDIAN).
+            destroyTime(3F).noOcclusion()), false);
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, boolean flag){
         RegistryObject<T> toReturn= BLOCKS.register(name, block);
