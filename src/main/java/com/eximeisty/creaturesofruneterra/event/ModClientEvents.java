@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.event;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
+import com.eximeisty.creaturesofruneterra.block.entity.client.darkinT.DarkinThingyRenderer;
 import com.eximeisty.creaturesofruneterra.block.entity.client.drill.DrillRenderer;
 import com.eximeisty.creaturesofruneterra.entity.model.EmptyModel;
 import com.eximeisty.creaturesofruneterra.entity.model.XerSaiHatchlingModel;
@@ -26,6 +27,7 @@ public class ModClientEvents {
     @SubscribeEvent
     public static void registerBlockRenderers(final EntityRenderersEvent.RegisterRenderers event){
         event.registerBlockEntityRenderer(ModTiles.DRILL.get(), DrillRenderer::new);
+        event.registerBlockEntityRenderer(ModTiles.DARKIN_PEDESTAL.get(), DarkinThingyRenderer::new);
     }
 
     @SubscribeEvent
