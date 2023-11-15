@@ -24,9 +24,9 @@ public enum ModArmorMaterials implements ArmorMaterial {
     }),
     DARKIN("sai", 10, Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266655_) -> {
         p_266655_.put(ArmorItem.Type.BOOTS, 1);
-        p_266655_.put(ArmorItem.Type.LEGGINGS, 4);
-        p_266655_.put(ArmorItem.Type.CHESTPLATE, 5);
-        p_266655_.put(ArmorItem.Type.HELMET, 2);
+        p_266655_.put(ArmorItem.Type.LEGGINGS, 2);
+        p_266655_.put(ArmorItem.Type.CHESTPLATE, 3);
+        p_266655_.put(ArmorItem.Type.HELMET, 1);
     }), 20, SoundEvents.ARMOR_EQUIP_ELYTRA, 1.0F, 0F, () -> {
         return null;
     });

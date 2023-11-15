@@ -8,16 +8,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class RhaastArmorModel extends GeoModel<RhaastArmorItem> {
     @Override
     public ResourceLocation getModelResource(RhaastArmorItem animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/armor/sai_armor.geo.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/armor/rhaast_armor.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(RhaastArmorItem animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/model/armor/sai_armor.png");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/model/armor/rhaast_armor.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(RhaastArmorItem animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/armor/sai_armor.animation.json");
+        return null;//new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/armor/sai_armor.animation.json");
     }
 }

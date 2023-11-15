@@ -34,7 +34,7 @@ public class ModCreativeModeTabs {
                         //WEAPONS
                         pOutput.accept(ModItems.FISHBONES.get());pOutput.accept(ModItems.ATLASG.get());pOutput.accept(ModItems.DUNEBREAKER_SHIELD.get());pOutput.accept(ModItems.FIDDLESCYTHE.get());pOutput.accept(ModItems.RHAAST.get());
                         //BLOCKS
-                        pOutput.accept(ModBlocks.TENDRIL.get());pOutput.accept(ModBlocks.DRILL.get());
+                        pOutput.accept(ModBlocks.TENDRIL.get());pOutput.accept(ModBlocks.DRILL.get());pOutput.accept(ModBlocks.DARKIN_PEDESTAL.get());
                         //SPAWN EGGS
                         pOutput.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG.get());pOutput.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG.get());pOutput.accept(ModItems.REKSAI_SPAWN_EGG.get());pOutput.accept(ModItems.PORO_SPAWN_EGG.get());pOutput.accept(ModItems.FABLEDPORO_SPAWN_EGG.get());
                         pOutput.accept(ModItems.PLUNDERPORO_SPAWN_EGG.get());pOutput.accept(ModItems.POROBOT_SPAWN_EGG.get());pOutput.accept(ModItems.EXALTEDPORO_SPAWN_EGG.get());

@@ -9,17 +9,17 @@ public class RhaastModel extends GeoModel<Rhaast> {
 
     @Override
     public ResourceLocation getAnimationResource(Rhaast animatable) {
-        return null;//new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/item/fiddle_scythe.animation.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/item/rhaast.animation.json");
     }
 
     @Override
     public ResourceLocation getModelResource(Rhaast object) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/item/fiddle_scythe.geo.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/item/rhaast.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(Rhaast object) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/item/fiddle_scythe.png");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/item/rhaast.png");
     }
 
 }

@@ -1,5 +1,6 @@
 package com.eximeisty.creaturesofruneterra.item;
 
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.ForgeTier;
 
@@ -10,7 +11,7 @@ public class ModItemTier {
     public static final ForgeTier ATLAS = new ForgeTier(4, 1600, 10.0F, 5.0F, 10,
             null, () -> Ingredient.of(ModItems.GEMSTONE.get()));
     public static final ForgeTier FIDDLE = new ForgeTier(5, 800, 7.0F, 6.0F, 15,
-            null, () -> null);
-    public static final ForgeTier DARKIN = new ForgeTier(5, 100, 7.0F, 4.0F, 0,
-            null, () -> null);
+            null, () -> Ingredient.of(Items.COPPER_INGOT));
+    public static final ForgeTier DARKIN = new ForgeTier(5, 100, 7.0F, 2.0F, 0,
+            null, () -> Ingredient.of(Items.ROTTEN_FLESH));
 }

@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -85,7 +86,6 @@ public class Rhaast extends SwordItem implements GeoItem {
                 ((RhaastArmorItem)Rhelmet.getItem()).addSaveData(Rhelmet, helmet);
                 helmet.getAllEnchantments().forEach(Rhelmet::enchant);
                 Rhelmet.enchant(Enchantments.BINDING_CURSE, 1);
-                Rhelmet.enchant(Enchantments.VANISHING_CURSE, 1);
                 playerentity.setItemSlot(es[i], Rhelmet);
             }
             stack.setDamageValue(stack.getDamageValue()+40);
@@ -102,7 +102,7 @@ public class Rhaast extends SwordItem implements GeoItem {
     
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        if(!target.isAlive()) attacker.heal(8);
+        if(!target.isAlive() && attacker.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.RHAAST_CHESTPLATE.get())) attacker.heal(8);
         stack.setDamageValue(stack.getDamageValue()-3);
         return true;
     }

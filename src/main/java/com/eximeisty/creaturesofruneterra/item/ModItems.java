@@ -4,7 +4,6 @@ import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import com.eximeisty.creaturesofruneterra.item.custom.*;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -150,6 +149,9 @@ public class ModItems {
 //    BLOCKS
     public static final RegistryObject<BlockItem> DRILL = ITEMS.register("drill",
             () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties()));
+
+    public static final RegistryObject<BlockItem> DARKIN_PEDESTAL = ITEMS.register("darkin_pedestal",
+            () -> new DarkinPedestalItem(ModBlocks.DARKIN_PEDESTAL.get(), new Item.Properties()));
 
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
