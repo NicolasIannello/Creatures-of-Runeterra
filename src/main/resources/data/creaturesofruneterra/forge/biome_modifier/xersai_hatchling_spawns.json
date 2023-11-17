@@ -9,7 +9,7 @@
   ],
   "spawners": {
     "type": "creaturesofruneterra:xersai_hatchling",
-    "weight": 2,
+    "weight": 30,
     "minCount": 2,
     "maxCount": 4
   }
