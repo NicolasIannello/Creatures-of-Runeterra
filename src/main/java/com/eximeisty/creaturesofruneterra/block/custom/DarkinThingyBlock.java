@@ -3,6 +3,8 @@ package com.eximeisty.creaturesofruneterra.block.custom;
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.block.entity.DarkinThingyTileEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +25,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import javax.annotation.Nullable;
 
 public class DarkinThingyBlock extends DirectionalBlock implements EntityBlock {
+	private float y = 1, x1 = 0, x2 = 0;
 
 	public DarkinThingyBlock(Properties builder) {
         super(builder);
@@ -57,6 +60,32 @@ public class DarkinThingyBlock extends DirectionalBlock implements EntityBlock {
 			((DarkinThingyTileEntity)tileentity).manageItem(itemstack, worldIn, pos, true);
 		}
 		return InteractionResult.CONSUME;
+	}
+
+	public void animateTick(BlockState p_221789_, Level world, BlockPos pos, RandomSource p_221792_) {
+		super.animateTick(p_221789_, world, pos, p_221792_);
+		int blockTick = world.getBlockEntity(pos).getPersistentData().getInt("ticks");
+		if(blockTick%20==0 || blockTick==1){
+			y=1; x1=0; x2=0;
+		}else if(blockTick>0){
+			y += 0.1; x1 += 0.3; x2 += -0.3;
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.west(3).getX()+x1+2.6, pos.west(3).getY()+y+0.6, pos.west(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.west(3).getX()+x1+2.4, pos.west(3).getY()+y+0.4, pos.west(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.west(3).getX()+x1+2, pos.west(3).getY()+y+0.2, pos.west(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.west(3).getX()+x1+1.6, pos.west(3).getY()+y+0.6, pos.west(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.west(3).getX()+x1+1.4, pos.west(3).getY()+y+0.4, pos.west(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.west(3).getX()+x1+1.2, pos.west(3).getY()+y+0.2, pos.west(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.west(3).getX()+x1, pos.west(3).getY()+y, pos.west(3).getZ()+0.5, 0, 0, 0);
+
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.east(3).getX()+x2-2.6, pos.east(3).getY()+y+0.6, pos.east(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.east(3).getX()+x2-2.4, pos.east(3).getY()+y+0.4, pos.east(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.east(3).getX()+x2-2, pos.east(3).getY()+y+0.2, pos.east(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.east(3).getX()+x2-1.6, pos.east(3).getY()+y+0.6, pos.east(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.east(3).getX()+x2-1.4, pos.east(3).getY()+y+0.4, pos.east(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.east(3).getX()+x2-1.2, pos.east(3).getY()+y+0.2, pos.east(3).getZ()+0.5, 0, 0, 0);
+			world.addParticle(ParticleTypes.DRAGON_BREATH, pos.east(3).getX()+x2, pos.east(3).getY()+y, pos.east(3).getZ()+0.5, 0, 0, 0);
+
+		}
 	}
 
 	@Nullable
