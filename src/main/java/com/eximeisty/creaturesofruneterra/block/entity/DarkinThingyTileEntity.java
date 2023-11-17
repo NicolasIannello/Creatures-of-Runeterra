@@ -7,6 +7,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -33,6 +35,7 @@ public class DarkinThingyTileEntity extends BlockEntity implements GeoBlockEntit
     public final ItemStackHandler itemHandler = new ItemStackHandler(1);
     private boolean eye = false;
     private boolean nw = false;
+    public int ticks = 0;
 
     public DarkinThingyTileEntity(BlockPos pos, BlockState state) {
         super(ModTiles.DARKIN_PEDESTAL.get(), pos, state);
@@ -81,7 +84,18 @@ public class DarkinThingyTileEntity extends BlockEntity implements GeoBlockEntit
                 if(((DarkinThingyTileEntity) tileentity2).itemHandler.getStackInSlot(0).is(Items.NETHER_WART)) nw = true;
                 if(((DarkinThingyTileEntity) tileentity).itemHandler.getStackInSlot(0).is(Items.ENDER_EYE)) eye = true;
                 if(((DarkinThingyTileEntity) tileentity2).itemHandler.getStackInSlot(0).is(Items.ENDER_EYE)) eye = true;
-                if(nw && eye) setAndDestroyPedestals(tileentity, tileentity2, new ItemStack(ModItems.RHAAST.get()));
+                if(nw && eye) {
+                    nw = false; eye = false;
+                    ticks++;
+                    if(ticks%20==0) getLevel().playSound(null, worldPosition, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1F, 1F);
+                    if(ticks>100){
+                        setAndDestroyPedestals(tileentity, tileentity2, new ItemStack(ModItems.RHAAST.get()));
+                        ticks=0;
+                    }
+                    this.getPersistentData().putInt("ticks", ticks);
+                    this.setChanged();
+                    this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
+                }
             }
         }
 
@@ -93,17 +107,25 @@ public class DarkinThingyTileEntity extends BlockEntity implements GeoBlockEntit
                     ItemStack tileItem = ((DarkinThingyTileEntity) tileentity).itemHandler.getStackInSlot(0);
                     ItemStack tileItem2 = ((DarkinThingyTileEntity) tileentity2).itemHandler.getStackInSlot(0);
                     if(tileItem.is(tileItem2.getItem()) && tileItem2.getItem() instanceof SwordItem){
-                        int damage = (int)((SwordItem)tileItem.getItem()).getDamage()+1;
-                        ItemStack darkinweapon = new ItemStack(ModItems.RHAAST.get());
-                        item.getAllEnchantments().forEach(darkinweapon::enchant);
-                        darkinweapon.getAttributeModifiers(EquipmentSlot.MAINHAND).forEach((atr, modifier) ->{
-                            if(atr==Attributes.ATTACK_DAMAGE){
-                                darkinweapon.addAttributeModifier(atr, new AttributeModifier(modifier.getId(), modifier.getName(), damage, modifier.getOperation()), EquipmentSlot.MAINHAND);
-                            }else{
-                                darkinweapon.addAttributeModifier(atr, modifier, EquipmentSlot.MAINHAND);
-                            }
-                        });
-                        setAndDestroyPedestals(tileentity, tileentity2, darkinweapon);
+                        ticks++;
+                        if(ticks%20==0) getLevel().playSound(null, worldPosition, SoundEvents.BLAZE_SHOOT, SoundSource.BLOCKS, 1F, 1F);
+                         if(ticks>100){
+                            int damage = (int) ((SwordItem) tileItem.getItem()).getDamage() + 1;
+                            ItemStack darkinweapon = new ItemStack(ModItems.RHAAST.get());
+                            item.getAllEnchantments().forEach(darkinweapon::enchant);
+                            darkinweapon.getAttributeModifiers(EquipmentSlot.MAINHAND).forEach((atr, modifier) -> {
+                                if (atr == Attributes.ATTACK_DAMAGE) {
+                                    darkinweapon.addAttributeModifier(atr, new AttributeModifier(modifier.getId(), modifier.getName(), damage, modifier.getOperation()), EquipmentSlot.MAINHAND);
+                                } else {
+                                    darkinweapon.addAttributeModifier(atr, modifier, EquipmentSlot.MAINHAND);
+                                }
+                            });
+                            setAndDestroyPedestals(tileentity, tileentity2, darkinweapon);
+                            ticks=0;
+                        }
+                        this.getPersistentData().putInt("ticks", ticks);
+                        this.setChanged();
+                        this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
                     }
                 }
             }
