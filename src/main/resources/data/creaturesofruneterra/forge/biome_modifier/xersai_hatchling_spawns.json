@@ -2,6 +2,7 @@
   "type": "forge:add_spawns",
   "biomes": [
     "minecraft:desert",
+    "minecraft:beach",
     "minecraft:badlands",
     "minecraft:wooded_badlands",
     "minecraft:eroded_badlands",
