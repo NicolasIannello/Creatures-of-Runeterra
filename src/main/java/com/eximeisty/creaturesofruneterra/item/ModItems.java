@@ -151,6 +151,9 @@ public class ModItems {
     public static final RegistryObject<BlockItem> DRILL = ITEMS.register("drill",
             () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties()));
 
+    public static final RegistryObject<BlockItem> DARKIN_PEDESTAL = ITEMS.register("darkin_pedestal",
+            () -> new DarkinPedestalItem(ModBlocks.DARKIN_PEDESTAL.get(), new Item.Properties()));
+
     public static void register(IEventBus eventBus) {
         ITEMS.register(eventBus);
     }

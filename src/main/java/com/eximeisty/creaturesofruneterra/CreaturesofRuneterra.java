@@ -77,7 +77,7 @@ public class CreaturesofRuneterra{
             //WEAPONS
             event.accept(ModItems.FISHBONES);event.accept(ModItems.ATLASG);event.accept(ModItems.DUNEBREAKER_SHIELD);event.accept(ModItems.FIDDLESCYTHE);event.accept(ModItems.RHAAST.get());
             //BLOCKS
-            event.accept(ModBlocks.TENDRIL);event.accept(ModBlocks.DRILL);
+            event.accept(ModBlocks.TENDRIL);event.accept(ModBlocks.DRILL);event.accept(ModBlocks.DARKIN_PEDESTAL.get());
             //SPAWN EGGS
             event.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG);event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
             event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);event.accept(ModItems.POROBOT_SPAWN_EGG);event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
