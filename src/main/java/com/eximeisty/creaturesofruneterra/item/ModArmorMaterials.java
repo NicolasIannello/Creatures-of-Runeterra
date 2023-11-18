@@ -22,7 +22,7 @@ public enum ModArmorMaterials implements ArmorMaterial {
     }), 20, SoundEvents.ARMOR_EQUIP_NETHERITE, 5.0F, 0.25F, () -> {
         return Ingredient.of(ModItems.REKSAI_PLAQUE.get());
     }),
-    DARKIN("sai", 10, Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266655_) -> {
+    DARKIN("darkin", 10, Util.make(new EnumMap<>(ArmorItem.Type.class), (p_266655_) -> {
         p_266655_.put(ArmorItem.Type.BOOTS, 1);
         p_266655_.put(ArmorItem.Type.LEGGINGS, 2);
         p_266655_.put(ArmorItem.Type.CHESTPLATE, 3);
