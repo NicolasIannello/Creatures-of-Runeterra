@@ -30,7 +30,6 @@ import java.util.function.Consumer;
 
 public class FiddleArmorItem extends ArmorItem implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    final String quote = "["+Minecraft.getInstance().options.keyShift.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ]+["+Minecraft.getInstance().options.keyPickItem.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ] to use hability";//"[SHIFT]+[LClick] to use hability";
     public String controllerName = "controller";
     public int cd=0;
     public int tiros=0;
@@ -90,6 +89,7 @@ public class FiddleArmorItem extends ArmorItem implements GeoItem {
     }
 
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        String quote = "["+Minecraft.getInstance().options.keyShift.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ]+["+Minecraft.getInstance().options.keyPickItem.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ] to use hability";//"[SHIFT]+[LClick] to use hability";
         if(this.getEquipmentSlot()==EquipmentSlot.CHEST && this.getMaterial()==ArmorMaterials.NETHERITE) tooltip.add(Component.nullToEmpty(quote));
 	}
 

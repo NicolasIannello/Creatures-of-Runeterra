@@ -1,0 +1,14 @@
+{
+  "placement": {
+    "salt": 554465248,
+    "spacing": 60,
+    "separation": 30,
+    "type": "minecraft:random_spread"
+  },
+  "structures": [
+    {
+      "structure": "creaturesofruneterra:darkin_pedestal",
+      "weight": 1
+    }
+  ]
+}

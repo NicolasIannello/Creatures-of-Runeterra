@@ -2,6 +2,7 @@
   "type": "forge:add_spawns",
   "biomes": [
     "minecraft:desert",
+    "minecraft:beach",
     "minecraft:badlands",
     "minecraft:wooded_badlands",
     "minecraft:eroded_badlands",
@@ -9,7 +10,7 @@
   ],
   "spawners": {
     "type": "creaturesofruneterra:xersai_hatchling",
-    "weight": 2,
+    "weight": 30,
     "minCount": 2,
     "maxCount": 4
   }

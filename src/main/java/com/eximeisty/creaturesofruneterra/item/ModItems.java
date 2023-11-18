@@ -88,6 +88,18 @@ public class ModItems {
     public static final RegistryObject<Item> FIDDLE_BIRDCAGE = ITEMS.register("fiddle_birdcage",
             () -> new FiddleArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant()));
 
+    public static final RegistryObject<Item> RHAAST_HELMET = ITEMS.register("rhaast_helmet",
+            () -> new RhaastArmorItem(ModArmorMaterials.DARKIN, ArmorItem.Type.HELMET, new Item.Properties().durability(1000)));
+
+    public static final RegistryObject<Item> RHAAST_CHESTPLATE = ITEMS.register("rhaast_chestplate",
+            () -> new RhaastArmorItem(ModArmorMaterials.DARKIN, ArmorItem.Type.CHESTPLATE, new Item.Properties().durability(1000)));
+
+    public static final RegistryObject<Item> RHAAST_LEGGINGS = ITEMS.register("rhaast_leggings",
+            () -> new RhaastArmorItem(ModArmorMaterials.DARKIN, ArmorItem.Type.LEGGINGS, new Item.Properties().durability(1000)));
+
+    public static final RegistryObject<Item> RHAAST_BOOTS = ITEMS.register("rhaast_boots",
+            () -> new RhaastArmorItem(ModArmorMaterials.DARKIN, ArmorItem.Type.BOOTS, new Item.Properties().durability(1000)));
+
     //WEAPONS
     public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
             () -> new Fishbones(new Item.Properties().durability(150)));
@@ -100,6 +112,9 @@ public class ModItems {
 
     public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
             () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().durability(100)));
+
+    public static final RegistryObject<Item> RHAAST = ITEMS.register("rhaast",
+            () -> new Rhaast(ModItemTier.DARKIN, 2, -2F, new Item.Properties().durability(100)));
 
     //SPAWN EGGS
     public static final RegistryObject<Item> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
