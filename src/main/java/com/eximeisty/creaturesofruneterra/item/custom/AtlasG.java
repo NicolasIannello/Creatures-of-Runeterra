@@ -88,7 +88,7 @@ public class AtlasG extends PickaxeItem implements GeoItem {
     public void breakBB(AABB bb, Entity player, Level worldIn){
         BlockPos.betweenClosedStream(bb).forEach(pos->{
             if(player.level.getBlockState(pos)!=Blocks.AIR.defaultBlockState() && player.level.getBlockState(pos)!=Blocks.WATER.defaultBlockState() && player.level.getBlockState(pos)!=Blocks.LAVA.defaultBlockState()){
-                if(player.level.getBlockState(pos).getDestroySpeed(player.level, pos)>=0 && player.level.getBlockState(pos).getDestroySpeed(player.level, pos)<=60) player.level.destroyBlock(pos, true, player);
+                if(player.level.getBlockState(pos).getDestroySpeed(player.level, pos)>=0 && player.level.getBlockState(pos).getDestroySpeed(player.level, pos)<=80) player.level.destroyBlock(pos, true, player);
             }
         });
     }
