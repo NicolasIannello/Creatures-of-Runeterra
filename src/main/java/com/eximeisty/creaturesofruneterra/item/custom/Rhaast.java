@@ -94,7 +94,7 @@ public class Rhaast extends SwordItem implements GeoItem {
 
         playerentity.getCooldowns().addCooldown(this, 60);
         ticks++;
-        playerentity.invulnerableTime = 60;
+        playerentity.invulnerableTime = 100;
         stack.setDamageValue(stack.getDamageValue()+25);
 
         return InteractionResultHolder.consume(stack);
