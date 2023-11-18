@@ -4,6 +4,11 @@
   "_comment": " This biome tag can specify the biome directly. Or specify another biome tag by starting with # ",
   "values": [
     "#forge:is_dry/nether",
-    "#forge:is_hot/nether"
+    "#forge:is_hot/nether",
+    "minecraft:basalt_deltas",
+    "minecraft:crimson_forest",
+    "minecraft:nether_wastes",
+    "minecraft:soul_sand_valley",
+    "minecraft:warped_forest"
   ]
 }
