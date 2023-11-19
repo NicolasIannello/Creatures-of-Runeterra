@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.item;
 import java.util.function.Supplier;
 
 import net.minecraft.item.IItemTier;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.LazyValue;
 
@@ -14,7 +15,10 @@ public enum ModItemTier implements IItemTier{
         return Ingredient.fromItems(ModItems.GEMSTONE.get());
     }),
     FIDDLE(5, 800, 7.0F, 6.0F, 15, () -> {
-        return null;
+        return Ingredient.fromItems(Items.CHAIN);
+    }),
+    DARKIN (5, 100, 7.0F, 2.0F, 0, () -> {
+        return Ingredient.fromItems(Items.ROTTEN_FLESH);
     });
 
     private final int harvestLevel;

@@ -2,8 +2,11 @@ package com.eximeisty.creaturesofruneterra.events;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
+import com.eximeisty.creaturesofruneterra.block.entity.client.darkinT.DarkinThingyRenderer;
 import com.eximeisty.creaturesofruneterra.block.entity.client.drill.DrillRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.armor.rhaast.RhaastArmorRenderer;
 import com.eximeisty.creaturesofruneterra.item.custom.FiddleArmorItem;
+import com.eximeisty.creaturesofruneterra.item.custom.RhaastArmorItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
 import com.eximeisty.creaturesofruneterra.item.custom.SaiElytraItem;
 import com.eximeisty.creaturesofruneterra.entity.client.armor.fiddle.FiddleArmorRenderer;
@@ -24,10 +27,12 @@ public class ModEventClientBusEvents {
         GeoArmorRenderer.registerArmorRenderer(SaiArmorItem.class, () -> new SaiArmorRenderer());
         GeoArmorRenderer.registerArmorRenderer(SaiElytraItem.class, () -> new SaiElytraRenderer());
         GeoArmorRenderer.registerArmorRenderer(FiddleArmorItem.class, () -> new FiddleArmorRenderer());
+        GeoArmorRenderer.registerArmorRenderer(RhaastArmorItem.class, () -> new RhaastArmorRenderer());
     }
 
     @SubscribeEvent
     public static void registerBlockRenderers(final FMLClientSetupEvent event){
         ClientRegistry.bindTileEntityRenderer(ModTiles.DRILL.get(), DrillRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(ModTiles.DARKIN_PEDESTAL.get(), DarkinThingyRenderer::new);
     }
 }

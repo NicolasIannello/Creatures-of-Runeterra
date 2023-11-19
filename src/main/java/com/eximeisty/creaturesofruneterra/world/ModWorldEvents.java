@@ -68,6 +68,7 @@ public class ModWorldEvents {
 
             //tempMap.putIfAbsent(ModStructures.TEST.get(),DimensionStructuresSettings.field_236191_b_.get(ModStructures.TEST.get()));
             tempMap.putIfAbsent(ModStructures.VOIDSANDCAVE.get(),DimensionStructuresSettings.field_236191_b_.get(ModStructures.VOIDSANDCAVE.get()));
+            tempMap.putIfAbsent(ModStructures.DARKIN_PEDESTAL.get(),DimensionStructuresSettings.field_236191_b_.get(ModStructures.DARKIN_PEDESTAL.get()));
 
             serverWorld.getChunkProvider().generator.func_235957_b_().field_236193_d_ = tempMap;
         }

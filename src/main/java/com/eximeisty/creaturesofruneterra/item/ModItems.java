@@ -3,19 +3,7 @@ package com.eximeisty.creaturesofruneterra.item;
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.block.ModBlocks;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
-import com.eximeisty.creaturesofruneterra.item.custom.AtlasG;
-import com.eximeisty.creaturesofruneterra.item.custom.DrillItem;
-import com.eximeisty.creaturesofruneterra.item.custom.DunebreakerShield;
-import com.eximeisty.creaturesofruneterra.item.custom.FiddleArmorItem;
-import com.eximeisty.creaturesofruneterra.item.custom.FiddleScythe;
-import com.eximeisty.creaturesofruneterra.item.custom.Fishbones;
-import com.eximeisty.creaturesofruneterra.item.custom.HexcoreItem;
-import com.eximeisty.creaturesofruneterra.item.custom.MisilItem;
-import com.eximeisty.creaturesofruneterra.item.custom.ModSpawnEggItem;
-import com.eximeisty.creaturesofruneterra.item.custom.SaiArmorItem;
-import com.eximeisty.creaturesofruneterra.item.custom.SaiBowItem;
-import com.eximeisty.creaturesofruneterra.item.custom.SaiElytraItem;
-import com.eximeisty.creaturesofruneterra.item.custom.TendrilCompassItem;
+import com.eximeisty.creaturesofruneterra.item.custom.*;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
@@ -99,6 +87,18 @@ public class ModItems {
         public static final RegistryObject<Item> FIDDLE_BIRDCAGE = ITEMS.register("fiddle_birdcage",
         () -> new FiddleArmorItem(ArmorMaterial.NETHERITE, EquipmentSlotType.CHEST, new Item.Properties().group(ModItemGroup.COR_GROUP).isImmuneToFire()));
 
+        public static final RegistryObject<Item> RHAAST_HELMET = ITEMS.register("rhaast_helmet",
+                () -> new RhaastArmorItem(ModArmorMaterial.DARKIN, EquipmentSlotType.HEAD, new Item.Properties().maxDamage(1000).group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> RHAAST_CHESTPLATE = ITEMS.register("rhaast_chestplate",
+                () -> new RhaastArmorItem(ModArmorMaterial.DARKIN, EquipmentSlotType.CHEST, new Item.Properties().maxDamage(1000).group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> RHAAST_LEGGINGS = ITEMS.register("rhaast_leggings",
+                () -> new RhaastArmorItem(ModArmorMaterial.DARKIN, EquipmentSlotType.LEGS, new Item.Properties().maxDamage(1000).group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> RHAAST_BOOTS = ITEMS.register("rhaast_boots",
+                () -> new RhaastArmorItem(ModArmorMaterial.DARKIN, EquipmentSlotType.FEET, new Item.Properties().maxDamage(1000).group(ModItemGroup.COR_GROUP)));
+
         //WEAPONS
         public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
         () -> new Fishbones(new Item.Properties().maxDamage(150).group(ModItemGroup.COR_GROUP)));
@@ -111,7 +111,10 @@ public class ModItems {
 
         public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
         () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().maxDamage(100).group(ModItemGroup.COR_GROUP)));
-        
+
+        public static final RegistryObject<Item> RHAAST = ITEMS.register("rhaast",
+                () -> new Rhaast(ModItemTier.DARKIN, 2, -2F, new Item.Properties().maxDamage(100).group(ModItemGroup.COR_GROUP)));
+
         //SPAWN EGGS
         public static final RegistryObject<ModSpawnEggItem> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F, new Item.Properties().group(ModItemGroup.COR_GROUP)));
@@ -146,7 +149,10 @@ public class ModItems {
         //BLOCKS
         public static final RegistryObject<Item> DRILL = ITEMS.register("drill",
         () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));
-        
+
+        public static final RegistryObject<BlockItem> DARKIN_PEDESTAL = ITEMS.register("darkin_pedestal",
+                () -> new DarkinPedestalItem(ModBlocks.DARKIN_PEDESTAL.get(), new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);
         }

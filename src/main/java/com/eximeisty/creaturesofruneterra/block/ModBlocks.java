@@ -3,6 +3,7 @@ package com.eximeisty.creaturesofruneterra.block;
 import java.util.function.Supplier;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
+import com.eximeisty.creaturesofruneterra.block.custom.DarkinThingyBlock;
 import com.eximeisty.creaturesofruneterra.block.custom.DrillBlock;
 import com.eximeisty.creaturesofruneterra.block.custom.EmptyBlock;
 import com.eximeisty.creaturesofruneterra.item.ModItemGroup;
@@ -27,6 +28,10 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> TENDRIL= registerBlock("tendril", () -> new EmptyBlock(AbstractBlock.Properties.create(Material.LEAVES)
     .hardnessAndResistance(0.2F).notSolid().doesNotBlockMovement()), true);
+
+    public static final RegistryObject<Block> DARKIN_PEDESTAL= registerBlock("darkin_pedestal", () -> new DarkinThingyBlock(AbstractBlock.Properties.create(Material.ROCK)
+            .harvestLevel(2).harvestTool(ToolType.PICKAXE).hardnessAndResistance(3F).notSolid()), false);
+
 
     private static <T extends Block>RegistryObject<T> registerBlock(String name, Supplier<T> block, boolean flag){
         RegistryObject<T> toReturn= BLOCKS.register(name, block);

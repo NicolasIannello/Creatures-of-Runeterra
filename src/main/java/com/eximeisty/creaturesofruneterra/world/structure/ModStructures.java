@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.world.structure;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 //import com.eximeisty.creaturesofruneterra.world.structure.structures.TestStructure;
+import com.eximeisty.creaturesofruneterra.world.structure.structures.DarkinPedestal;
 import com.eximeisty.creaturesofruneterra.world.structure.structures.VoidSandCave;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -26,6 +27,8 @@ public class ModStructures {
     
     public static final RegistryObject<Structure<NoFeatureConfig>> VOIDSANDCAVE = STRUCTURES.register("sandentrance", VoidSandCave::new);
 
+    public static final RegistryObject<Structure<NoFeatureConfig>> DARKIN_PEDESTAL = STRUCTURES.register("darkin_pedestal", DarkinPedestal::new);
+
     /* average distance apart in chunks between spawn attempts */
     /* minimum distance apart in chunks between spawn attempts. MUST BE LESS THAN ABOVE VALUE*/
     /* this modifies the seed of the structure so no two structures always spawn over each-other.
@@ -33,6 +36,7 @@ public class ModStructures {
     public static void setupStructures() {
         //setupMapSpacingAndLand(TEST.get(), new StructureSeparationSettings(100,50, 1234567890),true);
         setupMapSpacingAndLand(VOIDSANDCAVE.get(), new StructureSeparationSettings(100,50, 854795235),false);
+        setupMapSpacingAndLand(DARKIN_PEDESTAL.get(), new StructureSeparationSettings(60,30, 554465248),false);
     }
 
     /**

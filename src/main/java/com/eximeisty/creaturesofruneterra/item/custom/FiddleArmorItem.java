@@ -30,7 +30,6 @@ import software.bernie.geckolib3.item.GeoArmorItem;
 
 public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     private AnimationFactory factory = new AnimationFactory(this);
-    final String quote = "["+Minecraft.getInstance().gameSettings.keyBindSneak.getKeyDescription().replace("key.", "")+"]+["+Minecraft.getInstance().gameSettings.keyBindPickBlock.getKeyDescription().replace("key.", "")+"] to use hability";//"[SHIFT]+[LClick] to use hability";
     public String controllerName = "controller";
     public int cd=0;
     public int tiros=0;
@@ -75,6 +74,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     }
 
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        String quote = "["+Minecraft.getInstance().gameSettings.keyBindSneak.getKeyDescription().replace("key.", "")+"]+["+Minecraft.getInstance().gameSettings.keyBindPickBlock.getKeyDescription().replace("key.", "")+"] to use hability";
         if(this.getEquipmentSlot()==EquipmentSlotType.CHEST && this.getArmorMaterial()==ArmorMaterial.NETHERITE) tooltip.add(new TranslationTextComponent(quote));
 	}
 

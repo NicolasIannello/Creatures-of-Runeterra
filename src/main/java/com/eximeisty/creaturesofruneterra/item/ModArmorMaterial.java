@@ -16,8 +16,10 @@ import net.minecraftforge.api.distmarker.Dist;
 public enum ModArmorMaterial implements IArmorMaterial{
     SAI("sai", 45, new int[]{5, 9, 11, 6}, 20, SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE, 5.0F, 0.25F, () -> {
         return Ingredient.fromItems(ModItems.REKSAI_PLAQUE.get());
-    });
-    
+    }),
+    DARKIN("darkin", 10, new int[]{1, 2, 3, 1}, 20, SoundEvents.ITEM_ARMOR_EQUIP_ELYTRA, 1.0F, 0F,
+            () -> {return null;});
+
     private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
     private final String name;
     private final int maxDamageFactor;
