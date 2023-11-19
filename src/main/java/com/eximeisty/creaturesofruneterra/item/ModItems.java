@@ -88,6 +88,18 @@ public class ModItems {
         public static final RegistryObject<Item> FIDDLE_BIRDCAGE = ITEMS.register("fiddle_birdcage",
         () -> new FiddleArmorItem(ArmorMaterials.NETHERITE, EquipmentSlot.CHEST, new Item.Properties().tab(ModItemGroup.COR_GROUP).fireResistant()));
 
+        public static final RegistryObject<Item> RHAAST_HELMET = ITEMS.register("rhaast_helmet",
+        () -> new RhaastArmorItem(ModArmorMaterial.DARKIN, EquipmentSlot.HEAD, new Item.Properties().durability(1000).tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> RHAAST_CHESTPLATE = ITEMS.register("rhaast_chestplate",
+        () -> new RhaastArmorItem(ModArmorMaterial.DARKIN, EquipmentSlot.CHEST, new Item.Properties().durability(1000).tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> RHAAST_LEGGINGS = ITEMS.register("rhaast_leggings",
+        () -> new RhaastArmorItem(ModArmorMaterial.DARKIN, EquipmentSlot.LEGS, new Item.Properties().durability(1000).tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> RHAAST_BOOTS = ITEMS.register("rhaast_boots",
+        () -> new RhaastArmorItem(ModArmorMaterial.DARKIN, EquipmentSlot.FEET, new Item.Properties().durability(1000).tab(ModItemGroup.COR_GROUP)));
+
         //WEAPONS
         public static final RegistryObject<Item> FISHBONES = ITEMS.register("fishbones",
         () -> new Fishbones(new Item.Properties().durability(150).tab(ModItemGroup.COR_GROUP)));
@@ -100,6 +112,9 @@ public class ModItems {
 
         public static final RegistryObject<Item> FIDDLESCYTHE = ITEMS.register("fiddle_scythe",
         () -> new FiddleScythe(ModItemTier.FIDDLE, 6, -2F, new Item.Properties().durability(100).tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> RHAAST = ITEMS.register("rhaast",
+                () -> new Rhaast(ModItemTier.DARKIN, 2, -2F, new Item.Properties().durability(100).tab(ModItemGroup.COR_GROUP)));
 
         //SPAWN EGGS
         public static final RegistryObject<Item> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
@@ -135,6 +150,9 @@ public class ModItems {
         //BLOCKS
         public static final RegistryObject<BlockItem> DRILL = ITEMS.register("drill",
         () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<BlockItem> DARKIN_PEDESTAL = ITEMS.register("darkin_pedestal",
+                () -> new DarkinPedestalItem(ModBlocks.DARKIN_PEDESTAL.get(), new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
         public static void register(IEventBus eventBus) {
                 ITEMS.register(eventBus);

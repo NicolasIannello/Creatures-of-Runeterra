@@ -2,18 +2,23 @@ package com.eximeisty.creaturesofruneterra.item;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 
+import net.minecraft.Util;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 
+import java.util.EnumMap;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterial implements ArmorMaterial {
     SAI("sai", 45, new int[]{5, 9, 11, 6}, 20, SoundEvents.ARMOR_EQUIP_NETHERITE, 5.0F, 0.25F,
-            () -> Ingredient.of(ModItems.REKSAI_PLAQUE.get()));
+            () -> Ingredient.of(ModItems.REKSAI_PLAQUE.get())),
+    DARKIN("darkin", 10, new int[]{1, 2, 3, 1}, 20, SoundEvents.ARMOR_EQUIP_ELYTRA, 1.0F, 0F,
+            () -> {return null;});
 
     private static final int[] HEALTH_PER_SLOT = new int[]{13, 15, 16, 11};
     private final String name;

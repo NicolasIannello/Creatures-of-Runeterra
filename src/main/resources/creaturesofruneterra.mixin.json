@@ -5,6 +5,9 @@
     "client": [
         "MixinArmorStandEntity"
     ],
+    "server": [
+        "MixinArmorStandEntity"
+    ],
     "injectors": {
         "defaultRequire": 1
     },

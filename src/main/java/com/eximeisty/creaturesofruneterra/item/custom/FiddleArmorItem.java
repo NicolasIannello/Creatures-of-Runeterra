@@ -26,7 +26,6 @@ import java.util.List;
 
 public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    final String quote = "["+Minecraft.getInstance().options.keyShift.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ]+["+Minecraft.getInstance().options.keyPickItem.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ] to use hability";//"[SHIFT]+[LClick] to use hability";
     public String controllerName = "controller";
     public int cd=0;
     public int tiros=0;
@@ -71,6 +70,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     }
 
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        String quote = "["+Minecraft.getInstance().options.keyShift.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ]+["+Minecraft.getInstance().options.keyPickItem.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+" ] to use hability";//"[SHIFT]+[LClick] to use hability";
         if(this.getSlot()==EquipmentSlot.CHEST && this.getMaterial()==ArmorMaterials.NETHERITE) tooltip.add(Component.nullToEmpty(quote));
 	}
 
