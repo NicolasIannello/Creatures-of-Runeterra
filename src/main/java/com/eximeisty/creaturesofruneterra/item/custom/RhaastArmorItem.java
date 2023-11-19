@@ -50,7 +50,6 @@ public class RhaastArmorItem extends GeoArmorItem implements IAnimatable {
     }
 
     public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.sai_armor.new", ILoopType.EDefaultLoopTypes.LOOP));
         return PlayState.CONTINUE;
     }
 
