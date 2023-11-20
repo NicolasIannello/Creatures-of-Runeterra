@@ -1,0 +1,19 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        " 1 ",
+        "222",
+        "222"
+    ],
+    "key":{
+        "1":{
+            "item":"minecraft:leather_helmet"
+        },
+        "2":{
+            "item":"minecraft:chain"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:fiddle_helmet"
+    }
+}

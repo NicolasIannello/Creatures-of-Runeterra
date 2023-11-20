@@ -1,0 +1,25 @@
+{
+    "type":"minecraft:crafting_shaped",
+    "pattern":[
+        "CBP",
+        "B T",
+        "PT "
+    ],
+    "key":{
+        "C":{
+            "item":"creaturesofruneterra:reksai_claw"
+        },
+        "P":{
+            "item":"creaturesofruneterra:reksai_plaque"
+        },
+        "T":{
+            "item":"creaturesofruneterra:tendril"
+        },
+        "B":{
+            "item":"minecraft:bone"
+        }
+    },
+    "result":{
+        "item":"creaturesofruneterra:sai_bow"
+    }
+}
