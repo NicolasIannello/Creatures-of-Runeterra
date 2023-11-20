@@ -218,7 +218,7 @@ public class FiddleDummyEntity extends PathfinderMob implements IAnimatable, IAn
     }
 
     @Override
-    protected int getExperienceReward(Player player){ return 5+this.level.random.nextInt(5); }
+    public int getExperienceReward(){ return 5+this.level.random.nextInt(5); }
     protected SoundEvent getHurtSound(DamageSource damageSourceIn){ return ModSoundEvents.FIDDLESTICKS_HURT.get(); }
     @Override
     public boolean addEffect(MobEffectInstance effectInstanceIn, @Nullable Entity p_147209_) { return false; }
@@ -228,8 +228,8 @@ public class FiddleDummyEntity extends PathfinderMob implements IAnimatable, IAn
 //    public boolean canPassengerSteer() { return false; }
     @Override
     public boolean shouldRiderSit() { return false; }
-    @Override
-    public boolean canBeRiddenInWater(Entity rider) { return true; }
+//    @Override
+//    public boolean canBeRiddenInWater(Entity rider) { return true; }
     @Override
     public boolean canChangeDimensions() { return false; }
 //    @Override

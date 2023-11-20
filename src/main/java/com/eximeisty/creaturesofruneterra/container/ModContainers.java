@@ -13,7 +13,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModContainers {
-    public static DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.CONTAINERS, CreaturesofRuneterra.MOD_ID);
+    public static DeferredRegister<MenuType<?>> CONTAINERS = DeferredRegister.create(ForgeRegistries.MENU_TYPES, CreaturesofRuneterra.MOD_ID);
     
     public static final RegistryObject<MenuType<PorobotContainer>> POROBOT_CONTAINER =
     CONTAINERS.register( "porobot_container", ()->IForgeMenuType.create(((windowId, inv, data)->{

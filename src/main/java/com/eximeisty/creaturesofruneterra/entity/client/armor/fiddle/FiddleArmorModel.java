@@ -9,18 +9,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class FiddleArmorModel extends AnimatedGeoModel<FiddleArmorItem>{
 
     @Override
-    public ResourceLocation getAnimationFileLocation(FiddleArmorItem animatable) {
+    public ResourceLocation getAnimationResource(FiddleArmorItem animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/armor/fiddle_armor2.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(FiddleArmorItem object) {
+    public ResourceLocation getModelResource(FiddleArmorItem object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/armor/fiddle_armor2.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FiddleArmorItem object) {
+    public ResourceLocation getTextureResource(FiddleArmorItem object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/model/armor/fiddle_armor_new2.png");
     }
-    
 }

@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class FabledPoroModel extends AnimatedGeoModel<FabledPoroEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(FabledPoroEntity animatable) {
+    public ResourceLocation getAnimationResource(FabledPoroEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/fabledporo.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(FabledPoroEntity object) {
+    public ResourceLocation getModelResource(FabledPoroEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/fabledporo.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FabledPoroEntity object) {
+    public ResourceLocation getTextureResource(FabledPoroEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/fabledporo.png");
     }
 

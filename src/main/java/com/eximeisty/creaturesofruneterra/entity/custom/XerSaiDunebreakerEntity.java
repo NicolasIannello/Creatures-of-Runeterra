@@ -286,7 +286,7 @@ public class XerSaiDunebreakerEntity extends PathfinderMob implements IAnimatabl
     }
 
     @Override
-    public int getExperienceReward(Player pPlayer){ return 10+this.level.random.nextInt(30); }
+    public int getExperienceReward(){ return 10+this.level.random.nextInt(30); }
     @Override
     public boolean causeFallDamage(float p_146828_, float p_146829_, DamageSource p_146830_) { return false; }
     @Override

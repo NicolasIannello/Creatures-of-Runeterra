@@ -9,17 +9,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class DunebreakerShieldModel extends AnimatedGeoModel<DunebreakerShield>{
 
     @Override
-    public ResourceLocation getAnimationFileLocation(DunebreakerShield animatable) {
+    public ResourceLocation getAnimationResource(DunebreakerShield animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/item/dunebreaker_shield.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(DunebreakerShield object) {
+    public ResourceLocation getModelResource(DunebreakerShield object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/item/dunebreaker_shield.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DunebreakerShield object) {
+    public ResourceLocation getTextureResource(DunebreakerShield object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/item/dunebreaker_shield.png");
     }
 }

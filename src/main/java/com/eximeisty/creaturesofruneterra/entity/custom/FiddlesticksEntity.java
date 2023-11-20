@@ -544,7 +544,7 @@ public class FiddlesticksEntity extends PathfinderMob implements IAnimatable, IA
     }
 
     @Override
-    protected int getExperienceReward(Player player){ return 75+this.level.random.nextInt(25); }
+    public int getExperienceReward(){ return 75+this.level.random.nextInt(25); }
     protected SoundEvent getHurtSound(DamageSource damageSourceIn){ return ModSoundEvents.FIDDLESTICKS_HURT.get(); }
     @Override
     public boolean addEffect(MobEffectInstance effectInstanceIn, @Nullable Entity p_147209_) { return false; }
@@ -554,8 +554,8 @@ public class FiddlesticksEntity extends PathfinderMob implements IAnimatable, IA
     public boolean canBeLeashed(Player p_21418_) { return false; }
     @Override
     public boolean shouldRiderSit() { return false; }
-    @Override
-    public boolean canBeRiddenInWater(Entity rider) { return true; }
+//    @Override
+//    public boolean canBeRiddenInWater(Entity rider) { return true; }
     @Override
     public boolean canChangeDimensions() { return false; }
 //    @Override

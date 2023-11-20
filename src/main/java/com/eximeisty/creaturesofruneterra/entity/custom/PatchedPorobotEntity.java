@@ -325,12 +325,12 @@ public class PatchedPorobotEntity extends TamableAnimal implements IAnimatable{
                this.cookTimeTotal= this.getCookTime(inv);
                if (this.isHeating()) {
                   flag1 = true;
-                  if (itemHandler.getStackInSlot(23).hasContainerItem())
-                     itemHandler.insertItem(23, itemHandler.getStackInSlot(23).getContainerItem(), false);
+                  if (itemHandler.getStackInSlot(23).hasCraftingRemainingItem())
+                     itemHandler.insertItem(23, itemHandler.getStackInSlot(23).getCraftingRemainingItem(), false);
                   else if (!itemHandler.getStackInSlot(23).isEmpty()) {
                      itemHandler.getStackInSlot(23).shrink(1);
                      if (itemHandler.getStackInSlot(23).isEmpty()) {
-                        itemHandler.insertItem(23, itemHandler.getStackInSlot(23).getContainerItem(), false);
+                        itemHandler.insertItem(23, itemHandler.getStackInSlot(23).getCraftingRemainingItem(), false);
                      }
                   }
                }
@@ -386,7 +386,7 @@ public class PatchedPorobotEntity extends TamableAnimal implements IAnimatable{
             if(this.getOwner()==playerIn) this.setOrderedToSit(!entityData.get(STATE));
          }else if(playerIn.distanceTo(this)<=3){
             MenuProvider containerProvider = createContainerProvider(level, this.getId());
-            NetworkHooks.openGui((ServerPlayer)playerIn, containerProvider, buf -> buf.writeInt(this.getId()));
+            NetworkHooks.openScreen((ServerPlayer)playerIn, containerProvider, buf -> buf.writeInt(this.getId()));
             this.level.playSound(null, this.blockPosition(), SoundEvents.CHEST_OPEN, SoundSource.NEUTRAL, (float)0.5, (float)6);
             this.entityData.set(OPEN, true);
             playersUsing++;

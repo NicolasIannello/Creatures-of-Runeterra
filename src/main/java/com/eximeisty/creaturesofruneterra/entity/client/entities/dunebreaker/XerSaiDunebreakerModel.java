@@ -11,17 +11,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 public class XerSaiDunebreakerModel extends AnimatedGeoModel<XerSaiDunebreakerEntity> {
 
     @Override
-    public ResourceLocation getModelLocation(XerSaiDunebreakerEntity animatable) {
+    public ResourceLocation getModelResource(XerSaiDunebreakerEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/xersai_dunebreaker.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(XerSaiDunebreakerEntity animatable) {
+    public ResourceLocation getTextureResource(XerSaiDunebreakerEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/xersai_dunebreaker.png");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(XerSaiDunebreakerEntity animatable) {
+    public ResourceLocation getAnimationResource(XerSaiDunebreakerEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/xersai_dunebreaker.animation.json");
     }
 

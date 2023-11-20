@@ -99,11 +99,11 @@ public class DarkinThingyTileEntity extends BlockEntity implements IAnimatable {
                 if(getLevel().getBlockEntity(worldPosition.east(3))!=null){
                     tileentity = getLevel().getBlockEntity(worldPosition.east(3));
                     tileentity2 = getLevel().getBlockEntity(worldPosition.west(3));
-                    this.getTileData().putBoolean("ns", false);
+                    this.getPersistentData().putBoolean("ns", false);
                 }else{
                     tileentity = getLevel().getBlockEntity(worldPosition.north(3));
                     tileentity2 = getLevel().getBlockEntity(worldPosition.south(3));
-                    this.getTileData().putBoolean("ns", true);
+                    this.getPersistentData().putBoolean("ns", true);
                 }
                 this.setChanged();
                 this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
@@ -152,7 +152,7 @@ public class DarkinThingyTileEntity extends BlockEntity implements IAnimatable {
             ticks=0;
             setAndDestroyPedestals(tile, tile2, item);
         }
-        this.getTileData().putInt("ticks", ticks);
+        this.getPersistentData().putInt("ticks", ticks);
         this.setChanged();
         this.level.sendBlockUpdated(this.getBlockPos(), this.getBlockState(), this.getBlockState(), Block.UPDATE_ALL);
     }

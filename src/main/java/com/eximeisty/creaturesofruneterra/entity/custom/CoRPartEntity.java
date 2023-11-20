@@ -79,8 +79,8 @@ public class CoRPartEntity extends PathfinderMob {
     public boolean shouldRiderSit() { return false; }
     @Override
     public boolean canBeLeashed(Player p_21418_) { return false; }
-    @Override
-    public boolean canBeRiddenInWater(Entity rider) { return true; }
+//    @Override
+//    public boolean canBeRiddenInWater(Entity rider) { return true; }
     @Override
     public boolean canChangeDimensions() { return false; }
     @Override
@@ -89,8 +89,8 @@ public class CoRPartEntity extends PathfinderMob {
     public boolean requiresCustomPersistence() { return true; }
     @Override
     protected boolean shouldDespawnInPeaceful() { return true; }
-    @Override
-    public boolean canBeControlledByRider() { return false; }
+//    @Override
+//    public boolean canBeControlledByRider() { return false; }
 //    @Override
 //    public boolean canCollideWith(Entity pEntity) { return false; }
 }

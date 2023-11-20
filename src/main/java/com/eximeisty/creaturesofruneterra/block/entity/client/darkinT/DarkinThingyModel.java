@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class DarkinThingyModel extends AnimatedGeoModel<DarkinThingyTileEntity> {
     @Override
-    public ResourceLocation getAnimationFileLocation(DarkinThingyTileEntity animatable) {
+    public ResourceLocation getAnimationResource(DarkinThingyTileEntity animatable) {
         return null;//new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/block/drill.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(DarkinThingyTileEntity object) {
+    public ResourceLocation getModelResource(DarkinThingyTileEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/block/darkin_pedestal.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DarkinThingyTileEntity object) {
+    public ResourceLocation getTextureResource(DarkinThingyTileEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/block/darkin_pedestal.png");
     }
 }

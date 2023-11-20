@@ -11,17 +11,17 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 public class RekSaiModel extends AnimatedGeoModel<RekSaiEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(RekSaiEntity animatable) {
+    public ResourceLocation getAnimationResource(RekSaiEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/reksai.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(RekSaiEntity object) {
+    public ResourceLocation getModelResource(RekSaiEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/reksai.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(RekSaiEntity object) {
+    public ResourceLocation getTextureResource(RekSaiEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/reksai.png");
     }
 

@@ -54,7 +54,7 @@ public class XerSaiHatchlingEntity extends PathfinderMob {
     }
 
     @Override
-    protected int getExperienceReward(Player player){ return 1+this.level.random.nextInt(2); }
+    public int getExperienceReward(){ return 1+this.level.random.nextInt(2); }
 
     @Override
     protected SoundEvent getAmbientSound(){ return SoundEvents.SILVERFISH_AMBIENT; }

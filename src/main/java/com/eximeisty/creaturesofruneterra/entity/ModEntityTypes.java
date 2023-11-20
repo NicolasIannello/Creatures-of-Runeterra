@@ -14,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModEntityTypes {
     public static DeferredRegister<EntityType<?>>ENTITY_TYPES=
-    DeferredRegister.create(ForgeRegistries.ENTITIES, CreaturesofRuneterra.MOD_ID);
+    DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, CreaturesofRuneterra.MOD_ID);
     
     //Void creatures
     public static final RegistryObject<EntityType<XerSaiHatchlingEntity>> XERSAI_HATCHLING=

@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class AtlasGModel extends AnimatedGeoModel<AtlasG> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(AtlasG animatable) {
+    public ResourceLocation getAnimationResource(AtlasG animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/item/atlasg.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(AtlasG object) {
+    public ResourceLocation getModelResource(AtlasG object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/item/atlasg.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(AtlasG object) {
+    public ResourceLocation getTextureResource(AtlasG object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/item/atlasg.png");
     }
 }

@@ -9,17 +9,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class FishbonesModel extends AnimatedGeoModel<Fishbones>{
 
     @Override
-    public ResourceLocation getAnimationFileLocation(Fishbones animatable) {
+    public ResourceLocation getAnimationResource(Fishbones animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/item/fishbones.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(Fishbones object) {
+    public ResourceLocation getModelResource(Fishbones object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/item/fishbones.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(Fishbones object) {
+    public ResourceLocation getTextureResource(Fishbones object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/item/fishbones.png");
     }
     

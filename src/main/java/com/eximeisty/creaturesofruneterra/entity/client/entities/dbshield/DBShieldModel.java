@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class DBShieldModel extends AnimatedGeoModel<DBShieldEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(DBShieldEntity animatable) {
+    public ResourceLocation getAnimationResource(DBShieldEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/dbshield.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(DBShieldEntity object) {
+    public ResourceLocation getModelResource(DBShieldEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/dbshield.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DBShieldEntity object) {
+    public ResourceLocation getTextureResource(DBShieldEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/dbshield.png");
     }
 }

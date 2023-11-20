@@ -23,25 +23,25 @@ public class DunebreakerShieldRenderer extends GeoItemRenderer<DunebreakerShield
         super(new DunebreakerShieldModel());
     }
 
-    @Override
-    public void render(DunebreakerShield animatable, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
-                       ItemStack stack) {
-        this.currentItemStack = stack;
-        GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelLocation(animatable));
-        AnimationEvent animationEvent = new AnimationEvent(animatable, 0, 0, Minecraft.getInstance().getFrameTime(),
-                false, Collections.singletonList(stack));
-        this.dispatchedMat = poseStack.last().pose().copy();
-        setCurrentModelRenderCycle(EModelRenderCycle.INITIAL);
-        this.modelProvider.setCustomAnimations(animatable, getInstanceId(animatable), animationEvent);
-        poseStack.pushPose();
-        poseStack.translate(0, 0.01f, 0);
-        poseStack.translate(0.5, 0.5, 0.5);
-        RenderSystem.setShaderTexture(0, getTextureLocation(animatable));
-        Color renderColor = getRenderColor(animatable, 0, poseStack, bufferSource, null, packedLight);
-        RenderType renderType = RenderType.itemEntityTranslucentCull(getTextureLocation(animatable));
-        render(model, animatable, 0, renderType, poseStack, bufferSource, null, packedLight, OverlayTexture.NO_OVERLAY,
-                renderColor.getRed() / 255f, renderColor.getGreen() / 255f, renderColor.getBlue() / 255f,
-                renderColor.getAlpha() / 255f);
-        poseStack.popPose();
-    }
+//    @Override
+//    public void render(DunebreakerShield animatable, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight,
+//                       ItemStack stack) {
+//        this.currentItemStack = stack;
+//        GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelLocation(animatable));
+//        AnimationEvent animationEvent = new AnimationEvent(animatable, 0, 0, Minecraft.getInstance().getFrameTime(),
+//                false, Collections.singletonList(stack));
+//        this.dispatchedMat = poseStack.last().pose().copy();
+//        setCurrentModelRenderCycle(EModelRenderCycle.INITIAL);
+//        this.modelProvider.setCustomAnimations(animatable, getInstanceId(animatable), animationEvent);
+//        poseStack.pushPose();
+//        poseStack.translate(0, 0.01f, 0);
+//        poseStack.translate(0.5, 0.5, 0.5);
+//        RenderSystem.setShaderTexture(0, getTextureLocation(animatable));
+//        Color renderColor = getRenderColor(animatable, 0, poseStack, bufferSource, null, packedLight);
+//        RenderType renderType = RenderType.itemEntityTranslucentCull(getTextureLocation(animatable));
+//        render(model, animatable, 0, renderType, poseStack, bufferSource, null, packedLight, OverlayTexture.NO_OVERLAY,
+//                renderColor.getRed() / 255f, renderColor.getGreen() / 255f, renderColor.getBlue() / 255f,
+//                renderColor.getAlpha() / 255f);
+//        poseStack.popPose();
+//    }
 }

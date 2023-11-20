@@ -24,7 +24,6 @@ import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.screen.PorobotScreen;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
-import com.eximeisty.creaturesofruneterra.world.structure.ModStructures;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -67,7 +66,7 @@ public class CreaturesofRuneterra
     private void clientSetup(final FMLClientSetupEvent event) {
         ModItemModelProperties.addCustomItemProperties();
         //BLOCKS
-        //ItemBlockRenderTypes.setRenderLayer(ModBlocks.TENDRIL.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.TENDRIL.get(), RenderType.cutout());
         //PROYECTILES
         EntityRenderers.register(ModEntityTypes.HEXCORE.get(), HexcoreRenderer::new);
         EntityRenderers.register(ModEntityTypes.MISIL.get(), MisilRenderer::new);

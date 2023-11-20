@@ -22,11 +22,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class FiddleProyectileRenderer extends EntityRenderer<FiddleProyectileEntity> {
-   private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/particle/effect_5.png");
+   private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft", "textures/particle/soul_0.png");
    private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEXTURE);
-   private static final ResourceLocation TEXTURE3 = new ResourceLocation("minecraft", "textures/particle/soul_0.png");
+   private static final ResourceLocation TEXTURE3 = new ResourceLocation("minecraft", "textures/particle/sculk_soul_0.png");
    private static final RenderType RENDER_TYPE3 = RenderType.entityCutoutNoCull(TEXTURE3);
-   private static final ResourceLocation TEXTURE5 = new ResourceLocation("minecraft", "textures/particle/effect_3.png");
+   private static final ResourceLocation TEXTURE5 = new ResourceLocation("minecraft", "textures/particle/sculk_charge_pop_0.png");
    private static final RenderType RENDER_TYPE5 = RenderType.entityCutoutNoCull(TEXTURE5);
 
    public FiddleProyectileRenderer(EntityRendererProvider.Context manager) {

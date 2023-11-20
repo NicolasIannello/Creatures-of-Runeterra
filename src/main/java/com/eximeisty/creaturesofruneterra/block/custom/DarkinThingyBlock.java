@@ -4,6 +4,7 @@ import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.block.entity.DarkinThingyTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -23,7 +24,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class DarkinThingyBlock extends DirectionalBlock implements EntityBlock {
 	private float y = 1, x = 0;
@@ -63,14 +63,14 @@ public class DarkinThingyBlock extends DirectionalBlock implements EntityBlock {
 		return InteractionResult.CONSUME;
 	}
 
-	public void animateTick(BlockState p_221789_, Level world, BlockPos pos, Random p_221792_) {
+	public void animateTick(BlockState p_221789_, Level world, BlockPos pos, RandomSource p_221792_) {
 		super.animateTick(p_221789_, world, pos, p_221792_);
-		int blockTick = world.getBlockEntity(pos).getTileData().getInt("ticks");
+		int blockTick = world.getBlockEntity(pos).getPersistentData().getInt("ticks");
 		if(blockTick%15==0 || blockTick==1){
 			y=1; x=0;
 		}else if(blockTick>0){
 			y += 0.1; x += 0.3;
-			if(world.getBlockEntity(pos).getTileData().getBoolean("ns")){
+			if(world.getBlockEntity(pos).getPersistentData().getBoolean("ns")){
 				for (float i = 0; i < 3 ; i+=0.5) {
 					world.addParticle(ParticleTypes.DRAGON_BREATH, pos.north(3).getX()+0.5, pos.north(3).getY()+y+(i/4), pos.north(3).getZ()+x+i, 0, 0, 0);
 					world.addParticle(ParticleTypes.DRAGON_BREATH, pos.south(3).getX()+0.5, pos.south(3).getY()+y+(i/4), pos.south(3).getZ()-x-i, 0, 0, 0);

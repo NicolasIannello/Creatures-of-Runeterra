@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class DrillModel extends AnimatedGeoModel<DrillTileEntity>{
     @Override
-    public ResourceLocation getAnimationFileLocation(DrillTileEntity animatable) {
+    public ResourceLocation getAnimationResource(DrillTileEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/block/drill.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(DrillTileEntity object) {
+    public ResourceLocation getModelResource(DrillTileEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/block/drill.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(DrillTileEntity object) {
+    public ResourceLocation getTextureResource(DrillTileEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/block/drill.png");
     }
 }

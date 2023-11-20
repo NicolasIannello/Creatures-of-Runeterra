@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class PlunderPoroModel extends AnimatedGeoModel<PlunderPoroEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(PlunderPoroEntity animatable) {
+    public ResourceLocation getAnimationResource(PlunderPoroEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/plunderporo.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(PlunderPoroEntity object) {
+    public ResourceLocation getModelResource(PlunderPoroEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/plunderporo.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(PlunderPoroEntity object) {
+    public ResourceLocation getTextureResource(PlunderPoroEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/plunderporo.png");
     }
     

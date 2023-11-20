@@ -710,7 +710,7 @@ public class RekSaiEntity extends PathfinderMob implements IAnimatable {
     }
 
     @Override
-    public int getExperienceReward(Player pPlayer){ return 75+this.level.random.nextInt(25); }
+    public int getExperienceReward(){ return 75+this.level.random.nextInt(25); }
     protected SoundEvent getHurtSound(DamageSource damageSourceIn){ return ModSoundEvents.REKSAI_HIT.get(); }
     protected SoundEvent getDeathSound(){ return ModSoundEvents.REKSAI_ESCAPE.get(); }
     @Override

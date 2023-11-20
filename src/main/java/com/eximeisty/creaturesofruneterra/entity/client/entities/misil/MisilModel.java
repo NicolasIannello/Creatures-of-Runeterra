@@ -9,17 +9,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class MisilModel extends AnimatedGeoModel<MisilEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(MisilEntity animatable) {
+    public ResourceLocation getAnimationResource(MisilEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/misil.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(MisilEntity object) {
+    public ResourceLocation getModelResource(MisilEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/misil.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(MisilEntity object) {
+    public ResourceLocation getTextureResource(MisilEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/misil.png");
     }
 }

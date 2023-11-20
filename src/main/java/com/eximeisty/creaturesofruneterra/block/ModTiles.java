@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ModTiles {
-    public static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, CreaturesofRuneterra.MOD_ID);
+    public static final DeferredRegister<BlockEntityType<?>> TILES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, CreaturesofRuneterra.MOD_ID);
 
     public static final RegistryObject<BlockEntityType<DrillTileEntity>> DRILL = TILES.register("drill",
     ()-> BlockEntityType.Builder.of(DrillTileEntity::new, ModBlocks.DRILL.get()).build(null));

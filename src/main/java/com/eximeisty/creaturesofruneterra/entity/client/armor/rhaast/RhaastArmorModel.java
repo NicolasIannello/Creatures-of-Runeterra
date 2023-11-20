@@ -7,17 +7,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 
 public class RhaastArmorModel extends AnimatedGeoModel<RhaastArmorItem> {
     @Override
-    public ResourceLocation getModelLocation(RhaastArmorItem animatable) {
+    public ResourceLocation getModelResource(RhaastArmorItem animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/armor/rhaast_armor.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(RhaastArmorItem animatable) {
+    public ResourceLocation getTextureResource(RhaastArmorItem animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/model/armor/rhaast_armor.png");
     }
 
     @Override
-    public ResourceLocation getAnimationFileLocation(RhaastArmorItem animatable) {
+    public ResourceLocation getAnimationResource(RhaastArmorItem animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/armor/sai_armor.animation.json");
     }
 

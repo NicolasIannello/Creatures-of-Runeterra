@@ -9,17 +9,17 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class FiddleScytheModel extends AnimatedGeoModel<FiddleScythe>{
 
     @Override
-    public ResourceLocation getAnimationFileLocation(FiddleScythe animatable) {
+    public ResourceLocation getAnimationResource(FiddleScythe animatable) {
         return null;//new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/item/fiddle_scythe.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(FiddleScythe object) {
+    public ResourceLocation getModelResource(FiddleScythe object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/item/fiddle_scythe.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FiddleScythe object) {
+    public ResourceLocation getTextureResource(FiddleScythe object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/item/fiddle_scythe.png");
     }
     

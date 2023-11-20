@@ -8,17 +8,17 @@ import software.bernie.geckolib3.model.AnimatedTickingGeoModel;
 public class FiddlesticksModel extends AnimatedTickingGeoModel<FiddlesticksEntity> {
 
     @Override
-    public ResourceLocation getAnimationFileLocation(FiddlesticksEntity animatable) {
+    public ResourceLocation getAnimationResource(FiddlesticksEntity animatable) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/fiddlesticks.animation.json");
     }
 
     @Override
-    public ResourceLocation getModelLocation(FiddlesticksEntity object) {
+    public ResourceLocation getModelResource(FiddlesticksEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/fiddlesticks.geo.json");
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FiddlesticksEntity object) {
+    public ResourceLocation getTextureResource(FiddlesticksEntity object) {
         return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/fiddlesticks-normal.png");
     }
 }

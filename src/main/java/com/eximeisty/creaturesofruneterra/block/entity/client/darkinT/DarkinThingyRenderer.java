@@ -32,7 +32,7 @@ public class DarkinThingyRenderer extends GeoBlockRenderer<DarkinThingyTileEntit
             poseStack.pushPose();
             poseStack.mulPose(Vector3f.YP.rotationDegrees(z));
             poseStack.translate(0D, 1.5D, 0D);
-            BakedModel bakedmodel = Minecraft.getInstance().getItemRenderer().getModel(animatable.itemHandler.getStackInSlot(0), animatable.getLevel(), null, animatable.getTileData().getId());
+            BakedModel bakedmodel = Minecraft.getInstance().getItemRenderer().getModel(animatable.itemHandler.getStackInSlot(0), animatable.getLevel(), null, animatable.getPersistentData().getId());
             Minecraft.getInstance().getItemRenderer().render(animatable.itemHandler.getStackInSlot(0), ItemTransforms.TransformType.GROUND, true, poseStack, this.rtb, packedLight, packedOverlay, bakedmodel);
             poseStack.popPose();
             buffer = rtb.getBuffer(RenderType.entityTranslucent(rl));
