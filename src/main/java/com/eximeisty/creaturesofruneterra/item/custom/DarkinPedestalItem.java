@@ -1,5 +1,6 @@
 package com.eximeisty.creaturesofruneterra.item.custom;
 
+import com.eximeisty.creaturesofruneterra.item.client.darkin_pedestal.DarkinPedestaItemRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -13,7 +14,7 @@ public class DarkinPedestalItem extends BlockItem implements IAnimatable {
     public AnimationFactory factory = new AnimationFactory(this);
 
     public DarkinPedestalItem(Block block, Properties settings) {
-        super(block, settings);
+        super(block, settings.setISTER(()-> DarkinPedestaItemRenderer::new));
     }
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {

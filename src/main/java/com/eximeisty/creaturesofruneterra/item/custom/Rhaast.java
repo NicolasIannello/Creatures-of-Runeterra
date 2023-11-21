@@ -2,6 +2,7 @@ package com.eximeisty.creaturesofruneterra.item.custom;
 
 import com.eximeisty.creaturesofruneterra.item.ModArmorMaterial;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.item.client.rhaast.RhaastRenderer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
@@ -32,15 +33,10 @@ import java.util.UUID;
 public class Rhaast extends SwordItem implements IAnimatable {
     private AnimationFactory factory = new AnimationFactory(this);
     protected static final UUID REACH = UUID.fromString("f7e4f5c8-2463-4660-bfd3-0de7ac8f7247");
-    private AttributeModifier damageModifier;
-//    private Multimap<Attribute, AttributeModifier> attributeModifiers;
     private int ticks = 0;
 
     public Rhaast(IItemTier tier, int attackDamageIn, float attackSpeedIn, Properties builderIn) {
-        super(tier, attackDamageIn, attackSpeedIn, builderIn);
-//        reachModifier = new AttributeModifier(REACH, "reach_distance", 1.5, AttributeModifier.Operation.ADDITION);
-//        damageModifier = new AttributeModifier(BASE_ATTACK_DAMAGE_UUID, "Weapon modifier", (float)attackDamageIn+tier.getAttackDamageBonus(), AttributeModifier.Operation.ADDITION);
-//        speedModifier = new AttributeModifier(BASE_ATTACK_SPEED_UUID, "Weapon modifier", attackSpeedIn, AttributeModifier.Operation.ADDITION);
+        super(tier, attackDamageIn, attackSpeedIn, builderIn.setISTER(()-> RhaastRenderer::new));
     }
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
@@ -122,14 +118,5 @@ public class Rhaast extends SwordItem implements IAnimatable {
     public AnimationFactory getFactory() {
         return factory;
     }
-
-//     public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlotType equipmentSlot, ItemStack stack) {
-//         ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-//         builder.put(ForgeMod.ATTACK_RANGE.get(), reachModifier);
-//         builder.put(Attributes.ATTACK_DAMAGE, damageModifier);
-//         builder.put(Attributes.ATTACK_SPEED, speedModifier);
-//         this.attributeModifiers = builder.build();
-//         return equipmentSlot == EquipmentSlotType.MAINHAND ? attributeModifiers : super.getAttributeModifiers(equipmentSlot, stack);
-//     }
     
 }

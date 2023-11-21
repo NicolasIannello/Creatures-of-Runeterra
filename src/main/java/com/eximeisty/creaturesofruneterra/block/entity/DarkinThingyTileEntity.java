@@ -35,21 +35,22 @@ import java.util.Map;
 
 public class DarkinThingyTileEntity extends TileEntity implements IAnimatable, ITickableTileEntity {
     private final AnimationFactory factory = new AnimationFactory(this);
-    public final ItemStackHandler itemHandler = new ItemStackHandler(1){
-        @Override
-        public int getSlotLimit(int slot) {
-            switch (slot) {
-                case 0: return 1;
-                default: return super.getSlotLimit(slot);
-            }
-        }
-
-        @Override
-        protected void onContentsChanged(int slot){
-            markDirty();
-            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-        }
-    };
+//    public final ItemStackHandler itemHandler = new ItemStackHandler(1){
+//        @Override
+//        public int getSlotLimit(int slot) {
+//            switch (slot) {
+//                case 0: return 1;
+//                default: return super.getSlotLimit(slot);
+//            }
+//        }
+//
+//        @Override
+//        protected void onContentsChanged(int slot){
+//            markDirty();
+//            world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+//        }
+//    };
+    public ItemStack itemTile = ItemStack.EMPTY;
     private boolean eye = false;
     private boolean nw = false;
     public int ticks = 0;
@@ -74,18 +75,26 @@ public class DarkinThingyTileEntity extends TileEntity implements IAnimatable, I
 
     @Override @Nullable
     public SUpdateTileEntityPacket getUpdatePacket() {
-        return new SUpdateTileEntityPacket(this.pos, -1, this.getUpdateTag());
+        CompoundNBT nbt = new CompoundNBT();
+        writeItem(nbt);
+        return new SUpdateTileEntityPacket(this.pos, -1, nbt);
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        return write(new CompoundNBT());
     }
 
     @Override
     public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
-        super.onDataPacket(net, pkt);
-        handleUpdateTag(this.world.getBlockState(this.getPos()), pkt.getNbtCompound());
+//        super.onDataPacket(net, pkt);
+//        handleUpdateTag(this.world.getBlockState(this.getPos()), pkt.getNbtCompound());
+        readItem(pkt.getNbtCompound());
     }
 
     @Override
     public void tick() {
-        ItemStack item = itemHandler.getStackInSlot(0);
+        ItemStack item = itemTile;
         if(world.getDimensionKey()==World.THE_NETHER){
             if(item.isItemEqual(new ItemStack(Items.IRON_HOE)) || item.getItem() instanceof SwordItem){
                 TileEntity tileentity;
@@ -103,22 +112,22 @@ public class DarkinThingyTileEntity extends TileEntity implements IAnimatable, I
                 world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
                 if(tileentity instanceof DarkinThingyTileEntity && tileentity2 instanceof DarkinThingyTileEntity) {
                     if(item.isItemEqual(new ItemStack(Items.IRON_HOE))){
-                        if(((DarkinThingyTileEntity) tileentity).itemHandler.getStackInSlot(0).isItemEqual(new ItemStack(Items.NETHER_WART))) nw = true;
-                        if(((DarkinThingyTileEntity) tileentity2).itemHandler.getStackInSlot(0).isItemEqual(new ItemStack(Items.NETHER_WART))) nw = true;
-                        if(((DarkinThingyTileEntity) tileentity).itemHandler.getStackInSlot(0).isItemEqual(new ItemStack(Items.ENDER_EYE))) eye = true;
-                        if(((DarkinThingyTileEntity) tileentity2).itemHandler.getStackInSlot(0).isItemEqual(new ItemStack(Items.ENDER_EYE))) eye = true;
+                        if(((DarkinThingyTileEntity) tileentity).itemTile.isItemEqual(new ItemStack(Items.NETHER_WART))) nw = true;
+                        if(((DarkinThingyTileEntity) tileentity2).itemTile.isItemEqual(new ItemStack(Items.NETHER_WART))) nw = true;
+                        if(((DarkinThingyTileEntity) tileentity).itemTile.isItemEqual(new ItemStack(Items.ENDER_EYE))) eye = true;
+                        if(((DarkinThingyTileEntity) tileentity2).itemTile.isItemEqual(new ItemStack(Items.ENDER_EYE))) eye = true;
                         if(nw && eye) {
                             nw = false; eye = false;
                             ticker(null, null, null);
                             if(ticks > 100) ticker(tileentity, tileentity2, new ItemStack(ModItems.RHAAST.get()));
                         }
                     }else if(item.getItem() instanceof SwordItem ? ((SwordItem)item.getItem()).getTier()==ModItemTier.DARKIN : false){
-                        ItemStack tileItem = ((DarkinThingyTileEntity) tileentity).itemHandler.getStackInSlot(0);
-                        ItemStack tileItem2 = ((DarkinThingyTileEntity) tileentity2).itemHandler.getStackInSlot(0);
+                        ItemStack tileItem = ((DarkinThingyTileEntity) tileentity).itemTile;
+                        ItemStack tileItem2 = ((DarkinThingyTileEntity) tileentity2).itemTile;
                         if(tileItem.isItemEqual(new ItemStack(tileItem2.getItem())) && tileItem2.getItem() instanceof SwordItem) {
                             ticker(null, null, null);
                             if(ticks > 100) {
-                                int damage = (int) ((SwordItem) tileItem.getItem()).getDamage(tileItem) + 1;
+                                int damage = (int) ((SwordItem) tileItem.getItem()).getAttackDamage() + 1;
                                 ItemStack darkinweapon = new ItemStack(ModItems.RHAAST.get());
                                 Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(item);
                                 EnchantmentHelper.setEnchantments(map,darkinweapon);
@@ -160,25 +169,38 @@ public class DarkinThingyTileEntity extends TileEntity implements IAnimatable, I
     }
 
     public void manageItem(ItemStack stack, World worldIn, BlockPos pos, boolean drop) {
-        if(drop) worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY()+1, pos.getZ(), itemHandler.getStackInSlot(0)));
+        if(drop) worldIn.addEntity(new ItemEntity(worldIn, pos.getX(), pos.getY()+1, pos.getZ(), itemTile));
         if(stack.isEmpty()) {
-            itemHandler.setStackInSlot(0, ItemStack.EMPTY);
+            itemTile = ItemStack.EMPTY;
         }else{
             int i = stack.getCount();
             stack.shrink(i-1);
-            itemHandler.setStackInSlot(0, stack);
+            itemTile = stack;
         }
+        markDirty();
+        world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
     }
 
     @Override
     public void read(BlockState state, CompoundNBT nbt) {
-        itemHandler.deserializeNBT(nbt.getCompound("inv"));
+        //itemHandler.deserializeNBT(nbt.getCompound("inv"));
         super.read(state, nbt);
+        readItem(nbt);
+    }
+
+    private void readItem(CompoundNBT nbt){
+        itemTile = ItemStack.read(nbt.getCompound("Item"));
     }
 
     @Override
     public CompoundNBT write(CompoundNBT compound) {
-        compound.put("inv", itemHandler.serializeNBT());
-        return super.write(compound);
+        //compound.put("inv", itemHandler.serializeNBT());
+        super.write(compound);
+        writeItem(compound);
+        return compound;
+    }
+
+    private void writeItem(CompoundNBT nbt){
+        nbt.put("Item", itemTile.write(new CompoundNBT()));
     }
 }

@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 import software.bernie.geckolib3.geo.render.built.GeoBone;
@@ -46,7 +45,7 @@ public class DarkinThingyRenderer extends GeoBlockRenderer<DarkinThingyTileEntit
             poseStack.push();
             poseStack.rotate(Vector3f.YP.rotationDegrees(z));
             poseStack.translate(0D, 1.5D, 0D);
-            Minecraft.getInstance().getItemRenderer().renderItem(null,tile.itemHandler.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND, false,poseStack, rtb, tile.getWorld(), packedLight, packedOverlay);
+            Minecraft.getInstance().getItemRenderer().renderItem(null,((DarkinThingyTileEntity)tile.getTileEntity()).itemTile, ItemCameraTransforms.TransformType.GROUND, false,poseStack, rtb, tile.getWorld(), packedLight, packedOverlay);
             poseStack.pop();
             buffer = rtb.getBuffer(RenderType.getEntityTranslucent(rl));
         }
