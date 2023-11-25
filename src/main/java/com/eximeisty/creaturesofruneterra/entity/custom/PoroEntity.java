@@ -208,6 +208,11 @@ public class PoroEntity extends TamableAnimal implements GeoEntity {
                         itemstack.shrink(1);
                         return InteractionResult.SUCCESS;
                     }
+                }else if(playerIn.isCrouching()){
+                    this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItemInHand(InteractionHand.MAIN_HAND)));
+                    this.level().addFreshEntity(new ItemEntity(this.level(), this.getX(), this.getY(), this.getZ(), this.getItemBySlot(EquipmentSlot.HEAD)));
+                    this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+                    this.setItemSlotAndDropWhenKilled(EquipmentSlot.HEAD, ItemStack.EMPTY);
                 }
                 this.setOrderedToSit(!entityData.get(STATE));
             }
