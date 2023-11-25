@@ -68,6 +68,13 @@ public class AtlasG extends PickaxeItem implements GeoItem {
                 triggerAnim(entityIn, GeoItem.getOrAssignId(stack, (ServerLevel)worldIn), "atlas_controller", "idle");
             }
         }
+        if (!worldIn.isClientSide && isCharged(stack)) {
+            if(hand){
+                triggerAnim(entityIn, GeoItem.getOrAssignId(stack, (ServerLevel)worldIn), "atlas_controller", "charge2");
+            }else{
+                triggerAnim(entityIn, GeoItem.getOrAssignId(stack, (ServerLevel)worldIn), "atlas_controller", "charge");
+            }
+        }
         if(getState(stack)==3){
             dashTicks++;
             attackBB(entityIn.getBoundingBox().expandTowards(0.5, 0, 0.5).expandTowards(-0.5, 0, -0.5), entityIn);
@@ -95,6 +102,7 @@ public class AtlasG extends PickaxeItem implements GeoItem {
     public void attackBB(AABB bb, Entity player){
         player.level().getEntities(null, player.getBoundingBox().expandTowards(2, 0, 2).expandTowards(-2, 0, -2)).stream().forEach(livingEntity -> {
             if(!livingEntity.is(player)) livingEntity.hurt(player.level().damageSources().playerAttack((Player) player), 15);
+            if(motion==null) motion = player.getDeltaMovement();
             if(!livingEntity.level().isClientSide) livingEntity.setDeltaMovement(motion.add(0,0.1,0));//livingEntity.setDeltaMovement(player.getLookAngle().x*2, 0.2, player.getLookAngle().z*2);
         });
     }
