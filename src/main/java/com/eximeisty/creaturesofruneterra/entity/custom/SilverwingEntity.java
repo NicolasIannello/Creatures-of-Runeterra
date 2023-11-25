@@ -2,28 +2,19 @@ package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializers;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.control.BodyRotationControl;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
-import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.monster.Phantom;
-import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,14 +30,12 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.Comparator;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.UUID;
 
 public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private static final EntityDataAccessor<Integer> PHASE = SynchedEntityData.defineId(FabledPoroEntity.class, EntityDataSerializers.INT);
+    public static final int TICKS_PER_FLAP = Mth.ceil(24.166098F);
     Vec3 moveTargetPoint = Vec3.ZERO;
     BlockPos anchorPoint = BlockPos.ZERO;
     SilverwingEntity.AttackPhase attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
@@ -62,61 +51,20 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     }
 
     protected void registerGoals() {
+        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(1, new SilverwingEntity.PhantomAttackStrategyGoal());
         this.goalSelector.addGoal(2, new SilverwingEntity.PhantomSweepAttackGoal());
         this.goalSelector.addGoal(3, new SilverwingEntity.PhantomCircleAroundAnchorGoal());
         this.targetSelector.addGoal(1, new SilverwingEntity.PhantomAttackPlayerTargetGoal());
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
     }
-//    protected void registerGoals() {
-//        //this.goalSelector.addGoal(4, new RandomFloatAroundGoal(this));
-//        //this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0D){
-////            @Override
-////            public boolean canUse() {
-////                return getEntityData().get(PHASE) == 0 || super.canUse();
-////            }
-//        //});
-//        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
-//        //this.targetSelector.addGoal(1, (new HurtByTargetGoal(this){
-////            @Override
-////            public boolean canContinueToUse(){
-////                return getEntityData().get(PHASE) != 0 || super.canContinueToUse();
-////            }
-////            @Override
-////            public void stop(){
-////                getEntityData().set(PHASE, 0);
-////                super.stop();
-////            }
-//        //}));
-//        this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, Villager.class, true){
-////            @Override
-////            public boolean canContinueToUse(){
-////                return getEntityData().get(PHASE) != 0 || super.canContinueToUse();
-////            }
-////            @Override
-////            public void stop(){
-////                getEntityData().set(PHASE, 0);
-////                super.stop();
-////            }
-//        });
-//        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Animal.class, true){
-////            @Override
-////            public boolean canContinueToUse(){
-////                return getEntityData().get(PHASE) != 0 || super.canContinueToUse();
-////            }
-////            @Override
-////            public void stop(){
-////                getEntityData().set(PHASE, 0);
-////                super.stop();
-////            }
-//        });
-//    }
 
     public static AttributeSupplier setAttributes(){
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 30)
                 .add(Attributes.MOVEMENT_SPEED, 0.8)
                 .add(Attributes.ATTACK_DAMAGE, 7)
-                .add(Attributes.FOLLOW_RANGE, 20)
+                .add(Attributes.FOLLOW_RANGE, 70)
                 .add(Attributes.ATTACK_KNOCKBACK, 0)
                 .add(Attributes.ATTACK_SPEED, 0.8).build();
     }
@@ -136,49 +84,27 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         return silverwing;
     }
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(PHASE, 0);
+    public boolean isFlapping() {
+        return (this.getUniqueFlapTickOffset() + this.tickCount) % TICKS_PER_FLAP == 0;
+    }
+
+    public int getUniqueFlapTickOffset() {
+        return this.getId() * 3;
     }
 
     public void tick() {
         super.tick();
-        System.out.println(this.getTarget());
+        if (this.level().isClientSide) {
+            float f = Mth.cos((float)(this.getUniqueFlapTickOffset() + this.tickCount) * 7.448451F * ((float)Math.PI / 180F) + (float)Math.PI);
+            float f1 = Mth.cos((float)(this.getUniqueFlapTickOffset() + this.tickCount + 1) * 7.448451F * ((float)Math.PI / 180F) + (float)Math.PI);
+            if (f > 0.0F && f1 <= 0.0F && !this.onGround()) {
+                this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.PHANTOM_FLAP, this.getSoundSource(), 4.5F + this.random.nextFloat() * 0.05F, 0.2F + this.random.nextFloat() * 0.05F, false);
+            }
+        }
     }
     
     //FLYING------------------------------------------------------------------------------------------------------------
     protected void checkFallDamage(double p_20809_, boolean p_20810_, BlockState p_20811_, BlockPos p_20812_) {
-    }
-
-    public void travel(Vec3 p_20818_) {
-        if (this.isControlledByLocalInstance()) {
-            if (this.isInWater()) {
-                this.moveRelative(0.02F, p_20818_);
-                this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().scale((double)0.8F));
-            } else if (this.isInLava()) {
-                this.moveRelative(0.02F, p_20818_);
-                this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().scale(0.5D));
-            } else {
-                BlockPos ground = getBlockPosBelowThatAffectsMyMovement();
-                float f = 0.91F;
-                if (this.onGround()) {
-                    f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
-                }
-
-                float f1 = 0.16277137F / (f * f * f);
-                f = 0.91F;
-                if (this.onGround()) {
-                    f = this.level().getBlockState(ground).getFriction(this.level(), ground, this) * 0.91F;
-                }
-
-                this.moveRelative(this.onGround() ? 0.1F * f1 : 0.02F, p_20818_);
-                this.move(MoverType.SELF, this.getDeltaMovement());
-                this.setDeltaMovement(this.getDeltaMovement().scale((double)f));
-            }
-        }
-        //this.calculateEntityAnimation(false);
     }
 
     public boolean onClimbable() {
@@ -195,18 +121,13 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 return false;
             } else {
                 this.nextScanTick = reducedTickDelay(60);
-                List<Player> list = SilverwingEntity.this.level().getNearbyPlayers(this.attackTargeting, SilverwingEntity.this, SilverwingEntity.this.getBoundingBox().inflate(16.0D, 64.0D, 16.0D));
-                if (!list.isEmpty()) {
-                    list.sort(Comparator.<Entity, Double>comparing(Entity::getY).reversed());
-
-                    for(Player player : list) {
-                        if (SilverwingEntity.this.canAttack(player, TargetingConditions.DEFAULT)) {
-                            SilverwingEntity.this.setTarget(player);
-                            return true;
-                        }
+                Animal target = SilverwingEntity.this.level().getNearestEntity(Animal.class, attackTargeting, SilverwingEntity.this, SilverwingEntity.this.getX(), SilverwingEntity.this.getY(), SilverwingEntity.this.getZ(), SilverwingEntity.this.getBoundingBox().inflate(16.0D, 64.0D, 16.0D));
+                if(target!=null){
+                    if (SilverwingEntity.this.canAttack(target, TargetingConditions.DEFAULT)) {
+                        SilverwingEntity.this.setTarget(target);
+                        return true;
                     }
                 }
-
                 return false;
             }
         }
@@ -242,7 +163,6 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                     SilverwingEntity.this.attackPhase = SilverwingEntity.AttackPhase.SWOOP;
                     this.setAnchorAboveTarget();
                     this.nextSweepTick = this.adjustedTickDelay((8 + SilverwingEntity.this.random.nextInt(4)) * 20);
-                    SilverwingEntity.this.playSound(SoundEvents.PHANTOM_SWOOP, 10.0F, 0.95F + SilverwingEntity.this.random.nextFloat() * 0.1F);
                 }
             }
 
@@ -254,17 +174,6 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 SilverwingEntity.this.anchorPoint = new BlockPos(SilverwingEntity.this.anchorPoint.getX(), SilverwingEntity.this.level().getSeaLevel() + 1, SilverwingEntity.this.anchorPoint.getZ());
             }
 
-        }
-    }
-
-    class PhantomBodyRotationControl extends BodyRotationControl {
-        public PhantomBodyRotationControl(Mob p_33216_) {
-            super(p_33216_);
-        }
-
-        public void clientTick() {
-            SilverwingEntity.this.yHeadRot = SilverwingEntity.this.yBodyRot;
-            SilverwingEntity.this.yBodyRot = SilverwingEntity.this.getYRot();
         }
     }
 
@@ -382,7 +291,6 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 Vec3 vec3 = SilverwingEntity.this.getDeltaMovement();
                 SilverwingEntity.this.setDeltaMovement(vec3.add((new Vec3(d6, d8, d7)).subtract(vec3).scale(0.2D)));
             }
-
         }
     }
 
@@ -397,9 +305,6 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     }
 
     class PhantomSweepAttackGoal extends SilverwingEntity.PhantomMoveTargetGoal {
-        private static final int CAT_SEARCH_TICK_DELAY = 20;
-        private boolean isScaredOfCat;
-        private int catSearchTick;
 
         public boolean canUse() {
             return SilverwingEntity.this.getTarget() != null && SilverwingEntity.this.attackPhase == SilverwingEntity.AttackPhase.SWOOP;
@@ -418,22 +323,10 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                         return false;
                     }
                 }
-
                 if (!this.canUse()) {
                     return false;
                 } else {
-                    if (SilverwingEntity.this.tickCount > this.catSearchTick) {
-                        this.catSearchTick = SilverwingEntity.this.tickCount + 20;
-                        List<Cat> list = SilverwingEntity.this.level().getEntitiesOfClass(Cat.class, SilverwingEntity.this.getBoundingBox().inflate(16.0D), EntitySelector.ENTITY_STILL_ALIVE);
-
-                        for(Cat cat : list) {
-                            cat.hiss();
-                        }
-
-                        this.isScaredOfCat = !list.isEmpty();
-                    }
-
-                    return !this.isScaredOfCat;
+                    return true;
                 }
             }
         }
@@ -459,7 +352,6 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 } else if (SilverwingEntity.this.horizontalCollision || SilverwingEntity.this.hurtTime > 0) {
                     SilverwingEntity.this.attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
                 }
-
             }
         }
     }
