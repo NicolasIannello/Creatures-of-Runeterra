@@ -55,7 +55,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(1, new SilverwingEntity.PhantomAttackStrategyGoal());
         this.goalSelector.addGoal(2, new SilverwingEntity.PhantomSweepAttackGoal());
         this.goalSelector.addGoal(3, new SilverwingEntity.PhantomCircleAroundAnchorGoal());
-        this.targetSelector.addGoal(1, new SilverwingEntity.PhantomAttackPlayerTargetGoal());
+        this.targetSelector.addGoal(1, new SilverwingEntity.PhantomTargetGoal());
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
     }
 
@@ -111,7 +111,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         return false;
     }
 
-    class PhantomAttackPlayerTargetGoal extends Goal {
+    class PhantomTargetGoal extends Goal {
         private final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(64.0D);
         private int nextScanTick = reducedTickDelay(20);
 
@@ -153,7 +153,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         }
 
         public void stop() {
-            SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.anchorPoint).above(10 + SilverwingEntity.this.random.nextInt(20));
+            SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.anchorPoint).above(20 + SilverwingEntity.this.random.nextInt(20));
         }
 
         public void tick() {
@@ -248,7 +248,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     }
 
     class PhantomMoveControl extends MoveControl {
-        private float speed = 0.1F;
+        private float speed = 0.3F;
 
         public PhantomMoveControl(Mob p_33241_) {
             super(p_33241_);
@@ -257,7 +257,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         public void tick() {
             if (SilverwingEntity.this.horizontalCollision) {
                 SilverwingEntity.this.setYRot(SilverwingEntity.this.getYRot() + 180.0F);
-                this.speed = 0.1F;
+                this.speed = 0.3F;
             }
 
             double d0 = SilverwingEntity.this.moveTargetPoint.x - SilverwingEntity.this.getX();
@@ -346,9 +346,9 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 if (SilverwingEntity.this.getBoundingBox().inflate((double)0.2F).intersects(livingentity.getBoundingBox())) {
                     SilverwingEntity.this.doHurtTarget(livingentity);
                     SilverwingEntity.this.attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
-                    if (!SilverwingEntity.this.isSilent()) {
-                        SilverwingEntity.this.level().levelEvent(1039, SilverwingEntity.this.blockPosition(), 0);
-                    }
+//                    if (!SilverwingEntity.this.isSilent()) {
+//                        SilverwingEntity.this.level().levelEvent(1039, SilverwingEntity.this.blockPosition(), 0);
+//                    }
                 } else if (SilverwingEntity.this.horizontalCollision || SilverwingEntity.this.hurtTime > 0) {
                     SilverwingEntity.this.attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
                 }
