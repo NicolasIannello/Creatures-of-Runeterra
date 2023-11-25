@@ -27,6 +27,7 @@ public class ModEvents {
         event.put(ModEntities.EXALTEDPORO.get(), ExaltedPoroEntity.setAttributes());
         event.put(ModEntities.FIDDLESTICKS.get(), FiddlesticksEntity.setAttributes());
         event.put(ModEntities.FIDDLEDUMMY.get(), FiddleDummyEntity.setAttributes());
+        event.put(ModEntities.SILVERWING.get(), SilverwingEntity.setAttributes());
         //PART ENTITIES
         event.put(ModEntities.WIVHIV.get(), CoRPartEntity.setAttributes());
         event.put(ModEntities.WVIHV.get(), CoRPartEntity.setAttributes());

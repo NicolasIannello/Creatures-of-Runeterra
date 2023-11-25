@@ -16,6 +16,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.patchedporobot.
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.silverwing.SilverwingRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
@@ -92,6 +93,7 @@ public class CreaturesofRuneterra
             EntityRenderers.register(ModEntities.PLUNDERPORO.get(), PlunderPoroRenderer::new);
             EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
             EntityRenderers.register(ModEntities.PATCHEDPOROBOT.get(), PatchedPorobotRenderer::new);
+            EntityRenderers.register(ModEntities.SILVERWING.get(), SilverwingRenderer::new);
             //BOSSES
             EntityRenderers.register(ModEntities.FIDDLESTICKS.get(), FiddlesticksRenderer::new);
             EntityRenderers.register(ModEntities.FIDDLEDUMMY.get(), FiddleDummyRenderer::new);

@@ -38,7 +38,7 @@ public class ModCreativeModeTabs {
                         //SPAWN EGGS
                         pOutput.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG.get());pOutput.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG.get());pOutput.accept(ModItems.REKSAI_SPAWN_EGG.get());pOutput.accept(ModItems.PORO_SPAWN_EGG.get());pOutput.accept(ModItems.FABLEDPORO_SPAWN_EGG.get());
                         pOutput.accept(ModItems.PLUNDERPORO_SPAWN_EGG.get());pOutput.accept(ModItems.POROBOT_SPAWN_EGG.get());pOutput.accept(ModItems.EXALTEDPORO_SPAWN_EGG.get());
-                        pOutput.accept(ModItems.FIDDLESTICKS_SPAWN_EGG.get());
+                        pOutput.accept(ModItems.FIDDLESTICKS_SPAWN_EGG.get());pOutput.accept(ModItems.SILVERWING_SPAWN_EGG.get());
                     }).build()
     );
 
