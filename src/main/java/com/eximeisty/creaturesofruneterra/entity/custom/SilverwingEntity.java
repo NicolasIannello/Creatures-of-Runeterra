@@ -2,9 +2,15 @@ package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -12,10 +18,14 @@ import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -39,11 +49,15 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     Vec3 moveTargetPoint = Vec3.ZERO;
     BlockPos anchorPoint = BlockPos.ZERO;
     SilverwingEntity.AttackPhase attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
+    public static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Boolean> STATE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
 
     static enum AttackPhase {
         CIRCLE,
         SWOOP;
     }
+
     public SilverwingEntity(EntityType<? extends TamableAnimal> p_21803_, Level p_21804_) {
         super(p_21803_, p_21804_);
         this.moveControl = new SilverwingEntity.PhantomMoveControl(this);
@@ -51,11 +65,13 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     }
 
     protected void registerGoals() {
-        this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new SilverwingEntity.PhantomAttackStrategyGoal());
         this.goalSelector.addGoal(2, new SilverwingEntity.PhantomSweepAttackGoal());
         this.goalSelector.addGoal(3, new SilverwingEntity.PhantomCircleAroundAnchorGoal());
         this.targetSelector.addGoal(1, new SilverwingEntity.PhantomTargetGoal());
+        this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
     }
 
@@ -67,6 +83,13 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 .add(Attributes.FOLLOW_RANGE, 70)
                 .add(Attributes.ATTACK_KNOCKBACK, 0)
                 .add(Attributes.ATTACK_SPEED, 0.8).build();
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(SIZE, 1F);
+        entityData.define(STATE, false);
+        entityData.define(CLIMBING, (byte)0);
     }
 
     @Nullable
@@ -101,6 +124,57 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.PHANTOM_FLAP, this.getSoundSource(), 4.5F + this.random.nextFloat() * 0.05F, 0.2F + this.random.nextFloat() * 0.05F, false);
             }
         }
+        if (!this.level().isClientSide) {
+            this.setBesideClimbableBlock(this.horizontalCollision);
+        }
+    }
+
+    public InteractionResult mobInteract(Player playerIn, InteractionHand hand) {
+        ItemStack itemstack = playerIn.getItemInHand(hand);
+        Item item = itemstack.getItem();
+
+        if (this.level().isClientSide) {
+            boolean flag = this.isOwnedBy(playerIn) || this.isTame() || item.isEdible() && !this.isTame();
+            return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
+        }else{
+            if(!this.isTame() && item.isEdible()) {
+                if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
+
+                if (this.random.nextInt(5) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, playerIn)) {
+                    this.tame(playerIn);
+                    this.navigation.stop();
+                    this.setOrderedToSit(true);
+                    this.level().broadcastEntityEvent(this, (byte)7);
+                } else {
+                    this.level().broadcastEntityEvent(this, (byte)6);
+                }
+                return InteractionResult.SUCCESS;
+            }
+            if(this.isTame() && this.isOwnedBy(playerIn)){
+                if(item.isEdible()){
+                    entityData.set(SIZE, (entityData.get(SIZE)+0.2F));
+                }
+                this.setOrderedToSit(!entityData.get(STATE));
+            }
+            return super.mobInteract(playerIn, hand);
+        }
+    }
+
+    @Override
+    public void setOrderedToSit(boolean sit) {
+        this.entityData.set(STATE, sit);
+        super.setOrderedToSit(sit);
+    }
+
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.entityData.set(STATE, compound.getBoolean("Sitting"));
+        this.entityData.set(SIZE, compound.getFloat("size"));
+    }
+
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("size", this.entityData.get(SIZE));
     }
     
     //FLYING------------------------------------------------------------------------------------------------------------
@@ -108,14 +182,30 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     }
 
     public boolean onClimbable() {
-        return false;
+        return this.isClimbing();
     }
+
+    public boolean isClimbing() {
+        return (this.entityData.get(CLIMBING) & 1) != 0;
+    }
+
+    public void setBesideClimbableBlock(boolean p_33820_) {
+        byte b0 = this.entityData.get(CLIMBING);
+        if (p_33820_) {
+            b0 = (byte)(b0 | 1);
+        } else {
+            b0 = (byte)(b0 & -2);
+        }
+        this.entityData.set(CLIMBING, b0);
+    }
+
 
     class PhantomTargetGoal extends Goal {
         private final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(64.0D);
         private int nextScanTick = reducedTickDelay(20);
 
         public boolean canUse() {
+            if(isTame()) return false;
             if (this.nextScanTick > 0) {
                 --this.nextScanTick;
                 return false;
@@ -264,7 +354,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
             double d1 = SilverwingEntity.this.moveTargetPoint.y - SilverwingEntity.this.getY();
             double d2 = SilverwingEntity.this.moveTargetPoint.z - SilverwingEntity.this.getZ();
             double d3 = Math.sqrt(d0 * d0 + d2 * d2);
-            if (Math.abs(d3) > (double)1.0E-5F) {
+            if (Math.abs(d3) > (double)1.0E-5F && !isOrderedToSit()) {
                 double d4 = 1.0D - Math.abs(d1 * (double)0.7F) / d3;
                 d0 *= d4;
                 d2 *= d4;
@@ -289,7 +379,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 double d7 = (double)(this.speed * Mth.sin(f5 * ((float)Math.PI / 180F))) * Math.abs(d2 / d5);
                 double d8 = (double)(this.speed * Mth.sin(f4 * ((float)Math.PI / 180F))) * Math.abs(d1 / d5);
                 Vec3 vec3 = SilverwingEntity.this.getDeltaMovement();
-                SilverwingEntity.this.setDeltaMovement(vec3.add((new Vec3(d6, d8, d7)).subtract(vec3).scale(0.2D)));
+                double y = (!isTame() || getTarget()!=null) ? d8 : 0;
+                SilverwingEntity.this.setDeltaMovement(vec3.add((new Vec3(d6, y, d7)).subtract(vec3).scale(0.2D)));
             }
         }
     }
@@ -346,9 +437,9 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 if (SilverwingEntity.this.getBoundingBox().inflate((double)0.2F).intersects(livingentity.getBoundingBox())) {
                     SilverwingEntity.this.doHurtTarget(livingentity);
                     SilverwingEntity.this.attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
-//                    if (!SilverwingEntity.this.isSilent()) {
-//                        SilverwingEntity.this.level().levelEvent(1039, SilverwingEntity.this.blockPosition(), 0);
-//                    }
+                    if (!SilverwingEntity.this.isSilent()) {
+                        SilverwingEntity.this.level().levelEvent(1039, SilverwingEntity.this.blockPosition(), 0);
+                    }
                 } else if (SilverwingEntity.this.horizontalCollision || SilverwingEntity.this.hurtTime > 0) {
                     SilverwingEntity.this.attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
                 }
