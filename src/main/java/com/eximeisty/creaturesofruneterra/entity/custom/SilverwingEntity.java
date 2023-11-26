@@ -26,7 +26,10 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
@@ -52,6 +55,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     public static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> STATE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CHICKEN, Items.BEEF, Items.COD, Items.MUTTON, Items.PORKCHOP, Items.RABBIT, Items.SALMON);
 
     static enum AttackPhase {
         CIRCLE,
@@ -137,7 +141,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
             boolean flag = this.isOwnedBy(playerIn) || this.isTame() || item.isEdible() && !this.isTame();
             return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
         }else{
-            if(!this.isTame() && item.isEdible()) {
+            if(!this.isTame() && FOOD_ITEMS.test(itemstack)) {
                 if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
 
                 if (this.random.nextInt(5) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, playerIn)) {
