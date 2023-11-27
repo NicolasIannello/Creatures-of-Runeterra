@@ -3,9 +3,8 @@
 	"texture_size": [32, 32],
 	"render_type": "cutout",
 	"textures": {
-		"0": "creaturesofruneterra:block/tendril",
-		"1": "creaturesofruneterra:block/tendril2",
-		"particle": "creaturesofruneterra:block/tendril"
+		"0": "creaturesofruneterra:block/newtendril",
+		"particle": "creaturesofruneterra:block/newtendril"
 	},
 	"elements": [
 		{
@@ -14,9 +13,9 @@
 			"rotation": {"angle": -45, "axis": "y", "origin": [12, 1, 1]},
 			"faces": {
 				"north": {"uv": [0, 0, 0, 8], "texture": "#0"},
-				"east": {"uv": [0, 0, 11.25, 8], "texture": "#0"},
+				"east": {"uv": [0, 7.57895, 16, 16], "texture": "#0"},
 				"south": {"uv": [0, 0, 0, 8], "texture": "#0"},
-				"west": {"uv": [0, 8, 11.25, 16], "texture": "#0"},
+				"west": {"uv": [16, 7.57895, 0, 16], "texture": "#0"},
 				"up": {"uv": [0, 11.25, 0, 0], "texture": "#0"},
 				"down": {"uv": [0, 0, 0, 11.25], "texture": "#0"}
 			}
@@ -26,12 +25,12 @@
 			"to": [1.875, 16, 20],
 			"rotation": {"angle": 45, "axis": "y", "origin": [4, 1, 1]},
 			"faces": {
-				"north": {"uv": [0, 0, 0, 8], "texture": "#1"},
-				"east": {"uv": [0, 0, 11.25, 8], "texture": "#1"},
-				"south": {"uv": [0, 0, 0, 8], "texture": "#1"},
-				"west": {"uv": [0, 8, 11.25, 16], "texture": "#1"},
-				"up": {"uv": [0, 11.25, 0, 0], "texture": "#1"},
-				"down": {"uv": [0, 0, 0, 11.25], "texture": "#1"}
+				"north": {"uv": [0, 0, 0, 8], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 7.57895], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 8], "texture": "#0"},
+				"west": {"uv": [16, 0, 0, 7.57895], "texture": "#0"},
+				"up": {"uv": [0, 11.25, 0, 0], "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 11.25], "texture": "#0"}
 			}
 		}
 	],
@@ -41,6 +40,12 @@
 			"origin": [8, 8, 8],
 			"color": 0,
 			"children": [0, 1]
+		},
+		{
+			"name": "VoxelShapes",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": []
 		}
 	]
 }

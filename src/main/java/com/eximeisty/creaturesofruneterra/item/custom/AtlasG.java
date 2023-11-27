@@ -69,6 +69,13 @@ public class AtlasG extends PickaxeItem implements GeoItem {
                 triggerAnim(entityIn, GeoItem.getOrAssignId(stack, (ServerLevel)worldIn), "atlas_controller", "idle");
             }
         }
+        if (!worldIn.isClientSide && isCharged(stack)) {
+            if(hand){
+                triggerAnim(entityIn, GeoItem.getOrAssignId(stack, (ServerLevel)worldIn), "atlas_controller", "charge2");
+            }else{
+                triggerAnim(entityIn, GeoItem.getOrAssignId(stack, (ServerLevel)worldIn), "atlas_controller", "charge");
+            }
+        }
         if(getState(stack)==3){
             dashTicks++;
             attackBB(entityIn.getBoundingBox().expandTowards(0.5, 0, 0.5).expandTowards(-0.5, 0, -0.5), entityIn);
