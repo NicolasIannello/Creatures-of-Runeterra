@@ -94,6 +94,15 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
                 GeckoLibNetwork.syncAnimation(target, this, id, 4);
             }
         }
+        if (!worldIn.isRemote && isCharged(stack)) {
+            final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
+            final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityIn);
+            if(hand){
+                GeckoLibNetwork.syncAnimation(target, this, id, 1);
+            }else{
+                GeckoLibNetwork.syncAnimation(target, this, id, 3);
+            }
+        }
         if(getState(stack)==3){
             dashTicks++;
             attackBB(entityIn.getBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), entityIn);

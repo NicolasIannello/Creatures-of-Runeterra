@@ -23,7 +23,7 @@ public class MixinArmorStandEntity {
     private void onTick(CallbackInfo info){
         ArmorStandEntity clase = (ArmorStandEntity)((Object)this);
 
-        boolean flag0 = clase.world.getDayTime()>=15000 && clase.world.getDayTime()<=20000 && clase.world.canSeeSky(clase.getPosition());
+        boolean flag0 = clase.world.isNightTime();//clase.world.getTimeOfDay(0)>=0.35288608/*15000*/ && clase.world.getTimeOfDay(0)<=0.59869206/*20000*/ && clase.world.canSeeSky(clase.getPosition());
         boolean flag1 = clase.getArmorInventoryList().toString().equalsIgnoreCase("[1 chainmail_boots, 1 iron_leggings, 1 fiddle_chestplate, 1 fiddle_helmet]");
         boolean flag2 = true;
         boolean flag3 = true;

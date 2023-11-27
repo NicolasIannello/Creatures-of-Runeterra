@@ -218,6 +218,11 @@ public class PoroEntity extends TameableEntity implements IAnimatable{
                         itemstack.shrink(1);
                         return ActionResultType.SUCCESS;
                     }
+                }else if(playerIn.isCrouching()){
+                    this.entityDropItem(this.getHeldItemMainhand());
+                    this.entityDropItem(this.getItemStackFromSlot(EquipmentSlotType.HEAD));
+                    this.setHeldItem(Hand.MAIN_HAND, ItemStack.EMPTY);
+                    this.setItemStackToSlot(EquipmentSlotType.HEAD, ItemStack.EMPTY);
                 }
                 this.setSitting(!dataManager.get(STATE));
             }
