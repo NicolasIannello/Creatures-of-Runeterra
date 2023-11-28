@@ -2,12 +2,14 @@ package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,15 +26,23 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.DismountHelper;
+import net.minecraft.world.item.HorseArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -43,10 +53,11 @@ import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import javax.annotation.Nonnull;
 import java.util.EnumSet;
 import java.util.UUID;
 
-public class SilverwingEntity extends TamableAnimal implements GeoEntity {
+public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddleable, PlayerRideable {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public static final int TICKS_PER_FLAP = Mth.ceil(24.166098F);
     Vec3 moveTargetPoint = Vec3.ZERO;
@@ -55,7 +66,10 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     public static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> STATE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Byte> SADDLED = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
     private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CHICKEN, Items.BEEF, Items.COD, Items.MUTTON, Items.PORKCHOP, Items.RABBIT, Items.SALMON);
+    private final ItemStackHandler itemHandler = createHandler();
+    private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
 
     static enum AttackPhase {
         CIRCLE,
@@ -82,7 +96,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
     public static AttributeSupplier setAttributes(){
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 30)
-                .add(Attributes.MOVEMENT_SPEED, 0.8)
+                .add(Attributes.MOVEMENT_SPEED, 0.4)
                 .add(Attributes.ATTACK_DAMAGE, 7)
                 .add(Attributes.FOLLOW_RANGE, 70)
                 .add(Attributes.ATTACK_KNOCKBACK, 0)
@@ -94,6 +108,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         entityData.define(SIZE, 1F);
         entityData.define(STATE, false);
         entityData.define(CLIMBING, (byte)0);
+        entityData.define(SADDLED, (byte)0);
     }
 
     @Nullable
@@ -138,9 +153,9 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         Item item = itemstack.getItem();
 
         if (this.level().isClientSide) {
-            boolean flag = this.isOwnedBy(playerIn) || this.isTame() || item.isEdible() && !this.isTame();
+            boolean flag = this.isOwnedBy(playerIn) || this.isTame() || FOOD_ITEMS.test(itemstack) && !this.isTame();
             return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
-        }else{
+        }else if(!playerIn.isCrouching()){
             if(!this.isTame() && FOOD_ITEMS.test(itemstack)) {
                 if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
 
@@ -155,13 +170,21 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
                 return InteractionResult.SUCCESS;
             }
             if(this.isTame() && this.isOwnedBy(playerIn)){
-                if(item.isEdible()){
+                if(FOOD_ITEMS.test(itemstack)){
                     entityData.set(SIZE, (entityData.get(SIZE)+0.2F));
+                    return InteractionResult.SUCCESS;
                 }
-                this.setOrderedToSit(!entityData.get(STATE));
+                if (this.canWearArmor() && this.isArmor(itemstack) && !this.isWearingArmor()) {
+                    this.equipArmor(playerIn, itemstack);
+                    return InteractionResult.sidedSuccess(this.level().isClientSide);
+                }
+                this.doPlayerRide(playerIn);
+                return InteractionResult.sidedSuccess(this.level().isClientSide);
+
             }
-            return super.mobInteract(playerIn, hand);
         }
+        this.setOrderedToSit(!entityData.get(STATE));
+        return super.mobInteract(playerIn, hand);
     }
 
     @Override
@@ -174,13 +197,48 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         super.readAdditionalSaveData(compound);
         this.entityData.set(STATE, compound.getBoolean("Sitting"));
         this.entityData.set(SIZE, compound.getFloat("size"));
+        this.entityData.set(SADDLED, compound.getByte("saddled"));
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putFloat("size", this.entityData.get(SIZE));
+        compound.putByte("saddled", this.entityData.get(SADDLED));
     }
-    
+
+    public boolean canWearArmor() {
+        return true;
+    }
+
+    public boolean isArmor(ItemStack p_30731_) {
+        return p_30731_.getItem() instanceof HorseArmorItem;
+    }
+
+    public boolean isWearingArmor() {
+        return !this.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
+    }
+
+    public void equipArmor(Player p_251330_, ItemStack p_248855_) {
+        if (this.isArmor(p_248855_)) {
+            //this.inventory.setItem(1, p_248855_.copyWithCount(1));
+            if (!p_251330_.getAbilities().instabuild) {
+                p_248855_.shrink(1);
+            }
+        }
+
+    }
+
+    protected void dropEquipment() {
+        super.dropEquipment();
+//        if (this.inventory != null) {
+//            for(int i = 0; i < this.inventory.getContainerSize(); ++i) {
+//                ItemStack itemstack = this.inventory.getItem(i);
+//                if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack)) {
+//                    this.spawnAtLocation(itemstack);
+//                }
+//            }
+//        }
+    }
     //FLYING------------------------------------------------------------------------------------------------------------
     protected void checkFallDamage(double p_20809_, boolean p_20810_, BlockState p_20811_, BlockPos p_20812_) {
     }
@@ -451,7 +509,164 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity {
         }
     }
     //END---FLYING------------------------------------------------------------------------------------------------------
-    
+
+    //MOUNT-------------------------------------------------------------------------------------------------------------
+    @Override
+    public boolean isSaddleable() {
+        return this.isAlive() && this.isTame();
+    }
+
+    @Override
+    public void equipSaddle(@Nullable SoundSource p_21748_) {
+        itemHandler.setStackInSlot(0, new ItemStack(Items.SADDLE));
+        byte b0 = (byte)(this.entityData.get(SADDLED) | 1);
+        this.entityData.set(SADDLED, b0);
+    }
+
+    @Override
+    public boolean isSaddled() {
+        return (this.entityData.get(SADDLED) & 1) != 0;
+    }
+
+    protected void doPlayerRide(Player p_30634_) {
+        if (!this.level().isClientSide) {
+            p_30634_.setYRot(this.getYRot());
+            p_30634_.setXRot(this.getXRot());
+            p_30634_.startRiding(this);
+        }
+
+    }
+
+    public boolean isImmobile() {
+        return super.isImmobile() && this.isVehicle() && this.isSaddled();
+    }
+
+    protected void tickRidden(Player p_278233_, Vec3 p_275693_) {
+        super.tickRidden(p_278233_, p_275693_);
+        Vec2 vec2 = this.getRiddenRotation(p_278233_);
+        this.setRot(vec2.y, vec2.x);
+        this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+    }
+
+    protected Vec2 getRiddenRotation(LivingEntity p_275502_) {
+        return new Vec2(p_275502_.getXRot() * 0.5F, p_275502_.getYRot());
+    }
+
+    protected Vec3 getRiddenInput(Player p_278278_, Vec3 p_275506_) {
+        float f = p_278278_.xxa * 0.5F;
+        float f1 = p_278278_.zza;
+        if (f1 <= 0.0F) f1 *= 0.25F;
+        return new Vec3((double)f, 0.0D, (double)f1);
+    }
+
+    protected float getRiddenSpeed(Player p_278336_) {
+        return (float)this.getAttributeValue(Attributes.MOVEMENT_SPEED);
+    }
+
+    protected void positionRider(Entity p_289569_, Entity.MoveFunction p_289558_) {
+        super.positionRider(p_289569_, p_289558_);
+    }
+
+    @javax.annotation.Nullable
+    public LivingEntity getControllingPassenger() {
+        Entity entity = this.getFirstPassenger();
+        if (entity instanceof Mob) {
+            return (Mob)entity;
+        } else {
+            if (this.isSaddled()) {
+                entity = this.getFirstPassenger();
+                if (entity instanceof Player) {
+                    return (Player)entity;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    @javax.annotation.Nullable
+    private Vec3 getDismountLocationInDirection(Vec3 p_30562_, LivingEntity p_30563_) {
+        double d0 = this.getX() + p_30562_.x;
+        double d1 = this.getBoundingBox().minY;
+        double d2 = this.getZ() + p_30562_.z;
+        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+
+        for(Pose pose : p_30563_.getDismountPoses()) {
+            blockpos$mutableblockpos.set(d0, d1, d2);
+            double d3 = this.getBoundingBox().maxY + 0.75D;
+
+            while(true) {
+                double d4 = this.level().getBlockFloorHeight(blockpos$mutableblockpos);
+                if ((double)blockpos$mutableblockpos.getY() + d4 > d3) {
+                    break;
+                }
+
+                if (DismountHelper.isBlockFloorValid(d4)) {
+                    AABB aabb = p_30563_.getLocalBoundsForPose(pose);
+                    Vec3 vec3 = new Vec3(d0, (double)blockpos$mutableblockpos.getY() + d4, d2);
+                    if (DismountHelper.canDismountTo(this.level(), p_30563_, aabb.move(vec3))) {
+                        p_30563_.setPose(pose);
+                        return vec3;
+                    }
+                }
+
+                blockpos$mutableblockpos.move(Direction.UP);
+                if (!((double)blockpos$mutableblockpos.getY() < d3)) {
+                    break;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Vec3 getDismountLocationForPassenger(LivingEntity p_30576_) {
+        Vec3 vec3 = getCollisionHorizontalEscapeVector((double)this.getBbWidth(), (double)p_30576_.getBbWidth(), this.getYRot() + (p_30576_.getMainArm() == HumanoidArm.RIGHT ? 90.0F : -90.0F));
+        Vec3 vec31 = this.getDismountLocationInDirection(vec3, p_30576_);
+        if (vec31 != null) {
+            return vec31;
+        } else {
+            Vec3 vec32 = getCollisionHorizontalEscapeVector((double)this.getBbWidth(), (double)p_30576_.getBbWidth(), this.getYRot() + (p_30576_.getMainArm() == HumanoidArm.LEFT ? 90.0F : -90.0F));
+            Vec3 vec33 = this.getDismountLocationInDirection(vec32, p_30576_);
+            return vec33 != null ? vec33 : this.position();
+        }
+    }
+    //END---MOUNT-------------------------------------------------------------------------------------------------------
+    private ItemStackHandler createHandler(){
+        return new ItemStackHandler(2){
+//            @Override
+//            protected void onContentsChanged(int slot){
+//                if(slot==15) changeItem(InteractionHand.MAIN_HAND, slot);
+//                if(slot==20) changeItem(InteractionHand.OFF_HAND, slot);
+//            }
+
+            @Override @Deprecated
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                switch (slot) {
+                    case 0: return stack.getItem()==Items.SADDLE;
+                    case 1: return isArmor(stack);
+                    default: return super.isItemValid(slot, stack);
+                }
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                switch (slot) {
+                    case 0: return 1;
+                    case 1: return 1;
+                    default: return super.getSlotLimit(slot);
+                }
+            }
+        };
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @javax.annotation.Nullable Direction side){
+        if(cap == ForgeCapabilities.ITEM_HANDLER) return handler.cast();
+        return super.getCapability(cap, side);
+    }
+
     public <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState)  {
         if (tAnimationState.isMoving()) {
             //tAnimationState.getController().setAnimation(WALK_ANIM);
