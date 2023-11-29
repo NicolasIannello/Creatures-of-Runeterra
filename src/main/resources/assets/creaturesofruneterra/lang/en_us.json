@@ -53,5 +53,10 @@
     "item.creaturesofruneterra.rhaast_chestplate":"Rhaast's chestplate",
     "item.creaturesofruneterra.rhaast_leggings":"Rhaast's leggings",
     "item.creaturesofruneterra.rhaast_boots":"Rhaast's boots",
-    "block.creaturesofruneterra.darkin_pedestal":"Darkin pedestal"
+    "block.creaturesofruneterra.darkin_pedestal":"Darkin pedestal",
+    "key.category.creaturesofruneterra.cor": "Creatures of Runeterra",
+    "key.creaturesofruneterra.fly_up": "Fly up",
+    "key.creaturesofruneterra.fly_down": "Fly down",
+    "item.creaturesofruneterra.silverwing_spawn_egg":"Silverwing Spawn Egg",
+    "entity.creaturesofruneterra.silverwing":"Silverwing"
 }
