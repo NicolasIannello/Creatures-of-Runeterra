@@ -8,8 +8,10 @@ import com.eximeisty.creaturesofruneterra.entity.model.EmptyModel;
 import com.eximeisty.creaturesofruneterra.entity.model.XerSaiHatchlingModel;
 
 
+import com.eximeisty.creaturesofruneterra.util.KeyBinding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -17,6 +19,8 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = CreaturesofRuneterra.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ModClientEvents {
 
+//    @Mod.EventBusSubscriber(modid = CreaturesofRuneterra.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+//    public class ClientEvents {
 //    @SubscribeEvent
 //    public static void registerArmorRenderers(final FMLClientSetupEvent event){
 //        GeoArmorRenderer.registerArmorRenderer(SaiArmorItem.class, () -> new SaiArmorRenderer());
@@ -35,4 +39,21 @@ public class ModClientEvents {
         event.registerLayerDefinition(XerSaiHatchlingModel.LAYER_LOCATION, XerSaiHatchlingModel::createBodyLayer);
         event.registerLayerDefinition(EmptyModel.LAYER_LOCATION, EmptyModel::createBodyLayer);
     }
+
+    @SubscribeEvent
+    public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+        event.register(KeyBinding.FLY_UP);
+        event.register(KeyBinding.FLY_DOWN);
+    }
 }
+
+//    @Mod.EventBusSubscriber(modid = CreaturesofRuneterra.MOD_ID, value = Dist.CLIENT)
+//    public static class ForgeEvents {
+//        @SubscribeEvent
+//        public static void onKeyInput(InputEvent.Key event) {
+//            if(KeyBinding.FLY_DOWN.consumeClick()) {
+//                Minecraft.getInstance().player.sendSystemMessage(Component.literal("Pressed a Key!"));
+//            }
+//        }
+//    }
+//}
