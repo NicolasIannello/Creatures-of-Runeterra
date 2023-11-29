@@ -1,6 +1,7 @@
 package com.eximeisty.creaturesofruneterra.entity.custom;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
+import com.eximeisty.creaturesofruneterra.util.KeyBinding;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -96,7 +97,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     public static AttributeSupplier setAttributes(){
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 30)
-                .add(Attributes.MOVEMENT_SPEED, 0.4)
+                .add(Attributes.MOVEMENT_SPEED, 1)
                 .add(Attributes.ATTACK_DAMAGE, 7)
                 .add(Attributes.FOLLOW_RANGE, 70)
                 .add(Attributes.ATTACK_KNOCKBACK, 0)
@@ -546,6 +547,15 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         Vec2 vec2 = this.getRiddenRotation(p_278233_);
         this.setRot(vec2.y, vec2.x);
         this.yRotO = this.yBodyRot = this.yHeadRot = this.getYRot();
+        if(level().isClientSide){
+            if(KeyBinding.FLY_UP.isDown()){
+                addDeltaMovement(new Vec3(0, -getDeltaMovement().y+0.2, 0));
+            }else if(KeyBinding.FLY_DOWN.isDown()){
+                addDeltaMovement(new Vec3(0, -getDeltaMovement().y-0.2, 0));
+            }else if(getDeltaMovement().y<0){
+                addDeltaMovement(new Vec3(0, -getDeltaMovement().y-0.001, 0));
+            }
+        }
     }
 
     protected Vec2 getRiddenRotation(LivingEntity p_275502_) {
@@ -553,10 +563,17 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     }
 
     protected Vec3 getRiddenInput(Player p_278278_, Vec3 p_275506_) {
-        float f = p_278278_.xxa * 0.5F;
-        float f1 = p_278278_.zza;
-        if (f1 <= 0.0F) f1 *= 0.25F;
-        return new Vec3((double)f, 0.0D, (double)f1);
+        if(onGround() || isInWater()){
+            float f = p_278278_.xxa * 0.5F;
+            float f1 = p_278278_.zza;
+            if (f1 <= 0.0F) f1 *= 0.25F;
+            return new Vec3((double)f, 0.0D, (double)f1).scale(0.1);
+        }else{
+            float f = p_278278_.xxa * 8.5F;
+            float f1 = p_278278_.zza * 8;
+            if (f1 <= 0.0F) f1 *= 0.25F;
+            return new Vec3(f, 0.0D, f1);
+        }
     }
 
     protected float getRiddenSpeed(Player p_278336_) {
