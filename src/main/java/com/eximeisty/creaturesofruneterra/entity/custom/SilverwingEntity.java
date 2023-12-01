@@ -72,7 +72,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
     private static final RawAnimation IDLE_GROUND = RawAnimation.begin().then("animation.silverwing.idle_ground", Animation.LoopType.LOOP);
-    private static final RawAnimation FLY = RawAnimation.begin().then("animation.silverwing.fly_place", Animation.LoopType.PLAY_ONCE).then("animation.silverwing.fly", Animation.LoopType.LOOP);
+    private static final RawAnimation FLY = RawAnimation.begin().then("animation.silverwing.fly", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_FLY = RawAnimation.begin().then("animation.silverwing.fly_place", Animation.LoopType.LOOP);
 
     static enum AttackPhase {
