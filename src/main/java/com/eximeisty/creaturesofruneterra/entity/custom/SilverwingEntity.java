@@ -71,6 +71,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CHICKEN, Items.BEEF, Items.COD, Items.MUTTON, Items.PORKCHOP, Items.RABBIT, Items.SALMON);
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
+    private static final RawAnimation WALK = RawAnimation.begin().then("animation.silverwing.walk", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_GROUND = RawAnimation.begin().then("animation.silverwing.idle_ground", Animation.LoopType.LOOP);
     private static final RawAnimation FLY = RawAnimation.begin().then("animation.silverwing.fly", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_FLY = RawAnimation.begin().then("animation.silverwing.fly_place", Animation.LoopType.LOOP);
@@ -587,7 +588,11 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     }
 
     protected void positionRider(Entity p_289569_, Entity.MoveFunction p_289558_) {
-        super.positionRider(p_289569_, p_289558_);
+        if (this.hasPassenger(p_289569_)) {
+            double d0 = this.getY() + this.getPassengersRidingOffset() + p_289569_.getMyRidingOffset();
+            if(!onGround() && (getDeltaMovement().x!=0 || getDeltaMovement().z!=0)) d0-=0.5;
+            p_289558_.accept(p_289569_, this.getX(), d0, this.getZ());
+        }
     }
 
     @javax.annotation.Nullable
@@ -675,8 +680,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
             @Override
             public int getSlotLimit(int slot) {
                 switch (slot) {
-                    case 0: return 1;
-                    case 1: return 1;
+                    case 0, 1: return 1;
                     default: return super.getSlotLimit(slot);
                 }
             }
@@ -692,7 +696,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
 
     public <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState)  {
         if (tAnimationState.isMoving()) {
-            RawAnimation anim= entityData.get(FLYING) ? FLY : IDLE_GROUND;
+            RawAnimation anim= entityData.get(FLYING) ? FLY : WALK;
             tAnimationState.getController().setAnimation(anim);
             return PlayState.CONTINUE;
         }
