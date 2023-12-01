@@ -48,8 +48,7 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
@@ -67,10 +66,14 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     public static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> STATE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> SADDLED = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
     private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CHICKEN, Items.BEEF, Items.COD, Items.MUTTON, Items.PORKCHOP, Items.RABBIT, Items.SALMON);
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
+    private static final RawAnimation IDLE_GROUND = RawAnimation.begin().then("animation.silverwing.idle_ground", Animation.LoopType.LOOP);
+    private static final RawAnimation FLY = RawAnimation.begin().then("animation.silverwing.fly_place", Animation.LoopType.PLAY_ONCE).then("animation.silverwing.fly", Animation.LoopType.LOOP);
+    private static final RawAnimation IDLE_FLY = RawAnimation.begin().then("animation.silverwing.fly_place", Animation.LoopType.LOOP);
 
     static enum AttackPhase {
         CIRCLE,
@@ -110,6 +113,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         entityData.define(STATE, false);
         entityData.define(CLIMBING, (byte)0);
         entityData.define(SADDLED, (byte)0);
+        entityData.define(FLYING, false);
     }
 
     @Nullable
@@ -147,6 +151,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         if (!this.level().isClientSide) {
             this.setBesideClimbableBlock(this.horizontalCollision);
         }
+        if(!onGround() && !entityData.get(FLYING)) entityData.set(FLYING, true);
+        if(onGround() && entityData.get(FLYING)) entityData.set(FLYING, false);
     }
 
     public InteractionResult mobInteract(Player playerIn, InteractionHand hand) {
@@ -172,7 +178,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
             }
             if(this.isTame() && this.isOwnedBy(playerIn)){
                 if(FOOD_ITEMS.test(itemstack)){
-                    entityData.set(SIZE, (entityData.get(SIZE)+0.2F));
+                    entityData.set(SIZE, (entityData.get(SIZE)+0.05F));
                     return InteractionResult.SUCCESS;
                 }
                 if (this.canWearArmor() && this.isArmor(itemstack) && !this.isWearingArmor()) {
@@ -686,22 +692,24 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
 
     public <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState)  {
         if (tAnimationState.isMoving()) {
-            //tAnimationState.getController().setAnimation(WALK_ANIM);
+            RawAnimation anim= entityData.get(FLYING) ? FLY : IDLE_GROUND;
+            tAnimationState.getController().setAnimation(anim);
             return PlayState.CONTINUE;
         }
-        //tAnimationState.getController().setAnimation(IDLE_ANIM);
+        RawAnimation anim= entityData.get(FLYING) ? IDLE_FLY : IDLE_GROUND;
+        tAnimationState.getController().setAnimation(anim);
         return PlayState.CONTINUE;
     }
 
-    public <T extends GeoAnimatable> PlayState predicate2(AnimationState<T> tAnimationState)  {
-        tAnimationState.getController().forceAnimationReset();
-        return PlayState.STOP;
-    }
+//    public <T extends GeoAnimatable> PlayState predicate2(AnimationState<T> tAnimationState)  {
+//        tAnimationState.getController().forceAnimationReset();
+//        return PlayState.STOP;
+//    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers){
         controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
-        controllers.add(new AnimationController<>(this, "attacks", 0, this::predicate2));
+        //controllers.add(new AnimationController<>(this, "attacks", 0, this::predicate2));
     }
 
     @Override
