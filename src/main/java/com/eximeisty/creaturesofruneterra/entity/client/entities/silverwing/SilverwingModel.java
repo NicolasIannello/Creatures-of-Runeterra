@@ -14,28 +14,17 @@ public class SilverwingModel extends GeoModel<SilverwingEntity> {
 
     @Override
     public ResourceLocation getModelResource(SilverwingEntity animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/xersai_dunebreaker.geo.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "geo/entities/silverwing.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(SilverwingEntity animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/xersai_dunebreaker.png");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(SilverwingEntity animatable) {
-        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/xersai_dunebreaker.animation.json");
+        return new ResourceLocation(CreaturesofRuneterra.MOD_ID, "animations/entities/silverwing.animation.json");
     }
 
-//    @Override
-//    public void setCustomAnimations(SilverwingEntity animatable, long instanceId, AnimationState<SilverwingEntity> animationState) {
-//        super.setCustomAnimations(animatable, instanceId, animationState);
-//        CoreGeoBone head = getAnimationProcessor().getBone("Head");
-//
-//        if (head != null && animatable.getEntityData().get(SilverwingEntity.STATE)==0) {
-//            EntityModelData entityData = animationState.getData(DataTickets.ENTITY_MODEL_DATA);
-//            head.setRotX(entityData.headPitch() * Mth.DEG_TO_RAD);
-//            head.setRotY(entityData.netHeadYaw() * Mth.DEG_TO_RAD);
-//        }
-//    }
 }
