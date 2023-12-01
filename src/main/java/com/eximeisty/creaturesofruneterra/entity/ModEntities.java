@@ -69,7 +69,7 @@ public class ModEntities {
     //CREATURES
     public static final RegistryObject<EntityType<SilverwingEntity>> SILVERWING=
             ENTITY_TYPES.register("silverwing",
-                    ()-> EntityType.Builder.of(SilverwingEntity::new, MobCategory.CREATURE).sized(3f,2.5f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "silverwing").toString())
+                    ()-> EntityType.Builder.of(SilverwingEntity::new, MobCategory.CREATURE).sized(2f,2f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "silverwing").toString())
             );
 
     //PART ENTITIES
