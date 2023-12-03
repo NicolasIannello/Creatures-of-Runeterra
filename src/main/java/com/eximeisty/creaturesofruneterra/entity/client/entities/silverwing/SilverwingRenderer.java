@@ -14,6 +14,7 @@ public class SilverwingRenderer extends GeoEntityRenderer<SilverwingEntity> {
 
     public SilverwingRenderer(EntityRendererProvider.Context renderManager) {
         super(renderManager, new SilverwingModel());
+        addRenderLayer(new SilverwingSaddleLayer(this));
     }
 
     @Override
@@ -24,7 +25,8 @@ public class SilverwingRenderer extends GeoEntityRenderer<SilverwingEntity> {
     @Override
     public void preRender(PoseStack poseStack, SilverwingEntity animatable, BakedGeoModel model, MultiBufferSource bufferSource, VertexConsumer buffer, boolean isReRender, float partialTick, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         float size = animatable.getEntityData().get(SilverwingEntity.SIZE);
-        poseStack.scale(size*0.25F, size*0.25F, size*0.25F);
+        scaleModelForRender(size*0.25F, size*0.25F, poseStack, animatable, model, isReRender, partialTick, packedLight, packedOverlay);
+        //poseStack.scale(size*0.25F, size*0.25F, size*0.25F);
         super.preRender(poseStack, animatable, model, bufferSource, buffer, isReRender, partialTick, packedLight, packedOverlay, red, green, blue, alpha);
     }
 }
