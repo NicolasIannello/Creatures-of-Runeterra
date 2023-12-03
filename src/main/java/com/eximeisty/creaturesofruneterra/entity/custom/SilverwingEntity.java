@@ -62,6 +62,10 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     public static final int TICKS_PER_FLAP = Mth.ceil(24.166098F);
     Vec3 moveTargetPoint = Vec3.ZERO;
     BlockPos anchorPoint = BlockPos.ZERO;
+    Integer groundTicks = 0;
+    Integer flyTicks = 0;
+    Integer targetTicks = 0;
+    Boolean land = false;
     SilverwingEntity.AttackPhase attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
     public static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> STATE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
@@ -449,7 +453,30 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
                 double d7 = (double)(this.speed * Mth.sin(f5 * ((float)Math.PI / 180F))) * Math.abs(d2 / d5);
                 double d8 = (double)(this.speed * Mth.sin(f4 * ((float)Math.PI / 180F))) * Math.abs(d1 / d5);
                 Vec3 vec3 = SilverwingEntity.this.getDeltaMovement();
-                double y = (!isTame() || getTarget()!=null) ? d8 : 0;
+                double y = (!SilverwingEntity.this.land) ? d8 : 0;
+                if(SilverwingEntity.this.onGround()) {
+                    SilverwingEntity.this.groundTicks++;
+                    if ((SilverwingEntity.this.groundTicks > 1000 && !SilverwingEntity.this.isTame()) /*|| (SilverwingEntity.this.groundTicks > 500 && SilverwingEntity.this.isTame())*/ ) {
+                        SilverwingEntity.this.land = false;
+                        SilverwingEntity.this.groundTicks = 0;
+                        SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.anchorPoint).above( isTame() ? 5 : 20 + SilverwingEntity.this.random.nextInt(20));
+                    }
+                }
+                if(SilverwingEntity.this.getTarget()==null && !SilverwingEntity.this.isTame()) {
+                    SilverwingEntity.this.targetTicks++;
+                    if (SilverwingEntity.this.targetTicks > 3000) {
+                        SilverwingEntity.this.targetTicks = 0;
+                        SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.anchorPoint).above(20 + SilverwingEntity.this.random.nextInt(20)).east(SilverwingEntity.this.random.nextInt(40)).south(SilverwingEntity.this.random.nextInt(40));
+                    }
+                }
+                if(!SilverwingEntity.this.onGround() && SilverwingEntity.this.getTarget()==null){
+                    SilverwingEntity.this.flyTicks++;
+                    if ((SilverwingEntity.this.flyTicks > 10000 && !SilverwingEntity.this.isTame()) /*|| (SilverwingEntity.this.groundTicks > 700 && SilverwingEntity.this.isTame())*/ ) {
+                        SilverwingEntity.this.flyTicks = 0;
+                        SilverwingEntity.this.land=true;
+                        SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.blockPosition());
+                    }
+                }
                 SilverwingEntity.this.setDeltaMovement(vec3.add((new Vec3(d6, y, d7)).subtract(vec3).scale(0.2D)));
             }
         }
