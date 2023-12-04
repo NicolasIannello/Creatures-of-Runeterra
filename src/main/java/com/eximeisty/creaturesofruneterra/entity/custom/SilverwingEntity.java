@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
@@ -19,6 +20,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
@@ -34,6 +36,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.AABB;
@@ -72,6 +75,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Byte> SADDLED = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
     private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CHICKEN, Items.BEEF, Items.COD, Items.MUTTON, Items.PORKCHOP, Items.RABBIT, Items.SALMON);
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
@@ -92,6 +97,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     }
 
     protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(1, new SilverwingEntity.PhantomAttackStrategyGoal());
@@ -119,6 +125,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         entityData.define(CLIMBING, (byte)0);
         entityData.define(SADDLED, (byte)0);
         entityData.define(FLYING, false);
+        entityData.define(VARIANT, 0);
+        entityData.define(COLOR, 0);
     }
 
     @Nullable
@@ -216,12 +224,16 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         this.entityData.set(STATE, compound.getBoolean("Sitting"));
         this.entityData.set(SIZE, compound.getFloat("size"));
         this.entityData.set(SADDLED, compound.getByte("saddled"));
+        this.entityData.set(VARIANT, compound.getInt("variant"));
+        this.entityData.set(COLOR, compound.getInt("color"));
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putFloat("size", this.entityData.get(SIZE));
         compound.putByte("saddled", this.entityData.get(SADDLED));
+        compound.putInt("variant", this.entityData.get(VARIANT));
+        compound.putInt("color", this.entityData.get(COLOR));
     }
 
     public boolean canWearArmor() {
@@ -460,7 +472,6 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
                 double d8 = (double)(this.speed * Mth.sin(f4 * ((float)Math.PI / 180F))) * Math.abs(d1 / d5);
                 Vec3 vec3 = SilverwingEntity.this.getDeltaMovement();
                 double y = (!SilverwingEntity.this.land) ? d8 : 0;
-                System.out.println(SilverwingEntity.this.groundTicks+" "+SilverwingEntity.this.land);
                 if(SilverwingEntity.this.onGround()) {
                     SilverwingEntity.this.groundTicks++;
                     if ((SilverwingEntity.this.groundTicks > 1000 && !SilverwingEntity.this.isTame()) || (SilverwingEntity.this.groundTicks > 2500 && SilverwingEntity.this.isTame()) ) {
@@ -761,4 +772,32 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
     }
+
+    //VARIANTS----------------------------------------------------------------------------------------------------------
+    public int getVariant(){
+        return entityData.get(VARIANT);
+    }
+
+    public void setVariant(int variant){
+        entityData.set(VARIANT, variant);
+    }
+
+    public int getVariantColor(){
+        return entityData.get(COLOR);
+    }
+
+    public void setVariantColor(int color){
+        entityData.set(COLOR, color);
+    }
+
+    @javax.annotation.Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_30703_, DifficultyInstance p_30704_, MobSpawnType p_30705_, @javax.annotation.Nullable SpawnGroupData p_30706_, @javax.annotation.Nullable CompoundTag p_30707_) {
+        int variant = p_30703_.getRandom().nextInt(0, 2);
+        int color = p_30703_.getRandom().nextInt(0, 2);
+        System.out.println(variant+" "+color);
+        setVariant(variant);
+        setVariantColor(color);
+        return super.finalizeSpawn(p_30703_, p_30704_, p_30705_, p_30706_, p_30707_);
+    }
+    //END--VARIANTS-----------------------------------------------------------------------------------------------------
 }
