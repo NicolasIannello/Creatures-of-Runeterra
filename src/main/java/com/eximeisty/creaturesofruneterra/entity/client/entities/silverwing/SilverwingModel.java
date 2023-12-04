@@ -6,9 +6,22 @@ import net.minecraft.resources.ResourceLocation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class SilverwingModel extends GeoModel<SilverwingEntity> {
-    private static final ResourceLocation[] VARIANT = {
-            new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_white.png"),
-            new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_black.png")
+    private static final ResourceLocation[][] VARIANT = {
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_white.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_sandy.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_brown.png")
+            },
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_green.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_blue.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_brown.png")
+            },
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_white.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_black.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_blue.png")
+            }
     };
 
     @Override
@@ -18,7 +31,7 @@ public class SilverwingModel extends GeoModel<SilverwingEntity> {
 
     @Override
     public ResourceLocation getTextureResource(SilverwingEntity animatable) {
-        return VARIANT[animatable.getVariant()];
+        return VARIANT[animatable.getBiome()][animatable.getVariant()];
     }
 
     @Override

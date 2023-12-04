@@ -77,6 +77,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     private static final EntityDataAccessor<Byte> SADDLED = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BIOME = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
     private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CHICKEN, Items.BEEF, Items.COD, Items.MUTTON, Items.PORKCHOP, Items.RABBIT, Items.SALMON);
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
@@ -127,6 +128,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         entityData.define(FLYING, false);
         entityData.define(VARIANT, 0);
         entityData.define(COLOR, 0);
+        entityData.define(BIOME, 0);
     }
 
     @Nullable
@@ -226,6 +228,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         this.entityData.set(SADDLED, compound.getByte("saddled"));
         this.entityData.set(VARIANT, compound.getInt("variant"));
         this.entityData.set(COLOR, compound.getInt("color"));
+        this.entityData.set(BIOME, compound.getInt("biome"));
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -234,6 +237,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         compound.putByte("saddled", this.entityData.get(SADDLED));
         compound.putInt("variant", this.entityData.get(VARIANT));
         compound.putInt("color", this.entityData.get(COLOR));
+        compound.putInt("biome", this.entityData.get(BIOME));
     }
 
     public boolean canWearArmor() {
@@ -786,17 +790,34 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         return entityData.get(COLOR);
     }
 
-    public void setVariantColor(int color){
-        entityData.set(COLOR, color);
+    public void setVariantColor(int feathers){
+        entityData.set(COLOR, feathers);
+    }
+
+    public int getBiome(){
+        return entityData.get(BIOME);
+    }
+
+    public void setBiome(int biome){
+        entityData.set(BIOME, biome);
     }
 
     @javax.annotation.Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_30703_, DifficultyInstance p_30704_, MobSpawnType p_30705_, @javax.annotation.Nullable SpawnGroupData p_30706_, @javax.annotation.Nullable CompoundTag p_30707_) {
-        int variant = p_30703_.getRandom().nextInt(0, 2);
-        int color = p_30703_.getRandom().nextInt(0, 2);
-        System.out.println(variant+" "+color);
+        int variant = p_30703_.getRandom().nextInt(0, 3);
+        int feathers = p_30703_.getRandom().nextInt(0, 3);
+        float temp = p_30703_.getBiome(blockPosition()).get().getBaseTemperature();
+        if (temp>1.5) {
+            setBiome(0);
+        } else if (temp>0.5) {
+            setBiome(1);
+        } else if (temp<=0.5) {
+            setBiome(2);
+        } else{
+            setBiome(0); variant = 0; feathers = 0;
+        }
         setVariant(variant);
-        setVariantColor(color);
+        setVariantColor(feathers);
         return super.finalizeSpawn(p_30703_, p_30704_, p_30705_, p_30706_, p_30707_);
     }
     //END--VARIANTS-----------------------------------------------------------------------------------------------------

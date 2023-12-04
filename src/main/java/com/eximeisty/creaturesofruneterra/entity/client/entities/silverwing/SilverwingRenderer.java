@@ -11,9 +11,22 @@ import software.bernie.geckolib.cache.object.BakedGeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class SilverwingRenderer extends GeoEntityRenderer<SilverwingEntity> {
-    private static final ResourceLocation[] VARIANT = {
-        new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_white.png"),
-        new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_black.png")
+    private static final ResourceLocation[][] VARIANT = {
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_white.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_sandy.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_brown.png")
+            },
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_green.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_blue.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_brown.png")
+            },
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_white.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_black.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_blue.png")
+            }
     };
 
     public SilverwingRenderer(EntityRendererProvider.Context renderManager) {
@@ -24,7 +37,7 @@ public class SilverwingRenderer extends GeoEntityRenderer<SilverwingEntity> {
 
     @Override
     public ResourceLocation getTextureLocation(SilverwingEntity animatable) {
-        return VARIANT[animatable.getVariant()];
+        return VARIANT[animatable.getBiome()][animatable.getVariant()];
     }
 
     @Override

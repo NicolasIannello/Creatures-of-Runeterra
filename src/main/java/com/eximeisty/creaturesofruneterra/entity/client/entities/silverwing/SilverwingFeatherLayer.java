@@ -13,9 +13,22 @@ import software.bernie.geckolib.renderer.GeoRenderer;
 import software.bernie.geckolib.renderer.layer.GeoRenderLayer;
 
 public class SilverwingFeatherLayer extends GeoRenderLayer<SilverwingEntity> {
-    private static final ResourceLocation[] COLOR = {
-            new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_white.png"),
-            new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_blue.png")
+    private static final ResourceLocation[][] COLOR = {
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_white.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_sandy.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_brown.png")
+            },
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_green.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_blue.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_brown.png")
+            },
+            {
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_white.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_black.png"),
+                new ResourceLocation(CreaturesofRuneterra.MOD_ID, "textures/entity/silverwing_layer_blue.png")
+            }
     };
 
     public SilverwingFeatherLayer(GeoRenderer<SilverwingEntity> entityRenderer) {
@@ -24,7 +37,7 @@ public class SilverwingFeatherLayer extends GeoRenderLayer<SilverwingEntity> {
 
     @Override
     public void render(PoseStack poseStack, SilverwingEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        RenderType armorRenderType = RenderType.armorCutoutNoCull(COLOR[animatable.getVariantColor()]);
+        RenderType armorRenderType = RenderType.armorCutoutNoCull(COLOR[animatable.getBiome()][animatable.getVariantColor()]);
 
         getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, armorRenderType,
                 bufferSource.getBuffer(armorRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY,
