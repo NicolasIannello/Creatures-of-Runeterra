@@ -21,10 +21,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.LookControl;
 import net.minecraft.world.entity.ai.control.MoveControl;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.Goal;
-import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
-import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
+import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
@@ -86,6 +83,10 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     private static final RawAnimation IDLE_GROUND = RawAnimation.begin().then("animation.silverwing.idle_ground", Animation.LoopType.LOOP);
     private static final RawAnimation FLY = RawAnimation.begin().then("animation.silverwing.fly", Animation.LoopType.LOOP);
     private static final RawAnimation IDLE_FLY = RawAnimation.begin().then("animation.silverwing.fly_place", Animation.LoopType.LOOP);
+    private static final RawAnimation SIT = RawAnimation.begin().then("animation.silverwing.sit", Animation.LoopType.LOOP);
+    private static final RawAnimation BABY_WALK = RawAnimation.begin().then("animation.silverwing.baby_walk", Animation.LoopType.LOOP);
+    private static final RawAnimation BABY_IDLE = RawAnimation.begin().then("animation.silverwing.baby_idle", Animation.LoopType.LOOP);
+    private static final RawAnimation BABY_SIT = RawAnimation.begin().then("animation.silverwing.baby_sit", Animation.LoopType.LOOP);
 
     static enum AttackPhase {
         CIRCLE,
@@ -106,6 +107,12 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         this.goalSelector.addGoal(1, new SilverwingEntity.PhantomAttackStrategyGoal());
         this.goalSelector.addGoal(2, new SilverwingEntity.PhantomSweepAttackGoal());
         this.goalSelector.addGoal(3, new SilverwingEntity.PhantomCircleAroundAnchorGoal());
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D){
+            public boolean canUse() {
+                return isBaby() && super.canUse();
+            }
+        });
+        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
         this.targetSelector.addGoal(1, new SilverwingEntity.PhantomTargetGoal());
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
@@ -142,6 +149,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
             if (uuid != null) {
                 silverwing.setOwnerUUID(uuid);
                 silverwing.setTame(true);
+                silverwing.setBaby(true);
+                silverwing.getEntityData().set(SIZE, 0.25F);
             }
         }
 
@@ -187,6 +196,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
                     this.tame(playerIn);
                     this.navigation.stop();
                     this.setOrderedToSit(true);
+                    this.setTarget(null);
                     this.level().broadcastEntityEvent(this, (byte)7);
                 } else {
                     this.level().broadcastEntityEvent(this, (byte)6);
@@ -197,19 +207,28 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
                 if(FOOD_ITEMS.test(itemstack)){
                     setSize();
                     heal(6);
+                    if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
                     return InteractionResult.SUCCESS;
                 }
                 if (this.canWearArmor() && this.isArmor(itemstack) && !this.isWearingArmor()) {
                     this.equipArmor(playerIn, itemstack);
                     return InteractionResult.sidedSuccess(this.level().isClientSide);
                 }
-                this.doPlayerRide(playerIn);
+                if(isFood(itemstack)) return super.mobInteract(playerIn, hand);
+                if(!isBaby()) {
+                    this.setOrderedToSit(false);
+                    this.doPlayerRide(playerIn);
+                }
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
-
             }
         }
         this.setOrderedToSit(!entityData.get(STATE));
         return super.mobInteract(playerIn, hand);
+    }
+
+    public boolean isFood(ItemStack p_30440_) {
+        Item item = p_30440_.getItem();
+        return (item == Items.COOKED_COD || item == Items.COOKED_SALMON) && !isBaby();
     }
 
     //HANDLING--SIZE----------------------------------------------------------------------------------------------------
@@ -618,7 +637,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     //MOUNT-------------------------------------------------------------------------------------------------------------
     @Override
     public boolean isSaddleable() {
-        return this.isAlive() && this.isTame();
+        return this.isAlive() && this.isTame() && !isBaby();
     }
 
     @Override
@@ -639,7 +658,6 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
             p_30634_.setXRot(this.getXRot());
             p_30634_.startRiding(this);
         }
-
     }
 
     public boolean isImmobile() {
@@ -793,12 +811,17 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     }
 
     public <T extends GeoAnimatable> PlayState predicate(AnimationState<T> tAnimationState)  {
-        if (tAnimationState.isMoving()) {
-            RawAnimation anim= entityData.get(FLYING) ? FLY : WALK;
+        if(entityData.get(STATE)){
+            RawAnimation anim= isBaby() ? BABY_SIT : SIT;
             tAnimationState.getController().setAnimation(anim);
             return PlayState.CONTINUE;
         }
-        RawAnimation anim= entityData.get(FLYING) ? IDLE_FLY : IDLE_GROUND;
+        if (tAnimationState.isMoving()) {
+            RawAnimation anim= isBaby() ? BABY_WALK : entityData.get(FLYING) ? FLY : WALK;
+            tAnimationState.getController().setAnimation(anim);
+            return PlayState.CONTINUE;
+        }
+        RawAnimation anim= isBaby() ? BABY_IDLE : entityData.get(FLYING) ? IDLE_FLY : IDLE_GROUND;
         tAnimationState.getController().setAnimation(anim);
         return PlayState.CONTINUE;
     }
