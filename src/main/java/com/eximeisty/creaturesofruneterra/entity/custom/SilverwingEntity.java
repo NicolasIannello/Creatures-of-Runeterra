@@ -15,6 +15,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -93,6 +94,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
 
     public SilverwingEntity(EntityType<? extends TamableAnimal> p_21803_, Level p_21804_) {
         super(p_21803_, p_21804_);
+        this.fixupDimensions();
         this.moveControl = new SilverwingEntity.PhantomMoveControl(this);
         this.lookControl = new SilverwingEntity.PhantomLookControl(this);
     }
@@ -193,7 +195,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
             }
             if(this.isTame() && this.isOwnedBy(playerIn)){
                 if(FOOD_ITEMS.test(itemstack)){
-                    entityData.set(SIZE, (entityData.get(SIZE)+0.05F));
+                    setSize();
+                    heal(6);
                     return InteractionResult.SUCCESS;
                 }
                 if (this.canWearArmor() && this.isArmor(itemstack) && !this.isWearingArmor()) {
@@ -207,6 +210,45 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         }
         this.setOrderedToSit(!entityData.get(STATE));
         return super.mobInteract(playerIn, hand);
+    }
+
+    //HANDLING--SIZE----------------------------------------------------------------------------------------------------
+    public void setSize() {
+        entityData.set(SIZE, (entityData.get(SIZE)+0.05F));
+        this.reapplyPosition();
+        this.refreshDimensions();
+        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(getMaxHealth()+2);
+        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeValue(Attributes.ATTACK_DAMAGE)+2);
+    }
+
+    public void refreshDimensions() {
+        double d0 = this.getX();
+        double d1 = this.getY();
+        double d2 = this.getZ();
+        super.refreshDimensions();
+        this.setPos(d0, d1, d2);
+    }
+
+    public void onSyncedDataUpdated(EntityDataAccessor<?> p_33609_) {
+        if (SIZE.equals(p_33609_)) {
+            this.refreshDimensions();
+            this.setYRot(this.yHeadRot);
+            this.yBodyRot = this.yHeadRot;
+        }
+        super.onSyncedDataUpdated(p_33609_);
+    }
+
+    public EntityDimensions getDimensions(Pose p_21047_) {
+        return super.getDimensions(p_21047_).scale(entityData.get(SIZE)-0.02F);
+    }
+    //HANDLING--SIZE--END-----------------------------------------------------------------------------------------------
+
+    public boolean hurt(DamageSource p_27567_, float p_27568_) {
+        if (getControllingPassenger()!=null && p_27567_.getEntity()!=null && getControllingPassenger().is(p_27567_.getEntity())) {
+            return false;
+        } else {
+            return super.hurt(p_27567_, p_27568_);
+        }
     }
 
     @Override
