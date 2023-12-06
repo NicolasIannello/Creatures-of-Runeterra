@@ -39,5 +39,7 @@ public class ModEvents {
     public static void entitySpawnRestriction(SpawnPlacementRegisterEvent event) {
         event.register(ModEntities.PORO.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(ModEntities.SILVERWING.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 }
