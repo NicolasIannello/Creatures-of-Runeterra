@@ -295,7 +295,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
 
     //HANDLING--SIZE----------------------------------------------------------------------------------------------------
     public void setSize() {
-        entityData.set(SIZE, (entityData.get(SIZE)+0.05F));
+        entityData.set(SIZE, (entityData.get(SIZE)+0.025F));
+        if(isBaby() && entityData.get(SIZE)>=1) setBaby(false);
         this.reapplyPosition();
         this.refreshDimensions();
         this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(getMaxHealth()+2);
