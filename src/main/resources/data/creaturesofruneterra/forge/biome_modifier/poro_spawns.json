@@ -13,7 +13,7 @@
   ],
   "spawners": {
     "type": "creaturesofruneterra:poro",
-    "weight": 40,
+    "weight": 25,
     "minCount": 1,
     "maxCount": 3
   }
