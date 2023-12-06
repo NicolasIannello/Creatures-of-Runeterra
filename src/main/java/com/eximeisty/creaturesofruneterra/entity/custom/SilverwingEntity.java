@@ -67,6 +67,10 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     Integer flyTicks = 0;
     Integer targetTicks = 0;
     Boolean land = isTame();
+    Integer partnerBiome = getBiome();
+    Integer partnerBiomeLayer = getBiomeLayer();
+    Integer partnerVariant = getVariant();
+    Integer partnerColor = getVariantColor();
     SilverwingEntity.AttackPhase attackPhase = SilverwingEntity.AttackPhase.CIRCLE;
     public static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Boolean> STATE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
@@ -76,6 +80,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> BIOME = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BIOME_LAYER = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
     private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CHICKEN, Items.BEEF, Items.COD, Items.MUTTON, Items.PORKCHOP, Items.RABBIT, Items.SALMON);
     private final ItemStackHandler itemHandler = createHandler();
     private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
@@ -90,7 +95,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
 
     static enum AttackPhase {
         CIRCLE,
-        SWOOP;
+        SWOOP,
+        BREED;
     }
 
     public SilverwingEntity(EntityType<? extends TamableAnimal> p_21803_, Level p_21804_) {
@@ -112,7 +118,31 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
                 return isBaby() && super.canUse();
             }
         });
-        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D));
+        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D){
+            public void breed() {
+                SilverwingEntity.this.partnerVariant = ((SilverwingEntity)partner).getVariant();
+                SilverwingEntity.this.partnerColor = ((SilverwingEntity)partner).getVariantColor();
+                SilverwingEntity.this.partnerBiome = ((SilverwingEntity)partner).getBiome();
+                SilverwingEntity.this.partnerBiomeLayer = ((SilverwingEntity)partner).getBiomeLayer();
+                super.breed();
+            }
+
+            public boolean canContinueToUse() {
+                if(partner!=null) SilverwingEntity.this.attackPhase = AttackPhase.BREED;
+                return  super.canContinueToUse();
+            }
+
+            public void stop() {
+                SilverwingEntity.this.attackPhase = AttackPhase.CIRCLE;
+                super.stop();
+            }
+
+            public void tick(){
+                LivingEntity livingentity = partner;
+                if (livingentity != null) SilverwingEntity.this.moveTargetPoint = new Vec3(livingentity.getX(), livingentity.getY(0.5D), livingentity.getZ());
+                super.tick();
+            }
+        });
         this.targetSelector.addGoal(1, new SilverwingEntity.PhantomTargetGoal());
         this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
@@ -138,6 +168,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         entityData.define(VARIANT, 0);
         entityData.define(COLOR, 0);
         entityData.define(BIOME, 0);
+        entityData.define(BIOME_LAYER, 0);
     }
 
     @Nullable
@@ -147,6 +178,37 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         if (silverwing != null) {
             UUID uuid = this.getOwnerUUID();
             if (uuid != null) {
+                int variant = level().getRandom().nextInt(0, 2);
+                int feathers = level().getRandom().nextInt(0, 2);
+                int type = level().getRandom().nextInt(0, 4);
+
+                switch (type) {
+                    case 0 -> {
+                        silverwing.setVariant(variant == 0 ? getVariant() : getVariantColor());
+                        silverwing.setBiome(variant == 0 ? getBiome() : getBiomeLayer());
+                        silverwing.setVariantColor(feathers == 0 ? getVariantColor() : getVariant());
+                        silverwing.setBiomeLayer(feathers == 0 ? getBiomeLayer() : getBiome());
+                    }
+                    case 1 -> {
+                        silverwing.setVariant(variant == 0 ? partnerVariant : partnerColor);
+                        silverwing.setBiome(variant == 0 ? partnerBiome : partnerBiomeLayer);
+                        silverwing.setVariantColor(feathers == 0 ? partnerColor : partnerVariant);
+                        silverwing.setBiomeLayer(feathers == 0 ? partnerBiomeLayer : partnerBiome);
+                    }
+                    case 2 -> {
+                        silverwing.setVariant(variant == 0 ? getVariant() : partnerVariant);
+                        silverwing.setBiome(variant == 0 ? getBiome() : partnerBiome);
+                        silverwing.setVariantColor(feathers == 0 ? getVariantColor() : partnerColor);
+                        silverwing.setBiomeLayer(feathers == 0 ? getBiomeLayer() : partnerBiomeLayer);
+                    }
+                    case 3 -> {
+                        silverwing.setVariant(variant == 0 ? getVariantColor() : partnerColor);
+                        silverwing.setBiome(variant == 0 ? getBiomeLayer() : partnerBiomeLayer);
+                        silverwing.setVariantColor(feathers == 0 ? getVariant() : partnerVariant);
+                        silverwing.setBiomeLayer(feathers == 0 ? getBiome() : partnerBiome);
+                    }
+                }
+
                 silverwing.setOwnerUUID(uuid);
                 silverwing.setTame(true);
                 silverwing.setBaby(true);
@@ -258,7 +320,8 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     }
 
     public EntityDimensions getDimensions(Pose p_21047_) {
-        return super.getDimensions(p_21047_).scale(entityData.get(SIZE)-0.02F);
+        float diff = isBaby() ? 0F : 0.02F;
+        return super.getDimensions(p_21047_).scale(entityData.get(SIZE)-diff);
     }
     //HANDLING--SIZE--END-----------------------------------------------------------------------------------------------
 
@@ -290,6 +353,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         this.entityData.set(VARIANT, compound.getInt("variant"));
         this.entityData.set(COLOR, compound.getInt("color"));
         this.entityData.set(BIOME, compound.getInt("biome"));
+        this.entityData.set(BIOME_LAYER, compound.getInt("biomelayer"));
     }
 
     public void addAdditionalSaveData(CompoundTag compound) {
@@ -299,6 +363,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         compound.putInt("variant", this.entityData.get(VARIANT));
         compound.putInt("color", this.entityData.get(COLOR));
         compound.putInt("biome", this.entityData.get(BIOME));
+        compound.putInt("biomelayer", this.entityData.get(BIOME_LAYER));
     }
 
     public boolean canWearArmor() {
@@ -867,19 +932,27 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         entityData.set(BIOME, biome);
     }
 
+    public int getBiomeLayer(){
+        return entityData.get(BIOME_LAYER);
+    }
+
+    public void setBiomeLayer(int biome){
+        entityData.set(BIOME_LAYER, biome);
+    }
+
     @javax.annotation.Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_30703_, DifficultyInstance p_30704_, MobSpawnType p_30705_, @javax.annotation.Nullable SpawnGroupData p_30706_, @javax.annotation.Nullable CompoundTag p_30707_) {
         int variant = p_30703_.getRandom().nextInt(0, 3);
         int feathers = p_30703_.getRandom().nextInt(0, 3);
         float temp = p_30703_.getBiome(blockPosition()).get().getBaseTemperature();
         if (temp>1.5) {
-            setBiome(0);
+            setBiome(0); setBiomeLayer(0);
         } else if (temp>0.5) {
-            setBiome(1);
+            setBiome(1); setBiomeLayer(1);
         } else if (temp<=0.5) {
-            setBiome(2);
+            setBiome(2); setBiomeLayer(2);
         } else{
-            setBiome(0); variant = 0; feathers = 0;
+            setBiome(0); setBiomeLayer(0); variant = 0; feathers = 0;
         }
         setVariant(variant);
         setVariantColor(feathers);

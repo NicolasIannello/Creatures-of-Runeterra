@@ -37,7 +37,7 @@ public class SilverwingFeatherLayer extends GeoRenderLayer<SilverwingEntity> {
 
     @Override
     public void render(PoseStack poseStack, SilverwingEntity animatable, BakedGeoModel bakedModel, RenderType renderType, MultiBufferSource bufferSource, VertexConsumer buffer, float partialTick, int packedLight, int packedOverlay) {
-        RenderType armorRenderType = RenderType.armorCutoutNoCull(COLOR[animatable.getBiome()][animatable.getVariantColor()]);
+        RenderType armorRenderType = RenderType.armorCutoutNoCull(COLOR[animatable.getBiomeLayer()][animatable.getVariantColor()]);
 
         getRenderer().reRender(getDefaultBakedModel(animatable), poseStack, bufferSource, animatable, armorRenderType,
                 bufferSource.getBuffer(armorRenderType), partialTick, packedLight, OverlayTexture.NO_OVERLAY,
