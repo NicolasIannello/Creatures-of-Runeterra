@@ -1,20 +1,19 @@
 package com.eximeisty.creaturesofruneterra.item.custom;
 
-import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.item.client.dunebreakershield.DunebreakerShieldRenderer;
 
-import net.minecraft.client.Minecraft;
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
+import com.eximeisty.creaturesofruneterra.networking.packet.C2SDunebreakerShield;
+import com.eximeisty.creaturesofruneterra.util.KeyBinding;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -28,12 +27,13 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 public class DunebreakerShield extends Item implements GeoItem {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public int cd=0;
-    public boolean shoot=false;
+//    public boolean shoot=false;
     private static final RawAnimation IDLE_ANIM = RawAnimation.begin().then("animation.dunebreaker_shield.idle", Animation.LoopType.PLAY_ONCE);
     private static final RawAnimation DERECHA_ANIM = RawAnimation.begin().then("animation.dunebreaker_shield.derecha", Animation.LoopType.LOOP);
     private static final RawAnimation IZQUIERDA_ANIM = RawAnimation.begin().then("animation.dunebreaker_shield.izquierda", Animation.LoopType.LOOP);
@@ -74,30 +74,13 @@ public class DunebreakerShield extends Item implements GeoItem {
     }
 
     public void inventoryTick(ItemStack stack, Level worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(cd==197){
-            if (!worldIn.isClientSide) {
-                DBShieldEntity shieldEntity = new DBShieldEntity(worldIn, (LivingEntity) entityIn);
-                shieldEntity.shootFromRotation(entityIn, entityIn.getRotationVector().x, entityIn.getRotationVector().y, 0.0F, 1.0F * 3.0F, 1.0F);
-                shieldEntity.setBaseDamage(2);
-                shieldEntity.tickCount = 35;
-                shieldEntity.setKnockback(2);
-                shieldEntity.setNoGravity(true);
-                shieldEntity.setPierceLevel((byte) 4);
-
-                if (((LivingEntity) entityIn).getItemInHand(InteractionHand.MAIN_HAND).getDisplayName().getString().contains("Dunebreaker")) {
-                    triggerAnim(entityIn, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "dbs_controller", "attackd");
-                } else {
-                    triggerAnim(entityIn, GeoItem.getOrAssignId(stack, (ServerLevel) worldIn), "dbs_controller", "attacki");
-                }
-                worldIn.addFreshEntity(shieldEntity);
-            }
-        }
         if(cd>0) cd--;
     }
 
     public void onUseTick(Level worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
-        if(Minecraft.getInstance().mouseHandler.isLeftPressed() && cd==0){
+        if(worldIn.isClientSide && KeyBinding.ITEM_HABILITY.isDown() && cd<=0){
             cd=200;
+            ModMessages.sendToServer(new C2SDunebreakerShield());
         }
     }
 
@@ -117,6 +100,11 @@ public class DunebreakerShield extends Item implements GeoItem {
 
     public boolean isValidRepairItem(ItemStack p_43091_, ItemStack p_43092_) {
         return false;
+    }
+
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        String quote = "["+KeyBinding.ITEM_HABILITY.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to fire a proyectile";
+        tooltip.add(Component.nullToEmpty(quote));
     }
 
     @Override
