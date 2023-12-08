@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
@@ -272,10 +273,10 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
                     if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
                     return InteractionResult.SUCCESS;
                 }
-                if (this.canWearArmor() && this.isArmor(itemstack) && !this.isWearingArmor()) {
-                    this.equipArmor(playerIn, itemstack);
-                    return InteractionResult.sidedSuccess(this.level().isClientSide);
-                }
+//                if (this.canWearArmor() && this.isArmor(itemstack) && !this.isWearingArmor()) {
+//                    this.equipArmor(playerIn, itemstack);
+//                    return InteractionResult.sidedSuccess(this.level().isClientSide);
+//                }
                 if(isFood(itemstack)) return super.mobInteract(playerIn, hand);
                 if(!isBaby()) {
                     this.setOrderedToSit(false);
@@ -284,7 +285,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
                 return InteractionResult.sidedSuccess(this.level().isClientSide);
             }
         }
-        this.setOrderedToSit(!entityData.get(STATE));
+        if(this.isTame() && this.isOwnedBy(playerIn)) this.setOrderedToSit(!entityData.get(STATE));
         return super.mobInteract(playerIn, hand);
     }
 
@@ -299,8 +300,10 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         if(isBaby() && entityData.get(SIZE)>=1) setBaby(false);
         this.reapplyPosition();
         this.refreshDimensions();
-        this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(getMaxHealth()+2);
-        this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeValue(Attributes.ATTACK_DAMAGE)+2);
+        if(!isBaby()) {
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(getMaxHealth() + 1);
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeValue(Attributes.ATTACK_DAMAGE) + 2);
+        }
     }
 
     public void refreshDimensions() {
@@ -321,8 +324,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
     }
 
     public EntityDimensions getDimensions(Pose p_21047_) {
-        float diff = isBaby() ? 0F : 0.02F;
-        return super.getDimensions(p_21047_).scale(entityData.get(SIZE)-diff);
+        return super.getDimensions(p_21047_).scale(entityData.get(SIZE));
     }
     //HANDLING--SIZE--END-----------------------------------------------------------------------------------------------
 
@@ -960,4 +962,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         return super.finalizeSpawn(p_30703_, p_30704_, p_30705_, p_30706_, p_30707_);
     }
     //END--VARIANTS-----------------------------------------------------------------------------------------------------
+    protected SoundEvent getDeathSound() { return SoundEvents.PANDA_DEATH; }
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return SoundEvents.DONKEY_HURT; }
+    public SoundEvent getAmbientSound() { return SoundEvents.PARROT_AMBIENT; }
 }
