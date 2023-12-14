@@ -17,6 +17,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -108,8 +109,8 @@ public class AtlasG extends PickaxeItem implements GeoItem {
 
     public void breakBB(AABB bb, Entity player, Level worldIn){
         BlockPos.betweenClosedStream(bb).forEach(pos->{
-            if(player.level().getBlockState(pos)!=Blocks.AIR.defaultBlockState() && player.level().getBlockState(pos)!=Blocks.WATER.defaultBlockState() && player.level().getBlockState(pos)!=Blocks.LAVA.defaultBlockState()){
-                if(player.level().getBlockState(pos).getDestroySpeed(player.level(), pos)>=0 && player.level().getBlockState(pos).getDestroySpeed(player.level(), pos)<=80) player.level().destroyBlock(pos, true, player);
+            if(worldIn.getBlockState(pos)!=Blocks.AIR.defaultBlockState() && worldIn.getBlockState(pos)!=Blocks.WATER.defaultBlockState() && worldIn.getBlockState(pos)!=Blocks.LAVA.defaultBlockState() && !(worldIn.getBlockEntity(pos) instanceof BaseContainerBlockEntity)){
+                if(worldIn.getBlockState(pos).getDestroySpeed(worldIn, pos)>0 && worldIn.getBlockState(pos).getDestroySpeed(worldIn, pos)<=80) worldIn.destroyBlock(pos, true, player);
             }
         });
     }
