@@ -86,13 +86,13 @@ public class AtlasG extends PickaxeItem implements GeoItem {
             if(dash){
                 dashTicks++;
                 attackBB(entityIn.getBoundingBox().expandTowards(0.5, 0, 0.5).expandTowards(-0.5, 0, -0.5), entityIn);
-                breakBB(entityIn.getBoundingBox().expandTowards(1, 0, 1).expandTowards(-1, 0, -1).move(entityIn.getLookAngle().x * 1.5, 0, entityIn.getLookAngle().z * 1.5), entityIn, worldIn);
+                breakBB(entityIn.getBoundingBox().expandTowards(1, 0, 1).expandTowards(-1, 0, -1).move(entityIn.getLookAngle().x * 1.5, 0, entityIn.getLookAngle().z * 1.5), worldIn);
             }
             if(entityIn.fallDistance>=7) pound = dash = true;
             if(entityIn.onGround() && (pound || poundTicks>0)){
                 poundTicks++;
-                breakBB(entityIn.getBoundingBox().expandTowards(1, -2, 1).expandTowards(-1, 0, -1).contract(0, 2, 0), entityIn, worldIn);
-                breakBB(entityIn.getBoundingBox().expandTowards(2, -1, 2).expandTowards(-2, 0, -2).contract(0, 2, 0), entityIn, worldIn);
+                breakBB(entityIn.getBoundingBox().expandTowards(1, -2, 1).expandTowards(-1, 0, -1).contract(0, 2, 0), worldIn);
+                breakBB(entityIn.getBoundingBox().expandTowards(2, -1, 2).expandTowards(-2, 0, -2).contract(0, 2, 0), worldIn);
                 attackBB(entityIn.getBoundingBox().expandTowards(2, 0, 2).expandTowards(-2, 0, -2), entityIn);
                 pound=false;
                 if(poundTicks>=3) poundTicks=0;
@@ -107,16 +107,16 @@ public class AtlasG extends PickaxeItem implements GeoItem {
         }
     }
 
-    public void breakBB(AABB bb, Entity player, Level worldIn){
+    public void breakBB(AABB bb, Level worldIn){
         BlockPos.betweenClosedStream(bb).forEach(pos->{
             if(worldIn.getBlockState(pos)!=Blocks.AIR.defaultBlockState() && worldIn.getBlockState(pos)!=Blocks.WATER.defaultBlockState() && worldIn.getBlockState(pos)!=Blocks.LAVA.defaultBlockState() && !(worldIn.getBlockEntity(pos) instanceof BaseContainerBlockEntity)){
-                if(worldIn.getBlockState(pos).getDestroySpeed(worldIn, pos)>0 && worldIn.getBlockState(pos).getDestroySpeed(worldIn, pos)<=80) worldIn.destroyBlock(pos, true, player);
+                if(worldIn.getBlockState(pos).getDestroySpeed(worldIn, pos)>0 && worldIn.getBlockState(pos).getDestroySpeed(worldIn, pos)<=80) worldIn.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());//worldIn.destroyBlock(pos, true, player);
             }
         });
     }
 
     public void attackBB(AABB bb, Entity player){
-        player.level().getEntities(null, player.getBoundingBox().expandTowards(2, 0, 2).expandTowards(-2, 0, -2)).stream().forEach(livingEntity -> {
+        player.level().getEntities(null, bb).stream().forEach(livingEntity -> {
             if(!livingEntity.is(player)) livingEntity.hurt(player.level().damageSources().playerAttack((Player) player), 15);
             if(motion==null) motion = player.getDeltaMovement();
             if(!livingEntity.level().isClientSide) livingEntity.setDeltaMovement(motion.add(0,0.1,0));//livingEntity.setDeltaMovement(player.getLookAngle().x*2, 0.2, player.getLookAngle().z*2);
