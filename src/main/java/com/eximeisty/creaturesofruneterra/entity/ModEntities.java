@@ -66,6 +66,12 @@ public class ModEntities {
                     ()-> EntityType.Builder.of(ExaltedPoroEntity::new, MobCategory.CREATURE).sized(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "exaltedporo").toString())
             );
 
+    //CREATURES
+    public static final RegistryObject<EntityType<SilverwingEntity>> SILVERWING=
+            ENTITY_TYPES.register("silverwing",
+                    ()-> EntityType.Builder.of(SilverwingEntity::new, MobCategory.CREATURE).sized(1.7f,1.7f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "silverwing").toString())
+            );
+
     //PART ENTITIES
     public static final RegistryObject<EntityType<CoRPartEntity>> WIVHIV=
             ENTITY_TYPES.register("wichiv",

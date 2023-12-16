@@ -8,8 +8,10 @@ import com.eximeisty.creaturesofruneterra.entity.model.EmptyModel;
 import com.eximeisty.creaturesofruneterra.entity.model.XerSaiHatchlingModel;
 
 
+import com.eximeisty.creaturesofruneterra.util.KeyBinding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -34,5 +36,13 @@ public class ModClientEvents {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(XerSaiHatchlingModel.LAYER_LOCATION, XerSaiHatchlingModel::createBodyLayer);
         event.registerLayerDefinition(EmptyModel.LAYER_LOCATION, EmptyModel::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    public static void onKeyRegister(RegisterKeyMappingsEvent event) {
+        event.register(KeyBinding.FLY_UP);
+        event.register(KeyBinding.FLY_DOWN);
+        event.register(KeyBinding.ITEM_HABILITY);
+        event.register(KeyBinding.ARMOR_HABILITY);
     }
 }

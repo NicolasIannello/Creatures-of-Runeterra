@@ -16,12 +16,14 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.patchedporobot.
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.silverwing.SilverwingRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModCreativeModeTabs;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
 import com.eximeisty.creaturesofruneterra.screen.PorobotScreen;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.util.ModSounds;
@@ -60,6 +62,9 @@ public class CreaturesofRuneterra{
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            ModMessages.register();
+        });
     }
 
     private void addCreative(CreativeModeTabEvent.BuildContents event) {
@@ -81,7 +86,7 @@ public class CreaturesofRuneterra{
             //SPAWN EGGS
             event.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG);event.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG);event.accept(ModItems.REKSAI_SPAWN_EGG);event.accept(ModItems.PORO_SPAWN_EGG);event.accept(ModItems.FABLEDPORO_SPAWN_EGG);
             event.accept(ModItems.PLUNDERPORO_SPAWN_EGG);event.accept(ModItems.POROBOT_SPAWN_EGG);event.accept(ModItems.EXALTEDPORO_SPAWN_EGG);
-            event.accept(ModItems.FIDDLESTICKS_SPAWN_EGG);
+            event.accept(ModItems.FIDDLESTICKS_SPAWN_EGG);event.accept(ModItems.SILVERWING_SPAWN_EGG);
         }
     }
 
@@ -102,6 +107,7 @@ public class CreaturesofRuneterra{
             EntityRenderers.register(ModEntities.PLUNDERPORO.get(), PlunderPoroRenderer::new);
             EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
             EntityRenderers.register(ModEntities.PATCHEDPOROBOT.get(), PatchedPorobotRenderer::new);
+            EntityRenderers.register(ModEntities.SILVERWING.get(), SilverwingRenderer::new);
             //BOSSES
             EntityRenderers.register(ModEntities.FIDDLESTICKS.get(), FiddlesticksRenderer::new);
             EntityRenderers.register(ModEntities.FIDDLEDUMMY.get(), FiddleDummyRenderer::new);

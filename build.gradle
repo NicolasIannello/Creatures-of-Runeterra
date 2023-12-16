@@ -53,6 +53,7 @@ minecraft {
             property 'forge.enabledGameTestNamespaces', 'creaturesofruneterra'
 
             arg "-mixin.config=creaturesofruneterra.mixin.json"
+            args '--username', 'Dev###'
 
             mods {
                 creaturesofruneterra {
@@ -69,6 +70,8 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             property 'forge.enabledGameTestNamespaces', 'creaturesofruneterra'
+
+            arg "-mixin.config=creaturesofruneterra.mixin.json"
 
             mods {
                 creaturesofruneterra {

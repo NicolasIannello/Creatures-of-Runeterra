@@ -3,6 +3,8 @@ package com.eximeisty.creaturesofruneterra.block.entity;
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
 
 import com.eximeisty.creaturesofruneterra.entity.ModEntities;
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
+import com.eximeisty.creaturesofruneterra.networking.packet.S2CTremble;
 import com.eximeisty.creaturesofruneterra.util.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -79,13 +81,7 @@ public class DrillTileEntity extends BlockEntity implements GeoBlockEntity {
 
     public void tick() {
         if(this.getPersistentData().getBoolean("shake")) {
-            LocalPlayer pl = Minecraft.getInstance().player;
-//            this.level.players().forEach(player ->{
-                if(pl.distanceToSqr(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())<400){
-                    pl.setXRot(pl.getXRot()+(float)Math.random()*(3+3)-3);
-                    pl.setYRot(pl.getYRot()+(float)Math.random()*(3+3)-3);
-                }
-//            });
+            ModMessages.sendToClients(new S2CTremble(this.worldPosition));
         }
         if(this.getPersistentData().getInt("state")==1 && !this.level.isClientSide){
             ticks++;
@@ -94,14 +90,24 @@ public class DrillTileEntity extends BlockEntity implements GeoBlockEntity {
                 if(ticks==180) this.level.playSound(null, worldPosition, ModSounds.REKSAI_AWAKEN.get(), SoundSource.AMBIENT, 3, 1);
                 if(ticks==250) {
                     this.getPersistentData().putBoolean("shake", true);
-                    this.getLevel().getServer().getPlayerList().broadcastSystemMessage(Component.translatable("The floor trembles"), true);
+                    this.level.players().forEach(pl ->{
+                        if(pl.distanceToSqr(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())<1200){
+                            pl.sendSystemMessage(Component.translatable("The floor trembles"));
+                        }
+                    });
                 }
                 if(ticks==500){
                     ModEntities.REKSAI.get().spawn(level.getServer().getLevel(level.dimension()), (ItemStack) null, null, this.worldPosition, MobSpawnType.EVENT, false, false);
                     this.level.destroyBlock(worldPosition, false);
                 }
             }else{
-                if(ticks==250) this.getLevel().getServer().getPlayerList().broadcastSystemMessage(Component.translatable("Nothing happens"), true);
+                if(ticks==250) {
+                    this.level.players().forEach(pl ->{
+                        if(pl.distanceToSqr(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())<1200){
+                            pl.sendSystemMessage(Component.translatable("Nothing happens"));
+                        }
+                    });
+                }
             }
             if(ticks==1) if(this.level.getBiome(this.worldPosition).is(Biomes.DESERT)) inDesert=true;
         }else if(this.getPersistentData().getInt("state")==2){

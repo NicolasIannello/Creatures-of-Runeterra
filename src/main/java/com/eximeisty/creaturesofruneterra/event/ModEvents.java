@@ -27,6 +27,7 @@ public class ModEvents {
         event.put(ModEntities.EXALTEDPORO.get(), ExaltedPoroEntity.setAttributes());
         event.put(ModEntities.FIDDLESTICKS.get(), FiddlesticksEntity.setAttributes());
         event.put(ModEntities.FIDDLEDUMMY.get(), FiddleDummyEntity.setAttributes());
+        event.put(ModEntities.SILVERWING.get(), SilverwingEntity.setAttributes());
         //PART ENTITIES
         event.put(ModEntities.WIVHIV.get(), CoRPartEntity.setAttributes());
         event.put(ModEntities.WVIHV.get(), CoRPartEntity.setAttributes());
@@ -37,6 +38,8 @@ public class ModEvents {
     @SubscribeEvent
     public static void entitySpawnRestriction(SpawnPlacementRegisterEvent event) {
         event.register(ModEntities.PORO.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(ModEntities.SILVERWING.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Animal::checkAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 }
