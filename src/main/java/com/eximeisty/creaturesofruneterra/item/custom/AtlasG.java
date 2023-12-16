@@ -97,7 +97,7 @@ public class AtlasG extends PickaxeItem implements GeoItem {
                 pound=false;
                 if(poundTicks>=3) poundTicks=0;
             }
-            if(y<entityIn.getY()) {
+            if(y<entityIn.getY() || entityIn.isInWater()) {
                 y = entityIn.getY() + 5; pound = dash = false;
             }
             if(y < entityIn.getY() || (dashTicks>15 && entityIn.isOnGround()) || (item2.next()!=stack && item2.next()!=stack)) {
