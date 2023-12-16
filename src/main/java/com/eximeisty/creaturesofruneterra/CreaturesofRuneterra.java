@@ -14,6 +14,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.patchedporobot.
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.reksai.RekSaiRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.silverwing.SilverwingRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.EmptyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.FiddleProyectileRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.dbshield.DBShieldRenderer;
@@ -21,6 +22,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRend
 import com.eximeisty.creaturesofruneterra.entity.render.HexcoreRenderer;
 import com.eximeisty.creaturesofruneterra.entity.render.XerSaiHatchlingRenderer;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
 import com.eximeisty.creaturesofruneterra.screen.PorobotScreen;
 import com.eximeisty.creaturesofruneterra.util.ModItemModelProperties;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
@@ -79,6 +81,7 @@ public class CreaturesofRuneterra
         EntityRenderers.register(ModEntityTypes.FABLEDPORO.get(), FabledPoroRenderer::new);
         EntityRenderers.register(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
         EntityRenderers.register(ModEntityTypes.PATCHEDPOROBOT.get(), PatchedPorobotRenderer::new);
+        EntityRenderers.register(ModEntityTypes.SILVERWING.get(), SilverwingRenderer::new);
         //VOID CREATURES
         EntityRenderers.register(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
         EntityRenderers.register(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
@@ -97,6 +100,7 @@ public class CreaturesofRuneterra
 
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            ModMessages.register();
             SpawnPlacements.register(ModEntityTypes.PORO.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Animal::checkAnimalSpawnRules);
         });
     }

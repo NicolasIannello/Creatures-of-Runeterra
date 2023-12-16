@@ -407,10 +407,16 @@ public class FiddlesticksEntity extends PathfinderMob implements IAnimatable, IA
 
             if(ticks==2 && sound!=null) this.attacker.level.playSound(null, this.attacker.blockPosition(), sound, SoundSource.HOSTILE, 1, 1);
             if(ticks>start && ticks<end){
-                if(this.attacker.getSensing().hasLineOfSight(this.attacker.getTarget())){
-                    this.attacker.getTarget().addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 20*30));
-                    if(Mth.degreesDifferenceAbs(this.attacker.getTarget().getYRot(), x)<65 && Mth.degreesDifferenceAbs(this.attacker.getTarget().getXRot(), y)<50) this.attacker.getTarget().addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20*30));
-                }
+                this.attacker.level.players().forEach(player ->{
+                    if(this.attacker.getSensing().hasLineOfSight(player) && this.attacker.distanceToSqr(player)<2000){
+                        player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 20*30));
+                        if(Mth.degreesDifferenceAbs(player.getYRot(), x)<65 && Mth.degreesDifferenceAbs(player.getXRot(), y)<50) player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20*30));
+                    }
+                });
+//                if(this.attacker.getSensing().hasLineOfSight(this.attacker.getTarget())){
+//                    this.attacker.getTarget().addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 20*30));
+//                    if(Mth.degreesDifferenceAbs(this.attacker.getTarget().getYRot(), x)<65 && Mth.degreesDifferenceAbs(this.attacker.getTarget().getXRot(), y)<50) this.attacker.getTarget().addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20*30));
+//                }
             }
             if(ticks>reset) resetState(ms, state, false, false, false);
         }

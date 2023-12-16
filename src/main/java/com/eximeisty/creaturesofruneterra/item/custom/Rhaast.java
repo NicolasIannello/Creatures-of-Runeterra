@@ -3,10 +3,13 @@ package com.eximeisty.creaturesofruneterra.item.custom;
 import com.eximeisty.creaturesofruneterra.item.ModArmorMaterial;
 import com.eximeisty.creaturesofruneterra.item.ModItems;
 import com.eximeisty.creaturesofruneterra.item.client.rhaast.RhaastRenderer;
+import com.eximeisty.creaturesofruneterra.util.KeyBinding;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -34,6 +37,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -69,33 +73,32 @@ public class Rhaast extends SwordItem implements IAnimatable {
                 }
             }
         }
+
+        if (worldIn.isClientSide && KeyBinding.ITEM_HABILITY.isDown() && entityIn instanceof Player ? ( ((Player)entityIn).getItemInHand(InteractionHand.MAIN_HAND).is(ModItems.RHAAST.get()) || ((Player)entityIn).getItemInHand(InteractionHand.OFF_HAND).is(ModItems.RHAAST.get())) : false) {
+            if (stack.getDamageValue() == 0 && entityIn instanceof Player ? ((Player) entityIn).getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ArmorItem ? ((ArmorItem) ((Player) entityIn).getItemBySlot(EquipmentSlot.HEAD).getItem()).getMaterial() != ModArmorMaterial.DARKIN : ((Player) entityIn).getItemBySlot(EquipmentSlot.HEAD).isEmpty() : false) {
+                UUID id[] = {UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"), UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"), UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"), UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B")};
+                EquipmentSlot es[] = {EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
+                Item armor[] = {ModItems.RHAAST_HELMET.get(), ModItems.RHAAST_CHESTPLATE.get(), ModItems.RHAAST_LEGGINGS.get(), ModItems.RHAAST_BOOTS.get()};
+
+                for (int i = 0; i < 4; i++) {
+                    ItemStack helmet = ((Player) entityIn).getItemBySlot(es[i]).copy();
+                    ItemStack Rhelmet = new ItemStack(armor[i]);
+                    Rhelmet.addAttributeModifier(Attributes.ARMOR, new AttributeModifier(id[i], "Armor modifier", helmet.isEmpty() ? ((ArmorItem) Rhelmet.getItem()).getDefense() : ((ArmorItem) helmet.getItem()).getDefense() + ((ArmorItem) Rhelmet.getItem()).getDefense(), AttributeModifier.Operation.ADDITION), es[i]);
+                    Rhelmet.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id[i], "Armor modifier", helmet.isEmpty() ? ((ArmorItem) Rhelmet.getItem()).getToughness() : ((ArmorItem) helmet.getItem()).getToughness() + ((ArmorItem) Rhelmet.getItem()).getToughness(), AttributeModifier.Operation.ADDITION), es[i]);
+                    Rhelmet.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(id[i], "Armor modifier", helmet.isEmpty() ? 0 : 0.1, AttributeModifier.Operation.ADDITION), es[i]);
+                    ((RhaastArmorItem) Rhelmet.getItem()).addSaveData(Rhelmet, helmet);
+                    helmet.getAllEnchantments().forEach(Rhelmet::enchant);
+                    Rhelmet.enchant(Enchantments.BINDING_CURSE, 1);
+                    ((Player) entityIn).setItemSlot(es[i], Rhelmet);
+                }
+                stack.setDamageValue(stack.getDamageValue() + 40);
+            }
+        }
     }
 
     public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerentity, InteractionHand handIn) {
         ItemStack stack = playerentity.getItemInHand(handIn);
         if(stack.getDamageValue()>75) return InteractionResultHolder.consume(stack);
-
-        if(stack.getDamageValue()==0 && playerentity.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof ArmorItem ? ((ArmorItem)playerentity.getItemBySlot(EquipmentSlot.HEAD).getItem()).getMaterial()!= ModArmorMaterial.DARKIN : playerentity.getItemBySlot(EquipmentSlot.HEAD).isEmpty()){
-            UUID id[] = {UUID.fromString("2AD3F246-FEE1-4E67-B886-69FD380BB150"),UUID.fromString("9F3D476D-C118-4544-8365-64846904B48E"),UUID.fromString("D8499B04-0E66-4726-AB29-64469D734E0D"),UUID.fromString("845DB27C-C624-495F-8C9F-6020A9A58B6B")};
-            EquipmentSlot es[] = {EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET};
-            Item armor[] = {ModItems.RHAAST_HELMET.get(),ModItems.RHAAST_CHESTPLATE.get(),ModItems.RHAAST_LEGGINGS.get(),ModItems.RHAAST_BOOTS.get()};
-
-            for (int i = 0; i < 4; i++) {
-                ItemStack helmet = playerentity.getItemBySlot(es[i]).copy();
-                ItemStack Rhelmet = new ItemStack(armor[i]);
-                Rhelmet.addAttributeModifier(Attributes.ARMOR, new AttributeModifier(id[i], "Armor modifier", helmet.isEmpty() ? ((ArmorItem)Rhelmet.getItem()).getDefense() : ((ArmorItem)helmet.getItem()).getDefense()+((ArmorItem)Rhelmet.getItem()).getDefense(), AttributeModifier.Operation.ADDITION), es[i]);
-                Rhelmet.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(id[i], "Armor modifier", helmet.isEmpty() ? ((ArmorItem)Rhelmet.getItem()).getToughness() : ((ArmorItem)helmet.getItem()).getToughness()+((ArmorItem)Rhelmet.getItem()).getToughness(), AttributeModifier.Operation.ADDITION), es[i]);
-                Rhelmet.addAttributeModifier(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(id[i], "Armor modifier", helmet.isEmpty() ? 0 : 0.1, AttributeModifier.Operation.ADDITION), es[i]);
-                ((RhaastArmorItem)Rhelmet.getItem()).addSaveData(Rhelmet, helmet);
-                Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(helmet);
-                EnchantmentHelper.setEnchantments(map,Rhelmet);
-                //helmet.getAllEnchantments().forEach(Rhelmet::enchant);
-                Rhelmet.enchant(Enchantments.BINDING_CURSE, 1);
-                playerentity.setItemSlot(es[i], Rhelmet);
-            }
-            stack.setDamageValue(stack.getDamageValue()+40);
-            return InteractionResultHolder.consume(stack);
-        }
 
         playerentity.getCooldowns().addCooldown(this, 60);
         ticks++;
@@ -140,6 +143,11 @@ public class Rhaast extends SwordItem implements IAnimatable {
          this.attributeModifiers = builder.build();
          return equipmentSlot == EquipmentSlot.MAINHAND ? attributeModifiers : super.getAttributeModifiers(equipmentSlot, stack);
      }
+
+    public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
+        String quote = "["+ Minecraft.getInstance().options.keyUse.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to phase. ["+ KeyBinding.ITEM_HABILITY.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to become Rhaast";
+        tooltip.add(Component.nullToEmpty(quote));
+    }
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {

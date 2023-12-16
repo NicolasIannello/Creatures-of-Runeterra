@@ -1,11 +1,15 @@
 package com.eximeisty.creaturesofruneterra.mixin;
 
+import com.eximeisty.creaturesofruneterra.item.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,7 +28,7 @@ public class MixinArmorStandEntity {
         ArmorStand clase = (ArmorStand)((Object)this);
 
         boolean flag0 = clase.level.getTimeOfDay(0)>=0.35288608/*15000*/ && clase.level.getTimeOfDay(0)<=0.59869206/*20000*/ && clase.level.canSeeSky(clase.blockPosition());
-        boolean flag1 = clase.getArmorSlots().toString().equalsIgnoreCase("[1 chainmail_boots, 1 iron_leggings, 1 fiddle_chestplate, 1 fiddle_helmet]");
+        boolean flag1 = clase.getItemBySlot(EquipmentSlot.LEGS).is(Items.IRON_LEGGINGS) && clase.getItemBySlot(EquipmentSlot.FEET).is(Items.CHAINMAIL_BOOTS) && clase.getItemBySlot(EquipmentSlot.CHEST).is(ModItems.FIDDLE_CHESTPLATE.get()) && clase.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.FIDDLE_HELMET.get());
         boolean flag2 = true;
         boolean flag3 = true;
 
@@ -54,12 +58,12 @@ public class MixinArmorStandEntity {
                         for (int i = 0; i < lightings; i++) { 
                             double lx = clase.getRandomX(8), lz = clase.getRandomZ(8);
                             if( lx==clase.getX() && lz==clase.getZ() ) lx++;
-                            EntityType.LIGHTNING_BOLT.spawn(clase.level.getServer().getLevel(clase.level.dimension()), null, null, new BlockPos(lx, clase.getY(), lz), MobSpawnType.EVENT.EVENT, false, false);
+                            EntityType.LIGHTNING_BOLT.spawn((ServerLevel)clase.level, null, null, new BlockPos(lx, clase.getY(), lz), MobSpawnType.EVENT.EVENT, false, false);
                         }
                     }
                     if(tick>215 && !clase.level.isClientSide){
-                        EntityType.LIGHTNING_BOLT.spawn(clase.level.getServer().getLevel(clase.level.dimension()), null, null, clase.blockPosition(), MobSpawnType.EVENT, false, false);
-                        ModEntityTypes.FIDDLESTICKS.get().spawn(clase.level.getServer().getLevel(clase.level.dimension()), null, null, clase.blockPosition(), MobSpawnType.EVENT, false, false);
+                        EntityType.LIGHTNING_BOLT.spawn((ServerLevel)clase.level, null, null, clase.blockPosition(), MobSpawnType.EVENT, false, false);
+                        ModEntityTypes.FIDDLESTICKS.get().spawn((ServerLevel)clase.level, null, null, clase.blockPosition(), MobSpawnType.EVENT, false, false);
                         clase.discard();
                     }
                 }
