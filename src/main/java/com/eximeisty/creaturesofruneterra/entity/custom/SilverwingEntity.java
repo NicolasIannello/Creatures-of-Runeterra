@@ -448,6 +448,7 @@ public class SilverwingEntity extends TamableAnimal implements GeoEntity, Saddle
         }
 
         public boolean canContinueToUse() {
+            if(isTame()) SilverwingEntity.this.setTarget(null);
             LivingEntity livingentity = SilverwingEntity.this.getTarget();
             return livingentity != null ? SilverwingEntity.this.canAttack(livingentity, TargetingConditions.DEFAULT) : false;
         }
