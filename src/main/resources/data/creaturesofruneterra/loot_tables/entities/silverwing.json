@@ -1,0 +1,15 @@
+{
+    "type": "creaturesofruneterra:silverwing",
+    "pools": [
+        {
+            "rolls": 4,
+            "entries": [
+                {
+                    "type": "minecraft:item",
+                    "weight": 100,
+                    "name": "minecraft:feather"
+                }
+            ]
+        }
+    ]
+}

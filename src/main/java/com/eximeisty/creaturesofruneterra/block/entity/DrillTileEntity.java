@@ -2,24 +2,21 @@ package com.eximeisty.creaturesofruneterra.block.entity;
 
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
+import com.eximeisty.creaturesofruneterra.networking.packet.S2CTremble;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
-import net.minecraft.network.chat.ChatType;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.state.BlockState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -85,13 +82,7 @@ public class DrillTileEntity extends BlockEntity implements IAnimatable {
 
     public void tick() {
         if(this.getTileData().getBoolean("shake")) {
-            LocalPlayer pl = Minecraft.getInstance().player;
-//            this.level.players().forEach(player ->{
-                if(pl.distanceToSqr(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())<400){
-                    pl.setXRot(pl.getXRot()+(float)Math.random()*(3+3)-3);
-                    pl.setYRot(pl.getYRot()+(float)Math.random()*(3+3)-3);
-                }
-//            });
+            ModMessages.sendToClients(new S2CTremble(this.worldPosition));
         }
         if(this.getTileData().getInt("state")==1 && !this.level.isClientSide){
             ticks++;
@@ -100,14 +91,24 @@ public class DrillTileEntity extends BlockEntity implements IAnimatable {
                 if(ticks==180) this.level.playSound(null, worldPosition, ModSoundEvents.REKSAI_AWAKEN.get(), SoundSource.AMBIENT, 3, 1);
                 if(ticks==250) {
                     this.getTileData().putBoolean("shake", true);
-                    this.getLevel().getServer().getPlayerList().broadcastMessage(new TextComponent("The floor trembles"), ChatType.CHAT, Util.NIL_UUID);
+                    this.level.players().forEach(pl ->{
+                        if(pl.distanceToSqr(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())<1200){
+                            pl.sendMessage(new TextComponent("The floor trembles"), Util.NIL_UUID);
+                        }
+                    });
                 }
                 if(ticks==500){
                     ModEntityTypes.REKSAI.get().spawn(level.getServer().getLevel(level.dimension()), null, null, this.worldPosition, MobSpawnType.EVENT, false, false);
                     this.level.destroyBlock(worldPosition, false);
                 }
             }else{
-                if(ticks==250) this.getLevel().getServer().getPlayerList().broadcastMessage(new TextComponent("Nothing happens"), ChatType.CHAT, Util.NIL_UUID);
+                if(ticks==250) {
+                    this.level.players().forEach(pl ->{
+                        if(pl.distanceToSqr(this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ())<1200){
+                            pl.sendMessage(new TextComponent("Nothing happens"), Util.NIL_UUID);
+                        }
+                    });
+                }
             }
             if(ticks==1) if(this.level.getBiome(this.worldPosition).is(Biomes.DESERT)) inDesert=true;
         }else if(this.getTileData().getInt("state")==2){

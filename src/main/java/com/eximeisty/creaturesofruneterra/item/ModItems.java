@@ -147,6 +147,9 @@ public class ModItems {
         public static final RegistryObject<Item> FIDDLESTICKS_SPAWN_EGG = ITEMS.register("fiddlesticks_spawn_egg",
         () -> new ForgeSpawnEggItem(ModEntityTypes.FIDDLESTICKS, 0x0f0705, 0x3b1210, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
 
+        public static final RegistryObject<Item> SILVERWING_SPAWN_EGG = ITEMS.register("silverwing_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntityTypes.SILVERWING, 0xF3D978, 0xffffff, new Item.Properties().tab(ModItemGroup.COR_GROUP)));
+
         //BLOCKS
         public static final RegistryObject<BlockItem> DRILL = ITEMS.register("drill",
         () -> new DrillItem(ModBlocks.DRILL.get(), new Item.Properties().tab(ModItemGroup.COR_GROUP)));

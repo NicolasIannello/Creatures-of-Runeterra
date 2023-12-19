@@ -15,8 +15,11 @@ import com.eximeisty.creaturesofruneterra.entity.client.armor.fiddle.FiddleArmor
 import com.eximeisty.creaturesofruneterra.entity.client.armor.sai.SaiArmorRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.armor.sai.SaiElytraRenderer;
 
+import com.eximeisty.creaturesofruneterra.util.KeyBinding;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -42,5 +45,13 @@ public class ModEventClientBusEvents {
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(XerSaiHatchlingModel.LAYER_LOCATION, XerSaiHatchlingModel::createBodyLayer);
         event.registerLayerDefinition(EmptyModel.LAYER_LOCATION, EmptyModel::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    public static void onKeyRegister(FMLClientSetupEvent event) {
+        ClientRegistry.registerKeyBinding(KeyBinding.FLY_UP);
+        ClientRegistry.registerKeyBinding(KeyBinding.FLY_DOWN);
+        ClientRegistry.registerKeyBinding(KeyBinding.ITEM_HABILITY);
+        ClientRegistry.registerKeyBinding(KeyBinding.ARMOR_HABILITY);
     }
 }

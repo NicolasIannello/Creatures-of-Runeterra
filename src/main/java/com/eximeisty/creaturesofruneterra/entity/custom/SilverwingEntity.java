@@ -1,0 +1,987 @@
+package com.eximeisty.creaturesofruneterra.entity.custom;
+
+import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.util.KeyBinding;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.control.LookControl;
+import net.minecraft.world.entity.ai.control.MoveControl;
+import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.animal.Animal;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.DismountHelper;
+import net.minecraft.world.item.HorseArmorItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.builder.ILoopType;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import javax.annotation.Nonnull;
+import java.util.EnumSet;
+import java.util.UUID;
+
+public class SilverwingEntity extends TamableAnimal implements IAnimatable, Saddleable, PlayerRideable {
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    public static final int TICKS_PER_FLAP = Mth.ceil(24.166098F);
+    Vec3 moveTargetPoint = Vec3.ZERO;
+    BlockPos anchorPoint = BlockPos.ZERO;
+    Integer groundTicks = 0;
+    Integer flyTicks = 0;
+    Integer targetTicks = 0;
+    Boolean land = isTame();
+    Integer partnerBiome = getBiome();
+    Integer partnerBiomeLayer = getBiomeLayer();
+    Integer partnerVariant = getVariant();
+    Integer partnerColor = getVariantColor();
+    AttackPhase attackPhase = AttackPhase.CIRCLE;
+    public static final EntityDataAccessor<Float> SIZE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Boolean> STATE = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> CLIMBING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Boolean> FLYING = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Byte> SADDLED = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.BYTE);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> COLOR = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BIOME = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> BIOME_LAYER = SynchedEntityData.defineId(SilverwingEntity.class, EntityDataSerializers.INT);
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CHICKEN, Items.BEEF, Items.COD, Items.MUTTON, Items.PORKCHOP, Items.RABBIT, Items.SALMON);
+    private final ItemStackHandler itemHandler = createHandler();
+    private final LazyOptional<IItemHandler> handler = LazyOptional.of(()-> itemHandler);
+    private static final AnimationBuilder WALK = new AnimationBuilder().addAnimation("animation.silverwing.walk", ILoopType.EDefaultLoopTypes.LOOP);
+    private static final AnimationBuilder IDLE_GROUND = new AnimationBuilder().addAnimation("animation.silverwing.idle_ground", ILoopType.EDefaultLoopTypes.LOOP);
+    private static final AnimationBuilder FLY = new AnimationBuilder().addAnimation("animation.silverwing.fly", ILoopType.EDefaultLoopTypes.LOOP);
+    private static final AnimationBuilder IDLE_FLY = new AnimationBuilder().addAnimation("animation.silverwing.fly_place", ILoopType.EDefaultLoopTypes.LOOP);
+    private static final AnimationBuilder SIT = new AnimationBuilder().addAnimation("animation.silverwing.sit", ILoopType.EDefaultLoopTypes.LOOP);
+    private static final AnimationBuilder BABY_WALK = new AnimationBuilder().addAnimation("animation.silverwing.baby_walk", ILoopType.EDefaultLoopTypes.LOOP);
+    private static final AnimationBuilder BABY_IDLE = new AnimationBuilder().addAnimation("animation.silverwing.baby_idle", ILoopType.EDefaultLoopTypes.LOOP);
+    private static final AnimationBuilder BABY_SIT = new AnimationBuilder().addAnimation("animation.silverwing.baby_sit", ILoopType.EDefaultLoopTypes.LOOP);
+
+    static enum AttackPhase {
+        CIRCLE,
+        SWOOP,
+        BREED;
+    }
+
+    public SilverwingEntity(EntityType<? extends TamableAnimal> p_21803_, Level p_21804_) {
+        super(p_21803_, p_21804_);
+        //this.fixupDimensions();
+        this.moveControl = new PhantomMoveControl(this);
+        this.lookControl = new PhantomLookControl(this);
+    }
+
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(2, new SitWhenOrderedToGoal(this));
+        this.goalSelector.addGoal(1, new PhantomAttackStrategyGoal());
+        this.goalSelector.addGoal(2, new PhantomSweepAttackGoal());
+        this.goalSelector.addGoal(3, new PhantomCircleAroundAnchorGoal());
+        this.goalSelector.addGoal(1, new PanicGoal(this, 1.25D){
+            public boolean canUse() {
+                return isBaby() && super.canUse();
+            }
+        });
+        this.goalSelector.addGoal(2, new BreedGoal(this, 1.0D){
+            public void breed() {
+                SilverwingEntity.this.partnerVariant = ((SilverwingEntity)partner).getVariant();
+                SilverwingEntity.this.partnerColor = ((SilverwingEntity)partner).getVariantColor();
+                SilverwingEntity.this.partnerBiome = ((SilverwingEntity)partner).getBiome();
+                SilverwingEntity.this.partnerBiomeLayer = ((SilverwingEntity)partner).getBiomeLayer();
+                super.breed();
+            }
+
+            public boolean canContinueToUse() {
+                if(partner!=null) SilverwingEntity.this.attackPhase = AttackPhase.BREED;
+                return  super.canContinueToUse();
+            }
+
+            public void stop() {
+                SilverwingEntity.this.attackPhase = AttackPhase.CIRCLE;
+                super.stop();
+            }
+
+            public void tick(){
+                LivingEntity livingentity = partner;
+                if (livingentity != null) SilverwingEntity.this.moveTargetPoint = new Vec3(livingentity.getX(), livingentity.getY(0.5D), livingentity.getZ());
+                super.tick();
+            }
+        });
+        this.targetSelector.addGoal(1, new PhantomTargetGoal());
+        this.targetSelector.addGoal(2, new OwnerHurtByTargetGoal(this));
+        this.targetSelector.addGoal(1, (new HurtByTargetGoal(this)));
+    }
+
+    public static AttributeSupplier setAttributes(){
+        return PathfinderMob.createMobAttributes()
+                .add(Attributes.MAX_HEALTH, 30)
+                .add(Attributes.MOVEMENT_SPEED, 1)
+                .add(Attributes.ATTACK_DAMAGE, 7)
+                .add(Attributes.FOLLOW_RANGE, 70)
+                .add(Attributes.ATTACK_KNOCKBACK, 0)
+                .add(Attributes.ATTACK_SPEED, 0.8).build();
+    }
+
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(SIZE, 1F);
+        entityData.define(STATE, false);
+        entityData.define(CLIMBING, (byte)0);
+        entityData.define(SADDLED, (byte)0);
+        entityData.define(FLYING, false);
+        entityData.define(VARIANT, 0);
+        entityData.define(COLOR, 0);
+        entityData.define(BIOME, 0);
+        entityData.define(BIOME_LAYER, 0);
+    }
+
+    @Nullable
+    @Override
+    public AgeableMob getBreedOffspring(ServerLevel p_146743_, AgeableMob p_146744_) {
+        SilverwingEntity silverwing = ModEntityTypes.SILVERWING.get().create(p_146743_);
+        if (silverwing != null) {
+            UUID uuid = this.getOwnerUUID();
+            if (uuid != null) {
+                int variant = level.getRandom().nextInt(0, 2);
+                int feathers = level.getRandom().nextInt(0, 2);
+                int type = level.getRandom().nextInt(0, 4);
+
+                switch (type) {
+                    case 0 -> {
+                        silverwing.setVariant(variant == 0 ? getVariant() : getVariantColor());
+                        silverwing.setBiome(variant == 0 ? getBiome() : getBiomeLayer());
+                        silverwing.setVariantColor(feathers == 0 ? getVariantColor() : getVariant());
+                        silverwing.setBiomeLayer(feathers == 0 ? getBiomeLayer() : getBiome());
+                    }
+                    case 1 -> {
+                        silverwing.setVariant(variant == 0 ? partnerVariant : partnerColor);
+                        silverwing.setBiome(variant == 0 ? partnerBiome : partnerBiomeLayer);
+                        silverwing.setVariantColor(feathers == 0 ? partnerColor : partnerVariant);
+                        silverwing.setBiomeLayer(feathers == 0 ? partnerBiomeLayer : partnerBiome);
+                    }
+                    case 2 -> {
+                        silverwing.setVariant(variant == 0 ? getVariant() : partnerVariant);
+                        silverwing.setBiome(variant == 0 ? getBiome() : partnerBiome);
+                        silverwing.setVariantColor(feathers == 0 ? getVariantColor() : partnerColor);
+                        silverwing.setBiomeLayer(feathers == 0 ? getBiomeLayer() : partnerBiomeLayer);
+                    }
+                    case 3 -> {
+                        silverwing.setVariant(variant == 0 ? getVariantColor() : partnerColor);
+                        silverwing.setBiome(variant == 0 ? getBiomeLayer() : partnerBiomeLayer);
+                        silverwing.setVariantColor(feathers == 0 ? getVariant() : partnerVariant);
+                        silverwing.setBiomeLayer(feathers == 0 ? getBiome() : partnerBiome);
+                    }
+                }
+
+                silverwing.setOwnerUUID(uuid);
+                silverwing.setTame(true);
+                silverwing.setBaby(true);
+                silverwing.getEntityData().set(SIZE, 0.25F);
+            }
+        }
+
+        return silverwing;
+    }
+
+    public boolean isFlapping() {
+        return (this.getUniqueFlapTickOffset() + this.tickCount) % TICKS_PER_FLAP == 0;
+    }
+
+    public int getUniqueFlapTickOffset() {
+        return this.getId() * 3;
+    }
+
+    public void tick() {
+        super.tick();
+        if (this.level.isClientSide) {
+            float f = Mth.cos((float)(this.getUniqueFlapTickOffset() + this.tickCount) * 7.448451F * ((float)Math.PI / 180F) + (float)Math.PI);
+            float f1 = Mth.cos((float)(this.getUniqueFlapTickOffset() + this.tickCount + 1) * 7.448451F * ((float)Math.PI / 180F) + (float)Math.PI);
+            if (f > 0.0F && f1 <= 0.0F && !this.isOnGround()) {
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.PHANTOM_FLAP, this.getSoundSource(), 4.5F + this.random.nextFloat() * 0.05F, 0.2F + this.random.nextFloat() * 0.05F, false);
+            }
+        }
+        if (!this.level.isClientSide) {
+            this.setBesideClimbableBlock(this.horizontalCollision);
+        }
+        if(!isOnGround() && !entityData.get(FLYING)) entityData.set(FLYING, true);
+        if(isOnGround() && entityData.get(FLYING)) entityData.set(FLYING, false);
+    }
+
+    public InteractionResult mobInteract(Player playerIn, InteractionHand hand) {
+        ItemStack itemstack = playerIn.getItemInHand(hand);
+        Item item = itemstack.getItem();
+
+        if (this.level.isClientSide) {
+            boolean flag = this.isOwnedBy(playerIn) || this.isTame() || FOOD_ITEMS.test(itemstack) && !this.isTame();
+            return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
+        }else if(!playerIn.isCrouching()){
+            if(!this.isTame() && FOOD_ITEMS.test(itemstack)) {
+                if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
+
+                if (this.random.nextInt(5) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, playerIn)) {
+                    this.tame(playerIn);
+                    this.navigation.stop();
+                    this.setOrderedToSit(true);
+                    this.setTarget(null);
+                    this.level.broadcastEntityEvent(this, (byte)7);
+                } else {
+                    this.level.broadcastEntityEvent(this, (byte)6);
+                }
+                return InteractionResult.SUCCESS;
+            }
+            if(this.isTame() && this.isOwnedBy(playerIn)){
+                if(FOOD_ITEMS.test(itemstack)){
+                    setSize();
+                    heal(6);
+                    if (!playerIn.getAbilities().instabuild) itemstack.shrink(1);
+                    return InteractionResult.SUCCESS;
+                }
+//                if (this.canWearArmor() && this.isArmor(itemstack) && !this.isWearingArmor()) {
+//                    this.equipArmor(playerIn, itemstack);
+//                    return InteractionResult.sidedSuccess(this.level.isClientSide);
+//                }
+                if(isFood(itemstack)) return super.mobInteract(playerIn, hand);
+                if(!isBaby()) {
+                    this.setOrderedToSit(false);
+                    this.doPlayerRide(playerIn);
+                }
+                return InteractionResult.sidedSuccess(this.level.isClientSide);
+            }
+        }
+        if(this.isTame() && this.isOwnedBy(playerIn)) this.setOrderedToSit(!entityData.get(STATE));
+        return super.mobInteract(playerIn, hand);
+    }
+
+    public boolean isFood(ItemStack p_30440_) {
+        Item item = p_30440_.getItem();
+        return (item == Items.COOKED_COD || item == Items.COOKED_SALMON) && !isBaby();
+    }
+
+    //HANDLING--SIZE----------------------------------------------------------------------------------------------------
+    public void setSize() {
+        entityData.set(SIZE, (entityData.get(SIZE)+0.025F));
+        if(isBaby() && entityData.get(SIZE)>=1) setBaby(false);
+        this.reapplyPosition();
+        this.refreshDimensions();
+        if(!isBaby()) {
+            this.getAttribute(Attributes.MAX_HEALTH).setBaseValue(getMaxHealth() + 1);
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.getAttributeValue(Attributes.ATTACK_DAMAGE) + 2);
+        }
+    }
+
+    public void refreshDimensions() {
+        double d0 = this.getX();
+        double d1 = this.getY();
+        double d2 = this.getZ();
+        super.refreshDimensions();
+        this.setPos(d0, d1, d2);
+    }
+
+    public void onSyncedDataUpdated(EntityDataAccessor<?> p_33609_) {
+        if (SIZE.equals(p_33609_)) {
+            this.refreshDimensions();
+            this.setYRot(this.yHeadRot);
+            this.yBodyRot = this.yHeadRot;
+        }
+        super.onSyncedDataUpdated(p_33609_);
+    }
+
+    public EntityDimensions getDimensions(Pose p_21047_) {
+        return super.getDimensions(p_21047_).scale(entityData.get(SIZE));
+    }
+    //HANDLING--SIZE--END-----------------------------------------------------------------------------------------------
+
+    public boolean hurt(DamageSource p_27567_, float p_27568_) {
+        if (getControllingPassenger()!=null && p_27567_.getEntity()!=null && getControllingPassenger().is(p_27567_.getEntity())) {
+            return false;
+        } else {
+            return super.hurt(p_27567_, p_27568_);
+        }
+    }
+
+    @Override
+    public void tickLeash(){
+        if(isTame() && !land && isLeashed()) land=true;
+        super.tickLeash();
+    }
+
+    @Override
+    public void setOrderedToSit(boolean sit) {
+        this.entityData.set(STATE, sit);
+        super.setOrderedToSit(sit);
+    }
+
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        this.entityData.set(STATE, compound.getBoolean("Sitting"));
+        this.entityData.set(SIZE, compound.getFloat("size"));
+        this.entityData.set(SADDLED, compound.getByte("saddled"));
+        this.entityData.set(VARIANT, compound.getInt("variant"));
+        this.entityData.set(COLOR, compound.getInt("color"));
+        this.entityData.set(BIOME, compound.getInt("biome"));
+        this.entityData.set(BIOME_LAYER, compound.getInt("biomelayer"));
+    }
+
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putFloat("size", this.entityData.get(SIZE));
+        compound.putByte("saddled", this.entityData.get(SADDLED));
+        compound.putInt("variant", this.entityData.get(VARIANT));
+        compound.putInt("color", this.entityData.get(COLOR));
+        compound.putInt("biome", this.entityData.get(BIOME));
+        compound.putInt("biomelayer", this.entityData.get(BIOME_LAYER));
+    }
+
+    public boolean canWearArmor() {
+        return true;
+    }
+
+    public boolean isArmor(ItemStack p_30731_) {
+        return p_30731_.getItem() instanceof HorseArmorItem;
+    }
+
+    public boolean isWearingArmor() {
+        return !this.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
+    }
+
+    public void equipArmor(Player p_251330_, ItemStack p_248855_) {
+        if (this.isArmor(p_248855_)) {
+            //this.inventory.setItem(1, p_248855_.copyWithCount(1));
+            if (!p_251330_.getAbilities().instabuild) {
+                p_248855_.shrink(1);
+            }
+        }
+
+    }
+
+    protected void dropEquipment() {
+        super.dropEquipment();
+//        if (this.inventory != null) {
+//            for(int i = 0; i < this.inventory.getContainerSize(); ++i) {
+//                ItemStack itemstack = this.inventory.getItem(i);
+//                if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack)) {
+//                    this.spawnAtLocation(itemstack);
+//                }
+//            }
+//        }
+    }
+    //FLYING------------------------------------------------------------------------------------------------------------
+    protected void checkFallDamage(double p_20809_, boolean p_20810_, BlockState p_20811_, BlockPos p_20812_) {
+    }
+
+    public boolean onClimbable() {
+        return this.isClimbing();
+    }
+
+    public boolean isClimbing() {
+        return (this.entityData.get(CLIMBING) & 1) != 0;
+    }
+
+    public void setBesideClimbableBlock(boolean p_33820_) {
+        byte b0 = this.entityData.get(CLIMBING);
+        if (p_33820_) {
+            b0 = (byte)(b0 | 1);
+        } else {
+            b0 = (byte)(b0 & -2);
+        }
+        this.entityData.set(CLIMBING, b0);
+    }
+
+
+    class PhantomTargetGoal extends Goal {
+        private final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(64.0D);
+        private int nextScanTick = reducedTickDelay(20);
+
+        public boolean canUse() {
+            if(isTame()) return false;
+            if(this.nextScanTick > 0) {
+                --this.nextScanTick;
+                return false;
+            } else {
+                this.nextScanTick = reducedTickDelay(60);
+                Animal target = SilverwingEntity.this.level.getNearestEntity(Animal.class, attackTargeting, SilverwingEntity.this, SilverwingEntity.this.getX(), SilverwingEntity.this.getY(), SilverwingEntity.this.getZ(), SilverwingEntity.this.getBoundingBox().inflate(16.0D, 64.0D, 16.0D));
+                if(target!=null){
+                    if (SilverwingEntity.this.canAttack(target, TargetingConditions.DEFAULT)) {
+                        SilverwingEntity.this.setTarget(target);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+
+        public boolean canContinueToUse() {
+            LivingEntity livingentity = SilverwingEntity.this.getTarget();
+            return livingentity != null ? SilverwingEntity.this.canAttack(livingentity, TargetingConditions.DEFAULT) : false;
+        }
+    }
+
+    class PhantomAttackStrategyGoal extends Goal {
+        private int nextSweepTick;
+
+        public boolean canUse() {
+            LivingEntity livingentity = SilverwingEntity.this.getTarget();
+            return livingentity != null ? SilverwingEntity.this.canAttack(livingentity, TargetingConditions.DEFAULT) : false;
+        }
+
+        public void start() {
+            this.nextSweepTick = this.adjustedTickDelay(10);
+            SilverwingEntity.this.attackPhase = AttackPhase.CIRCLE;
+            this.setAnchorAboveTarget();
+        }
+
+        public void stop() {
+            SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.anchorPoint).above(20 + SilverwingEntity.this.random.nextInt(20));
+        }
+
+        public void tick() {
+            if (SilverwingEntity.this.attackPhase == AttackPhase.CIRCLE) {
+                --this.nextSweepTick;
+                if (this.nextSweepTick <= 0) {
+                    SilverwingEntity.this.attackPhase = AttackPhase.SWOOP;
+                    this.setAnchorAboveTarget();
+                    this.nextSweepTick = this.adjustedTickDelay((8 + SilverwingEntity.this.random.nextInt(4)) * 20);
+                }
+            }
+
+        }
+
+        private void setAnchorAboveTarget() {
+            SilverwingEntity.this.anchorPoint = SilverwingEntity.this.getTarget().blockPosition().above(20 + SilverwingEntity.this.random.nextInt(20));
+            if (SilverwingEntity.this.anchorPoint.getY() < SilverwingEntity.this.level.getSeaLevel()) {
+                SilverwingEntity.this.anchorPoint = new BlockPos(SilverwingEntity.this.anchorPoint.getX(), SilverwingEntity.this.level.getSeaLevel() + 1, SilverwingEntity.this.anchorPoint.getZ());
+            }
+
+        }
+    }
+
+    class PhantomCircleAroundAnchorGoal extends PhantomMoveTargetGoal {
+        private float angle;
+        private float distance;
+        private float height;
+        private float clockwise;
+
+        public boolean canUse() {
+            return SilverwingEntity.this.getTarget() == null || SilverwingEntity.this.attackPhase == AttackPhase.CIRCLE;
+        }
+
+        public void start() {
+            this.distance = 5.0F + SilverwingEntity.this.random.nextFloat() * 10.0F;
+            this.height = -4.0F + SilverwingEntity.this.random.nextFloat() * 9.0F;
+            this.clockwise = SilverwingEntity.this.random.nextBoolean() ? 1.0F : -1.0F;
+            this.selectNext();
+        }
+
+        public void tick() {
+            if (SilverwingEntity.this.random.nextInt(this.adjustedTickDelay(350)) == 0) {
+                this.height = -4.0F + SilverwingEntity.this.random.nextFloat() * 9.0F;
+            }
+
+            if (SilverwingEntity.this.random.nextInt(this.adjustedTickDelay(250)) == 0) {
+                ++this.distance;
+                if (this.distance > 15.0F) {
+                    this.distance = 5.0F;
+                    this.clockwise = -this.clockwise;
+                }
+            }
+
+            if (SilverwingEntity.this.random.nextInt(this.adjustedTickDelay(450)) == 0) {
+                this.angle = SilverwingEntity.this.random.nextFloat() * 2.0F * (float)Math.PI;
+                this.selectNext();
+            }
+
+            if (this.touchingTarget()) {
+                this.selectNext();
+            }
+
+            if (SilverwingEntity.this.moveTargetPoint.y < SilverwingEntity.this.getY() && !SilverwingEntity.this.level.isEmptyBlock(SilverwingEntity.this.blockPosition().below(1))) {
+                this.height = Math.max(1.0F, this.height);
+                this.selectNext();
+            }
+
+            if (SilverwingEntity.this.moveTargetPoint.y > SilverwingEntity.this.getY() && !SilverwingEntity.this.level.isEmptyBlock(SilverwingEntity.this.blockPosition().above(1))) {
+                this.height = Math.min(-1.0F, this.height);
+                this.selectNext();
+            }
+
+        }
+
+        private void selectNext() {
+            if (BlockPos.ZERO.equals(SilverwingEntity.this.anchorPoint)) {
+                SilverwingEntity.this.anchorPoint = SilverwingEntity.this.blockPosition();
+            }
+
+            this.angle += this.clockwise * 15.0F * ((float)Math.PI / 180F);
+            SilverwingEntity.this.moveTargetPoint = Vec3.atLowerCornerOf(SilverwingEntity.this.anchorPoint).add((double)(this.distance * Mth.cos(this.angle)), (double)(-4.0F + this.height), (double)(this.distance * Mth.sin(this.angle)));
+        }
+    }
+
+    class PhantomLookControl extends LookControl {
+        public PhantomLookControl(Mob p_33235_) {
+            super(p_33235_);
+        }
+
+        public void tick() {
+        }
+    }
+
+    class PhantomMoveControl extends MoveControl {
+        private float speed = 0.3F;
+
+        public PhantomMoveControl(Mob p_33241_) {
+            super(p_33241_);
+        }
+
+        public void tick() {
+            if (SilverwingEntity.this.horizontalCollision) {
+                SilverwingEntity.this.setYRot(SilverwingEntity.this.getYRot() + 180.0F);
+                this.speed = 0.3F;
+            }
+
+            double d0 = SilverwingEntity.this.moveTargetPoint.x - SilverwingEntity.this.getX();
+            double d1 = SilverwingEntity.this.moveTargetPoint.y - SilverwingEntity.this.getY();
+            double d2 = SilverwingEntity.this.moveTargetPoint.z - SilverwingEntity.this.getZ();
+            double d3 = Math.sqrt(d0 * d0 + d2 * d2);
+            if (Math.abs(d3) > (double)1.0E-5F && !isOrderedToSit()) {
+                double d4 = 1.0D - Math.abs(d1 * (double)0.7F) / d3;
+                d0 *= d4;
+                d2 *= d4;
+                d3 = Math.sqrt(d0 * d0 + d2 * d2);
+                double d5 = Math.sqrt(d0 * d0 + d2 * d2 + d1 * d1);
+                float f = SilverwingEntity.this.getYRot();
+                float f1 = (float)Mth.atan2(d2, d0);
+                float f2 = Mth.wrapDegrees(SilverwingEntity.this.getYRot() + 90.0F);
+                float f3 = Mth.wrapDegrees(f1 * (180F / (float)Math.PI));
+                SilverwingEntity.this.setYRot(Mth.approachDegrees(f2, f3, 4.0F) - 90.0F);
+                SilverwingEntity.this.yBodyRot = SilverwingEntity.this.getYRot();
+                if (Mth.degreesDifferenceAbs(f, SilverwingEntity.this.getYRot()) < 3.0F) {
+                    this.speed = Mth.approach(this.speed, 1.8F, 0.005F * (1.8F / this.speed));
+                } else {
+                    this.speed = Mth.approach(this.speed, 0.2F, 0.025F);
+                }
+
+                float f4 = (float)(-(Mth.atan2(-d1, d3) * (double)(180F / (float)Math.PI)));
+                SilverwingEntity.this.setXRot(f4);
+                float f5 = SilverwingEntity.this.getYRot() + 90.0F;
+                double d6 = (double)(this.speed * Mth.cos(f5 * ((float)Math.PI / 180F))) * Math.abs(d0 / d5);
+                double d7 = (double)(this.speed * Mth.sin(f5 * ((float)Math.PI / 180F))) * Math.abs(d2 / d5);
+                double d8 = (double)(this.speed * Mth.sin(f4 * ((float)Math.PI / 180F))) * Math.abs(d1 / d5);
+                Vec3 vec3 = SilverwingEntity.this.getDeltaMovement();
+                double y = (!SilverwingEntity.this.land) ? d8 : 0;
+                if(SilverwingEntity.this.isOnGround()) {
+                    SilverwingEntity.this.groundTicks++;
+                    if ((SilverwingEntity.this.groundTicks > 1000 && !SilverwingEntity.this.isTame()) || (SilverwingEntity.this.groundTicks > 2500 && SilverwingEntity.this.isTame()) ) {
+                        SilverwingEntity.this.land = false;
+                        SilverwingEntity.this.groundTicks = 0;
+                        SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.anchorPoint).above(20 + SilverwingEntity.this.random.nextInt(20));
+                    }
+                }
+                if(SilverwingEntity.this.getTarget()==null && !SilverwingEntity.this.isTame()) {
+                    SilverwingEntity.this.targetTicks++;
+                    if (SilverwingEntity.this.targetTicks > 2500) {
+                        SilverwingEntity.this.targetTicks = 0;
+                        SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.anchorPoint).above(20 + SilverwingEntity.this.random.nextInt(20)).east(SilverwingEntity.this.random.nextInt(40)).south(SilverwingEntity.this.random.nextInt(40));
+                    }
+                }
+                if(!SilverwingEntity.this.isOnGround() && SilverwingEntity.this.getTarget()==null){
+                    SilverwingEntity.this.flyTicks++;
+                    if ((SilverwingEntity.this.flyTicks > 10000 && !SilverwingEntity.this.isTame()) || (SilverwingEntity.this.flyTicks > 700 && SilverwingEntity.this.isTame()) ) {
+                        SilverwingEntity.this.flyTicks = 0;
+                        SilverwingEntity.this.land=true;
+                        SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.blockPosition());
+                    }
+                }
+                SilverwingEntity.this.setDeltaMovement(vec3.add((new Vec3(d6, y, d7)).subtract(vec3).scale(0.2D)));
+            }
+            if(isOrderedToSit() && (SilverwingEntity.this.flyTicks!=0 ||SilverwingEntity.this.groundTicks!=0 || !SilverwingEntity.this.land)){
+                SilverwingEntity.this.flyTicks = 0;
+                SilverwingEntity.this.groundTicks = 0;
+                SilverwingEntity.this.land=true;
+                SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.blockPosition());
+            }
+        }
+    }
+
+    abstract class PhantomMoveTargetGoal extends Goal {
+        public PhantomMoveTargetGoal() {
+            this.setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        protected boolean touchingTarget() {
+            return SilverwingEntity.this.moveTargetPoint.distanceToSqr(SilverwingEntity.this.getX(), SilverwingEntity.this.getY(), SilverwingEntity.this.getZ()) < 4.0D;
+        }
+    }
+
+    class PhantomSweepAttackGoal extends PhantomMoveTargetGoal {
+
+        public boolean canUse() {
+            return SilverwingEntity.this.getTarget() != null && SilverwingEntity.this.attackPhase == AttackPhase.SWOOP;
+        }
+
+        public boolean canContinueToUse() {
+            LivingEntity livingentity = SilverwingEntity.this.getTarget();
+            if (livingentity == null) {
+                return false;
+            } else if (!livingentity.isAlive()) {
+                return false;
+            } else {
+                if (livingentity instanceof Player) {
+                    Player player = (Player)livingentity;
+                    if (livingentity.isSpectator() || player.isCreative()) {
+                        return false;
+                    }
+                }
+                if (!this.canUse()) {
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
+
+        public void start() {
+        }
+
+        public void stop() {
+            SilverwingEntity.this.setTarget((LivingEntity)null);
+            SilverwingEntity.this.attackPhase = AttackPhase.CIRCLE;
+        }
+
+        public void tick() {
+            LivingEntity livingentity = SilverwingEntity.this.getTarget();
+            if (livingentity != null) {
+                SilverwingEntity.this.moveTargetPoint = new Vec3(livingentity.getX(), livingentity.getY(0.5D), livingentity.getZ());
+                if (SilverwingEntity.this.getBoundingBox().inflate((double)0.2F).intersects(livingentity.getBoundingBox())) {
+                    SilverwingEntity.this.doHurtTarget(livingentity);
+                    SilverwingEntity.this.attackPhase = AttackPhase.CIRCLE;
+                    if (!SilverwingEntity.this.isSilent()) {
+                        SilverwingEntity.this.level.levelEvent(1039, SilverwingEntity.this.blockPosition(), 0);
+                    }
+                } else if (SilverwingEntity.this.horizontalCollision || SilverwingEntity.this.hurtTime > 0) {
+                    SilverwingEntity.this.attackPhase = AttackPhase.CIRCLE;
+                }
+            }
+        }
+    }
+    //END---FLYING------------------------------------------------------------------------------------------------------
+
+    //MOUNT-------------------------------------------------------------------------------------------------------------
+    @Override
+    public boolean isSaddleable() {
+        return this.isAlive() && this.isTame() && !isBaby();
+    }
+
+    @Override
+    public void equipSaddle(@Nullable SoundSource p_21748_) {
+        itemHandler.setStackInSlot(0, new ItemStack(Items.SADDLE));
+        byte b0 = (byte)(this.entityData.get(SADDLED) | 1);
+        this.entityData.set(SADDLED, b0);
+    }
+
+    @Override
+    public boolean isSaddled() {
+        return (this.entityData.get(SADDLED) & 1) != 0;
+    }
+
+    protected void doPlayerRide(Player p_30634_) {
+        if (!this.level.isClientSide) {
+            p_30634_.setYRot(this.getYRot());
+            p_30634_.setXRot(this.getXRot());
+            p_30634_.startRiding(this);
+        }
+    }
+
+    public boolean isImmobile() {
+        return super.isImmobile() && this.isVehicle() && this.isSaddled();
+    }
+
+    public void travel(Vec3 pTravelVector) {
+        if (this.isAlive()) {
+            LivingEntity livingentity = this.getControllingPassenger();
+            if (this.isVehicle() && livingentity != null) {
+                this.setYRot(livingentity.getYRot());
+                this.yRotO = this.getYRot();
+                this.setXRot(livingentity.getXRot() * 0.5F);
+                this.setRot(this.getYRot(), this.getXRot());
+                this.yBodyRot = this.getYRot();
+                this.yHeadRot = this.yBodyRot;
+                this.flyingSpeed = this.getSpeed() * 0.03F;
+
+                if(level.isClientSide){
+                    if(KeyBinding.FLY_UP.isDown()){
+                        setDeltaMovement(new Vec3(getDeltaMovement().x, -getDeltaMovement().y + 0.4, getDeltaMovement().z));
+                    }else if(KeyBinding.FLY_DOWN.isDown()){
+                        setDeltaMovement(new Vec3(getDeltaMovement().x, -getDeltaMovement().y-0.4, getDeltaMovement().z));
+                    }else if(getDeltaMovement().y<0){
+                        setDeltaMovement(new Vec3(getDeltaMovement().x, -0.001, getDeltaMovement().z));
+                    }
+                }
+
+                if (this.isControlledByLocalInstance()) {
+                    float f,f1;
+                    if(isOnGround() || isInWater()){
+                        this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED));
+                        f = livingentity.xxa * 0.5F;
+                        f1 = livingentity.zza;
+                        if (f1 <= 0.0F) f1 *= 0.25F;
+                        super.travel(new Vec3((double)f, 0.0D, (double)f1).scale(0.1));
+                    }else{
+                        this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED)*4);
+                        f = livingentity.xxa * 8.5F;
+                        f1 = livingentity.zza * 8;
+                        if (f1 <= 0.0F) f1 *= 0.25F;
+                        super.travel(new Vec3(f, 0.0D, f1));
+                    }
+                }else if (livingentity instanceof Player) {
+                    this.setDeltaMovement(Vec3.ZERO);
+                }
+
+                this.calculateEntityAnimation(this, false);
+                this.tryCheckInsideBlocks();
+            } else {
+                this.flyingSpeed = 0.02F;
+                super.travel(pTravelVector);
+            }
+        }
+    }
+
+    public boolean canBeControlledByRider() {
+        return this.getControllingPassenger() instanceof LivingEntity;
+    }
+
+    public void positionRider(Entity p_289569_) {
+        if (this.hasPassenger(p_289569_)) {
+            double d0 = this.getY() + this.getPassengersRidingOffset() + p_289569_.getMyRidingOffset();
+            //if(!isOnGround() && (getDeltaMovement().x!=0 || getDeltaMovement().z!=0)) d0-=0.5;
+            p_289569_.setPos(this.getX(), d0, this.getZ());
+            if (p_289569_ instanceof LivingEntity) {
+                ((LivingEntity)p_289569_).yBodyRot = this.yBodyRot;
+            }
+        }
+    }
+
+    @javax.annotation.Nullable
+    public LivingEntity getControllingPassenger() {
+        Entity entity = this.getFirstPassenger();
+        if (entity instanceof Mob) {
+            return (Mob)entity;
+        } else {
+            if (this.isSaddled()) {
+                entity = this.getFirstPassenger();
+                if (entity instanceof Player) {
+                    return (Player)entity;
+                }
+            }
+
+            return null;
+        }
+    }
+
+    @javax.annotation.Nullable
+    private Vec3 getDismountLocationInDirection(Vec3 p_30562_, LivingEntity p_30563_) {
+        SilverwingEntity.this.anchorPoint = SilverwingEntity.this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SilverwingEntity.this.blockPosition());
+        double d0 = this.getX() + p_30562_.x;
+        double d1 = this.getBoundingBox().minY;
+        double d2 = this.getZ() + p_30562_.z;
+        BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+
+        for(Pose pose : p_30563_.getDismountPoses()) {
+            blockpos$mutableblockpos.set(d0, d1, d2);
+            double d3 = this.getBoundingBox().maxY + 0.75D;
+
+            while(true) {
+                double d4 = this.level.getBlockFloorHeight(blockpos$mutableblockpos);
+                if ((double)blockpos$mutableblockpos.getY() + d4 > d3) {
+                    break;
+                }
+
+                if (DismountHelper.isBlockFloorValid(d4)) {
+                    AABB aabb = p_30563_.getLocalBoundsForPose(pose);
+                    Vec3 vec3 = new Vec3(d0, (double)blockpos$mutableblockpos.getY() + d4, d2);
+                    if (DismountHelper.canDismountTo(this.level, p_30563_, aabb.move(vec3))) {
+                        p_30563_.setPose(pose);
+                        return vec3;
+                    }
+                }
+
+                blockpos$mutableblockpos.move(Direction.UP);
+                if (!((double)blockpos$mutableblockpos.getY() < d3)) {
+                    break;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public Vec3 getDismountLocationForPassenger(LivingEntity p_30576_) {
+        Vec3 vec3 = getCollisionHorizontalEscapeVector((double)this.getBbWidth(), (double)p_30576_.getBbWidth(), this.getYRot() + (p_30576_.getMainArm() == HumanoidArm.RIGHT ? 90.0F : -90.0F));
+        Vec3 vec31 = this.getDismountLocationInDirection(vec3, p_30576_);
+        if (vec31 != null) {
+            return vec31;
+        } else {
+            Vec3 vec32 = getCollisionHorizontalEscapeVector((double)this.getBbWidth(), (double)p_30576_.getBbWidth(), this.getYRot() + (p_30576_.getMainArm() == HumanoidArm.LEFT ? 90.0F : -90.0F));
+            Vec3 vec33 = this.getDismountLocationInDirection(vec32, p_30576_);
+            return vec33 != null ? vec33 : this.position();
+        }
+    }
+    //END---MOUNT-------------------------------------------------------------------------------------------------------
+    private ItemStackHandler createHandler(){
+        return new ItemStackHandler(2){
+//            @Override
+//            protected void onContentsChanged(int slot){
+//                if(slot==15) changeItem(InteractionHand.MAIN_HAND, slot);
+//                if(slot==20) changeItem(InteractionHand.OFF_HAND, slot);
+//            }
+
+            @Override @Deprecated
+            public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+                switch (slot) {
+                    case 0: return stack.getItem()==Items.SADDLE;
+                    case 1: return isArmor(stack);
+                    default: return super.isItemValid(slot, stack);
+                }
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                switch (slot) {
+                    case 0, 1: return 1;
+                    default: return super.getSlotLimit(slot);
+                }
+            }
+        };
+    }
+
+    @Nonnull
+    @Override
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @javax.annotation.Nullable Direction side){
+        if(cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return handler.cast();
+        return super.getCapability(cap, side);
+    }
+
+    public <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        if(entityData.get(STATE)){
+            AnimationBuilder anim= isBaby() ? BABY_SIT : SIT;
+            event.getController().setAnimation(anim);
+            return PlayState.CONTINUE;
+        }
+        if (event.isMoving()) {
+            AnimationBuilder anim= isBaby() ? BABY_WALK : entityData.get(FLYING) ? FLY : WALK;
+            event.getController().setAnimation(anim);
+            return PlayState.CONTINUE;
+        }
+        AnimationBuilder anim= isBaby() ? BABY_IDLE : entityData.get(FLYING) ? IDLE_FLY : IDLE_GROUND;
+        event.getController().setAnimation(anim);
+        return PlayState.CONTINUE;
+    }
+
+//    public <T extends GeoAnimatable> PlayState predicate2(AnimationState<T> tAnimationState)  {
+//        tAnimationState.getController().forceAnimationReset();
+//        return PlayState.STOP;
+//    }
+
+    @Override
+    public void registerControllers(AnimationData data) {
+        data.addAnimationController(new AnimationController<IAnimatable>(this, "controller", 0, this::predicate));
+    }
+
+    @Override
+    public AnimationFactory getFactory() {
+        return this.factory;
+    }
+
+    //VARIANTS----------------------------------------------------------------------------------------------------------
+    public int getVariant(){
+        return entityData.get(VARIANT);
+    }
+
+    public void setVariant(int variant){
+        entityData.set(VARIANT, variant);
+    }
+
+    public int getVariantColor(){
+        return entityData.get(COLOR);
+    }
+
+    public void setVariantColor(int feathers){
+        entityData.set(COLOR, feathers);
+    }
+
+    public int getBiome(){
+        return entityData.get(BIOME);
+    }
+
+    public void setBiome(int biome){
+        entityData.set(BIOME, biome);
+    }
+
+    public int getBiomeLayer(){
+        return entityData.get(BIOME_LAYER);
+    }
+
+    public void setBiomeLayer(int biome){
+        entityData.set(BIOME_LAYER, biome);
+    }
+
+    @javax.annotation.Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor p_30703_, DifficultyInstance p_30704_, MobSpawnType p_30705_, @javax.annotation.Nullable SpawnGroupData p_30706_, @javax.annotation.Nullable CompoundTag p_30707_) {
+        int variant = p_30703_.getRandom().nextInt(0, 3);
+        int feathers = p_30703_.getRandom().nextInt(0, 3);
+        float temp = p_30703_.getBiome(blockPosition()).value().getBaseTemperature();
+        if (temp>1.5) {
+            setBiome(0); setBiomeLayer(0);
+        } else if (temp>0.5) {
+            setBiome(1); setBiomeLayer(1);
+        } else if (temp<=0.5) {
+            setBiome(2); setBiomeLayer(2);
+        } else{
+            setBiome(0); setBiomeLayer(0); variant = 0; feathers = 0;
+        }
+        setVariant(variant);
+        setVariantColor(feathers);
+        return super.finalizeSpawn(p_30703_, p_30704_, p_30705_, p_30706_, p_30707_);
+    }
+    //END--VARIANTS-----------------------------------------------------------------------------------------------------
+    protected SoundEvent getDeathSound() { return SoundEvents.PANDA_DEATH; }
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn) { return SoundEvents.DONKEY_HURT; }
+    public SoundEvent getAmbientSound() { return SoundEvents.PARROT_AMBIENT; }
+}
