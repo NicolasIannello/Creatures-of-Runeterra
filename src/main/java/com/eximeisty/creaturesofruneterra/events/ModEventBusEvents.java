@@ -2,18 +2,7 @@ package com.eximeisty.creaturesofruneterra.events;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
-import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.ExaltedPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FiddleDummyEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FiddlesticksEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.PatchedPorobotEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.PlunderPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.XerxarethEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.*;
 import com.eximeisty.creaturesofruneterra.item.custom.ModSpawnEggItem;
 
 import net.minecraft.entity.EntityType;
@@ -37,6 +26,7 @@ public class ModEventBusEvents {
         event.put(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.FIDDLEDUMMY.get(), FiddleDummyEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.SILVERWING.get(), SilverwingEntity.setCustomAttributes().create());
         //PART ENTITIES
         event.put(ModEntityTypes.WIVHIV.get(), CoRPartEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.WVIHV.get(), CoRPartEntity.setCustomAttributes().create());

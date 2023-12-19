@@ -1,5 +1,7 @@
 package com.eximeisty.creaturesofruneterra;
 
+import com.eximeisty.creaturesofruneterra.entity.client.entities.silverwing.SilverwingRenderer;
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
@@ -72,6 +74,7 @@ public class CreaturesofRuneterra {
 
     private void setup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            ModMessages.register();
             ModStructures.setupStructures();
         });
     }
@@ -94,6 +97,7 @@ public class CreaturesofRuneterra {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FIDDLEDUMMY.get(), FiddleDummyRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SILVERWING.get(), SilverwingRenderer::new);
         //ITEMS
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MISIL.get(), MisilRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BULLET.get(), BulletRenderer::new);

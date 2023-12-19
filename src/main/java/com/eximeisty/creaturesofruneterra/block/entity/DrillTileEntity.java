@@ -4,6 +4,8 @@ import javax.annotation.Nullable;
 
 import com.eximeisty.creaturesofruneterra.block.ModTiles;
 import com.eximeisty.creaturesofruneterra.entity.ModEntityTypes;
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
+import com.eximeisty.creaturesofruneterra.networking.packet.S2CTremble;
 import com.eximeisty.creaturesofruneterra.util.ModSoundEvents;
 
 import net.minecraft.client.Minecraft;
@@ -17,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.Util;
 import net.minecraft.util.text.ChatType;
+import net.minecraft.util.text.TextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -67,17 +70,11 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
         super.onDataPacket(net, pkt);
         handleUpdateTag(this.world.getBlockState(this.getPos()), pkt.getNbtCompound());
     }
-    
+
     @Override @SuppressWarnings("resource")
     public void tick() {
         if(this.getTileData().getBoolean("shake")) {
-            ClientPlayerEntity pl = Minecraft.getInstance().player;
-            // this.world.getPlayers().forEach(player ->{
-                if(pl.getDistanceSq(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ())<400){
-                    pl.rotationYaw+=Math.random()*(3+3)-3; 
-                    pl.rotationPitch+=Math.random()*(3+3)-3;
-                }
-            // });
+            ModMessages.sendToClients(new S2CTremble(this.getPos()));
         }
         if(this.getTileData().getInt("state")==1 && !this.world.isRemote){
             ticks++;
@@ -86,14 +83,25 @@ public class DrillTileEntity extends TileEntity implements IAnimatable, ITickabl
                 if(ticks==180) this.world.playSound(null, pos, ModSoundEvents.REKSAI_AWAKEN.get(), SoundCategory.AMBIENT, 3, 1);
                 if(ticks==250) {
                     this.getTileData().putBoolean("shake", true);
-                    this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("The floor trembles"), ChatType.CHAT, Util.DUMMY_UUID));
+                    this.getTileData().putBoolean("shake", true);
+                    this.world.getPlayers().forEach(pl ->{
+                        if(pl.getDistanceSq(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ())<1200){
+                            pl.sendMessage(new TranslationTextComponent("The floor trembles"), Util.DUMMY_UUID);
+                        }
+                    });
                 }
                 if(ticks==500){
                     ModEntityTypes.REKSAI.get().spawn(world.getServer().getWorld(world.getDimensionKey()), null, null, this.getPos(), SpawnReason.TRIGGERED, false, false);
                     this.world.destroyBlock(pos, false);
                 }
             }else{
-                if(ticks==250) this.getWorld().getServer().getPlayerList().sendPacketToAllPlayers(new SChatPacket(new TranslationTextComponent("Nothing happens"), ChatType.CHAT, Util.DUMMY_UUID));
+                if(ticks==250) {
+                    this.world.getPlayers().forEach(pl ->{
+                        if(pl.getDistanceSq(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ())<1200){
+                            pl.sendMessage(new TranslationTextComponent("Nothing happens"), Util.DUMMY_UUID);
+                        }
+                    });
+                }
             }
             if(ticks==1) if(this.world.getBiome(this.pos).getRegistryName().toString().contains("desert")) inDesert=true;
         }else if(this.getTileData().getInt("state")==2){

@@ -7,6 +7,7 @@ import com.eximeisty.creaturesofruneterra.item.custom.*;
 
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.*;
+import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
@@ -145,6 +146,9 @@ public class ModItems {
 
         public static final RegistryObject<ModSpawnEggItem> FIDDLESTICKS_SPAWN_EGG = ITEMS.register("fiddlesticks_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.FIDDLESTICKS, 0x0f0705, 0x3b1210, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> SILVERWING_SPAWN_EGG = ITEMS.register("silverwing_spawn_egg",
+        () -> new ForgeSpawnEggItem(ModEntityTypes.SILVERWING, 0xF3D978, 0xffffff, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         //BLOCKS
         public static final RegistryObject<Item> DRILL = ITEMS.register("drill",

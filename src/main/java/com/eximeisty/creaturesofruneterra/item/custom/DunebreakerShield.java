@@ -5,6 +5,9 @@ import java.util.List;
 import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
 import com.eximeisty.creaturesofruneterra.item.client.dunebreakershield.DunebreakerShieldRenderer;
 
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
+import com.eximeisty.creaturesofruneterra.networking.packet.C2SDunebreakerShield;
+import com.eximeisty.creaturesofruneterra.util.KeyBindings;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -42,7 +45,6 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     private static final AnimationBuilder IZQUIERDA_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.izquierda", true);
     private static final AnimationBuilder ATTACKD_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackD", false).addAnimation("animation.dunebreaker_shield.derecha", true);
     private static final AnimationBuilder ATTACKI_ANIM = new AnimationBuilder().addAnimation("animation.dunebreaker_shield.attackI", false).addAnimation("animation.dunebreaker_shield.izquierda", true);
-    final String quote = "["+Minecraft.getInstance().gameSettings.keyBindAttack.getKeyDescription().replace("key.", "")+"]+["+Minecraft.getInstance().gameSettings.keyBindUseItem.getKeyDescription().replace("key.", "")+"] to use hability";
 
     public DunebreakerShield(Properties properties) {
         super(properties.setISTER(()-> DunebreakerShieldRenderer::new));
@@ -80,33 +82,14 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     }
     
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(cd==295){
-            if (!worldIn.isRemote) {
-                DBShieldEntity shieldEntity = new DBShieldEntity(worldIn, (LivingEntity)entityIn);
-                shieldEntity.setDirectionAndMovement(entityIn, entityIn.rotationPitch, entityIn.rotationYaw, 0.0F,1.0F * 3.0F, 1.0F);
-                shieldEntity.setDamage(2);
-                shieldEntity.setKnockbackStrength(2);
-                shieldEntity.ticksExisted = 35;
-                shieldEntity.setNoGravity(true);
-                shieldEntity.setPierceLevel((byte)4);
-                
-                final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) worldIn);
-                final PacketDistributor.PacketTarget target = PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> entityIn);
-                if(((LivingEntity)entityIn).getHeldItemMainhand().getDisplayName().getString().contains("Dunebreaker")){
-                    GeckoLibNetwork.syncAnimation(target, this, id, 3);
-                }else{
-                    GeckoLibNetwork.syncAnimation(target, this, id, 4);
-                }
-                worldIn.addEntity(shieldEntity);
-            }
-        }
         if(cd>0) cd--;
     }
 
     @SuppressWarnings("resource")
     public void onUse(World worldIn, LivingEntity livingEntityIn, ItemStack stack, int count) {
-        if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown() && cd==0){
+        if(worldIn.isRemote && KeyBindings.ITEM_HABILITY.isKeyDown() && cd<=0){
             cd=300;
+            ModMessages.sendToServer(new C2SDunebreakerShield());
         }
     }
 
@@ -130,6 +113,7 @@ public class DunebreakerShield extends Item implements IAnimatable , ISyncable{
     }
 
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
+        String quote = "["+KeyBindings.ITEM_HABILITY.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to fire a proyectile";
         tooltip.add(new TranslationTextComponent(quote));
 	}
 

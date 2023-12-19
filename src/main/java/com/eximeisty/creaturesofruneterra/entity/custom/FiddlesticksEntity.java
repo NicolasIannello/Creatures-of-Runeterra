@@ -406,10 +406,16 @@ public class FiddlesticksEntity extends CreatureEntity implements IAnimatable, I
             
             if(ticks==2 && sound!=null) this.attacker.world.playSound(null, this.attacker.getPosition(), sound, SoundCategory.HOSTILE, 1, 1);
             if(ticks>start && ticks<end){
-                if(this.attacker.getEntitySenses().canSee(this.attacker.getAttackTarget())){
-                    this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 20*30));
-                    if(MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationYaw, x)<65 && MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationPitch, y)<50) this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.NAUSEA, 20*30));
-                }
+                this.attacker.world.getPlayers().forEach(player ->{
+                    if(this.attacker.getEntitySenses().canSee(player) && this.attacker.getDistanceSq(player)<2000){
+                        player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 20*30));
+                        if(MathHelper.degreesDifferenceAbs(player.rotationYaw, x)<65 && MathHelper.degreesDifferenceAbs(player.rotationPitch, y)<50) player.addPotionEffect(new EffectInstance(Effects.NAUSEA, 20*30));
+                    }
+                });
+//                if(this.attacker.getEntitySenses().canSee(this.attacker.getAttackTarget())){
+//                    this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.BLINDNESS, 20*30));
+//                    if(MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationYaw, x)<65 && MathHelper.degreesDifferenceAbs(this.attacker.getAttackTarget().rotationPitch, y)<50) this.attacker.getAttackTarget().addPotionEffect(new EffectInstance(Effects.NAUSEA, 20*30));
+//                }
             }
             if(ticks>reset) resetState(ms, state, false, false, false);
         }

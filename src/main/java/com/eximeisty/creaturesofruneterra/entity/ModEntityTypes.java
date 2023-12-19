@@ -1,23 +1,7 @@
 package com.eximeisty.creaturesofruneterra.entity;
 
 import com.eximeisty.creaturesofruneterra.CreaturesofRuneterra;
-import com.eximeisty.creaturesofruneterra.entity.custom.HexcoreEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.MisilEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.PatchedPorobotEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.PlunderPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.PoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.RekSaiEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.BulletEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.CoRPartEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.DBShieldEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.ExaltedPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FabledPoroEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FiddleDummyEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FiddleProyectileEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.FiddlesticksEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiDunebreakerEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.XerSaiHatchlingEntity;
-import com.eximeisty.creaturesofruneterra.entity.custom.XerxarethEntity;
+import com.eximeisty.creaturesofruneterra.entity.custom.*;
 
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
@@ -82,7 +66,13 @@ public class ModEntityTypes {
     ENTITY_TYPES.register("exaltedporo",
         ()-> EntityType.Builder.create(ExaltedPoroEntity::new, EntityClassification.CREATURE).size(0.6f,0.8f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "exaltedporo").toString())
     );
-    
+
+    //CREATURES
+    public static final RegistryObject<EntityType<SilverwingEntity>> SILVERWING=
+    ENTITY_TYPES.register("silverwing",
+            ()-> EntityType.Builder.create(SilverwingEntity::new, EntityClassification.CREATURE).size(1.7f,1.7f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "silverwing").toString())
+    );
+
     //PART ENTITIES
     public static final RegistryObject<EntityType<CoRPartEntity>> WIVHIV=
     ENTITY_TYPES.register("wichiv", 

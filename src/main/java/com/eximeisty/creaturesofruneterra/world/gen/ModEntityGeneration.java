@@ -16,7 +16,8 @@ import java.util.List;
 public class ModEntityGeneration {
     public static void onEntitySpawn(final BiomeLoadingEvent event) {
         addEntityToSpecificBiomes(event, ModEntityTypes.XERSAI_HATCHLING.get(), 30, 2, 4, Biomes.DESERT,Biomes.DESERT_HILLS,Biomes.DESERT_LAKES,Biomes.BADLANDS,Biomes.BADLANDS_PLATEAU );
-        addEntityToSpecificBiomes(event, ModEntityTypes.PORO.get(), 40, 1, 3, Biomes.SNOWY_BEACH, Biomes.SNOWY_MOUNTAINS, Biomes.SNOWY_TAIGA, Biomes.SNOWY_TAIGA_HILLS, Biomes.SNOWY_TAIGA_MOUNTAINS, Biomes.SNOWY_TUNDRA );
+        addEntityToSpecificBiomes(event, ModEntityTypes.PORO.get(), 25, 1, 3, Biomes.SNOWY_BEACH, Biomes.SNOWY_MOUNTAINS, Biomes.SNOWY_TAIGA, Biomes.SNOWY_TAIGA_HILLS, Biomes.ICE_SPIKES, Biomes.SNOWY_TAIGA_MOUNTAINS, Biomes.FROZEN_RIVER, Biomes.SNOWY_TUNDRA);
+        addEntityToSpecificBiomes(event, ModEntityTypes.SILVERWING.get(), 10, 1, 1, Biomes.BADLANDS, Biomes.DESERT, Biomes.ERODED_BADLANDS, Biomes.ICE_SPIKES, Biomes.PLAINS, Biomes.SAVANNA, Biomes.SAVANNA_PLATEAU, Biomes.SNOWY_TUNDRA, Biomes.SUNFLOWER_PLAINS, Biomes.WOODED_MOUNTAINS, Biomes.GRAVELLY_MOUNTAINS, Biomes.MOUNTAINS, Biomes.SHATTERED_SAVANNA, Biomes.WOODED_BADLANDS_PLATEAU);
     }
 
     private static void addEntityToSpecificBiomes(BiomeLoadingEvent event, EntityType<?> type, int weight, int minCount, int maxCount, RegistryKey<Biome>... biomes) {

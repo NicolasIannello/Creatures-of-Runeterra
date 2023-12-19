@@ -3,6 +3,9 @@ package com.eximeisty.creaturesofruneterra.item.custom;
 import java.util.List;
 
 import com.eximeisty.creaturesofruneterra.entity.custom.FiddleProyectileEntity;
+import com.eximeisty.creaturesofruneterra.networking.ModMessages;
+import com.eximeisty.creaturesofruneterra.networking.packet.C2SFiddleArmor;
+import com.eximeisty.creaturesofruneterra.util.KeyBindings;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
@@ -33,7 +36,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     public String controllerName = "controller";
     public int cd=0;
     public int tiros=0;
-    private List<Entity> targets = Lists.newArrayList();
+    public List<Entity> targets = Lists.newArrayList();
     //private static final AnimationBuilder ANIM = new AnimationBuilder().addAnimation("animation.fiddle_armor2.open", false);
 
     public FiddleArmorItem(IArmorMaterial materialIn, EquipmentSlotType slot, Properties builder) {
@@ -55,11 +58,9 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     }
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-        if(this.getEquipmentSlot()==EquipmentSlotType.CHEST && entityIn.getArmorInventoryList().toString().contains("fiddle_birdcage") && Minecraft.getInstance().gameSettings.keyBindSneak.isKeyDown() && Minecraft.getInstance().gameSettings.keyBindPickBlock.isKeyDown() && cd<=0 && !worldIn.isRemote){
-                worldIn.getEntitiesWithinAABB(LivingEntity.class, entityIn.getBoundingBox().grow(5)).stream().forEach(entity ->{
-                    if(targets.size()<6 && entity!=entityIn)targets.add(entity); 
-                });
+        if(this.getEquipmentSlot()==EquipmentSlotType.CHEST && entityIn.getArmorInventoryList().toString().contains("fiddle_birdcage") && cd<=0 && worldIn.isRemote && KeyBindings.ARMOR_HABILITY.isKeyDown()){
             cd=1000;
+            ModMessages.sendToServer(new C2SFiddleArmor());
         }
         if(!targets.isEmpty()){
             worldIn.addEntity(new FiddleProyectileEntity(worldIn, (LivingEntity)entityIn, targets.get(0), Direction.DOWN.getAxis(), null));
@@ -74,7 +75,7 @@ public class FiddleArmorItem extends GeoArmorItem implements IAnimatable{
     }
 
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        String quote = "["+Minecraft.getInstance().gameSettings.keyBindSneak.getKeyDescription().replace("key.", "")+"]+["+Minecraft.getInstance().gameSettings.keyBindPickBlock.getKeyDescription().replace("key.", "")+"] to use hability";
+        String quote = "["+KeyBindings.ARMOR_HABILITY.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to use hability";
         if(this.getEquipmentSlot()==EquipmentSlotType.CHEST && this.getArmorMaterial()==ArmorMaterial.NETHERITE) tooltip.add(new TranslationTextComponent(quote));
 	}
 

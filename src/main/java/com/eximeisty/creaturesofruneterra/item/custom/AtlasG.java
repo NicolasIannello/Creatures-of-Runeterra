@@ -45,6 +45,9 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
     private int dashTicks=0;
     private int soundTicks=0;
     private boolean pound=false;
+    private boolean dash=false;
+    private int poundTicks=0;
+    private double y;
     private Vector3d motion;
     private static final AnimationBuilder CHARGE_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge", false).addAnimation("animation.atlasg.full", true);
     private static final AnimationBuilder CHARGE2_ANIM = new AnimationBuilder().addAnimation("animation.atlasg.charge2", false).addAnimation("animation.atlasg.full2", true);
@@ -83,6 +86,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
 
     public void inventoryTick(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         Iterator<ItemStack> item = entityIn.getHeldEquipment().iterator();
+        Iterator<ItemStack> item2 = entityIn.getHeldEquipment().iterator();
         if(item.next()==stack && hand) hand=false;
         if(item.next()==stack && !hand) hand=true;
         if (!worldIn.isRemote && !isCharged(stack)) {
@@ -104,32 +108,43 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
             }
         }
         if(getState(stack)==3){
-            dashTicks++;
-            attackBB(entityIn.getBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), entityIn);
-            breakBB(entityIn.getBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5).offset(entityIn.getLookVec().x*1.5, 0, entityIn.getLookVec().z*1.5), entityIn, worldIn);
-            if(entityIn.fallDistance>=7) pound=true;
-            if(dashTicks>=20 && (!entityIn.isOnGround())) dashTicks-=3;
-            if(entityIn.isOnGround() && pound){
-                breakBB(entityIn.getBoundingBox().expand(1, -2, 1).expand(-1, 0, -1).contract(0, 2, 0), entityIn, worldIn);
-                breakBB(entityIn.getBoundingBox().expand(2, -1, 2).expand(-2, 0, -2).contract(0, 2, 0), entityIn, worldIn);
+            if(dashTicks==0) y = entityIn.getPosY()+5;
+            if(dash){
+                dashTicks++;
+                attackBB(entityIn.getBoundingBox().expand(0.5, 0, 0.5).expand(-0.5, 0, -0.5), entityIn);
+                breakBB(entityIn.getBoundingBox().expand(1, 0, 1).expand(-1, 0, -1).offset(entityIn.getLookVec().x * 1.5, 0, entityIn.getLookVec().z * 1.5), worldIn);
+            }
+            if(entityIn.fallDistance>=7) pound = dash = true;
+            if(entityIn.isOnGround() && (pound || poundTicks>0)){
+                poundTicks++;
+                breakBB(entityIn.getBoundingBox().expand(1, -2, 1).expand(-1, 0, -1).contract(0, 2, 0), worldIn);
+                breakBB(entityIn.getBoundingBox().expand(2, -1, 2).expand(-2, 0, -2).contract(0, 2, 0), worldIn);
                 attackBB(entityIn.getBoundingBox().expand(2, 0, 2).expand(-2, 0, -2), entityIn);
                 pound=false;
+                if(poundTicks>=3) poundTicks=0;
             }
-            if(dashTicks>=20) setState(stack, 1);
+            if(y<entityIn.getPosY() || entityIn.isInWater()) {
+                y = entityIn.getPosY() + 5; pound = dash = false;
+            }
+            if(y < entityIn.getPosY() || (dashTicks>15 && entityIn.isOnGround()) || (item2.next()!=stack && item2.next()!=stack)) {
+                dashTicks = poundTicks = 0; dash = pound = false;
+                setState(stack, 1);
+            }
         }
     }
 
-    public void breakBB(AxisAlignedBB bb, Entity player, World worldIn){
+    public void breakBB(AxisAlignedBB bb, World worldIn){
         BlockPos.getAllInBox(bb).forEach(pos->{
-            if(player.world.getBlockState(pos)!=Blocks.AIR.getDefaultState() && player.world.getBlockState(pos)!=Blocks.WATER.getDefaultState() && player.world.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
-                if(player.world.getBlockState(pos).getBlockHardness(worldIn, pos)>=0 && player.world.getBlockState(pos).getBlockHardness(worldIn, pos)<=80) player.world.destroyBlock(pos, true, player);
+            if(worldIn.getBlockState(pos)!=Blocks.AIR.getDefaultState() && worldIn.getBlockState(pos)!=Blocks.WATER.getDefaultState() && worldIn.getBlockState(pos)!=Blocks.LAVA.getDefaultState()){
+                if(worldIn.getBlockState(pos).getBlockHardness(worldIn, pos)>=0 && worldIn.getBlockState(pos).getBlockHardness(worldIn, pos)<=80) worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());//worldIn.destroyBlock(pos, true, player);
             }
         });
     }
 
     public void attackBB(AxisAlignedBB bb, Entity player){
-        player.world.getEntitiesWithinAABB(LivingEntity.class, player.getBoundingBox().expand(2, 0, 2).expand(-2, 0, -2)).stream().forEach(livingEntity -> {
+        player.world.getEntitiesWithinAABB(LivingEntity.class, bb).stream().forEach(livingEntity -> {
             if(!livingEntity.isEntityEqual(player)) livingEntity.attackEntityFrom(DamageSource.causePlayerDamage((PlayerEntity)player), 15);
+            if(motion==null) motion = player.getMotion();
             if(!livingEntity.world.isRemote) livingEntity.setMotion(motion.add(0,0.1,0));//livingEntity.setMotion(player.getLookVec().x*2, 0.2, player.getLookVec().z*2);
         });
     }
@@ -140,6 +155,7 @@ public class AtlasG extends PickaxeItem implements IAnimatable , ISyncable{
         if(isCharged(stack)){
             worldIn.playSound(playerentity, playerentity.getPosition(), SoundEvents.BLOCK_PISTON_EXTEND, SoundCategory.PLAYERS, 5, 0.9f);
             setState(stack, 3);
+            dash=true;
             playerentity.getCooldownTracker().setCooldown(this, 20);
             motion = new Vector3d(playerentity.getLookVec().x*2, 0.1, playerentity.getLookVec().z*2);
             playerentity.setMotion(motion);

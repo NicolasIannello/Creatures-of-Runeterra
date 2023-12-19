@@ -13,6 +13,7 @@ import com.eximeisty.creaturesofruneterra.entity.client.armor.fiddle.FiddleArmor
 import com.eximeisty.creaturesofruneterra.entity.client.armor.sai.SaiArmorRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.armor.sai.SaiElytraRenderer;
 
+import com.eximeisty.creaturesofruneterra.util.KeyBindings;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -34,5 +35,13 @@ public class ModEventClientBusEvents {
     public static void registerBlockRenderers(final FMLClientSetupEvent event){
         ClientRegistry.bindTileEntityRenderer(ModTiles.DRILL.get(), DrillRenderer::new);
         ClientRegistry.bindTileEntityRenderer(ModTiles.DARKIN_PEDESTAL.get(), DarkinThingyRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onKeyRegister(FMLClientSetupEvent event) {
+        ClientRegistry.registerKeyBinding(KeyBindings.FLY_UP);
+        ClientRegistry.registerKeyBinding(KeyBindings.FLY_DOWN);
+        ClientRegistry.registerKeyBinding(KeyBindings.ITEM_HABILITY);
+        ClientRegistry.registerKeyBinding(KeyBindings.ARMOR_HABILITY);
     }
 }

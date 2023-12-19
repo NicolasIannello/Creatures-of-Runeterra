@@ -1,5 +1,10 @@
 package com.eximeisty.creaturesofruneterra.mixin;
 
+import com.eximeisty.creaturesofruneterra.item.ModItems;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.world.server.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -24,7 +29,7 @@ public class MixinArmorStandEntity {
         ArmorStandEntity clase = (ArmorStandEntity)((Object)this);
 
         boolean flag0 = clase.world.isNightTime();//clase.world.getTimeOfDay(0)>=0.35288608/*15000*/ && clase.world.getTimeOfDay(0)<=0.59869206/*20000*/ && clase.world.canSeeSky(clase.getPosition());
-        boolean flag1 = clase.getArmorInventoryList().toString().equalsIgnoreCase("[1 chainmail_boots, 1 iron_leggings, 1 fiddle_chestplate, 1 fiddle_helmet]");
+        boolean flag1 = clase.getItemStackFromSlot(EquipmentSlotType.LEGS).isItemEqual(new ItemStack(Items.IRON_LEGGINGS)) && clase.getItemStackFromSlot(EquipmentSlotType.FEET).isItemEqual(new ItemStack(Items.CHAINMAIL_BOOTS)) && clase.getItemStackFromSlot(EquipmentSlotType.CHEST).isItemEqual(new ItemStack(ModItems.FIDDLE_CHESTPLATE.get())) && clase.getItemStackFromSlot(EquipmentSlotType.HEAD).isItemEqual(new ItemStack(ModItems.FIDDLE_HELMET.get()));
         boolean flag2 = true;
         boolean flag3 = true;
 
@@ -54,12 +59,12 @@ public class MixinArmorStandEntity {
                         for (int i = 0; i < lightings; i++) { 
                             double lx = clase.getPosXRandom(8), lz = clase.getPosZRandom(8);
                             if( lx==clase.getPosX() && lz==clase.getPosZ() ) lx++;
-                            EntityType.LIGHTNING_BOLT.spawn(clase.world.getServer().func_241755_D_(), null, null, new BlockPos(lx, clase.getPosY(), lz), SpawnReason.EVENT, false, false);
+                            EntityType.LIGHTNING_BOLT.spawn((ServerWorld) clase.world, null, null, new BlockPos(lx, clase.getPosY(), lz), SpawnReason.EVENT, false, false);
                         }
                     }
                     if(tick>215 && !clase.world.isRemote){
-                        EntityType.LIGHTNING_BOLT.spawn(clase.world.getServer().func_241755_D_(), null, null, clase.getPosition(), SpawnReason.EVENT, false, false);
-                        ModEntityTypes.FIDDLESTICKS.get().spawn(clase.world.getServer().func_241755_D_(), null, null, clase.getPosition(), SpawnReason.EVENT, false, false);
+                        EntityType.LIGHTNING_BOLT.spawn((ServerWorld) clase.world, null, null, clase.getPosition(), SpawnReason.EVENT, false, false);
+                        ModEntityTypes.FIDDLESTICKS.get().spawn((ServerWorld) clase.world, null, null, clase.getPosition(), SpawnReason.EVENT, false, false);
                         clase.remove();
                     }
                 }
