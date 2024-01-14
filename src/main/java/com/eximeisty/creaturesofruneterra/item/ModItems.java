@@ -115,6 +115,9 @@ public class ModItems {
     public static final RegistryObject<Item> RHAAST = ITEMS.register("rhaast",
             () -> new Rhaast(ModItemTier.DARKIN, 2, -2F, new Item.Properties().durability(100)));
 
+    public static final RegistryObject<Item> NAAFIRI = ITEMS.register("naafiri",
+            () -> new NaafiriItem(ModItemTier.DARKIN, 1, -2F, new Item.Properties()));
+
     //SPAWN EGGS
     public static final RegistryObject<Item> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F, new Item.Properties()));
@@ -148,6 +151,12 @@ public class ModItems {
 
     public static final RegistryObject<Item> SILVERWING_SPAWN_EGG = ITEMS.register("silverwing_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.SILVERWING, 0xF3D978, 0xffffff, new Item.Properties()));
+
+    public static final RegistryObject<Item> NAAFIRI_SPAWN_EGG = ITEMS.register("naafiri_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.NAAFIRI, 0x0f0705, 0x96281b, new Item.Properties()));
+
+    public static final RegistryObject<Item> NAAFIRI_HOUND_SPAWN_EGG = ITEMS.register("naafiri_hound_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.NAAFIRI_HOUND, 0x96281b, 0xc44d56, new Item.Properties()));
 
 //    BLOCKS
     public static final RegistryObject<BlockItem> DRILL = ITEMS.register("drill",
