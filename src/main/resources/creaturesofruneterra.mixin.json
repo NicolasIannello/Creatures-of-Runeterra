@@ -3,10 +3,12 @@
     "package": "com.eximeisty.creaturesofruneterra.mixin",
     "compatibilityLevel": "JAVA_8",
     "client": [
-        "MixinArmorStandEntity"
+        "MixinArmorStandEntity",
+        "MixinWolfEntity"
     ],
     "server": [
-        "MixinArmorStandEntity"
+        "MixinArmorStandEntity",
+        "MixinWolfEntity"
     ],
     "injectors": {
         "defaultRequire": 1
