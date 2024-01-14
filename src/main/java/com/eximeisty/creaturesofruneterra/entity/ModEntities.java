@@ -71,6 +71,14 @@ public class ModEntities {
             ENTITY_TYPES.register("silverwing",
                     ()-> EntityType.Builder.of(SilverwingEntity::new, MobCategory.CREATURE).sized(1.7f,1.7f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "silverwing").toString())
             );
+    public static final RegistryObject<EntityType<NaafiriEntity>> NAAFIRI=
+            ENTITY_TYPES.register("naafiri",
+                    ()-> EntityType.Builder.of(NaafiriEntity::new, MobCategory.CREATURE).sized(1.1f,0.9f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "naafiri").toString())
+            );
+    public static final RegistryObject<EntityType<NaafiriHoundEntity>> NAAFIRI_HOUND=
+            ENTITY_TYPES.register("naafiri_hound",
+                    ()-> EntityType.Builder.of(NaafiriHoundEntity::new, MobCategory.CREATURE).sized(0.9f,0.9f).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "naafiri_hound").toString())
+            );
 
     //PART ENTITIES
     public static final RegistryObject<EntityType<CoRPartEntity>> WIVHIV=
@@ -118,6 +126,10 @@ public class ModEntities {
     public static final RegistryObject<EntityType<FiddleProyectileEntity>> FIDDLE_PROYECTILE =
             ENTITY_TYPES.register("fiddle_proyectile",
                     ()-> EntityType.Builder.<FiddleProyectileEntity>of(FiddleProyectileEntity::new, MobCategory.MISC).sized(0.25F, 0.25F).setTrackingRange(8).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "fiddle_proyectile").toString())
+            );
+    public static final RegistryObject<EntityType<NaafiriDaggerEntity>> NAAFIRI_DAGGER =
+            ENTITY_TYPES.register("naafiri_dagger",
+                    ()-> EntityType.Builder.<NaafiriDaggerEntity>of(NaafiriDaggerEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).setTrackingRange(4).updateInterval(20).build(new ResourceLocation(CreaturesofRuneterra.MOD_ID, "naafiri_dagger").toString())
             );
 
     public static void register(IEventBus eventBus){

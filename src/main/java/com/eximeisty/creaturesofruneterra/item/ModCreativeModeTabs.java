@@ -26,7 +26,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.REKSAI_PLAQUE.get());
                         //TOOLS
                         pOutput.accept(ModItems.SAI_SWORD.get());pOutput.accept(ModItems.SAI_PICKAXE.get());pOutput.accept(ModItems.SAI_AXE.get());pOutput.accept(ModItems.SAI_SHOVEL.get());pOutput.accept(ModItems.SAI_HOE.get());pOutput.accept(ModItems.SAI_BOW.get());
-                        pOutput.accept(ModItems.TENDRIL_COMPASS.get());
+                        pOutput.accept(ModItems.TENDRIL_COMPASS.get());pOutput.accept(ModItems.NAAFIRI.get());
                         //ARMORS
                         pOutput.accept(ModItems.SAI_HELMET.get());pOutput.accept(ModItems.SAI_CHESTPLATE.get());pOutput.accept(ModItems.SAI_LEGGINGS.get());pOutput.accept(ModItems.SAI_BOOTS.get());pOutput.accept(ModItems.SAI_ELYTRA.get());
                         pOutput.accept(ModItems.FIDDLE_HELMET.get());pOutput.accept(ModItems.FIDDLE_CHESTPLATE.get());pOutput.accept(ModItems.FIDDLE_BEARTRAP.get());pOutput.accept(ModItems.FIDDLE_BIRDCAGE.get());
@@ -38,7 +38,7 @@ public class ModCreativeModeTabs {
                         //SPAWN EGGS
                         pOutput.accept(ModItems.XERSAI_HATCHLING_SPAWN_EGG.get());pOutput.accept(ModItems.XERSAI_DUNEBREAKER_SPAWN_EGG.get());pOutput.accept(ModItems.REKSAI_SPAWN_EGG.get());pOutput.accept(ModItems.PORO_SPAWN_EGG.get());pOutput.accept(ModItems.FABLEDPORO_SPAWN_EGG.get());
                         pOutput.accept(ModItems.PLUNDERPORO_SPAWN_EGG.get());pOutput.accept(ModItems.POROBOT_SPAWN_EGG.get());pOutput.accept(ModItems.EXALTEDPORO_SPAWN_EGG.get());
-                        pOutput.accept(ModItems.FIDDLESTICKS_SPAWN_EGG.get());pOutput.accept(ModItems.SILVERWING_SPAWN_EGG.get());
+                        pOutput.accept(ModItems.FIDDLESTICKS_SPAWN_EGG.get());pOutput.accept(ModItems.SILVERWING_SPAWN_EGG.get());pOutput.accept(ModItems.NAAFIRI_SPAWN_EGG.get());pOutput.accept(ModItems.NAAFIRI_HOUND_SPAWN_EGG.get());
                     }).build()
     );
 

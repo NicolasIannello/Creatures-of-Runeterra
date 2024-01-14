@@ -26,6 +26,11 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> FIDDLESTICKS_HURT = registerSoundEvent("fiddlesticks_hurt");
     public static final RegistryObject<SoundEvent> FIDDLESTICKS_RUN = registerSoundEvent("fiddlesticks_run");
     public static final RegistryObject<SoundEvent> FIDDLESTICKS_LINE = registerSoundEvent("fiddlesticks_line");
+    //Naafiri
+    public static final RegistryObject<SoundEvent> NAAFIRI_ATTACK = registerSoundEvent("naafiri_attack");
+    public static final RegistryObject<SoundEvent> NAAFIRI_DEATH = registerSoundEvent("naafiri_death");
+    public static final RegistryObject<SoundEvent> NAAFIRI_SPAWN = registerSoundEvent("naafiri_spawn");
+    public static final RegistryObject<SoundEvent> NAAFIRI_HURT = registerSoundEvent("naafiri_hurt");
 
     private static RegistryObject<SoundEvent> registerSoundEvent(String name) {
         ResourceLocation id = new ResourceLocation(CreaturesofRuneterra.MOD_ID, name);

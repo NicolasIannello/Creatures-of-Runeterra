@@ -12,6 +12,9 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.Fable
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddleDummyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddlesticksRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.misil.MisilRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriDaggerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriHoundRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.patchedporobot.PatchedPorobotRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
@@ -97,6 +100,8 @@ public class CreaturesofRuneterra
             EntityRenderers.register(ModEntities.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
             EntityRenderers.register(ModEntities.PATCHEDPOROBOT.get(), PatchedPorobotRenderer::new);
             EntityRenderers.register(ModEntities.SILVERWING.get(), SilverwingRenderer::new);
+            EntityRenderers.register(ModEntities.NAAFIRI.get(), NaafiriRenderer::new);
+            EntityRenderers.register(ModEntities.NAAFIRI_HOUND.get(), NaafiriHoundRenderer::new);
             //BOSSES
             EntityRenderers.register(ModEntities.FIDDLESTICKS.get(), FiddlesticksRenderer::new);
             EntityRenderers.register(ModEntities.FIDDLEDUMMY.get(), FiddleDummyRenderer::new);
@@ -107,6 +112,7 @@ public class CreaturesofRuneterra
             EntityRenderers.register(ModEntities.DBSHIELD.get(), DBShieldRenderer::new);
             EntityRenderers.register(ModEntities.HEXCORE.get(), HexcoreRenderer::new);
             EntityRenderers.register(ModEntities.FIDDLE_PROYECTILE.get(), FiddleProyectileRenderer::new);
+            EntityRenderers.register(ModEntities.NAAFIRI_DAGGER.get(), NaafiriDaggerRenderer::new);
             //PART ENTITIES
             EntityRenderers.register(ModEntities.WIVHIV.get(), EmptyRenderer::new);
             EntityRenderers.register(ModEntities.WVIHV.get(), EmptyRenderer::new);

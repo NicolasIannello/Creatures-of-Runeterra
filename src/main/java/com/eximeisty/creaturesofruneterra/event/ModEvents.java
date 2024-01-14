@@ -28,6 +28,8 @@ public class ModEvents {
         event.put(ModEntities.FIDDLESTICKS.get(), FiddlesticksEntity.setAttributes());
         event.put(ModEntities.FIDDLEDUMMY.get(), FiddleDummyEntity.setAttributes());
         event.put(ModEntities.SILVERWING.get(), SilverwingEntity.setAttributes());
+        event.put(ModEntities.NAAFIRI.get(), NaafiriEntity.setAttributes());
+        event.put(ModEntities.NAAFIRI_HOUND.get(), NaafiriHoundEntity.setAttributes());
         //PART ENTITIES
         event.put(ModEntities.WIVHIV.get(), CoRPartEntity.setAttributes());
         event.put(ModEntities.WVIHV.get(), CoRPartEntity.setAttributes());
