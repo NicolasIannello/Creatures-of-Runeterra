@@ -89,5 +89,33 @@
         "sounds":[
             "creaturesofruneterra:fiddlesticks_line"
         ]
+    },
+    "naafiri_attack":{
+        "category":"neutral",
+        "subtitle":"creaturesofruneterra.naafiri_attack",
+        "sounds":[
+            "creaturesofruneterra:naafiri_attack"
+        ]
+    },
+    "naafiri_death":{
+        "category":"neutral",
+        "subtitle":"creaturesofruneterra.naafiri_death",
+        "sounds":[
+            "creaturesofruneterra:naafiri_death"
+        ]
+    },
+    "naafiri_spawn":{
+        "category":"neutral",
+        "subtitle":"creaturesofruneterra.naafiri_spawn",
+        "sounds":[
+            "creaturesofruneterra:naafiri_spawn"
+        ]
+    },
+    "naafiri_hurt":{
+        "category":"neutral",
+        "subtitle":"creaturesofruneterra.naafiri_hurt",
+        "sounds":[
+            "creaturesofruneterra:naafiri_hurt"
+        ]
     }
 }

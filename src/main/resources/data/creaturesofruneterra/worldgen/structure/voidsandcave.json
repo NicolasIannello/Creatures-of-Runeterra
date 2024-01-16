@@ -27,7 +27,24 @@
           "type": "creaturesofruneterra:xersai_hatchling",
           "weight": 1,
           "minCount": 1,
-          "maxCount": 3
+          "maxCount": 1
+        },
+        {
+          "type": "minecraft:spider",
+          "weight": 1,
+          "minCount": 1,
+          "maxCount": 1
+        }
+      ]
+    },
+    "creature": {
+      "bounding_box": "piece",
+      "spawns": [
+        {
+          "type": "minecraft:bat",
+          "weight": 1,
+          "minCount": 1,
+          "maxCount": 1
         }
       ]
     }

@@ -60,5 +60,10 @@
     "key.creaturesofruneterra.item_hability": "Item hability",
     "key.creaturesofruneterra.armor_hability": "Armor hability",
     "item.creaturesofruneterra.silverwing_spawn_egg":"Silverwing Spawn Egg",
-    "entity.creaturesofruneterra.silverwing":"Silverwing"
+    "entity.creaturesofruneterra.silverwing":"Silverwing",
+    "item.creaturesofruneterra.naafiri_spawn_egg":"Naafiri Spawn Egg",
+    "entity.creaturesofruneterra.naafiri":"Naafiri",
+    "item.creaturesofruneterra.naafiri":"Naafiri",
+    "item.creaturesofruneterra.naafiri_hound_spawn_egg":"Naafiri's hound Spawn Egg",
+    "entity.creaturesofruneterra.naafiri_hound":"Naafiri's hound"
 }
