@@ -190,8 +190,9 @@ public class DarkinThingyTileEntity extends BlockEntity implements GeoBlockEntit
         manageItem(item, getLevel(), worldPosition, false);
         ((DarkinThingyTileEntity)tile).manageItem(ItemStack.EMPTY, getLevel(), tile.getBlockPos(), false);
         ((DarkinThingyTileEntity)tile2).manageItem(ItemStack.EMPTY, getLevel(), tile2.getBlockPos(), false);
-        getLevel().destroyBlock(tile.getBlockPos(), false);
-        getLevel().destroyBlock(tile2.getBlockPos(), false);
+        int chance=(int)(Math.random() * 5);
+        if(chance==0 || chance==4) getLevel().destroyBlock(tile.getBlockPos(), false);
+        if(chance==1 || chance==4) getLevel().destroyBlock(tile2.getBlockPos(), false);
     }
 
     public void manageItem(ItemStack stack, Level worldIn, BlockPos pos, boolean drop) {
