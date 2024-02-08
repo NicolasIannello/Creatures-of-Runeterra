@@ -34,9 +34,9 @@ public class XerSaiHatchlingEntity extends PathfinderMob {
     public static AttributeSupplier setAttributes(){
         return PathfinderMob.createMobAttributes()
                 .add(Attributes.MAX_HEALTH, 2)
-                .add(Attributes.MOVEMENT_SPEED, 0.6)
-                .add(Attributes.ATTACK_DAMAGE, 2)
-                .add(Attributes.FOLLOW_RANGE, 40)
+                .add(Attributes.MOVEMENT_SPEED, 0.4)
+                .add(Attributes.ATTACK_DAMAGE, 1)
+                .add(Attributes.FOLLOW_RANGE, 30)
                 .add(Attributes.ATTACK_KNOCKBACK, 0)
                 /*.add(Attributes.ATTACK_SPEED, 2)*/.build();
     }
