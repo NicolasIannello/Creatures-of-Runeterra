@@ -45,6 +45,7 @@ public class ModClientEvents {
         event.register(KeyBinding.FLY_UP);
         event.register(KeyBinding.FLY_DOWN);
         event.register(KeyBinding.ITEM_HABILITY);
+        event.register(KeyBinding.ITEM_HABILITY2);
         event.register(KeyBinding.ARMOR_HABILITY);
     }
 }
