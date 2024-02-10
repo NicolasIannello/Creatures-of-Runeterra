@@ -33,12 +33,12 @@ public class XerSaiHatchlingEntity extends CreatureEntity {
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes(){
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 6)
-        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.6)
-        .createMutableAttribute(Attributes.ATTACK_DAMAGE, 3)
-        .createMutableAttribute(Attributes.FOLLOW_RANGE, 40)
-        .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0)
-        .createMutableAttribute(Attributes.ATTACK_SPEED, 2);
+        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.MAX_HEALTH, 2)
+        .createMutableAttribute(Attributes.MOVEMENT_SPEED, 0.4)
+        .createMutableAttribute(Attributes.ATTACK_DAMAGE, 1)
+        .createMutableAttribute(Attributes.FOLLOW_RANGE, 30)
+        .createMutableAttribute(Attributes.ATTACK_KNOCKBACK, 0);
+        //.createMutableAttribute(Attributes.ATTACK_SPEED, 2);
     }
 
     @Override

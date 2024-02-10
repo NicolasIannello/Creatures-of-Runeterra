@@ -116,6 +116,9 @@ public class ModItems {
         public static final RegistryObject<Item> RHAAST = ITEMS.register("rhaast",
                 () -> new Rhaast(ModItemTier.DARKIN, 2, -2F, new Item.Properties().maxDamage(100).group(ModItemGroup.COR_GROUP)));
 
+        public static final RegistryObject<Item> NAAFIRI = ITEMS.register("naafiri",
+                () -> new NaafiriItem(ModItemTier.DARKIN, 1, -2F, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
         //SPAWN EGGS
         public static final RegistryObject<ModSpawnEggItem> XERSAI_HATCHLING_SPAWN_EGG = ITEMS.register("xersai_hatchling_spawn_egg",
         () -> new ModSpawnEggItem(ModEntityTypes.XERSAI_HATCHLING, 0x9F2BAF, 0x67276F, new Item.Properties().group(ModItemGroup.COR_GROUP)));
@@ -149,6 +152,12 @@ public class ModItems {
 
         public static final RegistryObject<Item> SILVERWING_SPAWN_EGG = ITEMS.register("silverwing_spawn_egg",
         () -> new ForgeSpawnEggItem(ModEntityTypes.SILVERWING, 0xF3D978, 0xffffff, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> NAAFIRI_SPAWN_EGG = ITEMS.register("naafiri_spawn_egg",
+                () -> new ForgeSpawnEggItem(ModEntityTypes.NAAFIRI, 0x0f0705, 0x96281b, new Item.Properties().group(ModItemGroup.COR_GROUP)));
+
+        public static final RegistryObject<Item> NAAFIRI_HOUND_SPAWN_EGG = ITEMS.register("naafiri_hound_spawn_egg",
+                () -> new ForgeSpawnEggItem(ModEntityTypes.NAAFIRI_HOUND, 0x96281b, 0xc44d56, new Item.Properties().group(ModItemGroup.COR_GROUP)));
 
         //BLOCKS
         public static final RegistryObject<Item> DRILL = ITEMS.register("drill",

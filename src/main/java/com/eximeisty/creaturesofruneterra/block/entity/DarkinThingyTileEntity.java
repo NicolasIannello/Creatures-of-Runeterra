@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
@@ -51,8 +52,8 @@ public class DarkinThingyTileEntity extends TileEntity implements IAnimatable, I
 //        }
 //    };
     public ItemStack itemTile = ItemStack.EMPTY;
-    private boolean eye = false;
-    private boolean nw = false;
+    private boolean offeringCheck1 = false;
+    private boolean offeringCheck2 = false;
     public int ticks = 0;
 
     public DarkinThingyTileEntity() {
@@ -96,54 +97,85 @@ public class DarkinThingyTileEntity extends TileEntity implements IAnimatable, I
     public void tick() {
         ItemStack item = itemTile;
         if(world.getDimensionKey()==World.THE_NETHER){
-            if(item.isItemEqual(new ItemStack(Items.IRON_HOE)) || item.getItem() instanceof SwordItem){
-                TileEntity tileentity;
-                TileEntity tileentity2;
-                if(world.getTileEntity(pos.east(3))!=null){
-                    tileentity = world.getTileEntity(pos.east(3));
-                    tileentity2 = world.getTileEntity(pos.west(3));
-                    this.getTileData().putBoolean("ns", false);
-                }else{
-                    tileentity = world.getTileEntity(pos.north(3));
-                    tileentity2 = world.getTileEntity(pos.south(3));
-                    this.getTileData().putBoolean("ns", true);
-                }
-                markDirty();
-                world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
-                if(tileentity instanceof DarkinThingyTileEntity && tileentity2 instanceof DarkinThingyTileEntity) {
-                    if(item.isItemEqual(new ItemStack(Items.IRON_HOE))){
-                        if(((DarkinThingyTileEntity) tileentity).itemTile.isItemEqual(new ItemStack(Items.NETHER_WART))) nw = true;
-                        if(((DarkinThingyTileEntity) tileentity2).itemTile.isItemEqual(new ItemStack(Items.NETHER_WART))) nw = true;
-                        if(((DarkinThingyTileEntity) tileentity).itemTile.isItemEqual(new ItemStack(Items.ENDER_EYE))) eye = true;
-                        if(((DarkinThingyTileEntity) tileentity2).itemTile.isItemEqual(new ItemStack(Items.ENDER_EYE))) eye = true;
-                        if(nw && eye) {
-                            nw = false; eye = false;
-                            ticker(null, null, null);
-                            if(ticks > 100) ticker(tileentity, tileentity2, new ItemStack(ModItems.RHAAST.get()));
-                        }
-                    }else if(item.getItem() instanceof SwordItem ? ((SwordItem)item.getItem()).getTier()==ModItemTier.DARKIN : false){
-                        ItemStack tileItem = ((DarkinThingyTileEntity) tileentity).itemTile;
-                        ItemStack tileItem2 = ((DarkinThingyTileEntity) tileentity2).itemTile;
-                        if(tileItem.isItemEqual(new ItemStack(tileItem2.getItem())) && tileItem2.getItem() instanceof SwordItem) {
-                            ticker(null, null, null);
-                            if(ticks > 100) {
-                                int damage = (int) ((SwordItem) tileItem.getItem()).getAttackDamage() + 1;
-                                ItemStack darkinweapon = new ItemStack(ModItems.RHAAST.get());
-                                Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(item);
-                                EnchantmentHelper.setEnchantments(map,darkinweapon);
-                                //item.getEnchantmentTags().forEach(darkinweapon::enchant);
-                                darkinweapon.getAttributeModifiers(EquipmentSlotType.MAINHAND).forEach((atr, modifier) -> {
-                                    if (atr == Attributes.ATTACK_DAMAGE) {
-                                        darkinweapon.addAttributeModifier(atr, new AttributeModifier(modifier.getID(), modifier.getName(), damage, modifier.getOperation()), EquipmentSlotType.MAINHAND);
-                                    } else {
-                                        darkinweapon.addAttributeModifier(atr, modifier, EquipmentSlotType.MAINHAND);
+            if (item.isItemEqual(new ItemStack(Items.IRON_HOE))) {
+                recipe(Items.NETHER_WART, Items.ENDER_EYE, new ItemStack(ModItems.RHAAST.get()));
+            }else if (item.isItemEqual(new ItemStack(Items.WOODEN_SWORD))) {
+                recipe(Items.BONE_BLOCK, Items.WITHER_SKELETON_SKULL, new ItemStack(ModItems.NAAFIRI.get()));
+            }else if (item.getItem() instanceof SwordItem && ((SwordItem)item.getItem()).getTier()==ModItemTier.DARKIN) {
+                upgrade(item, new ItemStack(item.getItem()));
+            }
+        }
+    }
+
+    public void recipe(Item offering1, Item offering2, ItemStack result){
+        TileEntity tileentity;
+        TileEntity tileentity2;
+        if(world.getTileEntity(pos.east(3))!=null){
+            tileentity = world.getTileEntity(pos.east(3));
+            tileentity2 = world.getTileEntity(pos.west(3));
+            this.getTileData().putBoolean("ns", false);
+        }else{
+            tileentity = world.getTileEntity(pos.north(3));
+            tileentity2 = world.getTileEntity(pos.south(3));
+            this.getTileData().putBoolean("ns", true);
+        }
+        markDirty();
+        world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+        if(tileentity instanceof DarkinThingyTileEntity && tileentity2 instanceof DarkinThingyTileEntity) {
+            if(((DarkinThingyTileEntity) tileentity).itemTile.isItemEqual(new ItemStack(offering1))) offeringCheck1 = true;
+            if(((DarkinThingyTileEntity) tileentity2).itemTile.isItemEqual(new ItemStack(offering1))) offeringCheck1 = true;
+            if(((DarkinThingyTileEntity) tileentity).itemTile.isItemEqual(new ItemStack(offering2))) offeringCheck2 = true;
+            if(((DarkinThingyTileEntity) tileentity2).itemTile.isItemEqual(new ItemStack(offering2))) offeringCheck2 = true;
+            if(offeringCheck1 && offeringCheck2) {
+                offeringCheck1 = false; offeringCheck2 = false;
+                ticker(null, null, null);
+                if(ticks > 100) ticker(tileentity, tileentity2, result);
+            }
+        }
+    }
+
+    public void upgrade(ItemStack item, ItemStack result){
+        TileEntity tileentity;
+        TileEntity tileentity2;
+        if (world.getTileEntity(pos.east(3)) != null) {
+            tileentity = world.getTileEntity(pos.east(3));
+            tileentity2 = world.getTileEntity(pos.west(3));
+            this.getTileData().putBoolean("ns", false);
+        } else {
+            tileentity = world.getTileEntity(pos.north(3));
+            tileentity2 = world.getTileEntity(pos.south(3));
+            this.getTileData().putBoolean("ns", true);
+        }
+        markDirty();
+        world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 2);
+        if (tileentity instanceof DarkinThingyTileEntity && tileentity2 instanceof DarkinThingyTileEntity) {
+            ItemStack tileItem = ((DarkinThingyTileEntity) tileentity).itemTile;
+            ItemStack tileItem2 = ((DarkinThingyTileEntity) tileentity2).itemTile;
+            if (tileItem.isItemEqual(new ItemStack(tileItem2.getItem())) && tileItem2.getItem() instanceof SwordItem) {
+                tileItem.getAttributeModifiers(EquipmentSlotType.MAINHAND).forEach((atr, modifier) ->{
+                    if (atr == Attributes.ATTACK_DAMAGE) {
+                        item.getAttributeModifiers(EquipmentSlotType.MAINHAND).forEach((atr2, modifier2) ->{
+                            if (atr2 == Attributes.ATTACK_DAMAGE) {
+                                if(modifier.getAmount()>modifier2.getAmount()){
+                                    ticker(null, null, null);
+                                    if (ticks > 100) {
+                                        ItemStack darkinweapon = result;
+                                        Map<Enchantment, Integer> map = EnchantmentHelper.getEnchantments(item);
+                                        EnchantmentHelper.setEnchantments(map,darkinweapon);
+                                        darkinweapon.getAttributeModifiers(EquipmentSlotType.MAINHAND).forEach((d_atr, d_modifier) -> {
+                                            if (d_atr == Attributes.ATTACK_DAMAGE) {
+                                                darkinweapon.addAttributeModifier(d_atr, new AttributeModifier(d_modifier.getID(), d_modifier.getName(), modifier.getAmount()+1, d_modifier.getOperation()), EquipmentSlotType.MAINHAND);
+                                            } else {
+                                                darkinweapon.addAttributeModifier(d_atr, d_modifier, EquipmentSlotType.MAINHAND);
+                                            }
+                                        });
+                                        ticker(tileentity, tileentity2, darkinweapon);
                                     }
-                                });
-                                ticker(tileentity, tileentity2, darkinweapon);
+                                }
                             }
-                        }
+                        });
                     }
-                }
+                });
             }
         }
     }
@@ -164,8 +196,9 @@ public class DarkinThingyTileEntity extends TileEntity implements IAnimatable, I
         manageItem(item, world, pos, false);
         ((DarkinThingyTileEntity)tile).manageItem(ItemStack.EMPTY, world, tile.getPos(), false);
         ((DarkinThingyTileEntity)tile2).manageItem(ItemStack.EMPTY, world, tile2.getPos(), false);
-        world.destroyBlock(tile.getPos(), false);
-        world.destroyBlock(tile2.getPos(), false);
+        int chance=(int)(Math.random() * 5);
+        if(chance==0 || chance==4) world.destroyBlock(tile.getPos(), false);
+        if(chance==1 || chance==4) world.destroyBlock(tile2.getPos(), false);
     }
 
     public void manageItem(ItemStack stack, World worldIn, BlockPos pos, boolean drop) {

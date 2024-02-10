@@ -84,19 +84,26 @@ public class Rhaast extends SwordItem implements IAnimatable {
                 stack.setDamage(stack.getDamage() + 40);
             }
         }
+
+        if (worldIn.isRemote && KeyBindings.ITEM_HABILITY2.isKeyDown() && stack.getDamage()<75 && !((PlayerEntity)entityIn).getCooldownTracker().hasCooldown(this) && entityIn instanceof PlayerEntity ? ( ((PlayerEntity)entityIn).getHeldItem(Hand.MAIN_HAND).isItemEqual(new ItemStack(ModItems.RHAAST.get())) || ((PlayerEntity)entityIn).getHeldItem(Hand.OFF_HAND).isItemEqual(new ItemStack(ModItems.RHAAST.get()))) : false) {
+            ((PlayerEntity)entityIn).getCooldownTracker().setCooldown(this, 60);
+            ticks++;
+            ((PlayerEntity)entityIn).hurtTime = 100;
+            stack.setDamage(stack.getDamage()+25);
+        }
     }
 
-    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerentity, Hand handIn) {
-        ItemStack stack = playerentity.getHeldItem(handIn);
-        if(stack.getDamage()>75) return ActionResult.resultConsume(stack);
-
-        playerentity.getCooldownTracker().setCooldown(this, 60);
-        ticks++;
-        playerentity.hurtTime = 100;
-        stack.setDamage(stack.getDamage()+25);
-
-        return ActionResult.resultConsume(stack);
-    }
+//    public ActionResult<ItemStack> onItemRightClick(World worldIn, PlayerEntity playerentity, Hand handIn) {
+//        ItemStack stack = playerentity.getHeldItem(handIn);
+//        if(stack.getDamage()>75) return ActionResult.resultConsume(stack);
+//
+//        playerentity.getCooldownTracker().setCooldown(this, 60);
+//        ticks++;
+//        playerentity.hurtTime = 100;
+//        stack.setDamage(stack.getDamage()+25);
+//
+//        return ActionResult.resultConsume(stack);
+//    }
     
     @Override
     public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker) {
@@ -112,7 +119,7 @@ public class Rhaast extends SwordItem implements IAnimatable {
     }
 
     public void addInformation(ItemStack stack, World worldIn, List<ITextComponent> tooltip, ITooltipFlag flagIn) {
-        String quote = "["+ Minecraft.getInstance().gameSettings.keyBindUseItem.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to phase. ["+ KeyBindings.ITEM_HABILITY.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to become Rhaast";
+        String quote = "["+ KeyBindings.ITEM_HABILITY2.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to phase. ["+ KeyBindings.ITEM_HABILITY.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to become Rhaast";
         tooltip.add(new TranslationTextComponent(quote));
     }
 

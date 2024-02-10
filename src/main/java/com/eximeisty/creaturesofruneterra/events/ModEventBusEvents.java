@@ -27,6 +27,8 @@ public class ModEventBusEvents {
         event.put(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.FIDDLEDUMMY.get(), FiddleDummyEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.SILVERWING.get(), SilverwingEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.NAAFIRI.get(), NaafiriEntity.setCustomAttributes().create());
+        event.put(ModEntityTypes.NAAFIRI_HOUND.get(), NaafiriHoundEntity.setCustomAttributes().create());
         //PART ENTITIES
         event.put(ModEntityTypes.WIVHIV.get(), CoRPartEntity.setCustomAttributes().create());
         event.put(ModEntityTypes.WVIHV.get(), CoRPartEntity.setCustomAttributes().create());

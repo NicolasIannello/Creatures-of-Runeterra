@@ -1,5 +1,8 @@
 package com.eximeisty.creaturesofruneterra;
 
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriDaggerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriHoundRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.silverwing.SilverwingRenderer;
 import com.eximeisty.creaturesofruneterra.networking.ModMessages;
 import net.minecraft.block.Block;
@@ -98,12 +101,15 @@ public class CreaturesofRuneterra {
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FIDDLESTICKS.get(), FiddlesticksRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FIDDLEDUMMY.get(), FiddleDummyRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.SILVERWING.get(), SilverwingRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NAAFIRI.get(), NaafiriRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NAAFIRI_HOUND.get(), NaafiriHoundRenderer::new);
         //ITEMS
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.MISIL.get(), MisilRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BULLET.get(), BulletRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.DBSHIELD.get(), DBShieldRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.HEXCORE.get(), new HexcoreRenderer());
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FIDDLE_PROYECTILE.get(), FiddleProyectileRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.NAAFIRI_DAGGER.get(), NaafiriDaggerRenderer::new);
         //PART ENTITIES
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WIVHIV.get(), EmptyRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.WVIHV.get(), EmptyRenderer::new);

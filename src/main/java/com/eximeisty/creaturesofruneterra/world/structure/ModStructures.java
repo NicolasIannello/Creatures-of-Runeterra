@@ -35,8 +35,8 @@ public class ModStructures {
     Make this large and unique. */
     public static void setupStructures() {
         //setupMapSpacingAndLand(TEST.get(), new StructureSeparationSettings(100,50, 1234567890),true);
-        setupMapSpacingAndLand(VOIDSANDCAVE.get(), new StructureSeparationSettings(100,50, 854795235),false);
-        setupMapSpacingAndLand(DARKIN_PEDESTAL.get(), new StructureSeparationSettings(60,30, 554465248),false);
+        setupMapSpacingAndLand(VOIDSANDCAVE.get(), new StructureSeparationSettings(40,20, 854795235),false);
+        setupMapSpacingAndLand(DARKIN_PEDESTAL.get(), new StructureSeparationSettings(40,20, 554465248),false);
     }
 
     /**
