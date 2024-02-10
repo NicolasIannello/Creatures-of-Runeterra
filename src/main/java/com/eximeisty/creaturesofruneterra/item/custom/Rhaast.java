@@ -95,19 +95,26 @@ public class Rhaast extends SwordItem implements IAnimatable {
                 stack.setDamageValue(stack.getDamageValue() + 40);
             }
         }
+
+        if (worldIn.isClientSide && KeyBinding.ITEM_HABILITY2.isDown() && stack.getDamageValue()<75 && !((Player)entityIn).getCooldowns().isOnCooldown(this) && entityIn instanceof Player ? ( ((Player)entityIn).getItemInHand(InteractionHand.MAIN_HAND).is(ModItems.RHAAST.get()) || ((Player)entityIn).getItemInHand(InteractionHand.OFF_HAND).is(ModItems.RHAAST.get())) : false) {
+            ((Player)entityIn).getCooldowns().addCooldown(this, 60);
+            ticks++;
+            entityIn.invulnerableTime = 100;
+            stack.setDamageValue(stack.getDamageValue()+25);
+        }
     }
 
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerentity, InteractionHand handIn) {
-        ItemStack stack = playerentity.getItemInHand(handIn);
-        if(stack.getDamageValue()>75) return InteractionResultHolder.consume(stack);
-
-        playerentity.getCooldowns().addCooldown(this, 60);
-        ticks++;
-        playerentity.invulnerableTime = 100;
-        stack.setDamageValue(stack.getDamageValue()+25);
-
-        return InteractionResultHolder.consume(stack);
-    }
+//    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerentity, InteractionHand handIn) {
+//        ItemStack stack = playerentity.getItemInHand(handIn);
+//        if(stack.getDamageValue()>75) return InteractionResultHolder.consume(stack);
+//
+//        playerentity.getCooldowns().addCooldown(this, 60);
+//        ticks++;
+//        playerentity.invulnerableTime = 100;
+//        stack.setDamageValue(stack.getDamageValue()+25);
+//
+//        return InteractionResultHolder.consume(stack);
+//    }
     
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
@@ -146,7 +153,7 @@ public class Rhaast extends SwordItem implements IAnimatable {
      }
 
     public void appendHoverText(ItemStack stack, Level worldIn, List<Component> tooltip, TooltipFlag flagIn) {
-        String quote = "["+ Minecraft.getInstance().options.keyUse.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to phase. ["+ KeyBinding.ITEM_HABILITY.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to become Rhaast";
+        String quote = "["+ KeyBinding.ITEM_HABILITY2.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to phase. ["+ KeyBinding.ITEM_HABILITY.getKey().toString().replace("keyboard.", "").replace("."," ").replace("key","")+"] to become Rhaast";
         tooltip.add(Component.nullToEmpty(quote));
     }
 

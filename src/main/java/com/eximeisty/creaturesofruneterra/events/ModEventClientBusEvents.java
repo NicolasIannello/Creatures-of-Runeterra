@@ -52,6 +52,7 @@ public class ModEventClientBusEvents {
         ClientRegistry.registerKeyBinding(KeyBinding.FLY_UP);
         ClientRegistry.registerKeyBinding(KeyBinding.FLY_DOWN);
         ClientRegistry.registerKeyBinding(KeyBinding.ITEM_HABILITY);
+        ClientRegistry.registerKeyBinding(KeyBinding.ITEM_HABILITY2);
         ClientRegistry.registerKeyBinding(KeyBinding.ARMOR_HABILITY);
     }
 }

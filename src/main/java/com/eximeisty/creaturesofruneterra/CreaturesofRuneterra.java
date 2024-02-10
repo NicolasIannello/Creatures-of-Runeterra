@@ -10,6 +10,9 @@ import com.eximeisty.creaturesofruneterra.entity.client.entities.exaltedporo.Exa
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fableporo.FabledPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddleDummyRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.fiddlesticks.FiddlesticksRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriDaggerRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriHoundRenderer;
+import com.eximeisty.creaturesofruneterra.entity.client.entities.naafiri.NaafiriRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.patchedporobot.PatchedPorobotRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.plunderporo.PlunderPoroRenderer;
 import com.eximeisty.creaturesofruneterra.entity.client.entities.poro.PoroRenderer;
@@ -77,6 +80,7 @@ public class CreaturesofRuneterra
         EntityRenderers.register(ModEntityTypes.DBSHIELD.get(), DBShieldRenderer::new);
         EntityRenderers.register(ModEntityTypes.FIDDLE_PROYECTILE.get(), FiddleProyectileRenderer::new);
         EntityRenderers.register(ModEntityTypes.BULLET.get(), BulletRenderer::new);
+        EntityRenderers.register(ModEntityTypes.NAAFIRI_DAGGER.get(), NaafiriDaggerRenderer::new);
         //POROS
         EntityRenderers.register(ModEntityTypes.PORO.get(), PoroRenderer::new);
         EntityRenderers.register(ModEntityTypes.PLUNDERPORO.get(), PlunderPoroRenderer::new);
@@ -84,6 +88,8 @@ public class CreaturesofRuneterra
         EntityRenderers.register(ModEntityTypes.EXALTEDPORO.get(), ExaltedPoroRenderer::new);
         EntityRenderers.register(ModEntityTypes.PATCHEDPOROBOT.get(), PatchedPorobotRenderer::new);
         EntityRenderers.register(ModEntityTypes.SILVERWING.get(), SilverwingRenderer::new);
+        EntityRenderers.register(ModEntityTypes.NAAFIRI.get(), NaafiriRenderer::new);
+        EntityRenderers.register(ModEntityTypes.NAAFIRI_HOUND.get(), NaafiriHoundRenderer::new);
         //VOID CREATURES
         EntityRenderers.register(ModEntityTypes.XERSAI_DUNEBREAKER.get(), XerSaiDunebreakerRenderer::new);
         EntityRenderers.register(ModEntityTypes.XERSAI_HATCHLING.get(), XerSaiHatchlingRenderer::new);
